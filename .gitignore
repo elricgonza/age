@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#add
+static/imgbd
+testonly
+*.swp
+*.swo
+
 # C extensions
 *.so
 

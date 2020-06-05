@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <br>
+    <h2>{{ l1 }}</h2>
+    <br>
+    <h4>
+    {{ current_user.nombre  }}
+    {{ current_user.apellidos }}
+    </h4>
+    <br>
+    <p>Contactese con al Administrador para la asignación de permisos 
+    de acuerdo al rol asignado.</p>
+</div>
+{% endblock %}

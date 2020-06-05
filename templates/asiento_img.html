@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/uts/table_img.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/uts/table.js') }}"></script>
+{% endblock %}
+
+<div class="container">
+    <h2 class="text-center text-blue pt-5" >Imágenes de Asiento Electoral</h2>
+    <br>
+    <form action="" class="needs-validation" novalidate method='POST' enctype="multipart/form-data"  id='imgform'>
+        <input type="hidden" id="id_imgsa" name="imgsa[]">
+        <input type="hidden" id="id_filesa" name="filesa[]">
+        <input type="hidden" id="id_filesv" name="filesv[]">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <h5>Asiento: {{ nomloc }}</h5>
+            </div>
+            <div class="col-xs-6 col-md-4">
+                <button type="button" id="addRow" onclick="pAddRow(arrOpt);" class="btn btn-light btn-md btn-block "><span class="fas fa-camera"></span><a href="#" >  Adicionar Imágen</a></button>
+            </div>
+        </div>
+        <div class="form-row">
+            <div id='cont' class="col-lg-12"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button"  onclick="javascript: window.location.href = '/asientos_list';"  class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-outline-success btn-md btn-block" onclick="pSubmit()"  
+                    {% if puede_editar %}
+                        enabled
+                    {% else %}
+                        disabled
+                    {% endif %}
+                >Aceptar</button>
+            </div>
+        </div> <!--row-->
+    </form>
+
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        createTable();
+
+        // arrOpt - Arreglo para options de SELECT 
+        arrOpt = {
+            {% for r in rows %}
+                {{ r[0] }}: '{{ r[1] }}',  
+            {% endfor %}
+        }
+    })
+</script>
+
+{% endblock %}

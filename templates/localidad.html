@@ -1,0 +1,151 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<link href="{{ url_for('static', filename='DataTables/datatables.min.css') }}" rel="stylesheet" media="screen">
+<link href="{{ url_for('static', filename='DataTables/Datatables-1.10.20/css/datatables.bootstrap4.min.css') }}" rel="stylesheet" media="screen">
+
+<script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+
+{% endblock %}
+<div style="height:15px"></div>
+
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-8">
+                    <h5>LOCALIDADES</h5>
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <!-- 
+                    <button type="button" class="btn btn-light"><span class="fas fa-user-plus"></span> <a href = {{ url_for('provincia_add', prov_id = 0) }} >Adicionar Provincia</a></button>
+                    -->
+                    <button type="button" class="btn btn-light"><span class="fas fa-user-plus"></span> <a href = "#" >Adicionar Localidad - NO-operable</a></button>
+                </div>
+            </div>
+
+            <div style="height:20px"></div>
+
+            <div class="table-responsive">
+                <table id="id_dt" class="table table-striped table-bordered table-hover" style="width:150">
+                    <thead>
+                        <tr>
+                            <th>IdLoc</th>
+                            <th>DepLoc</th>
+                            <th>ProvLoc</th>
+                            <th>SecLoc</th>
+                            <th>Loc</th>
+                            <th>IdCanLoc</th>
+                            <th>NomLoc</th>
+                            <th>PoblacionLoc</th>
+                            <th>PoblacionElecLoc</th>
+                            <th>FechaCensoLoc</th>
+                            <th>TpoLocLoc</th>
+                            <th>FechaBaseLegLoc</th>
+                            <th>CodBaseLegLoc</th>
+                            <th>MarcaLoc</th>
+                            <th>EsCabeceraCanLoc</th>
+                            <th>EsCabeceraSecLoc</th>
+                            <th>CodProv</th>
+                            <th>CodSecc</th>
+                            <th>TipoCircun</th>
+                            <th>Circun</th>
+                            <th>EstadoMapa</th>
+                            <th>latitud</th>
+                            <th>longitud</th>
+                            <th>estado</th>
+                            <th>CircunConsulado</th>
+
+                            <th>Editar</th>
+                            <th>ELIMINAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for prov in datos_loc %}
+                        <tr>
+                            <td>{{ prov[0] }}</td>
+                            <td>{{ prov[1] }}</td>
+                            <td>{{ prov[2] }}</td>
+                            <td>{{ prov[3] }}</td>
+                            <td>{{ prov[4] }}</td>
+                            <td>{{ prov[5] }}</td>
+                            <td>{{ prov[6] }}</td>
+                            <td>{{ prov[7] }}</td>
+                            <td>{{ prov[8] }}</td>
+                            <td>{{ prov[9] }}</td>
+                            <td>{{ prov[10] }}</td>
+                            <td>{{ prov[11] }}</td>
+                            <td>{{ prov[12] }}</td>
+                            <td>{{ prov[13] }}</td>
+                            <td>{{ prov[14] }}</td>
+                            <td>{{ prov[15] }}</td>
+                            <td>{{ prov[16] }}</td>
+                            <td>{{ prov[17] }}</td>
+                            <td>{{ prov[18] }}</td>
+                            <td>{{ prov[19] }}</td>
+                            <td>{{ prov[20] }}</td>
+                            <td>{{ prov[21] }}</td>
+                            <td>{{ prov[22] }}</td>
+                            <td>{{ prov[23] }}</td>
+                            <td>{{ prov[24] }}</td>
+
+                            <td>
+                                <!--
+                                <a href={{ url_for( 'provincia_add2', prov_id=prov[0], prov_id2=prov[1]) }}><span class="fas fa-edit"></span></a>
+                                 -->
+                                <a href="#"><span class="fas fa-edit"></span></a>
+
+                            </td>
+
+                            <td>
+                                <!-- 
+                                <a href="#" data-href={{ url_for( 'provincia_del', prov_id1=prov[0], prov_id2=prov[1]) }} data-toggle="modal" data-target="#confirm-delete"><span class="fas fa-trash"></span></a>
+                                -->
+                                <a href="#"><span class="fas fa-trash"></span></a>
+
+                            </td>
+
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Confirme Eliminación</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Elminará una Provincia. </p>
+                        <p>Esta seguro?</p>
+                        <p class="debug-url"></p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <a class="btn btn-danger btn-ok">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $('#confirm-delete').on('show.bs.modal', function(e) {
+                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+
+                $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+            });
+        </script>
+
+        {% endblock %}

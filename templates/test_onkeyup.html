@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<script> 
+    
+  function getgeog(input) {
+    //alert("Key pressed...");
+      alert(input.value);
+     };
+
+    function keyDownLong(event) {
+        var x = event.keyCode;
+        alert(x);
+        if (x == 27 || x == 9) {
+            alert("presionado ESC...");
+        }
+    }
+
+
+</script>
+
+<div class="container">
+    <h2 class="text-center text-blue pt-5" >Asiento Electoral</h2>
+    <form class="needs-validation" novalidate method='POST'>
+        <div class="form-row">
+            <div class="col-lg-6">
+                <label for="latitud">Latitud:</label>
+                <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  oninput="getgeog(this)"
+                        {% if load %}
+                            value="{{ a.latitud }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
+            </div>
+
+            <input type="text" onkeydown="keyDownLong(event)"><br>
+
+        </div> <!--row-->
+
+
+        <br>
+
+        <p><a href=# id=calculate>calculate server side</a>
+
+        <button type="submit" class="btn btn-primary">Aceptar</button>
+    </form>
+
+
+</div> <!--main-->
+
+
+{% endblock %}
+

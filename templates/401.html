@@ -1,0 +1,16 @@
+
+{% extends "layout.html" %}
+
+{% block page_title %}Unauthorized{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="text-center">
+        <h1>Error 401</h1>
+        <p>Usted no esta autorizado para visualizar esta página <a href="{{ url_for('login') }}">Ingresar</a> or
+            <a href="{{ url_for('registro', usuario_id=0) }}">Crear una nueva Cuenta</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}
+

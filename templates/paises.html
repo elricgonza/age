@@ -1,0 +1,85 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<link href="{{ url_for('static', filename='DataTables/datatables.min.css') }}" rel="stylesheet" media="screen">
+<link href="{{ url_for('static', filename='DataTables/Datatables-1.10.20/css/datatables.bootstrap4.min.css') }}" rel="stylesheet" media="screen">
+
+<script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+
+{% endblock %}
+<div style="height:15px"></div>
+
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-8">
+                    <h5>PAISES</h5>
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <button type="button" class="btn btn-light"><span class="fas fa-user-plus"></span> <a href =  {{ url_for('pais_add', pais_id = 0) }} >Adicionar Pais</a></button>
+                </div>
+            </div>
+
+            <div style="height:20px"></div>
+
+            <div class="table-responsive">
+                <table id="id_dt" class="table table-striped table-bordered table-hover" style="width:150">
+                    <thead>
+                        <tr>
+                            <th>IdPais</th>
+                            <th>Pais</th>
+                            <th>NomPAIS</th>
+                            <th>Nacionalidad</th>
+                            <th>Estado</th>
+                            <th>Cod-Internacional</th>
+                            <th>Cod-InterISO-3166</th>
+
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for pais in datos_paises %}
+                        <tr>
+                            <td>{{ pais[0] }}</td>
+                            <td>{{ pais[1] }}</td>
+                            <td>{{ pais[2] }}</td>
+                            <td>{{ pais[3] }}</td>
+                            <td>{{ pais[4] }}</td>
+                            <td>{{ pais[5] }}</td>
+                            <td>{{ pais[6] }}</td>
+
+                            <td>
+                                <a href={{ url_for( 'pais_add', pais_id=pais[0]) }}><span class="fas fa-edit"></span></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+            <hr>
+            <div class="form/group">
+                <label for="sel1">Seleccionar lista </label>
+                <select class="form-control" id="sel1">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+</script>
+
+{% endblock %}

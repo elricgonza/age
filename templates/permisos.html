@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+
+<!-- of: https://www.w3.org/TR/wai-aria-practices-1.1/examples/listbox/listbox-rearrangeable.html -->
+{% block content %}
+
+{% block js_css %}
+
+<link href="{{ url_for('static', filename='css/listbox/listbox.css') }}" rel="stylesheet" media="screen">
+
+<script src="{{ url_for('static', filename='js/listbox/listbox.js') }}"></script>
+<script src="{{ url_for('static', filename='js/listbox/listbox-rearrangeable.js') }}"></script>
+<script src="{{ url_for('static', filename='js/listbox/toolbar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/listbox/utils.js') }}"></script>
+{% endblock %}
+
+<div id="login-row" class="row justify-content-center align-items-center">
+    <main>
+    <section>
+
+        <section style="display: none;" >
+            <h3 id="ex1_label">Example 1: Single-Select Listbox</h3>
+            <div role="separator" id="ex1_start_sep" aria-labelledby="ex1_start_sep ex1_label" aria-label="Start of" style="display: none;" ></div>
+            <div id="ex1" style="display: none;" >
+                <p>Rank features important to you when choosing where to live. If a feature is unimportant, move it to the unimportant features list.</p>
+                <div class="listbox-area">
+                    <div class="left-area" style="display: none;">
+                        <span id="ss_imp_l">Important Features:</span>
+                        <ul id="ss_imp_list" tabindex="0" role="listbox" aria-labelledby="ss_imp_l">
+                            <li id="ss_opt1" role="option">Proximity of public K-12 schools</li>
+                            <li id="ss_opt2" role="option">Proximity of child-friendly parks</li>
+                            <li id="ss_opt3" role="option">Proximity of grocery shopping</li>
+                        </ul>
+                        <div role="toolbar" aria-label="Actions" class="toolbar">
+                            <button id="ex1-up" class="toolbar-item selected" aria-keyshortcuts="Alt+ArrowUp" aria-disabled="true">Up</button>
+                            <button id="ex1-down" class="toolbar-item" tabindex="-1" aria-keyshortcuts="Alt+ArrowDown" aria-disabled="true">Down</button>
+                            <button id="ex1-delete" class="toolbar-item move-right-btn" tabindex="-1" aria-keyshortcuts="Alt+ArrowRight Delete" aria-disabled="true">Not Important</button>
+                        </div>
+                    </div>
+                    <div class="right-area">
+                        <span id="ss_unimp_l">Unimportant Features:</span>
+                        <ul id="ss_unimp_list" tabindex="0" role="listbox" aria-labelledby="ss_unimp_l" aria-activedescendant="">
+                        </ul>
+                        <button id="ex1-add" class="move-left-btn" aria-keyshortcuts="Alt+ArrowLeft Enter" aria-disabled="true">Important</button>
+                    </div>
+                    <div class="offscreen">Last change: <span aria-live="polite" id="ss_live_region"></span></div>
+                </div>
+            </div>
+            <div role="separator" id="ex1_end_sep" aria-labelledby="ex1_end_sep ex1_label" aria-label="End of"></div>
+        </section>
+
+        <form action="" method='POST'">
+
+            <section>
+                <br>  
+                <h5 id="ex2_label">Asignación de permisos a Usuario: {{ usuario }}  </h5>
+                <div role="separator" id="ex2_start_sep" aria-labelledby="ex2_start_sep ex2_label" aria-label="Start of"></div>
+                <div id="ex2">
+                    <p>Debe seleccionar los permisos a asignar:</p>
+                    <div class="listbox-area">
+                        <input type="hidden" id="id_values_li" name="values_li">
+                        <div class="left-area" style="height:500px; overflow: scroll;" >
+                            <button type="button" id="ex2-add" class="move-right-btn" aria-keyshortcuts="Alt+ArrowRight Enter" aria-disabled="true" >Asignar >></button>
+                            <!--<span id="ms_av_l">Permisos disponibles:</span>-->
+                            <ul
+                            id="ms_imp_list"
+                            tabindex="0"
+                            role="listbox"
+                            aria-labelledby="ms_av_l"
+                            aria-multiselectable="true">
+                            {% for modulo in modulos %}
+                            <li id="{{ modulo[0] }}" role="option" aria-selected="false">{{ modulo[1] }}</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="right-area" style="height:500px; overflow: scroll;">
+                            <button type="button"  id="ex2-delete" class="move-left-btn" aria-keyshortcuts="Alt+ArrowLeft Delete" aria-disabled="true"><< Denegar</button>
+                            <!--<span id="ms_ch_l">Permisos asignados:</span>-->
+                            <ul id="ms_unimp_list" tabindex="0" role="listbox" aria-labelledby="ms_ch_l" aria-activedescendant="" aria-multiselectable="true">
+                            {% if permisos_usuario %}
+                            {% for permiso in permisos_usuario %}
+                            <li id="{{ permiso[0] }}" role="option" aria-selected="false">{{ permiso[1] }}</li>
+                            {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </div>
+                        <button id="get_values" type="submit" class="btn btn-primary btn-sm" onclick="get_values_li()">Grabar permisos asignados</button>
+                        <button type="submit" class="btn btn-danger btn-sm float-right" onclick="set_salir()">Salir</button>
+
+                        <div class="offscreen">Last change: <span aria-live="polite" id="ms_live_region"></span></div>
+
+                    </div>
+                </div>
+                <div role="separator" id="ex2_end_sep" aria-labelledby="ex2_end_sep ex2_label" aria-label="End of"></div>
+            </section>
+        </form>
+    </section>
+</div>
+
+<script>
+function get_values_li(){
+    var lis = document.querySelectorAll('#ms_unimp_list li[id]');
+
+    var arr = [];
+    var v = '';
+
+    for (var i = 0; i < lis.length; i++) {
+        arr.push(+lis[i].id);
+        v+= lis[i].id + '|'
+    }
+
+    //document.getElementById('id_values_li').value = JSON.stringify(arr, 0, 4);
+    document.getElementById('id_values_li').value = v;
+}
+
+function set_salir(){
+    document.getElementById('id_values_li').value = 'salir'
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+swap cx
+
+add __init__
+
+en la clase: usuarios:
+---------------------
+c.sql2(       ->   self.cur.execute(
+c.sql(       ->   self.cur.execute(
+
+c.cur.   ->  self.cur.
+
+c.cnx.commit ->  self.cx.commit
+
+en app.py
+----------
+usuarios.Usuarios() -> usuarios.Usuarios(cxms)
