@@ -462,6 +462,7 @@ function valida_n_rango(event, input, min, max) {
    //}
 }
 
+
 // Below Function Executes On Form Submit
 function Validation(f) {
     if (f.tipolocloc.value == '') {
@@ -471,6 +472,10 @@ function Validation(f) {
 
     if (f.marcaloc.value == '') {
         alert('Debe específicar - Habilitado/Inhabilitado...');
+        return false;
+    }
+    if (parseFloat(f.poblacionelecloc.value) >= parseFloat(f.poblacionloc.value)) {
+        alert('\n Error - Población Electoral mayor o igual a Población Total ?? \n\n Por favor verifique ...');
         return false;
     }
     return true;
