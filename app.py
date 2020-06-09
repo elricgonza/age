@@ -171,7 +171,7 @@ def registro(usuario_id=None):
                             request.form['apellidos'], \
                             request.form['email'], \
                             pw_hash, \
-                            '2', \
+                            request.form['dep'], \
                             1)
                 return render_template('welcome.html')
         else: # es EDIT
@@ -179,6 +179,7 @@ def registro(usuario_id=None):
                             request.form['nombre'], \
                             request.form['apellidos'], \
                             request.form['email'], \
+                            request.form['dep'], \
                             1)
             return render_template('usuarios.html', usuarios=u.get_usuarios())
     else: # viene de listado USUARIOS
@@ -187,6 +188,54 @@ def registro(usuario_id=None):
                 return render_template('registro.html', error=error, u=u, load_u=True)
 
     return render_template('registro.html', error=error, u=u, load_u=False)
+
+
+@app.route('/m_usuarios', methods=['GET', 'POST'])
+@login_required
+def m_usuarios():
+    u = usuarios.Usuarios(cxms)
+    rows = u.get_usuarios()
+    if rows:
+        return render_template('usuarios.html', usuarios=rows)
+    else:
+        print ('Sin usuarios...')
+
+
+@app.route('/usuario_del/<usuario_id>', methods=['GET', 'POST'])
+def usuario_del(usuario_id):
+    u = usuarios.Usuarios(cxms)
+    u.del_usuario(usuario_id)
+
+    rows = u.get_usuarios()
+    if rows:
+        return render_template('usuarios.html', usuarios=rows)
+    else:
+        print ('Sin usuarios...')
+
+
+@app.route('/permisos/<usuario_id>', methods=['GET', 'POST'])
+@login_required
+def permisos(usuario_id):
+    u = usuarios.Usuarios(cxms)
+    p = permisosU.Permisos(cxms)
+
+    if request.method == 'POST':
+        # Grabando
+        vl = request.form['values_li']
+        if vl != 'salir':
+            p.reset_permisos_de_usuario(usuario_id)
+            p.save_permisos_txt(usuario_id, request.form['values_li'])
+
+        rows = u.get_usuarios()
+        if rows:
+            return render_template('usuarios.html', usuarios=rows)
+        else:
+            print ('Sin usuarios...')
+    else:
+        if u.get_usuario_id(usuario_id):
+            m_rows = p.get_modulos_sin_asignar(usuario_id)      # False or rows
+            pu_rows =  p.get_permisos_de_usuario(usuario_id)  # False or rows
+            return render_template('permisos.html', usuario=u, modulos=m_rows, permisos_usuario=pu_rows)
 
 
 @app.route('/asiento_img/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
@@ -411,52 +460,6 @@ def asiento(idloc):
     # New
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p)
 
-
-@app.route('/m_usuarios', methods=['GET', 'POST'])
-@login_required
-def m_usuarios():
-    u = usuarios.Usuarios(cxms)
-    rows = u.get_usuarios()
-    if rows:
-        return render_template('usuarios.html', usuarios=rows)
-    else:
-        print ('Sin usuarios...')
-
-
-@app.route('/usuario_del/<usuario_id>', methods=['GET', 'POST'])
-def usuario_del(usuario_id):
-    u = usuarios.Usuarios(cxms)
-    u.del_usuario(usuario_id)
-
-    rows = u.get_usuarios()
-    if rows:
-        return render_template('usuarios.html', usuarios=rows)
-    else:
-        print ('Sin usuarios...')
-
-@app.route('/permisos/<usuario_id>', methods=['GET', 'POST'])
-@login_required
-def permisos(usuario_id):
-    u = usuarios.Usuarios(cxms)
-    p = permisosU.Permisos(cxms)
-
-    if request.method == 'POST':
-        # Grabando
-        vl = request.form['values_li']
-        if vl != 'salir':
-            p.reset_permisos_de_usuario(usuario_id)
-            p.save_permisos_txt(usuario_id, request.form['values_li'])
-
-        rows = u.get_usuarios()
-        if rows:
-            return render_template('usuarios.html', usuarios=rows)
-        else:
-            print ('Sin usuarios...')
-    else:
-        if u.get_usuario_id(usuario_id):
-            m_rows = p.get_modulos_sin_asignar(usuario_id)      # False or rows
-            pu_rows =  p.get_permisos_de_usuario(usuario_id)  # False or rows
-            return render_template('permisos.html', usuario=u, modulos=m_rows, permisos_usuario=pu_rows)
 
 @app.route('/about')
 def about():

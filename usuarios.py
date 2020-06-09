@@ -77,10 +77,10 @@ class Usuarios:
         except:
              print("Error --DEL-- usuario...")
 
-    def upd_usuario(self, id, nombre, apellidos, email, authenticated):
-        upd_usuario = (nombre, apellidos, email, authenticated, id)
+    def upd_usuario(self, id, nombre, apellidos, email, dep, authenticated):
+        upd_usuario = (nombre, apellidos, email, dep, authenticated, id)
         s = "update usuarios " + \
-            " set nombre= %s, apellidos= %s, email= %s,  authenticated= %d " + \
+            " set nombre= %s, apellidos= %s, email= %s, dep= %d, authenticated= %d " + \
             " where id = %d"
         try:
             self.cur.execute(s, upd_usuario)

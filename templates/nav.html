@@ -56,13 +56,22 @@
 
     <ul class="nav navbar-nav ml-auto">
       {% if current_user.is_authenticated %}
-      <li class="nav-item">
-          <i><a class="nav-link" href="#">Usuario: {{ current_user.nombre }} {{ current_user.apellidos }} </a></i>
-      </li>
+      <!--<li class="nav-item">-->
+          <!--<i><a class="nav-link" href="#">Usuario: {{ current_user.nombre }} {{ current_user.apellidos }} </a></i>-->
+          <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i>Usuario: {{ current_user.nombre }}  {{ current_user.apellidos }}</i>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/mundo">Cambio de Password</a>
+                <a class="dropdown-item" href="/pais">Actualización de datos</a>
+            </div>
+        </div>
+        <!--</li> -->
       {% endif %}
   
       <li class="nav-item">
-          <!--<a class="nav-link" href="registro"><span class="fas fa-user"></span>Registro</a>-->
+          <!--<a class="nav-link" href="registro"><span class="fas fa-user"></span> Registro</a>-->
           <a class="nav-link" href={{ url_for('registro', usuario_id=0) }} ><span class="fas fa-user"></span>Registro</a>
       </li>
 
