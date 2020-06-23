@@ -154,6 +154,30 @@ def login():
     return render_template('login.html', error=error)
 
 
+@app.route('/change_pwd', methods=['GET', 'POST'])
+@login_required
+def change_pwd():
+    u = usuarios.Usuarios(cxms)
+    error = None
+
+    if request.method == 'POST':
+        if u.get_usuario_usr(usr):
+            pw_es_igual = bcrypt.check_password_hash(u.password, request.form['pwdold'])
+            if not pw_es_igual:   # valida usr
+                error = "Password anterior NO coincide...!"
+                return render_template('pwd.html', error=error, u=u, load_u=True)
+            elif request.form['pwdnew'] != request.form['pwdnew2'] :
+                error = "Error en password nuevo NO coincide con password confirmado...!"
+                return render_template('pwd.html', error=error, u=u, load_u=True)
+            else:
+                pw_hash = bcrypt.generate_password_hash(request.form['pwdnew']).decode('UTF-8')
+                u.upd_pwd_usuario(usr, \
+                            pw_hash, \
+                            )
+                return render_template('welcome.html')
+
+    return render_template('pwd.html', error=error, u=u, load_u=False)
+
 @app.route('/registro/<usuario_id>', methods=['GET', 'POST'])
 def registro(usuario_id=None):
     u = usuarios.Usuarios(cxms)
@@ -188,6 +212,8 @@ def registro(usuario_id=None):
                 return render_template('registro.html', error=error, u=u, load_u=True)
 
     return render_template('registro.html', error=error, u=u, load_u=False)
+
+
 
 
 @app.route('/m_usuarios', methods=['GET', 'POST'])

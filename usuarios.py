@@ -53,6 +53,22 @@ class Usuarios:
             self.authenticated = row[7]
             return True
 
+    def get_usuario_usr(self, usr):
+        s = "select * from usuarios where usuario = %s"
+        self.cur.execute(s, usr)
+        row = self.cur.fetchone()
+        if  row == None:
+            return False
+        else:
+            self.usuario = row[1]
+            self.nombre = row[2]
+            self.apellidos = row[3]
+            self.email = row[4]
+            self.password = row[5]
+            self.dep = row[6]
+            self.authenticated = row[7]
+            return True
+
     def get_usuarios(self):
         s = "select * from usuarios order by usuario"
         self.cur.execute(s)
@@ -88,6 +104,18 @@ class Usuarios:
             print('Usuario actualizado')
         except:
             print("Error --UPD-- usuario...")
+
+    def upd_pwd_usuario(self, usuario, password):
+        upd_usuario = (password, usuario)
+        s = "update usuarios " + \
+            " set password= %s "  + \
+            " where usuario = %s"
+        try:
+            self.cur.execute(s, upd_usuario)
+            self.cx.commit()
+            print('Password actualizado')
+        except:
+            print("Error --UPD-- password usuario...")
 
     def get_permisos(self, usuario_id):
         """ Retorna list con permisos asignados a usuario """

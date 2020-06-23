@@ -179,16 +179,6 @@
     })();
 
 
-
-function checkp(input) {
-        //alert(input.value);
-      input.setCustomValidity('scv0');
-    if (form.$pswd.value != input.value) {
-        alert($pswd.value);
-      input.setCustomValidity('scv');
-      $("#v_pswd2").html("Error: Pasword NO coincide!");
-    }
-}
 function validapswd2(input) {
     pswd = document.getElementById("pswd").value 
     if (pswd != input.value) {

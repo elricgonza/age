@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h4 class="text-center text-blue pt-3" >Actualización de Password</h4>
+    <br>
+    <div id="login-row" class="row justify-content-center align-items-center">
+        <div id="login-column" class="col-md-6">
+            <div id="login-box" class="col-md-12">
+
+                <form action="" class="needs-validation" novalidate method='POST'>
+                    <div class="form-group">
+                        <label for="pwd">Password Anterior:</label>
+                        <input type="password" class="form-control" id="pwdold" title="" placeholder="Introduzca password anterior" name="pwdold" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
+                        <div class="invalid-feedback">Debe contener al menos un número, una letra minúscula, una mayúscula y al menos 8 caracteres.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pwd">Password Nuevo:</label>
+                        <input type="password" class="form-control" id="pwdnew" title="" placeholder="Introduzca nuevo password" name="pwdnew" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
+                        <div class="invalid-feedback">Debe contener al menos un número, una letra minúscula, una mayúscula y al menos 8 caracteres.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pwd">Confirme Nuevo Password:</label>
+                        <input type="password" class="form-control" id="pwdnew2" title="" placeholder="Confirme password nuevo" name="pwdnew2" required oninput="validapswd2(this)">                                                                                                                                                            
+                        <div class="invalid-feedback" id="v_pswd2">Error en confirmación...</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <button type="button"  onclick="javascript: window.location.href = '/';"  class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button type="submit" class="btn btn-outline-success btn-md btn-block" 
+                            >Aceptar</button>
+                        </div>
+                    </div> <!--row-->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+
+function validapswd2(input) {
+    pswd = document.getElementById("pwdnew").value 
+    if (pswd != input.value) {
+      input.setCustomValidity('scv');
+      $("#v_pswd2").html("Error: Pasword NO coincide!");
+    } else {
+      input.setCustomValidity('');
+    }
+}
+
+</script>
+
+{% endblock %}
+
