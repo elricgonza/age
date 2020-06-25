@@ -37,11 +37,18 @@ class Asientos:
         self.cx = cx
         self.cur = cx.cursor()
 
-    def get_asientos(self):
+    def get_asientos(self, usrdep):
         s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio, "  + \
 	    "AsientoElectoral as Asiento, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC " + \
-	    " from [GeografiaElectoral_app].[dbo].[GeoAsientos_Nacional] order by dep, prov, sec"
-        self.cur.execute(s)
+	    " from [GeografiaElectoral_app].[dbo].[GeoAsientos_Nacional]"
+        if usrdep != 0 :
+            s = s + " where DEP = %d order by prov, sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by DEP, PROV, SEC"
+            print(s)
+            self.cur.execute(s)
+
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False

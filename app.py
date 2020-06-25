@@ -82,11 +82,13 @@ def teardown_request_func(error=None):
 @login_manager.user_loader
 def user_loader(txtusr):
     global usr
+    global usrdep
     global permisos_usr
     user = usuarios.Usuarios(cxms)
 
     if user.get_usuario(txtusr):
         usr = user.usuario
+        usrdep = user.dep
         permisos_usr = user.get_permisos_name(usr)
         return user
 
@@ -319,7 +321,7 @@ def resize_save_file(in_file, out_file, size):
 @login_required
 def asientos_list():
     a = asi.Asientos(cxms)
-    rows = a.get_asientos()
+    rows = a.get_asientos(usrdep)
 
     if rows:
         if permisos_usr:    # tiene pemisos asignados
