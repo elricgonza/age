@@ -250,6 +250,7 @@
                             selected 
                         {% endif %}
                     >Propuesta</option>
+                    {% if usrdep == 0 %}
                     <option value=2
                         {% if load  and a.etapa == 2 %}
                             selected 
@@ -260,6 +261,7 @@
                             selected 
                         {% endif %}
                     >Aprobado</option>
+                    {% endif %}
                 </select> 
             </div>
             <div class="col-md-6">

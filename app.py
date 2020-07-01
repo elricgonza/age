@@ -96,7 +96,7 @@ def user_loader(txtusr):
 @app.context_processor
 def inject_global():
     u = usuarios.Usuarios(cxms)
-    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr)
+    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr, usrdep=usrdep)
 
 
 @app.errorhandler(401)
