@@ -348,6 +348,18 @@ def asiento(idloc):
 '''
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
+        print('***************************************')
+        print(idloc)
+        #print('etapa', request.form['etapa'])
+        #print('docAct', request.form['docAct'])
+        print('fechaDocAct', str(request.form['fechaDocAct']))
+        #print('obsUbicacion', request.form['obsUbicacion'])
+        #print('docRspNal', request.form['docRspNal'])
+        print('fechaRspNal', request.form['fechaRspNal'])
+        print('fechaIngreso', request.form['fechaIngreso'])
+        print('fa', fa)
+
+        print('***************************************')
         if idloc == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -387,7 +399,7 @@ def asiento(idloc):
                                 'NUevo Registro')
                 #
                 '''
-                rows = a.get_asientos()
+                rows = a.get_asientos(usrdep)
                 return render_template('asientos_list.html', asientos=rows)  # render a template
         else: # Es Edit
             a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
@@ -429,9 +441,9 @@ def asiento(idloc):
             #
             '''
 
+            fa = str(datetime.datetime.now())[:-7]     # fechaAct
             if a.existe_en_loc2(idloc):
                 # Debe actualizar fechaAct y usuario
-                fa = str(datetime.datetime.now())[:-7]     # fechaAct
 
                 a.upd_asiento2(idloc, request.form['etapa'], request.form['docAct'], \
                                 request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
@@ -465,11 +477,11 @@ def asiento(idloc):
             else:
                 a.add_asiento2(idloc, request.form['etapa'], request.form['docAct'], \
                               request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                              request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'], \
+                               request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'][:-7], \
                               fa, request.form['usuario'])
 
 
-            rows = a.get_asientos()
+            rows = a.get_asientos(usrdep)
             return render_template('asientos_list.html', asientos=rows)  # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT

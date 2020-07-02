@@ -154,7 +154,7 @@ class Asientos:
             self.cx.commit()
             print("asiento -loc2- adicionado...")
         except Exception as e:
-            print("Error - actualización de asiento -loc2-...")
+            print("Error - adición de asiento -loc2-...")
             print(e)
 
     def upd_asiento(self, idloc, nomloc, poblacionloc, \
