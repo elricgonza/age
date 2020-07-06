@@ -46,6 +46,7 @@ login_manager.login_view = ''
 
 # globales
 usr = ""
+usrdep = 99
 permisos_usr = []
 
 
@@ -95,7 +96,7 @@ def user_loader(txtusr):
 
 @app.context_processor
 def inject_global():
-    u = usuarios.Usuarios(cxms)
+    print(str(datetime.datetime.now())[0:-3])
     return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr, usrdep=usrdep)
 
 
@@ -348,18 +349,6 @@ def asiento(idloc):
 '''
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
-        print('***************************************')
-        print(idloc)
-        #print('etapa', request.form['etapa'])
-        #print('docAct', request.form['docAct'])
-        print('fechaDocAct', str(request.form['fechaDocAct']))
-        #print('obsUbicacion', request.form['obsUbicacion'])
-        #print('docRspNal', request.form['docRspNal'])
-        print('fechaRspNal', request.form['fechaRspNal'])
-        print('fechaIngreso', request.form['fechaIngreso'])
-        print('fa', fa)
-
-        print('***************************************')
         if idloc == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -447,7 +436,7 @@ def asiento(idloc):
 
                 a.upd_asiento2(idloc, request.form['etapa'], request.form['docAct'], \
                                 request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                               request.form['fechaRspNal'], request.form['obs'], str(request.form['fechaIngreso'])[0:-3], \
+                               request.form['fechaRspNal'], request.form['obs'], str(request.form['fechaIngreso']), \
                                fa, usr)
 
                 '''
@@ -477,7 +466,7 @@ def asiento(idloc):
             else:
                 a.add_asiento2(idloc, request.form['etapa'], request.form['docAct'], \
                               request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                               request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'][:-7], \
+                               request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'], \
                               fa, request.form['usuario'])
 
 
