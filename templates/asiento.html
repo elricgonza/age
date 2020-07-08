@@ -216,22 +216,42 @@
                         {% if load  and a.estado == 1 %}
                             selected 
                         {% endif %}
-                    >Activo</option>
+                    >Habilitado TED</option>
                     <option value=2
                         {% if load  and a.estado == 2 %}
                             selected 
                         {% endif %}
-                    >Habilitado</option>
+                    >Rehabilitado TED</option>
                     <option value=3
                         {% if load  and a.estado == 3 %}
                             selected 
                         {% endif %}
-                    >Suspendido</option>
+                    >Suspendido TED</option>
                     <option value=4
                         {% if load  and a.estado == 4 %}
                             selected 
                         {% endif %}
-                    >Suprimido</option>
+                    >Suprimido TED</option>
+                    <option value=1 
+                        {% if load  and a.estado == 101 %}
+                            selected 
+                        {% endif %}
+                    >Habilitado TSE</option>
+                    <option value=2
+                        {% if load  and a.estado == 102 %}
+                            selected 
+                        {% endif %}
+                    >Rehabilitado TSE</option>
+                    <option value=3
+                        {% if load  and a.estado == 103 %}
+                            selected 
+                        {% endif %}
+                    >Suspendido TSE</option>
+                    <option value=4
+                        {% if load  and a.estado == 104 %}
+                            selected 
+                        {% endif %}
+                    >Suprimido TSE</option>
                 </select> 
             </div>
         </div> <!--row-->

@@ -322,7 +322,7 @@ def resize_save_file(in_file, out_file, size):
 @login_required
 def asientos_list():
     a = asi.Asientos(cxms)
-    rows = a.get_asientos(usrdep)
+    rows = a.get_asientos_all(usrdep)
 
     if rows:
         if permisos_usr:    # tiene pemisos asignados
@@ -388,7 +388,7 @@ def asiento(idloc):
                                 'NUevo Registro')
                 #
                 '''
-                rows = a.get_asientos(usrdep)
+                rows = a.get_asientos_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows)  # render a template
         else: # Es Edit
             a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
@@ -470,7 +470,7 @@ def asiento(idloc):
                               fa, request.form['usuario'])
 
 
-            rows = a.get_asientos(usrdep)
+            rows = a.get_asientos_all(usrdep)
             return render_template('asientos_list.html', asientos=rows)  # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT

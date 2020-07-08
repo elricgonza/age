@@ -55,6 +55,34 @@ class Asientos:
         else:
             return rows
 
+
+    def get_asientos_all(self, usrdep):
+        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio, "  + \
+	    "AsientoElectoral as Asiento, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC, " + \
+            "CASE WHEN estado = 1 THEN 'Habilitado TED' " + \
+                    "WHEN estado = 2 THEN 'Rehabilitado TED' " + \
+                    "WHEN estado = 3 THEN 'Suspendido TED' " + \
+                    "WHEN estado = 4 THEN 'Suprimido TED' " + \
+                    "WHEN estado = 101 THEN 'Habilitado TSE' " + \
+                    "WHEN estado = 102 THEN 'Rehabilitado TSE' " + \
+                    "WHEN estado = 103 THEN 'Suspendido TSE' " + \
+                    "WHEN estado = 104 THEN 'Suprimido TSE' " + \
+            "ELSE 'oother'  END as Estado" + \
+	    " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        if usrdep != 0 :
+            s = s + " where DEP = %d order by prov, sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by DEP, PROV, SEC"
+            print(s)
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
     def get_asiento_idloc(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
             "a.PoblacionLoc, a.PoblacionElecLoc, a.FechaCensoLoc, a.TipoLocLoc, a.fechaBaseLegLoc," + \
