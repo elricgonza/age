@@ -16,6 +16,7 @@
                             <input type="text" class="form-control" id="uname" placeholder="Introduzca usuario" name="uname" required pattern="\w+"
                                 {% if load_u %}
                                     value="{{ u.usuario }}"
+                                    readonly
                                 {% endif %}
                             >
                         <div class="invalid-feedback" id="v_uname">Debe contener sólo letras, números, y guión "bajo".</div>
@@ -45,7 +46,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="idep">Departamento</label>
-                            <select id="idep" name=dep class="form-control">
+                            <select id="idep" name=dep class="form-control" 
+                                {% if usuario != 'admin' %}
+                                disabled>
+                                {% endif %}
+
                                 <option value=1 
                                     {% if load_u  and u.dep == 1 %}
                                         selected 
@@ -97,6 +102,9 @@
                                     {% endif %}
                                 >Nacional</option>
                             </select> 
+                            {% if usuario != 'admin' %}
+                            <input type="hidden" name="dep" value={{ u.dep }}>
+                            {% endif %}
                         </div>
                     </div>
 
