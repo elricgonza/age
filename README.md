@@ -1,3 +1,6 @@
+App Administración Geo
+======================
+
 Resguardo de imágenes en:
  static/imgbd/asi
  static/imgbd/reci
