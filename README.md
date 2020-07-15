@@ -16,4 +16,7 @@ using:
     all.css
     webfonts (carpeta)
 
+Base de datos:
+-SQL SERVER
+-Postgres
 
