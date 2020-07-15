@@ -1,6 +1,7 @@
 # Operaciones usuarios
 
 class Usuarios:
+    id = 0
     usuario = ''
     nombre = ''
     apellidos = ''
@@ -28,6 +29,7 @@ class Usuarios:
         if  row == None:
             return False
         else:
+            self.id = row[0]
             self.usuario = row[1]
             self.nombre = row[2]
             self.apellidos = row[3]

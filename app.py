@@ -47,6 +47,7 @@ login_manager.login_view = ''
 # globales
 usr = ""
 usrdep = 99
+usrid = 0
 permisos_usr = []
 
 
@@ -84,12 +85,14 @@ def teardown_request_func(error=None):
 def user_loader(txtusr):
     global usr
     global usrdep
+    global usrid
     global permisos_usr
     user = usuarios.Usuarios(cxms)
 
     if user.get_usuario(txtusr):
         usr = user.usuario
         usrdep = user.dep
+        usrid = user.id
         permisos_usr = user.get_permisos_name(usr)
         return user
 
@@ -97,7 +100,7 @@ def user_loader(txtusr):
 @app.context_processor
 def inject_global():
     print(str(datetime.datetime.now())[0:-3])
-    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr, usrdep=usrdep)
+    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr, usrdep=usrdep, usrid=usrid)
 
 
 @app.errorhandler(401)
@@ -181,6 +184,7 @@ def change_pwd():
 
     return render_template('pwd.html', error=error, u=u, load_u=False)
 
+
 @app.route('/registro/<usuario_id>', methods=['GET', 'POST'])
 def registro(usuario_id=None):
     u = usuarios.Usuarios(cxms)
@@ -208,15 +212,16 @@ def registro(usuario_id=None):
                             request.form['email'], \
                             request.form['dep'], \
                             1)
-            return render_template('usuarios.html', usuarios=u.get_usuarios())
+            if usr == 'admin':
+                return render_template('usuarios.html', usuarios=u.get_usuarios())
+            return render_template('home.html')
+
     else: # viene de listado USUARIOS
         if usuario_id != 0:  # EDIT
             if u.get_usuario_id(usuario_id) == True:
                 return render_template('registro.html', error=error, u=u, load_u=True)
 
     return render_template('registro.html', error=error, u=u, load_u=False)
-
-
 
 
 @app.route('/m_usuarios', methods=['GET', 'POST'])
@@ -231,6 +236,7 @@ def m_usuarios():
 
 
 @app.route('/usuario_del/<usuario_id>', methods=['GET', 'POST'])
+@login_required
 def usuario_del(usuario_id):
     u = usuarios.Usuarios(cxms)
     u.del_usuario(usuario_id)
