@@ -273,14 +273,19 @@
                             selected 
                         {% endif %}
                     >Propuesta</option>
-                    {% if usrdep == 0 %}
-                    <option value=2
+                    <option value=2 
                         {% if load  and a.etapa == 2 %}
                             selected 
                         {% endif %}
-                    >Revisión</option>
+                    >Devuelto</option>
+                    {% if usrdep == 0 %}
                     <option value=3
                         {% if load  and a.etapa == 3 %}
+                            selected 
+                        {% endif %}
+                    >Revisión</option>
+                    <option value=4
+                        {% if load  and a.etapa == 4 %}
                             selected 
                         {% endif %}
                     >Aprobado</option>
@@ -503,6 +508,12 @@ function Validation(f) {
         alert('\n Error - Población Electoral mayor o igual a Población Total ?? \n\n Por favor verifique ...');
         return false;
     }
+    est = parseFloat(f.estado.value);
+    if  ({{ usrdep }} > 0 && est > 100 ) { // estado corresponde a usr nal
+        alert ('\n Error - Como usuario del TED debe completar el dato ESTADO...');
+        return false;
+    }
+
     return true;
 }
 
