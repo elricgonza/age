@@ -1,0 +1,270 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">    
+    <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}        
+        {% for message in messages %}         
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        {% endfor %}        
+      {% endif %}
+    {% endwith %}
+    <div id="login-row" class="row justify-content-center align-items-center">
+        <div id="login-column" class="col-md-8">
+            <div id="login-box" class="col-md-12">
+                <form action="" class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="docform">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="idoc">Tipo de Documento</label>
+                            <select id="idoc" name=doc class="form-control" required>                          
+                                <option></option>
+                                {% for tdocumento in tdocumentos %}
+                                        {% if load_d  and d.tipoDoc == tdocumento[0] %}
+                                                <option value = "{{ tdocumento[0] }}" selected>{{ tdocumento[1] }}</option>
+                                        {% else %}
+                                                <option value = "{{ tdocumento[0] }}">{{ tdocumento[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
+                        </div>
+                        
+                    </div>                
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="idep">Departamento</label>                                
+                            <select id="idep" name=dep class="form-control" required
+                                {% if usuario != 'unacional' %}
+                                        disabled         
+                                {% endif %}
+                                >
+                                <option></option>                                                          
+                                <option value=1 
+                                    {% if load_d  and d.dep == 1 %}
+                                            selected
+                                        {% elif usrdep == 1 %}
+                                            selected  
+                                    {% endif %}
+                                >Chuquisaca</option>
+                                <option value=2
+                                    {% if load_d  and d.dep == 2 %}
+                                            selected
+                                        {% elif usrdep == 2 %}
+                                            selected 
+                                    {% endif %}
+                                >La Paz</option>
+                                <option value=3
+                                    {% if load_d  and d.dep == 3 %}
+                                            selected
+                                        {% elif usrdep == 3 %}
+                                            selected 
+                                    {% endif %}
+                                >Cochabamba</option>
+                                <option value=4 
+                                    {% if load_d  and d.dep == 4 %}
+                                            selected
+                                        {% elif usrdep == 4 %}
+                                            selected 
+                                    {% endif %}
+                                >Oruro</option>
+                                <option value=5
+                                    {% if load_d  and d.dep == 5 %}
+                                            selected
+                                        {% elif usrdep == 5 %}
+                                            selected 
+                                    {% endif %}
+                                >Potosí</option>
+                                <option value=6
+                                    {% if load_d  and d.dep == 6 %}
+                                            selected
+                                        {% elif usrdep == 6 %}
+                                            selected  
+                                    {% endif %}
+                                >Tarija</option>
+                                <option value=7 
+                                    {% if load_d  and d.dep == 7 %}
+                                            selected
+                                      {% elif usrdep == 7 %}
+                                            selected                                   
+                                    {% endif %}
+                                >Santa Cruz</option>
+                                <option value=8
+                                    {% if load_d  and d.dep == 8 %}
+                                            selected
+                                        {% elif usrdep == 8 %}
+                                            selected 
+                                    {% endif %}
+                                >Bení</option>
+                                <option value=9
+                                    {% if load_d  and d.dep == 9 %}
+                                            selected
+                                        {% elif usrdep == 9 %}
+                                            selected 
+                                    {% endif %}
+                                >Pando</option>
+                                <option value=0 
+                                    {% if load_d  and d.dep == 0 %}
+                                            selected                                  
+                                    {% endif %}
+                                >Nacional</option>
+                            </select> 
+                            {% if usuario != 'unacional' %}
+                                <input type="hidden" name="dep" value={{ usrdep }}>
+                            {% endif %}
+                            <div class="invalid-feedback">Debe Seleccionar un Departamento...</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label for="cite">CITE:</label>
+                            <input type="text" class="form-control" id="cite" placeholder="Introduzca CITE" name="cite" required
+                                {% if load_d %}
+                                    value="{{ d.cite }}"        
+                                {% endif %}
+                            >
+                            <div class="invalid-feedback">Por favor ingrese datos.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechadoc">Fecha Documento:</label>
+                            <input type="date" class="form-control" id="ifechadoc" title="" placeholder="Introduzca fecha del Documento" name="fechadoc" min="2012-01-01" max="2025-01-01" "  
+                                    {% if load_d %}
+                                        value="{{ d.fechaDoc }}"
+                                    {% else %}
+                                        value="{{ idate }}"  
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback" id="v_fechadoc">Debe introducir una fecha válida.</div>
+                        </div>
+                    </div>                    
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="iobs">Observaciones:</label>
+                            <textarea class="form-control" rows="3" id="iobs" name="obs">
+                                    {% if load_d %}
+                                        {{ d.obs }}
+                                    {% endif %}
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="ipdf">Adjuntar PDF.:</label>
+                            <div class="custom-file">                                
+                                <input id="logo" type="file" accept="application/pdf" class="custom-file-input" name="archivo" 
+                                {% if not load_d %}
+                                        required                                    
+                                {% endif %}
+                                >
+                                <label for="logo" class="custom-file-label">Seleccione el archivo...</label>                             
+                                <div class="invalid-feedback">Debe cargar el archivo PDF.</div>                     
+                            </div>
+                            {% if load_d %}                                                                                
+                                        <a href="{{ d.ruta }}" target="_blank">Adjunto</a>                               
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="fecharegistro">Fecha y Hora de Registro:</label>
+                            <input type="datetime" class="form-control" id="ifecharegistro" title="" placeholder="Fecha de Registro." name="fecharegistro" readonly
+                                    {% if load_d %}
+                                        value="{{ d.fechaAct }}"
+                                    {% else %}
+                                        value="{{ idatetime }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechaingreso">Fecha y Hora Actual:</label>
+                            <input type="datetime" class="form-control" id="ifechaingreso" title="" placeholder="Fecha Actual." name="fechaingreso" readonly
+                                    {% if load_d %}
+                                        value="{{ d.fechaIngreso }}"
+                                    {% else %}
+                                        value="{{ idatetime }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
+                        </div>                        
+                        <div class="col-md-4">
+                            <label for="usuario">Usuario Logueado:</label>
+                            <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                                    {% if load_d %}
+                                        value="{{ d.usuario }}"
+                                    {% else %}
+                                        value="{{ usuario }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback">Debe introducir un nombre válido.</div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <button type="button"  onclick="javascript: window.location.href = '/documentos_list';"  class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button type="submit" class="btn btn-outline-success btn-md btn-block" 
+                            >Aceptar</button>
+                        </div>
+                    </div> <!--row-->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    $('.custom-file-input').on('change', function() { 
+          let fileName = $(this).val().split('\\').pop(); 
+          $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+    });    
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+</script>
+
+{% endblock %}

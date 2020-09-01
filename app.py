@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_bcrypt import Bcrypt
 import re
@@ -14,6 +14,9 @@ import dbcn
 import usuarios
 import permisos as permisosU
 import asientos as asi
+import documentos as docu
+import documentos_pdf as dpdf
+import tipodocs as tdoc
 import geo as geo
 import img
 import loc_img
@@ -36,6 +39,9 @@ app.secret_key ='\xfd{H\xe7<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\
 app.config['LOGIN_DISABLED'] = False
 app.config['IMG_ASIENTOS'] = '/static/imgbd/asi'
 app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
+app.config['SUBIR_PDF'] = '/static/pdfdoc'
+
+ALLOWED_EXTENSIONS = set(['pdf'])
 
 BCRYPT_LOG_ROUNDS = 15
 bcrypt = Bcrypt(app)
@@ -50,6 +56,8 @@ usrdep = 99
 usrid = 0
 permisos_usr = []
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.before_request
 def before_request_func():
@@ -294,11 +302,11 @@ def asiento_img(idloc, nomloc):
             f  = uploaded_files[n]
             if f.filename != '':
                 securef = secure_filename(f.filename)
-                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))                
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
                 name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
-                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
+                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)                
                 resize_save_file(fpath, name_to_save, (1024, 768))
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
@@ -329,7 +337,7 @@ def resize_save_file(in_file, out_file, size):
 def asientos_list():
     a = asi.Asientos(cxms)
     rows = a.get_asientos_all(usrdep)
-
+    
     if rows:
         if permisos_usr:    # tiene pemisos asignados
             return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
@@ -338,6 +346,126 @@ def asientos_list():
     else:
         print ('Sin asientos...')
 
+#Codigo Grover-Inicio
+@app.route('/documentos_list', methods=['GET', 'POST'])
+@login_required
+def documentos_list():
+    d = docu.Documentos(cxms)
+    rows = d.get_documentos_all(usrdep)
+    
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados            
+            return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Documentos...')              
+
+@app.route('/documento/<doc_id>', methods=['GET', 'POST'])
+def documento(doc_id):    
+    d = docu.Documentos(cxms)
+    tdocu = tdoc.Tipodocs(cxms)
+    error = None
+
+    if request.method == 'POST':        
+        if doc_id == '0':  # es NEW            
+            nextid = d.get_next_iddoc()
+            tipo = d.tipo_doc(request.form['doc'])
+            tipo = tipo.lower()
+            f = request.files['archivo']
+            if allowed_file(f.filename):                
+                filename = secure_filename(f.filename)
+                filename = doc_id + '_' + filename        
+                f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
+                fpath = os.path.join(app.config['SUBIR_PDF'], filename)
+                fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+                arch, ext = os.path.splitext(fpath)
+                name_to_save = str(nextid) + "_" + str(tipo) + ext            
+                ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
+                os.rename(fpath1 + filename, fpath1 + name_to_save)
+            else:
+                flash('Debe cargar solo archivos PDFs')
+                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipodocumentos(usrdep))          
+            d.add_documento(request.form['doc'], \
+                        request.form['dep'], \
+                        request.form['cite'], \
+                        ruta, \
+                        request.form['fechadoc'], \
+                        request.form['obs'], \
+                        request.form['fecharegistro'], \
+                        request.form['usuario'], \
+                        request.form['fechaingreso'])            
+            return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
+        else: # es EDIT
+            tipo = d.tipo_doc(request.form['doc'])
+            tipo = tipo.lower()
+            f = request.files['archivo']            
+            filename = secure_filename(f.filename)
+            filename = doc_id + '_' + filename        
+            f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
+            fpath = os.path.join(app.config['SUBIR_PDF'], filename)
+            fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+            arch, ext = os.path.splitext(fpath)
+            name_to_save = doc_id + "_" + str(tipo) + ext            
+            ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
+            os.rename(fpath1 + filename, fpath1 + name_to_save)
+            fa = str(datetime.datetime.now())[:-7]                            
+            d.upd_documento(doc_id, \
+                        request.form['doc'], \
+                        request.form['dep'], \
+                        request.form['cite'], \
+                        ruta, \
+                        request.form['fechadoc'], \
+                        request.form['obs'], \
+                        request.form['usuario'], \
+                        fa)
+            if usr == 'admin':
+                return render_template('documentos_list.html', documentos=d.get_documentos())
+            return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
+
+    else: # viene de listado DOCUMENTOS            
+        if doc_id != 0:  # EDIT            
+            if d.get_documento_id(doc_id) == True:                
+                return render_template('documento.html', error=error, d=d, load_d=True, titulo='Modificacion de Documentos', tdocumentos=tdocu.get_tipodocumentos(usrdep))
+
+    return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipodocumentos(usrdep))
+
+@app.route('/documento_pdf/<doc_id>/<string:tipo>', methods=['GET', 'POST'])
+@login_required
+def documento_pdf(doc_id, tipo):
+    dp = dpdf.Documentos_pdf(cxms)
+    error = None  
+
+    if request.method == 'POST':            
+        f = request.files['archivo']
+        filename = secure_filename(f.filename)
+        filename = doc_id + '_' + filename        
+        f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
+        fpath = os.path.join(app.config['SUBIR_PDF'], filename)
+        fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+        arch, ext = os.path.splitext(fpath)
+        name_to_save = str(doc_id) + "_" + str(tipo) + ext
+        ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
+        os.rename(fpath1 + filename, fpath1 + name_to_save)        
+
+        if dp.upd_documentopdf_id(doc_id, ruta) == True: 
+                return render_template('documentos_list.html', documentos=dp.get_documentospdf_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
+
+    return render_template('documento_pdf.html', error=error, dp=dp, load_dp=False, puede_editar='Documentos - Edición' in permisos_usr)
+
+
+@app.route('/documento_del/<doc_id>', methods=['GET', 'POST'])
+@login_required
+def documento_del(doc_id):
+    d = docu.Documentos(cxms)
+    d.del_documento(doc_id)
+
+    rows = d.get_documentos_all(usrdep)
+    if rows:
+        return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)
+    else:
+        print ('Sin documentos...')    
+#Codigo Grover-Final
 
 @app.route('/asiento/<idloc>', methods=['GET', 'POST'])
 @login_required
@@ -515,10 +643,11 @@ def habilitado():
 def secret():
     return ('DEBERIA check only auths..')
 
+
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
-    """Logout the current user."""
+
     #user = current_user
     #user.authenticated = False
     #db.session.add(user)
@@ -867,6 +996,7 @@ def provincia_add(prov_id=None):
     #return 'Form para provincias'
     return render_template('provincia_add.html', datos_depto=rows)
 
+
 @app.route('/provincia_add2/<prov_id>/<prov_id2>', methods=['GET', 'POST'])
 @login_required
 def provincia_add2(prov_id=None, prov_id2=None):
@@ -1003,6 +1133,7 @@ def seccion_add(secc_id=None):
 
     #return 'Form para OJO secciones'  # 1ra vez entra form (vacio)
     return render_template('seccion_add.html', datos_depto=rows_d, datos_prov=rows_p)
+
 
 @app.route('/seccion_add2/<secc_id1>/<secc_id2>/<secc_id3>', methods=['GET', 'POST'])
 @login_required
@@ -1162,6 +1293,7 @@ def circunscripcion_add(circun_id=None):
     #return 'Form para circunscripcion 1ra vez'
     return render_template('circunscripcion_add.html', datos_depto=rows_d, datos_tipocircun=rows_c)
 
+
 @app.route('/circunscripcion_add2/<circun_id1>/<circun_id2>', methods=['GET', 'POST'])
 @login_required
 def circunscripcion_add2(circun_id1=None, circun_id2=None):
@@ -1243,7 +1375,6 @@ def circunscripcion_del(circun_id1, circun_id2):
         return render_template('circunscripcion.html', datos_circun=rows)  # render a template
 
     # return 'Para eliminar una provincia'
-
 
 
 

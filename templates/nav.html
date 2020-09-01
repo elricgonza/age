@@ -48,9 +48,14 @@
       </li>
       {% endif %}
       {% if current_user.is_authenticated %}
+      <!--Codigo Grover-Inicio-->
+      <li class="nav-item">
+        <a class="nav-link" href="/documentos_list">Documentos</a>
+      </li>
+      <!--Codigo Grover-Final-->
       <li class="nav-item">
         <a class="nav-link" href="#">Reportes</a>
-      </li>
+      </li>            
       {% endif %}
     </ul>
 
