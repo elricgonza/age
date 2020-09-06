@@ -1,6 +1,6 @@
 #Operaciones Tipo Documentos
 
-class Tipodocs:    
+class TipoDocs:    
     id=0
     usrdep=0
     tipodoc=0
@@ -11,7 +11,7 @@ class Tipodocs:
         self.cx = cx
         self.cur = cx.cursor()
 
-    def get_tipodocumentos(self, usrdep):
+    def get_tipo_documentos(self, usrdep):
         if usrdep != 0:
             codigo = 1
         else:
@@ -31,7 +31,7 @@ class Tipodocs:
         else:
             return rows
 
-    def get_tipodocumentos_all(self):
+    def get_tipo_documentos_all(self):
         s = "select id, tipoDoc from tipoDocumento"
         self.cur.execute(s)
         rows = self.cur.fetchall()

@@ -23,6 +23,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="idoc">Tipo de Documento</label>
+                            <input type="hidden" name="tipodocu" value="{{ d.tipoDoc }}">
                             <select id="idoc" name=doc class="form-control" required>                          
                                 <option></option>
                                 {% for tdocumento in tdocumentos %}

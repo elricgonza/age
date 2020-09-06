@@ -5,6 +5,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 from flask_bcrypt import Bcrypt
 import re
 import os
+import pathlib
 import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -364,12 +365,12 @@ def documentos_list():
 @app.route('/documento/<doc_id>', methods=['GET', 'POST'])
 def documento(doc_id):    
     d = docu.Documentos(cxms)
-    tdocu = tdoc.Tipodocs(cxms)
+    tdocu = tdoc.TipoDocs(cxms)
     error = None
 
     if request.method == 'POST':        
         if doc_id == '0':  # es NEW            
-            nextid = d.get_next_iddoc()
+            nextid = d.get_next_id_doc()
             tipo = d.tipo_doc(request.form['doc'])
             tipo = tipo.lower()
             f = request.files['archivo']
@@ -385,7 +386,7 @@ def documento(doc_id):
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
             else:
                 flash('Debe cargar solo archivos PDFs')
-                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipodocumentos(usrdep))          
+                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))          
             d.add_documento(request.form['doc'], \
                         request.form['dep'], \
                         request.form['cite'], \
@@ -397,18 +398,43 @@ def documento(doc_id):
                         request.form['fechaingreso'])            
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
         else: # es EDIT
-            tipo = d.tipo_doc(request.form['doc'])
-            tipo = tipo.lower()
-            f = request.files['archivo']            
-            filename = secure_filename(f.filename)
-            filename = doc_id + '_' + filename        
-            f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
-            fpath = os.path.join(app.config['SUBIR_PDF'], filename)
-            fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
-            arch, ext = os.path.splitext(fpath)
-            name_to_save = doc_id + "_" + str(tipo) + ext            
-            ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
-            os.rename(fpath1 + filename, fpath1 + name_to_save)
+            f = request.files['archivo']
+            if allowed_file(f.filename):                            
+                tipodo = d.tipo_doc(request.form['tipodocu'])
+                tipodo = doc_id + "_" + tipodo + '.pdf'
+                tipodo = tipodo.lower()                   
+                ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+                directorio = pathlib.Path(ejemplo_dir)
+                for fichero in directorio.iterdir():
+                    if fichero.name == tipodo:
+                            os.remove(ejemplo_dir + fichero.name)
+                
+                tipo = d.tipo_doc(request.form['doc'])
+                tipo = tipo.lower()
+                f = request.files['archivo']
+                filename = secure_filename(f.filename)
+                filename = doc_id + '_' + filename        
+                f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
+                fpath = os.path.join(app.config['SUBIR_PDF'], filename)
+                fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+                arch, ext = os.path.splitext(fpath)
+                name_to_save = doc_id + "_" + str(tipo) + ext            
+                ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
+                os.rename(fpath1 + filename, fpath1 + name_to_save)
+            else:                
+                tipo = d.tipo_doc(request.form['doc'])
+                tipo = tipo.lower()
+                name_to_save = doc_id + "_" + str(tipo) + '.pdf'
+                tipodo = d.tipo_doc(request.form['tipodocu'])
+                tipodo = tipodo.lower()
+                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'            
+                ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
+                ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+                directorio = pathlib.Path(ejemplo_dir)
+                for fichero in directorio.iterdir():
+                    if fichero.name == name_to_save1:
+                            os.rename(ejemplo_dir + fichero.name, ejemplo_dir + name_to_save)
+
             fa = str(datetime.datetime.now())[:-7]                            
             d.upd_documento(doc_id, \
                         request.form['doc'], \
@@ -426,9 +452,9 @@ def documento(doc_id):
     else: # viene de listado DOCUMENTOS            
         if doc_id != 0:  # EDIT            
             if d.get_documento_id(doc_id) == True:                
-                return render_template('documento.html', error=error, d=d, load_d=True, titulo='Modificacion de Documentos', tdocumentos=tdocu.get_tipodocumentos(usrdep))
+                return render_template('documento.html', error=error, d=d, load_d=True, titulo='Modificacion de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
 
-    return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipodocumentos(usrdep))
+    return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
 
 @app.route('/documento_pdf/<doc_id>/<string:tipo>', methods=['GET', 'POST'])
 @login_required
@@ -454,12 +480,18 @@ def documento_pdf(doc_id, tipo):
     return render_template('documento_pdf.html', error=error, dp=dp, load_dp=False, puede_editar='Documentos - Edición' in permisos_usr)
 
 
-@app.route('/documento_del/<doc_id>', methods=['GET', 'POST'])
+@app.route('/documento_del/<doc_id>/<tipo_d>', methods=['GET', 'POST'])
 @login_required
-def documento_del(doc_id):
+def documento_del(doc_id, tipo_d):
     d = docu.Documentos(cxms)
-    d.del_documento(doc_id)
-
+    d.del_documento(doc_id)      
+    tipod = doc_id + "_" + tipo_d + '.pdf'
+    tipod = tipod.lower()                    
+    ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
+    directorio = pathlib.Path(ejemplo_dir)
+    for fichero in directorio.iterdir():
+        if fichero.name == tipod:
+                os.remove(ejemplo_dir + fichero.name)
     rows = d.get_documentos_all(usrdep)
     if rows:
         return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)

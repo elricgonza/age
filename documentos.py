@@ -93,8 +93,8 @@ class Documentos:
         except:
              print("Error --DEL-- documento...")
 
-    def get_next_iddoc(self):
-        self.cur.execute("select max(id) + 1 from doc")
+    def get_next_id_doc(self):
+        self.cur.execute("select ident_current('doc')+1 as IdActual")
         row = self.cur.fetchone()
         return row[0]
 
@@ -102,4 +102,4 @@ class Documentos:
         s = "select tipoDoc from tipoDocumento where id = %s"
         self.cur.execute(s, tipo)
         row = self.cur.fetchone()
-        return row[0]
+        return row[0]    
