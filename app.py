@@ -16,7 +16,6 @@ import usuarios
 import permisos as permisosU
 import asientos as asi
 import documentos as docu
-import documentos_pdf as dpdf
 import tipodocs as tdoc
 import geo as geo
 import img
@@ -303,11 +302,11 @@ def asiento_img(idloc, nomloc):
             f  = uploaded_files[n]
             if f.filename != '':
                 securef = secure_filename(f.filename)
-                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))                
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
                 name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
-                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)                
+                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
                 resize_save_file(fpath, name_to_save, (1024, 768))
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
@@ -338,7 +337,7 @@ def resize_save_file(in_file, out_file, size):
 def asientos_list():
     a = asi.Asientos(cxms)
     rows = a.get_asientos_all(usrdep)
-    
+
     if rows:
         if permisos_usr:    # tiene pemisos asignados
             return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
@@ -353,40 +352,40 @@ def asientos_list():
 def documentos_list():
     d = docu.Documentos(cxms)
     rows = d.get_documentos_all(usrdep)
-    
+
     if rows:
-        if permisos_usr:    # tiene pemisos asignados            
+        if permisos_usr:    # tiene pemisos asignados
             return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print ('Sin Documentos...')              
+        print ('Sin Documentos...')
 
 @app.route('/documento/<doc_id>', methods=['GET', 'POST'])
-def documento(doc_id):    
+def documento(doc_id):
     d = docu.Documentos(cxms)
     tdocu = tdoc.TipoDocs(cxms)
     error = None
 
-    if request.method == 'POST':        
-        if doc_id == '0':  # es NEW            
+    if request.method == 'POST':
+        if doc_id == '0':  # es NEW
             nextid = d.get_next_id_doc()
             tipo = d.tipo_doc(request.form['doc'])
             tipo = tipo.lower()
             f = request.files['archivo']
-            if allowed_file(f.filename):                
+            if allowed_file(f.filename):
                 filename = secure_filename(f.filename)
-                filename = doc_id + '_' + filename        
+                filename = doc_id + '_' + filename
                 f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
                 fpath = os.path.join(app.config['SUBIR_PDF'], filename)
                 fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(nextid) + "_" + str(tipo) + ext            
+                name_to_save = str(nextid) + "_" + str(tipo) + ext
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
             else:
                 flash('Debe cargar solo archivos PDFs')
-                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))          
+                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
             d.add_documento(request.form['doc'], \
                         request.form['dep'], \
                         request.form['cite'], \
@@ -395,39 +394,39 @@ def documento(doc_id):
                         request.form['obs'], \
                         request.form['fecharegistro'], \
                         request.form['usuario'], \
-                        request.form['fechaingreso'])            
+                        request.form['fechaingreso'])
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
         else: # es EDIT
             f = request.files['archivo']
-            if allowed_file(f.filename):                            
+            if allowed_file(f.filename):
                 tipodo = d.tipo_doc(request.form['tipodocu'])
                 tipodo = doc_id + "_" + tipodo + '.pdf'
-                tipodo = tipodo.lower()                   
+                tipodo = tipodo.lower()
                 ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 directorio = pathlib.Path(ejemplo_dir)
                 for fichero in directorio.iterdir():
                     if fichero.name == tipodo:
                             os.remove(ejemplo_dir + fichero.name)
-                
+
                 tipo = d.tipo_doc(request.form['doc'])
                 tipo = tipo.lower()
                 f = request.files['archivo']
                 filename = secure_filename(f.filename)
-                filename = doc_id + '_' + filename        
+                filename = doc_id + '_' + filename
                 f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
                 fpath = os.path.join(app.config['SUBIR_PDF'], filename)
                 fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = doc_id + "_" + str(tipo) + ext            
+                name_to_save = doc_id + "_" + str(tipo) + ext
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
-            else:                
+            else:
                 tipo = d.tipo_doc(request.form['doc'])
                 tipo = tipo.lower()
                 name_to_save = doc_id + "_" + str(tipo) + '.pdf'
                 tipodo = d.tipo_doc(request.form['tipodocu'])
                 tipodo = tipodo.lower()
-                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'            
+                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 directorio = pathlib.Path(ejemplo_dir)
@@ -435,7 +434,7 @@ def documento(doc_id):
                     if fichero.name == name_to_save1:
                             os.rename(ejemplo_dir + fichero.name, ejemplo_dir + name_to_save)
 
-            fa = str(datetime.datetime.now())[:-7]                            
+            fa = str(datetime.datetime.now())[:-7]
             d.upd_documento(doc_id, \
                         request.form['doc'], \
                         request.form['dep'], \
@@ -449,9 +448,9 @@ def documento(doc_id):
                 return render_template('documentos_list.html', documentos=d.get_documentos())
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
 
-    else: # viene de listado DOCUMENTOS            
-        if doc_id != 0:  # EDIT            
-            if d.get_documento_id(doc_id) == True:                
+    else: # viene de listado DOCUMENTOS
+        if doc_id != 0:  # EDIT
+            if d.get_documento_id(doc_id) == True:
                 return render_template('documento.html', error=error, d=d, load_d=True, titulo='Modificacion de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
 
     return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
@@ -460,21 +459,21 @@ def documento(doc_id):
 @login_required
 def documento_pdf(doc_id, tipo):
     dp = dpdf.Documentos_pdf(cxms)
-    error = None  
+    error = None
 
-    if request.method == 'POST':            
+    if request.method == 'POST':
         f = request.files['archivo']
         filename = secure_filename(f.filename)
-        filename = doc_id + '_' + filename        
+        filename = doc_id + '_' + filename
         f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
         fpath = os.path.join(app.config['SUBIR_PDF'], filename)
         fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
         arch, ext = os.path.splitext(fpath)
         name_to_save = str(doc_id) + "_" + str(tipo) + ext
         ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
-        os.rename(fpath1 + filename, fpath1 + name_to_save)        
+        os.rename(fpath1 + filename, fpath1 + name_to_save)
 
-        if dp.upd_documentopdf_id(doc_id, ruta) == True: 
+        if dp.upd_documentopdf_id(doc_id, ruta) == True:
                 return render_template('documentos_list.html', documentos=dp.get_documentospdf_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
 
     return render_template('documento_pdf.html', error=error, dp=dp, load_dp=False, puede_editar='Documentos - Edición' in permisos_usr)
@@ -484,9 +483,9 @@ def documento_pdf(doc_id, tipo):
 @login_required
 def documento_del(doc_id, tipo_d):
     d = docu.Documentos(cxms)
-    d.del_documento(doc_id)      
+    d.del_documento(doc_id)
     tipod = doc_id + "_" + tipo_d + '.pdf'
-    tipod = tipod.lower()                    
+    tipod = tipod.lower()
     ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
     directorio = pathlib.Path(ejemplo_dir)
     for fichero in directorio.iterdir():
@@ -496,7 +495,7 @@ def documento_del(doc_id, tipo_d):
     if rows:
         return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)
     else:
-        print ('Sin documentos...')    
+        print ('Sin documentos...')
 #Codigo Grover-Final
 
 @app.route('/asiento/<idloc>', methods=['GET', 'POST'])
