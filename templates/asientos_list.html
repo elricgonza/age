@@ -43,6 +43,7 @@
                            <th>Estado</th>
                            <th>Editar</th>
                            <th>Imágen</th>
+                           <th>Inf</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +59,9 @@
                         <td>{{ asiento[9] }}</td>
                         <td>
                             <a href={{ url_for('asiento', idloc=asiento[0]) }}><span class="fas fa-edit"></span></a>                        
+                        </td>
+                        <td>
+                            <a href={{ url_for('asiento_img', idloc=asiento[0], nomloc=asiento[4]) }}><span class="fas fa-camera"></span></a>                        
                         </td>
                         <td>
                             <a href={{ url_for('asiento_img', idloc=asiento[0], nomloc=asiento[4]) }}><span class="fas fa-camera"></span></a>                        
