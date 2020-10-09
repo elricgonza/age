@@ -4,12 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_bcrypt import Bcrypt
 import re
-import os
+import os, glob
 import pathlib
 import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
 from resizeimage import resizeimage
+import subprocess
 
 import dbcn
 import usuarios
@@ -305,9 +306,15 @@ def asiento_img(idloc, nomloc):
                 f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
+                name_only = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)
+                name_to_save = name_only + ext
+                name_to_del = os.path.join('.' + app.config['IMG_ASIENTOS']) + '/' + name_only + '.*'
+                for file_img_old in glob.glob(name_to_del):  # remove old
+                    os.unlink(file_img_old)
+
                 fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
                 resize_save_file(fpath, name_to_save, (1024, 768))
+                li.del_loc_img(idloc, img_ids[n]) # remove de tabla
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
 

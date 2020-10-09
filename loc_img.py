@@ -28,6 +28,33 @@ class LocImg:
             print (e)
 
 
+    def exist_img(self, idLoc, imgId):
+        s = "select * from loc_img where idLoc= %d and imgId= %d"
+        parm = idLoc, imgId
+        try:
+            self.cur.execute(s, parm)
+            if not self.cur.fetchall():
+                return False
+            else:
+                return True
+
+        except Exception as e:
+            print('Error en exist_img...')
+            print(e)
+
+
+    def del_loc_img(self, idLoc, imgId):
+        if self.exist_img(idLoc, imgId):
+            s = "delete from loc_img where idloc= %d and imgId= %d"
+            parm = idLoc, imgId
+            try:
+                self.cur.execute(s, parm)
+
+            except Exception as e:
+                print('Error en del_loc_img...')
+                print(e)
+
+
     def get_loc_imgs(self, idLoc):
         s = "select * from loc_img where idLoc = %d order by imgId"
         try:
