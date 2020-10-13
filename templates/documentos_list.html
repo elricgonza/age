@@ -53,18 +53,22 @@
                         <td>{{ documento[2] }}</td>
                         <td>{{ documento[3] }}</td>
                         <td>{{ documento[4] }}</td>
-                        <td>{{ documento[5] }}</td>                        
+                        <td>{{ fecha(documento[5]) }}</td>                        
                         <td>
                             <a href={{ url_for('documento', doc_id = documento[0]) }}><span class="fas fa-edit"></span></a>                        
                         </td>
-                        <td>                            
-                            <a href="#" data-href={{ url_for('documento_del', doc_id=documento[0], tipo_d=documento[1]) }}  data-toggle="modal" data-target="#confirm-delete"><i class="far fa-trash-alt"></i></a>                      
+                        <td>
+                            {% if documento[8] == 1 %}                            
+                                    <i class="far fa-trash-alt" style="color: grey"></i>
+                             {% else %}                        
+                                    <a href="#" data-href={{ url_for('documento_del', doc_id=documento[0], tipo_d=documento[1]) }}  data-toggle="modal" data-target="#confirm-delete"><i class="far fa-trash-alt"></i></a>
+                            {% endif %}        
                         </td>
                         <td>                                            
                             {% if not documento[4] %}
                                     <a href=#><i class="far fa-file-pdf"></i></a>                                    
                              {% else %}                                    
-                                    <a href="{{ documento[4] }}" target="_blank""><i class="fas fa-file-pdf" style="font-size: 25px;"></i></a>
+                                    <a href="{{ documento[4] }}" target="_blank"><i class="fas fa-file-pdf" style="font-size: 25px;"></i></a>
                             {% endif %}
                         </td>
                     </tr>

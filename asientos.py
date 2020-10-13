@@ -18,11 +18,7 @@ class Asientos:
     circunconsulado = ''
 
     etapa = 0
-    docAct = ''
-    fechaDocAct = ''
     obsUbicacion = ''
-    docRspNal = ''
-    fechaRspNal = ''
     obs = ''
     fechaIngreso = ''
     fechaAct = ''
@@ -37,7 +33,7 @@ class Asientos:
         self.cx = cx
         self.cur = cx.cursor()
 
-    def get_asientos(self, usrdep):
+    """def get_asientos(self, usrdep):
         s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio, "  + \
 	    "AsientoElectoral as Asiento, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC " + \
 	    " from [GeografiaElectoral_app].[dbo].[GeoAsientos_Nacional]"
@@ -54,9 +50,8 @@ class Asientos:
             return False
         else:
             return rows
-
-
-    def get_asientos_all(self, usrdep):
+    """
+    def get_asientos_all(self, usrdep):        
         s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio, "  + \
 	    "AsientoElectoral as Asiento, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC, " + \
             "CASE WHEN estado = 1 THEN 'Habilitado TED' " + \
@@ -88,14 +83,16 @@ class Asientos:
             "a.PoblacionLoc, a.PoblacionElecLoc, a.FechaCensoLoc, a.TipoLocLoc, a.fechaBaseLegLoc," + \
             "a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \
             "b.NomDep as _departamento, c.NomProv as _provincia, d.NomSec as _municipio, e.NombreTipoLocLoc as _tipo_circun," + \
-            "f.etapa, f.docAct, f.fechaDocAct, f.obsUbicacion, f.docRspNal, f.fechaRspNal," + \
-            "f.obs, f.fechaIngreso, f.fechaAct, f.usuario " + \
+            "f.etapa, f.doc_idA, f.obsUbicacion, f.doc_idRN, f.obs, f.fechaIngreso, f.fechaAct, f.usuario " + \
+            ", g.ruta as rutaA, h.ruta as rutaRN " + \
             "from [GeografiaElectoral_app].[dbo].[LOC] a" + \
             "        left join [GeografiaElectoral_app].[dbo].[DEP] b on a.DepLoc= b.Dep " + \
             "        left join [GeografiaElectoral_app].[dbo].[PROV] c on a.DepLoc= c.DepProv and a.ProvLoc= c.Prov" + \
             "        left join [GeografiaElectoral_app].[dbo].[SEC] d on a.DepLoc= d.DepSec and a.ProvLoc= d.ProvSec and a.SecLoc= d.Sec" + \
             "        left join [GeografiaElectoral_app].[dbo].[clTipoLocLoc] e on a.TipoLocLoc = e.Tipolocloc" + \
             "        left join [bdge].[dbo].[loc2] f on a.idloc = f.idloc " + \
+            "        left join [bdge].[dbo].[doc] g on f.doc_idA=g.id " + \
+            "        left join [bdge].[dbo].[doc] h on f.doc_idRN=h.id " + \
             "where a.idloc = %d "
 
         self.cur.execute(s, idloc)
@@ -126,17 +123,17 @@ class Asientos:
             self._tipo_circun = row[18]
 
             self.etapa = row[19]
-            self.docAct = row[20]
-            self.fechaDocAct = row[21]
-            self.obsUbicacion = row[22]
-            self.docRspNal = row[23]
-            self.fechaRspNal = row[24]
-            self.obs = row[25]
-            self.fechaIngreso = row[26]
-            self.fechaAct = row[27]
-            self.usuario = row[28]
+            self.doc_idA = row[20]
+            self.obsUbicacion = row[21]
+            self.doc_idRN = row[22]
+            self.obs = row[23]
+            self.fechaIngreso = row[24]
+            self.fechaAct = row[25]
+            self.usuario = row[26]
+            self.rutaA = row[27]
+            self.rutaRN = row[28]
             return True
-
+    
     def add_asiento(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
@@ -161,22 +158,16 @@ class Asientos:
             print("asiento adicionado...")
         except:
             print("Error - actualización de asiento...")
+    
+    def add_asiento2(self, idloc, etapa, obsUbicacion, \
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal):
 
-    def add_asiento2(self, idloc, etapa, docAct, \
-                    fechaDocAct, obsUbicacion, docRspNal, \
-                    fechaRspNal, obs, fechaIngreso, \
-                    fechaAct, usuario):
+        new_asiento = idloc, etapa, obsUbicacion, \
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal
 
-        new_asiento = idloc, etapa, docAct, \
-                    fechaDocAct, obsUbicacion, docRspNal, \
-                    fechaRspNal, obs, fechaIngreso, \
-                    fechaAct, usuario
-
-        s = "insert into  [bdge].[dbo].[loc2] (idloc, etapa, docAct, " + \
-            " fechaDocAct, obsUbicacion, docRspNal, " + \
-            " fechaRspNal,  obs, fechaIngreso, " + \
-            " fechaAct, usuario) VALUES " + \
-            " (%s, %s, %s,  %s, %s, %s,  %s, %s, %s,  %s, %s )"
+        s = "insert into  [bdge].[dbo].[loc2] (idloc, etapa, obsUbicacion, obs, fechaIngreso," + \
+            " fechaAct, usuario, doc_idA, doc_idRN) VALUES " + \
+            " (%s, %s, %s,  %s, %s, %s,  %s, %s, %s)"
         try:
             self.cur.execute(s, new_asiento)
             self.cx.commit()
@@ -184,7 +175,7 @@ class Asientos:
         except Exception as e:
             print("Error - adición de asiento -loc2-...")
             print(e)
-
+    
     def upd_asiento(self, idloc, nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     marcaloc, latitud, longitud, \
@@ -210,22 +201,16 @@ class Asientos:
         except Exception as e:
             print("Error - actualización de Asiento...")
             print(e)
+    
+    def upd_asiento2(self, idloc, etapa, obsUbicacion, \
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal):
 
-    def upd_asiento2(self, idloc, etapa, docAct, \
-                    fechaDocAct, obsUbicacion, docRspNal, \
-                    fechaRspNal, obs, fechaIngreso, \
-                    fechaAct, usuario):
-
-        asiento = etapa, docAct, \
-                    fechaDocAct, obsUbicacion, docRspNal, \
-                    fechaRspNal, obs, fechaIngreso, \
-                    fechaAct, usuario, idloc
+        asiento = etapa, obsUbicacion, \
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, idloc
 
         s = "update bdge.dbo.loc2" + \
-            " set etapa= %d, docAct= %s, " + \
-            " fechaDocAct= %s, obsUbicacion= %s, docRspNal= %s, " + \
-            " fechaRspNal= %s, obs= %s, fechaIngreso= %s, " + \
-            " fechaAct= %s, usuario= %s" + \
+            " set etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
+            " fechaAct= %s, usuario= %s, doc_idA= %s, doc_idRN= %s" + \
             " where idloc = %d"
         try:
             self.cur.execute(s, asiento)
@@ -234,12 +219,12 @@ class Asientos:
         except Exception as e:
             print("Error - actualización de Asiento...-LOC2-")
             print(e)
-
+    
     def get_next_idloc(self):
         self.cur.execute("select max(idloc) + 1 from GeografiaElectoral_app.dbo.loc")
         row = self.cur.fetchone()
         return row[0]
-
+    
     def existe_en_loc2(self, idloc):
         s = "select idloc from bdge.dbo.loc2 where idloc= %d "
         self.cur.execute(s, idloc)
@@ -249,6 +234,25 @@ class Asientos:
         else:
             return True
 
+    def get_geo_all(self, usrdep):
+        s = "select gn.IdLoc, gn.Dep, gn.NomDep, gn.Prov, gn.NomProv, gn.Sec, gn.NombreMunicipio, gn.AsientoElectoral, gn.latitud," + \
+        " gn.longitud, gn.estado, Convert(CHAR(10),l2.fechaIngreso,23) as fecha, gn.NombreTipoLocLoc"  + \
+        " from [bdge].[dbo].[GeoAsientos_Nacional_all] AS gn LEFT JOIN loc2 as l2 ON gn.IdLoc=l2.idLoc"
+        self.cur.execute(s)
+        if usrdep != 0 :
+            s = s + " where DEP = %d order by gn.prov, gn.sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by gn.DEP, gn.PROV, gn.SEC"
+            print(s)
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
     def __str__(self):
         return str(self.idloc) + '--' + self.nomloc
-
+    

@@ -3,21 +3,23 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_bcrypt import Bcrypt
+import webbrowser
 import re
-import os, glob
+import os
 import pathlib
 import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
 from resizeimage import resizeimage
-import subprocess
-
 import dbcn
 import usuarios
 import permisos as permisosU
 import asientos as asi
+import reportes as rep
 import documentos as docu
+import documentos_pdf as dpdf
 import tipodocs as tdoc
+import reportes_PDF as rpdf
 import geo as geo
 import img
 import loc_img
@@ -59,6 +61,7 @@ permisos_usr = []
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.before_request
 def before_request_func():
@@ -107,6 +110,19 @@ def user_loader(txtusr):
 
 
 @app.context_processor
+def utility_processor():
+    def current_date_format(date):
+        months = ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
+        day = date.day
+        month = months[date.month - 1]
+        year = date.year
+        hora = date.strftime('%H:%M:%S')
+        messsage = "{}-{}-{} {}".format(day, month, year, hora)
+        return messsage
+    return dict(fecha=current_date_format)
+
+
+@app.context_processor
 def inject_global():
     print(str(datetime.datetime.now())[0:-3])
     return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr, usrdep=usrdep, usrid=usrid)
@@ -137,6 +153,7 @@ def get_geo():
                        provincia='INCORRECTA !!!',
                        sec='---',
                        municipio='INTENTE NUEVAMENTE....')
+
 
 @app.route('/')
 def home():
@@ -286,7 +303,7 @@ def permisos(usuario_id):
 @login_required
 def asiento_img(idloc, nomloc):
 
-    i = img.Img(cxms)
+    i = img.Img(cxms)  # conecta a la BD
     li = loc_img.LocImg(cxms)
 
     with_img = li.get_loc_imgs(idloc)  # False or rows-img
@@ -303,18 +320,12 @@ def asiento_img(idloc, nomloc):
             f  = uploaded_files[n]
             if f.filename != '':
                 securef = secure_filename(f.filename)
-                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))                
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-                name_only = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)
-                name_to_save = name_only + ext
-                name_to_del = os.path.join('.' + app.config['IMG_ASIENTOS']) + '/' + name_only + '.*'
-                for file_img_old in glob.glob(name_to_del):  # remove old
-                    os.unlink(file_img_old)
-
-                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
+                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
+                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)                
                 resize_save_file(fpath, name_to_save, (1024, 768))
-                li.del_loc_img(idloc, img_ids[n]) # remove de tabla
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
 
@@ -329,7 +340,6 @@ def asiento_img(idloc, nomloc):
             return render_template('asiento_img.html', rows=i.get_imgs('Asiento'), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr)
 
-
 def resize_save_file(in_file, out_file, size):
     with open('.' + in_file, 'rb') as fd:
         image = resizeimage.resize_thumbnail(Image.open(fd), size)
@@ -338,61 +348,45 @@ def resize_save_file(in_file, out_file, size):
     image.close()
     #return(out_file)
 
-
-@app.route('/asientos_list', methods=['GET', 'POST'])
-@login_required
-def asientos_list():
-    a = asi.Asientos(cxms)
-    rows = a.get_asientos_all(usrdep)
-
-    if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
-        else:
-            return render_template('msg.html', l1='Sin permisos asignados !!')
-    else:
-        print ('Sin asientos...')
-
 #Codigo Grover-Inicio
 @app.route('/documentos_list', methods=['GET', 'POST'])
 @login_required
 def documentos_list():
     d = docu.Documentos(cxms)
     rows = d.get_documentos_all(usrdep)
-
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
+        if permisos_usr:    # tiene pemisos asignados            
             return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print ('Sin Documentos...')
+        print ('Sin Documentos...')              
 
 @app.route('/documento/<doc_id>', methods=['GET', 'POST'])
-def documento(doc_id):
+def documento(doc_id):    
     d = docu.Documentos(cxms)
     tdocu = tdoc.TipoDocs(cxms)
     error = None
 
-    if request.method == 'POST':
-        if doc_id == '0':  # es NEW
+    if request.method == 'POST':        
+        if doc_id == '0':  # es NEW            
             nextid = d.get_next_id_doc()
             tipo = d.tipo_doc(request.form['doc'])
             tipo = tipo.lower()
             f = request.files['archivo']
-            if allowed_file(f.filename):
+            if allowed_file(f.filename):                
                 filename = secure_filename(f.filename)
-                filename = doc_id + '_' + filename
+                filename = doc_id + '_' + filename        
                 f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
                 fpath = os.path.join(app.config['SUBIR_PDF'], filename)
                 fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(nextid) + "_" + str(tipo) + ext
+                name_to_save = str(nextid) + "_" + str(tipo) + ext            
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
             else:
                 flash('Debe cargar solo archivos PDFs')
-                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
+                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))          
             d.add_documento(request.form['doc'], \
                         request.form['dep'], \
                         request.form['cite'], \
@@ -401,39 +395,39 @@ def documento(doc_id):
                         request.form['obs'], \
                         request.form['fecharegistro'], \
                         request.form['usuario'], \
-                        request.form['fechaingreso'])
+                        request.form['fechaingreso'])            
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
         else: # es EDIT
             f = request.files['archivo']
-            if allowed_file(f.filename):
+            if allowed_file(f.filename):                            
                 tipodo = d.tipo_doc(request.form['tipodocu'])
                 tipodo = doc_id + "_" + tipodo + '.pdf'
-                tipodo = tipodo.lower()
+                tipodo = tipodo.lower()                   
                 ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 directorio = pathlib.Path(ejemplo_dir)
                 for fichero in directorio.iterdir():
                     if fichero.name == tipodo:
                             os.remove(ejemplo_dir + fichero.name)
-
+                
                 tipo = d.tipo_doc(request.form['doc'])
                 tipo = tipo.lower()
                 f = request.files['archivo']
                 filename = secure_filename(f.filename)
-                filename = doc_id + '_' + filename
+                filename = doc_id + '_' + filename        
                 f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
                 fpath = os.path.join(app.config['SUBIR_PDF'], filename)
                 fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = doc_id + "_" + str(tipo) + ext
+                name_to_save = doc_id + "_" + str(tipo) + ext            
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
-            else:
+            else:                
                 tipo = d.tipo_doc(request.form['doc'])
                 tipo = tipo.lower()
                 name_to_save = doc_id + "_" + str(tipo) + '.pdf'
                 tipodo = d.tipo_doc(request.form['tipodocu'])
                 tipodo = tipodo.lower()
-                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'
+                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'            
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 directorio = pathlib.Path(ejemplo_dir)
@@ -441,7 +435,7 @@ def documento(doc_id):
                     if fichero.name == name_to_save1:
                             os.rename(ejemplo_dir + fichero.name, ejemplo_dir + name_to_save)
 
-            fa = str(datetime.datetime.now())[:-7]
+            fa = str(datetime.datetime.now())[:-7]                            
             d.upd_documento(doc_id, \
                         request.form['doc'], \
                         request.form['dep'], \
@@ -455,9 +449,9 @@ def documento(doc_id):
                 return render_template('documentos_list.html', documentos=d.get_documentos())
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
 
-    else: # viene de listado DOCUMENTOS
-        if doc_id != 0:  # EDIT
-            if d.get_documento_id(doc_id) == True:
+    else: # viene de listado DOCUMENTOS            
+        if doc_id != 0:  # EDIT            
+            if d.get_documento_id(doc_id) == True:                
                 return render_template('documento.html', error=error, d=d, load_d=True, titulo='Modificacion de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
 
     return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
@@ -466,21 +460,21 @@ def documento(doc_id):
 @login_required
 def documento_pdf(doc_id, tipo):
     dp = dpdf.Documentos_pdf(cxms)
-    error = None
+    error = None  
 
-    if request.method == 'POST':
+    if request.method == 'POST':            
         f = request.files['archivo']
         filename = secure_filename(f.filename)
-        filename = doc_id + '_' + filename
+        filename = doc_id + '_' + filename        
         f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
         fpath = os.path.join(app.config['SUBIR_PDF'], filename)
         fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
         arch, ext = os.path.splitext(fpath)
         name_to_save = str(doc_id) + "_" + str(tipo) + ext
         ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
-        os.rename(fpath1 + filename, fpath1 + name_to_save)
+        os.rename(fpath1 + filename, fpath1 + name_to_save)        
 
-        if dp.upd_documentopdf_id(doc_id, ruta) == True:
+        if dp.upd_documentopdf_id(doc_id, ruta) == True: 
                 return render_template('documentos_list.html', documentos=dp.get_documentospdf_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
 
     return render_template('documento_pdf.html', error=error, dp=dp, load_dp=False, puede_editar='Documentos - Edición' in permisos_usr)
@@ -490,9 +484,9 @@ def documento_pdf(doc_id, tipo):
 @login_required
 def documento_del(doc_id, tipo_d):
     d = docu.Documentos(cxms)
-    d.del_documento(doc_id)
+    d.del_documento(doc_id)      
     tipod = doc_id + "_" + tipo_d + '.pdf'
-    tipod = tipod.lower()
+    tipod = tipod.lower()                    
     ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
     directorio = pathlib.Path(ejemplo_dir)
     for fichero in directorio.iterdir():
@@ -502,13 +496,28 @@ def documento_del(doc_id, tipo_d):
     if rows:
         return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)
     else:
-        print ('Sin documentos...')
+        print ('Sin documentos...')    
 #Codigo Grover-Final
+
+@app.route('/asientos_list', methods=['GET', 'POST'])
+@login_required
+def asientos_list():
+    a = asi.Asientos(cxms)
+    rows = a.get_asientos_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin asientos...')
+
 
 @app.route('/asiento/<idloc>', methods=['GET', 'POST'])
 @login_required
 def asiento(idloc):
     a = asi.Asientos(cxms)
+    d = docu.Documentos(cxms)
 
     error = None
     p = ('Asientos - Edición' in permisos_usr)  # t/f
@@ -534,32 +543,12 @@ def asiento(idloc):
                               request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
                               request.form['estado'], '')
 
-                a.add_asiento2(nextid, request.form['etapa'], request.form['docAct'], \
-                              request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                               request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'][:-7], \
-                              fa, request.form['usuario'])
+                a.add_asiento2(nextid, request.form['etapa'], \
+                              request.form['obsUbicacion'], request.form['obs'], request.form['fechaIngreso'][:-7], \
+                              fa, request.form['usuario'], request.form['docAct'], request.form['docRspNal'])
 
+                d.upd_doc(request.form['docAct'], request.form['docRspNal'], request.form['doc_idAct'], request.form['doc_idRspNal'])
 
-                '''
-                #REGISTRA  EN  historicoLOCloc2  NUEVO-REG david
-                hloc_loc2.add_historicolocloc2(usr, IP_remoto, 'Add registro LOC', \
-                                0, 0, 0, \
-                                0, 'SN', 0, \
-                                0, '01-01-1900', 'N', \
-                                'N', 0.0, 0.0, \
-                                0, '', \
-                                nextid, request.form['deploc'], request.form['provloc'], \
-                                request.form['secloc'], request.form['nomloc'], request.form['poblacionloc'], \
-                                request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
-                                request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
-                                request.form['estado'], '', \
-                                0,'da','01-01-1900', 'o-ubic','SN','01-01-1900','obs','01-01-1900','01-01-1900', \
-                                request.form['etapa'], request.form['docAct'], \
-                                request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                                request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'], fa, \
-                                'NUevo Registro')
-                #
-                '''
                 rows = a.get_asientos_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows)  # render a template
         else: # Es Edit
@@ -568,87 +557,30 @@ def asiento(idloc):
                           request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
                           request.form['estado'], '')
 
-            '''
-            # Copara campos anterior vs actual para loc  y loc2
-            cambioReg = ' '
-            if str(a.nomloc).strip() != str(request.form['nomloc']).strip():
-                cambioReg = cambioReg + 'NombLoc, '
-            if a.poblacionloc != int(request.form['poblacionloc']):
-                cambioReg = cambioReg + 'PoblacionLoc, '
-            if a.poblacionelecloc != int(request.form['poblacionelecloc']):
-                cambioReg = cambioReg + 'PoblacionElecLoc, '
-            if a.tipolocloc != str(request.form['tipolocloc']):
-                cambioReg = cambioReg + 'TipoLocLoc, '
-            if a.marcaloc != str(request.form['marcaloc']):
-                cambioReg = cambioReg + 'MarcaLoc, '
-            if a.latitud != float(request.form['latitud']):
-                cambioReg = cambioReg + 'latitud, '
-            if a.longitud != float(request.form['longitud']):
-                cambioReg = cambioReg + 'longitud, '
-            if a.estado != int(request.form['estado']):
-                cambioReg = cambioReg + 'estado, '
-            if a.circunconsulado != '':
-                cambioReg = cambioReg + 'circunConsulado '
-
-            cambioReg = cambioReg + ' tbl=>loc2  '
-            if a.etapa != int(request.form['etapa']):
-                cambioReg = cambioReg + 'etapa, '
-            if a.docAct != str(request.form['docAct']):
-                cambioReg = cambioReg + 'docAct, '
-            if a.obsUbicacion != str(request.form['obsUbicacion']):
-                cambioReg = cambioReg + 'obsUbicacion, '
-
-            print(cambioReg)
-            #
-            '''
-
             fa = str(datetime.datetime.now())[:-7]     # fechaAct
             if a.existe_en_loc2(idloc):
                 # Debe actualizar fechaAct y usuario
 
-                a.upd_asiento2(idloc, request.form['etapa'], request.form['docAct'], \
-                                request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                               request.form['fechaRspNal'], request.form['obs'], str(request.form['fechaIngreso']), \
-                               fa, usr)
+                a.upd_asiento2(idloc, request.form['etapa'], \
+                              request.form['obsUbicacion'], request.form['obs'], \
+                              str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], request.form['docRspNal'])
 
-                '''
-                # Registra en historicoLocloc2
-                hloc_loc2.add_historicolocloc2(usr, IP_remoto, 'ACTUALIZA registro LOC-LOC2', \
-                        a.idloc, a.deploc, a.provloc, a.secloc, a.nomloc, a.poblacionloc, \
-                        a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
-                        a.marcaloc, a.latitud, a.longitud, \
-                        a.estado, '', \
+                d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'])
 
-                        idloc, request.form['deploc'], request.form['provloc'], \
-                        request.form['secloc'], request.form['nomloc'], request.form['poblacionloc'], \
-                        request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
-                        request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
-                        request.form['estado'], '', \
-
-                        a.etapa, a.docAct, a.fechaDocAct, a.obsUbicacion, a.docRspNal, a.fechaRspNal, \
-                        a.obs, a.fechaIngreso, a.fechaAct, \
-                        request.form['etapa'], request.form['docAct'], \
-                        request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                        request.form['fechaRspNal'], request.form['obs'], str(request.form['fechaIngreso'])[0:-3], \
-                        str(datetime.datetime.now())[0:-3], \
-                        cambioReg)
-                #
-
-                '''
             else:
-                a.add_asiento2(idloc, request.form['etapa'], request.form['docAct'], \
-                              request.form['fechaDocAct'], request.form['obsUbicacion'], request.form['docRspNal'], \
-                               request.form['fechaRspNal'], request.form['obs'], request.form['fechaIngreso'], \
-                              fa, request.form['usuario'])
+                a.add_asiento2(idloc, request.form['etapa'], request.form['obsUbicacion'], \
+                               request.form['obs'], request.form['fechaIngreso'], fa, request.form['usuario'], \
+                               request.form['docAct'], request.form['docRspNal'])
 
+                d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'])
 
             rows = a.get_asientos_all(usrdep)
-            return render_template('asientos_list.html', asientos=rows)  # render a template
+            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
             if a.get_asiento_idloc(idloc) == True:
-                if a.docAct == None:
-                    a.docAct = ""
+                """if a.docAct == None:
+                    a.docAct = """
                 if a.fechaIngreso == None:
                     a.fechaIngreso = str(datetime.datetime.now())[:-7]
                 if a.fechaAct == None:
@@ -656,11 +588,67 @@ def asiento(idloc):
                 if a.usuario == None:
                     a.usuario = usr
 
-                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p)
+                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p)
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
+
+@app.route('/get_geo_all', methods=['GET', 'POST'])
+def get_geo_all():
+    a = asi.Asientos(cxms)
+    rows = a.get_geo_all(usrdep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(departamento='COORDENADA',
+                       provincia='INCORRECTA !!!',
+                       municipio='INTENTE NUEVAMENTE....')
+
+
+@app.route('/reportes', methods=['GET', 'POST'])
+@login_required
+def reportes():
+    r = rep.Reportes(cxms)
+    return render_template('reportes.html', load_r=False, puede_consultar='Reportes - Consulta' in permisos_usr)
+
+
+@app.route('/reportes_PDF', methods=['GET', 'POST'])
+def reportes_PDF():
+    new = 2
+    rp = rpdf.Reportes_PDF(cxms)
+    
+    rows = rp.reporte_consulta(usrdep)
+    if rows:
+        url = "file:///home/r/pge/age/reporte.pdf"
+        webbrowser.open(url,new=new)
+        return ('PDF Generado')
+    else: 
+        return ('PDF Generado')
+
+
+@app.route('/get_provincias_all', methods=['GET', 'POST'])
+def get_provincia_all():
+    r = rep.Reportes(cxms)
+    rows = r.get_provincias_all(usrdep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(departamento='COORDENADA',
+                       provincia='INCORRECTA !!!',
+                       municipio='INTENTE NUEVAMENTE....')
+
+
+@app.route('/get_municipios_all', methods=['GET', 'POST'])
+def get_municipios_all():
+    r = rep.Reportes(cxms)
+    rows = r.get_municipios_all(usrdep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(departamento='COORDENADA',
+                       provincia='INCORRECTA !!!',
+                       municipio='INTENTE NUEVAMENTE....')
 
 @app.route('/about')
 def about():

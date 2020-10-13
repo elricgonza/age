@@ -13,13 +13,15 @@ class Documentos:
     usuario=''
     fechaingreso=''
     fa=''
+    codigo=0
+    usuario=''
 
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
 
     def get_documentos_all(self, usrdep):                        
-        s = "select id, tipoDoc, nomDep, cite, ruta, fechaAct, usuario, fechaIngreso from [bdge].[dbo].[docDepartamento]"             
+        s = "select id, tipoDoc, nomDep, cite, ruta, fechaAct, usuario, fechaIngreso, asignado from [bdge].[dbo].[docDepartamento]"             
         if usrdep != 0 :
             s = s + " where Dep = %d order by nomDep, fechaIngreso desc"
             self.cur.execute(s, usrdep)
@@ -102,4 +104,53 @@ class Documentos:
         s = "select tipoDoc from tipoDocumento where id = %s"
         self.cur.execute(s, tipo)
         row = self.cur.fetchone()
-        return row[0]    
+        return row[0]
+
+    def get_tipo_documentos_pdfA(self, usrdep):
+        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
+        if usrdep != 0:
+            s = s + " where dep = %d  order by fechaAct desc"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by fechaAct desc"
+            self.cur.execute(s) 
+        rows = self.cur.fetchall()
+                
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_tipo_documentos_pdfRN(self, usrdep):
+        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
+        s = s + " where dep = 0 order by fechaAct desc"
+        self.cur.execute(s) 
+        rows = self.cur.fetchall()
+                
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def upd_doc(self, idA, idRN, idAct, idRspNal):
+        upd_doc2 = (idAct, idRspNal)
+        s2 = "select * from loc2 where doc_idA = %d or doc_idRN = %d"
+        self.cur.execute(s2, upd_doc2)
+        row = self.cur.fetchone()
+
+        if row == None:
+            upd_doc1 = (idAct, idRspNal) 
+            s1 = "update doc " + \
+                 " set asignado = 0 where id = %d or id= %d"
+            self.cur.execute(s1, upd_doc1)
+            self.cx.commit()
+
+        upd_doc = (idA, idRN) 
+        s = "update doc " + \
+            " set asignado = 1 where id = %d or id= %d"
+        try:
+            self.cur.execute(s, upd_doc)
+            self.cx.commit()
+            print('Documento actualizado')
+        except:
+            print("Error --UPD-- Documento...")

@@ -265,7 +265,7 @@
 
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
                 <select id="ietapa" name=etapa class="form-control">
                     <option value=1 
@@ -292,33 +292,30 @@
                     {% endif %}
                 </select> 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <label for="docAct">Documento Actualización:</label>
-                <input type="text" class="form-control" id="idocAct" title="" placeholder="Introduzca doc. RSP-TED, Informe u Otro" name="docAct"  required 
-                        {% if load %}
-                            value="{{ a.docAct }}"
-                        {% endif %}
-                    >
-                <div class="invalid-feedback">Debe introducir un dato válido.</div>
-            </div>
-            <div class="col-md-3">
-              <div>
-
-  </div>
-                <label for="fechaDocAct">Fecha Documento Actualización:</label>
-                <input type="date" class="form-control" id="ifechaDocAct" title="" placeholder="Introduzca fecha del Doc." name="fechaDocAct"  min="1970-01-01" max="2030-01-01" "  
-                        {% if load %}
-                            value = '{{ a.fechaDocAct }}'
+                <input type="hidden" name="doc_idAct" value="{{ a.doc_idA }}">
+                <select id="idocAct" name=docAct class="form-control" required>                          
+                    <option></option>
+                    {% for tpdfA in tpdfsA %}
+                        {% if load and a.doc_idA == tpdfA[0] %}
+                                <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
                         {% else %}
-                            value = '2020-01-01'
-                        {% endif %}
-                    >
-                <div class="invalid-feedback" id="v_fechaDocAct">Debe introducir una fecha válida.</div>
+                                <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                        {% endif %}                                                                
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
             </div>
+            <div class="col-md-1"><a href="{{ a.rutaA }}" target="_blank">
+                                    {% if load %}
+                                        <i class="fas fa-file-pdf" style="font-size: 25px;display: inline-block; margin-top: 40px;"></i>
+                                    {% endif %}
+                                 </a></div>
         </div> <!--row-->
         <br>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <label for="iobsUbicacion">Breve descripción de la  Ubicación Geográfica:</label>
                 <input type="text" class="form-control" id="iobsUbicacion" title="" placeholder="Introduzca descripción de ubicación" name="obsUbicacion"  
                         {% if load %}
@@ -327,32 +324,37 @@
                     >
                 <div class="invalid-feedback">Debe introducir un dato válido.</div>
             </div>
-        </div> <!--row-->
-
-        <br>
-        <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-5">
                 <label for="docRspNal">Documento Resolución de Sala Plena - Nacional:</label>
-                <input type="text" class="form-control" id="idocRspNal" title="" placeholder="Introduzca doc. RSP-NAL, Informe u Otro" name="docRspNal"  
-                        {% if load %}
-                            value="{{ a.docRspNal }}"
-                        {% endif %}
-                    >
-                <div class="invalid-feedback">Debe introducir un dato válido.</div>
+                <input type="hidden" name="doc_idRspNal" value="{{ a.doc_idRN }}">
+                {% if usuario == 'unacional' %}
+                    <select id="idocRspNal" name=docRspNal class="form-control" required>                          
+                        <option></option>
+                        {% for tpdfRN in tpdfsRN %}
+                            {% if load and a.doc_idRN == tpdfRN[0] %}
+                                    <option value = "{{ tpdfRN[0] }}" selected>{{ '<'~tpdfRN[1]~'> '~': '~tpdfRN[2]~' _ '~tpdfRN[3] }}</option>
+                            {% else: %}
+                                    <option value = "{{ tpdfRN[0] }}">{{ '<'~tpdfRN[1]~'> '~': '~tpdfRN[2]~' _ '~tpdfRN[3] }}</option>
+                            {% endif %}                                                                
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <select id="idocRspNal" name=docRspNal class="form-control">                            
+                        {% for tpdfRN in tpdfsRN %}
+                            {% if load and a.doc_idRN == tpdfRN[0] %}
+                                    <option value = "{{ tpdfRN[0] }}" selected>{{ '<'~tpdfRN[1]~'> '~': '~tpdfRN[2]~' _ '~tpdfRN[3] }}</option>
+                            {% endif %}                                                                
+                        {% endfor %}
+                    </select>
+                {% endif%}
+                <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
             </div>
-            <div class="col-md-4">
-                <label for="fechaRspNal">Fecha RSP Nacional:</label>
-                <input type="date" class="form-control" id="ifechaRspNal" title="" placeholder="Introduzca fecha RSP" name="fechaRspNal"  min="1970-01-01" max="2030-01-01" "  
-                        {% if load %}
-                            value = '{{ a.fechaRspNal }}'
-                        {% else %}
-                            value = '2020-01-01'
-                        {% endif %}
-                    >
-                <div class="invalid-feedback" id="v_fechaRspNal">Debe introducir una fecha válida.</div>
-            </div>
+            <div class="col-md-1"><a href="{{ a.rutaRN }}" target="_blank">
+                                  {% if load %}
+                                    <i class="fas fa-file-pdf" style="font-size: 25px;display: inline-block; margin-top: 40px; "></i>
+                                  {% endif %}
+                                  </a></div>
         </div> <!--row-->
-
         <br>
         <div class="row">
             <div class="col-md-12">
@@ -370,7 +372,7 @@
                 <label for="fechaIngreso">Fecha Ingreso al Sistema:</label>
                 <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Ingreso." name="fechaIngreso" readonly "  
                         {% if load %}
-                            value="{{ a.fechaIngreso }}"
+                            value="{{ fecha(a.fechaIngreso) }}"
                         {% else %}
                             value="{{ idatetime }}"
                         {% endif %}
@@ -381,7 +383,7 @@
                 <label for="fechaAct">Fecha Actualización:</label>
                 <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha de Actualización" name="fechaAct" readonly "  
                         {% if load %}
-                            value="{{ a.fechaAct }}"
+                            value="{{ fecha(a.fechaAct) }}"
                         {% else %}
                             value="{{ idatetime }}"
                         {% endif %}
