@@ -4,13 +4,12 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_bcrypt import Bcrypt
 import re
-import os, glob
+import os
 import pathlib
 import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
 from resizeimage import resizeimage
-import subprocess
 
 import dbcn
 import usuarios
@@ -21,6 +20,13 @@ import tipodocs as tdoc
 import geo as geo
 import img
 import loc_img
+
+import indcate
+import indsubcate
+import loc_cate
+
+#import asiento_indi as indi
+import asiento_indi as indi
 
 '''
 import paises
@@ -306,22 +312,21 @@ def asiento_img(idloc, nomloc):
                 f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-                name_only = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)
-                name_to_save = name_only + ext
-                name_to_del = os.path.join('.' + app.config['IMG_ASIENTOS']) + '/' + name_only + '.*'
-                for file_img_old in glob.glob(name_to_del):  # remove old
-                    os.unlink(file_img_old)
-
+                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
                 fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
                 resize_save_file(fpath, name_to_save, (1024, 768))
-                li.del_loc_img(idloc, img_ids[n]) # remove de tabla
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
 
         return redirect(url_for('asientos_list'))
 
     else:
-        if with_img:  # Edit
+        if with_img:  # Edit entra 1ra vez x [Imagen]
+            print('//////////////////////')
+            print(i.get_imgs('Asiento'))
+            print('-------------')
+            print(with_img)
+            print('//////////////////////')
             return render_template('asiento_img_upd.html', rows=i.get_imgs('Asiento'), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
@@ -1416,6 +1421,95 @@ def circunscripcion_del(circun_id1, circun_id2):
 
 
 
+#-------------------------------------------------------------------------
+# ****************************pruebas JAVIER *****************************
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+#--------- indicadores socio econimicos ----------------------------------
+#-------------------------------------------------------------------------
+
+@app.route('/asiento_ind/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
+@login_required
+def asiento_ind(idloc, nomloc):
+
+    # conexiones a las tablas
+    ind_cat = indcate.Indcate(cxms)
+    ind_subcate = indsubcate.Indsubcate(cxms)
+    lc = loc_cate.LocCate(cxms)
+
+    # obtiene reg con idLoc de la tabla  'loc_cate'
+    with_cate = lc.get_loc_cates(idloc) # False or rows-img
+
+    error = None
+
+    if request.method == 'POST':
+        cat_ids_ = request.form.getlist('imgsa[]')  # options CATEGORIAS for Asiento
+        cat_ids = list(cat_ids_[0].split(","))      # list ok
+        # EN PANTALLA PARA NUEVO, SI NO HAY INDICADOR CREADO => SE SALE A LA LISTA DE ASIENTOS
+        if cat_ids[0] == '':
+            print('NO hay indicador para guardar----------------')
+            return redirect(url_for('asientos_list'))
+        else:
+            # convertir a numeros la lista
+            categ_ids = [int(x) for x in cat_ids]
+        subcat_ids_ = request.form.getlist('filesa[]')  # options SUBCATEGORIAS for Asiento
+        subcat_ids = list(subcat_ids_[0].split(","))    # list ok
+        subcateg_ids = [int(x) for x in subcat_ids]     # lista con ids de subcategorias
+        
+        ind_obs_ = request.form.getlist('filesv[]')  # options Observaciones for Asiento
+        ind_obs = list(ind_obs_[0].split(","))       # list ok  observaciones
+        
+        # DE LA CONSULTA CON idloc, si hay registros OBTENIDOS  => actualizar
+        if with_cate:
+            # verifica si todos loa elementos a ACTUALIZAR son distinos
+            if(len(categ_ids) == len(set(categ_ids))):
+                print('todos DISTINTOS => 1ro borrar datos de la BBDD......')
+                lc.del_loc_cate(idloc)
+
+                for n in range(len(cat_ids)):
+                    print(f'Grabando => ...{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
+                    #GUARDANDO DATOS
+                    lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n],ind_obs[n], \
+                    datetime.datetime.now(), \
+                    usr, \
+                    datetime.datetime.now())
+            else:
+                print('DATOS repetidos.....No se pudo ACTUALIZAR')
+
+        # DE LA CONSULTA CON idloc, si NO hay registros  => CREAR NEW para 'loc_cate'
+        else:
+            # verifica si todos loa elementos a INSERTAR son distinos
+            if(len(categ_ids) == len(set(categ_ids))):
+                print('todos DISTINTOS  GRABANDO DATOS......')
+                for n in range(len(cat_ids)):
+                    print(f'{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
+                    #GUARDANDO DATOS
+                    lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
+                    datetime.datetime.now(), \
+                    usr,\
+                    datetime.datetime.now())
+            else:
+                print('DATOS repetidos.....No se pudo guardar')
+                #GRABA
+                #li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
+
+        return redirect(url_for('asientos_list'))
+
+    else:
+        if with_cate:  # Edit  ENTRA LA 1RA VEZ  POR Lista Asientos[Indice]
+            return render_template('asiento_ind_upd.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
+                                puede_editar='Asientos - Edición' in permisos_usr,
+                                loc_cate_loaded = with_cate)
+        else:  # New  with_cate = False 
+            return render_template('asiento_ind.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
+                                puede_editar='Asientos - Edición' in permisos_usr)
+
+
+#-------------------------------------------------------------------------
+#--------- -------------- ------------------------------------------------
+#-------------------------------------------------------------------------
+
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000', debug=True)
+
