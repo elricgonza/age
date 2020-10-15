@@ -19,7 +19,7 @@ import reportes as rep
 import documentos as docu
 import documentos_pdf as dpdf
 import tipodocs as tdoc
-import reportes_PDF as rpdf
+import reportesPDF as rpdf
 import geo as geo
 import img
 import loc_img
@@ -613,10 +613,10 @@ def reportes():
     return render_template('reportes.html', load_r=False, puede_consultar='Reportes - Consulta' in permisos_usr)
 
 
-@app.route('/reportes_PDF', methods=['GET', 'POST'])
-def reportes_PDF():
+@app.route('/reportespdf', methods=['GET', 'POST'])
+def reportespdf():
     new = 2
-    rp = rpdf.Reportes_PDF(cxms)
+    rp = rpdf.ReportesPDF(cxms)
     
     rows = rp.reporte_consulta(usrdep)
     if rows:

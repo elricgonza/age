@@ -39,7 +39,7 @@
                                     </div>
                                     <!--<script>var i=console.log(funcion());</script>-->
                                     <div class="myreport-bottom-left">
-                                        <a href={{ url_for('reportes_PDF', dpto=ipdto) }} target="_blank"><i class="fas fa-file-pdf" style="font-size: 35px;"></i></a>
+                                        <a href={{ url_for('reportespdf', dpto=ipdto) }} target="_blank"><i class="fas fa-file-pdf" style="font-size: 35px;"></i></a>
                                     </div>
                                 </div>
                                 <div class="myform-bottom">
@@ -125,7 +125,6 @@
             </div>
         </div>
     </form>
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script>
        $("#btnBorrar").click(function(event) {
            $("#limpiar_formulario")[0].reset();
