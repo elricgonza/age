@@ -20,7 +20,7 @@
                 <h5>Asiento: {{ nomloc }}</h5>
             </div>
             <div class="col-xs-6 col-md-4">          <!-- ADD  ELEMENT SELECT X DEFECTO  -->
-                <button type="button" id="addRow" onclick="pAddRow(objOpt, objSubcatSalud);" class="btn btn-light btn-md btn-block "><span class="fas fa-share-alt"></span><a href="#" > Adicionar Indicador</a></button>
+                <button type="button" id="addRow" onclick="pAddRow(objOpt, objSubcatSalud);" class="btn btn-light btn-md btn-block "><span class="fas fa-chart-line"></span><a href="#" > Adicionar Indicador</a></button>
             </div>
         </div>
         <div class="form-row">
@@ -35,24 +35,20 @@
                 <button type="submit" class="btn btn-outline-success btn-md btn-block" onclick="pSubmit()" {% if puede_editar %} enabled {% else %} disabled {% endif %}>Aceptar</button>
             </div>
         </div>
-        <!--row-->
     </form>
 
     {% if error %}
-    <br>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> {{ error }}
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
+        <br>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> {{ error }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% endif %}
-
-
 </div>
 
 <script>
     window.addEventListener('load', function() {
         createTable();
-
         // objOpt - para options de SELECT 
         // CATEGORIAS
         objOpt = {
@@ -60,14 +56,12 @@
              {{ r[0] }}: '{{ r[1] }}',
             {% endfor %}
         }
-        
         // SUBCATEGORIAS
         objSubcat = {
             {% for r in subcat %}
              {{ r[0] }}: ['{{ r[1] }}',{{ r[2] }}],
             {% endfor %}
         };
-
         // GENERA SUBCATEGORIAS CON (cate_id = 1)
         objSubcatSalud = {};
         for (var sub in objSubcat){
@@ -77,53 +71,35 @@
             }
         }
 
-
-        //console.log('----------  creando un diccionario en base a loc_cate   --------------');
         objLoaded_base = {
             {% for r in loc_cate_loaded %}
              {{ r[1] }}: [{{ r[2] }}, '{{ r[3] }}', 0],
             {% endfor %}
         }
-    
-        console.log('----lee objLoaded_base y a la vez genera subcategorias correspondientes ----');
-        
         for(var fila in objLoaded_base){
-        var dict = {};
-          //  leendo  subcategorias
-          for(var sc in objSubcat){
-             
-             if(fila==objSubcat[sc][1]){   
-                //console.log('son iguales '+sc);
-                dict[sc] = objSubcat[sc][0];
-             }
-          }  
-    
-        objLoaded_base[fila][2] = dict;  // add al final los subcat correspndientes al id de cate  
-                
+            var dict = {};
+                //  leendo  subcategorias
+                for(var sc in objSubcat){
+                    if(fila==objSubcat[sc][1]){   
+                        dict[sc] = objSubcat[sc][0];
+                    }
+                }  
+            objLoaded_base[fila][2] = dict;  // add al final los subcat correspndientes al id de cate  
         }
-            
         // PARA DOS COMBOS
         for (prop in objLoaded_base) {
-            
             addRow2(objOpt, prop, objLoaded_base[prop][1], objLoaded_base[prop][2], objLoaded_base[prop][0]);
-            
         }
-    
     })
-
 
     //--------  funcion del evento select -------------------------
     function cambia(obj){
         var n_objetoSelect = obj.substr(obj.length - 1);
         var id_mySelect = 'idSelect'+n_objetoSelect;
         var id_mySelectSub = 'idSelectSub'+n_objetoSelect;
-        
         var indiceSelect1 = 0;
         indiceSelect1 = document.getElementById(obj).value;
-        console.log('indice seleccionado = '+indiceSelect1);
-
         if(indiceSelect1 >= 0){
-            
             // obtener el numero de subelementos seleccionados
             var cont=0;
             var idcate = parseInt(indiceSelect1,10);
@@ -142,14 +118,7 @@
                     i = i + 1;
                 }
             };
-            console.log('VER SOLUCION ');    
-
-        
         } //  fin if
-
     }  //  fin funcion  cambia()
-
-
 </script>
-
 {% endblock %}

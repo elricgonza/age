@@ -23,7 +23,7 @@
             </div>
             <div class="col-xs-6 col-md-4">
                 <!-- ADD ELEMENT SELECT X DEFECTO  EN FORM VACIO -->
-                <button type="button" id="addRow" onclick="pAddRow(arrOpt, objSubcatSalud);" class="btn btn-light btn-md btn-block "><span class="fas fa-share-alt"></span><a href="#" > Adicionar Indicador</a></button>
+                <button type="button" id="addRow" onclick="pAddRow(arrOpt, objSubcatSalud);" class="btn btn-light btn-md btn-block "><span class="fas fa-chart-line"></span><a href="#" > Adicionar Indicador</a></button>
             </div>
         </div>
         <div class="form-row">
@@ -48,28 +48,23 @@
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
     {% endif %}
-
-
 </div>
 
 <script>
     window.addEventListener('load', function() {
         createTable();
-
         // arrOpt con CATEGORIAS - Arreglo para options de SELECT 
         arrOpt = {
             {% for r in rows %} 
                 {{ r[0] }}: '{{ r[1] }}',
             {% endfor %}
         };
-
         // SUBCATEGORIAS
         objSubcat = {
             {% for r in subcat %} 
                 {{ r[0] }}: ['{{ r[1] }}', {{ r[2] }}],
             {% endfor %}
         };
-
         // GENERA SUBCATEGORIAS CON (cate_id = 1)
         objSubcatSalud = {};
         for (var sub in objSubcat) {
@@ -82,7 +77,6 @@
     })
 
     //--------  funcion del evento select -------------------------
-
     function cambia(obj) {
         var n_objetoSelect = obj.substr(obj.length - 1);
         var id_mySelect = 'idSelect' + n_objetoSelect;
@@ -90,8 +84,6 @@
 
         var indiceSelect1 = 0;
         indiceSelect1 = document.getElementById(obj).value;
-        console.log('indice seleccionado = ' + indiceSelect1);
-
         if (indiceSelect1 >= 0) {
             // obtener el numero de subelementos seleccionados
             var cont = 0;
@@ -101,7 +93,6 @@
                     cont = cont + 1;
                 }
             };
-
             // llenando el 2do select
             var combo2 = document.getElementById(id_mySelectSub);
             combo2.length = cont;
@@ -112,11 +103,7 @@
                     i = i + 1;
                 }
             };
-            console.log('VER SOLUCION ');
-
         } //  fin if
-
     } //  fin funcion  cambia()
 </script>
-
 {% endblock %}

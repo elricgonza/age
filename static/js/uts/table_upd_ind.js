@@ -1,8 +1,7 @@
-// Operaciones tabla-dinamica para imagenes en asientos y recintos
+// Operaciones tabla-dinamica para indicadores en asientos y recintos
 
 // ARRAY FOR HEADER.
 var arrHead = new Array();
-//arrHead = ['Imagen', 'Actualizar', 'Actualmente']; // SIMPLY ADD OR REMOVE VALUES IN THE ARRAY FOR TABLE HEADERS.
 arrHead = ['Categoria', 'Subcategoria', 'Observaciones', 'Eliminar']; // SIMPLY ADD OR REMOVE VALUES IN THE ARRAY FOR TABLE HEADERS.
 
 // FIRST CREATE A TABLE STRUCTURE BY ADDING A FEW HEADERS AND
@@ -23,9 +22,7 @@ function createTable() {
     div.appendChild(empTable); // ADD THE TABLE TO YOUR WEB PAGE.
 }
 
-// -----------------------------------------------------------
-// ADD A NEW ROW TO THE TABLE.s
-//************************PARA  DOS COMBOS*************************** 
+// PARA  DOS COMBOS
 // ADD A NEW ROW TO THE TABLE.s
 function addRow2(objOpt, codImg = 0, rutaImg = '', objOpt2, codImg2 = 0) {
     //alert('PARA 2 CBX INICIA de add la fila');
@@ -48,7 +45,6 @@ function addRow2(objOpt, codImg = 0, rutaImg = '', objOpt2, codImg2 = 0) {
             selectList.id = "idSelect" + rowCnt;
             selectList.name = "mySelect" + rowCnt;
             selectList.onchange = function() { cambia(this.id) };
-            //alert(selectList.id);
 
             // objOpt ->  toda la tabla defin de imag [frontal, panoramica plaza,...]             
             for (var prop in objOpt) {
@@ -62,7 +58,6 @@ function addRow2(objOpt, codImg = 0, rutaImg = '', objOpt2, codImg2 = 0) {
                     }
                     selectList.appendChild(option);
                 }
-
                 td.appendChild(selectList);
             }
         }
@@ -89,7 +84,6 @@ function addRow2(objOpt, codImg = 0, rutaImg = '', objOpt2, codImg2 = 0) {
                     }
                     selectList2.appendChild(option);
                 }
-
                 td.appendChild(selectList2);
             }
         }
@@ -122,11 +116,7 @@ function addRow2(objOpt, codImg = 0, rutaImg = '', objOpt2, codImg2 = 0) {
             td.appendChild(button);
         }
     }
-    //alert('2 CBX termina de add la fila');
-} //FIN  ADD A NEW ROW TO THE TABLE ---------------------------
-// **************************************************
-
-
+} //FIN  ADD A NEW ROW TO THE TABLE
 
 // ADD A NEW ROW  VACIA A LA TABLA ->  A LACER CLICK EN EL BOTON 'Adicionar Indice'
 function pAddRow(objOpt, objSubcat) {
@@ -152,31 +142,20 @@ function submit() {
 
     var myform = document.getElementById('imgform');
     for (var i = 0; i < myform.elements.length; i++) { //loop through all form elements
-        //if (myform.elements[i].type == "select-one" || myform.elements[i].type == "select-multiple") {
-        //if (myform.elements[i].type == "select-one") {
-
         // Primer select  se obtiene los id  seleccionados
         for (var j = 0; j < myform.elements.length; j++) {
             var n1 = 'idSelect' + j;
-            //if (myform.elements[i].id == n2) {
             if (myform.elements[i].id == n1) {
-                //var s = myform.elements[i];
                 arrs.push(myform.elements[i].value);
-                //arrs.push(s.value);
             }
         }
-
         // Segundo select  se obtiene los id  seleccionados
         for (var j = 0; j < myform.elements.length; j++) {
             var n2 = 'idSelectSub' + j;
-            //if (myform.elements[i].id == n2) {
             if (myform.elements[i].id == n2) {
-                //var s = myform.elements[i];
                 arrf.push(myform.elements[i].value);
-                //arrs.push(s.value);
             }
         }
-
         // InputText para las observaciones
         for (var j = 0; j < myform.elements.length; j++) {
             var n3 = 'idTxtObs' + j;
@@ -184,23 +163,6 @@ function submit() {
                 arrv.push(myform.elements[i].value);
             }
         }
-
-        if (myform.elements[i].type == 'file') {
-            //arrf.push(myform.elements[i].name);
-            //arrv.push(myform.elements[i].value);
-            //alert(myform.elements[i].filename);
-            //var f = myform.elements[i];
-            //arrf.push(f.name);
-        }
-        /*
-        if (myform.elements[i].type == "select-two" || myform.elements[i].type == "select-multiple") {
-            //var s = myform.elements[i];
-            arrf.push(myform.elements[i].value);
-            //arrs.push(s.value);
-        }
-        */
-
-
     }
     document.getElementById('id_imgsa').value = arrs;
     document.getElementById('id_filesa').value = arrf;

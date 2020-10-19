@@ -1419,14 +1419,9 @@ def circunscripcion_del(circun_id1, circun_id2):
 
     # return 'Para eliminar una provincia'
 
-
-
-#-------------------------------------------------------------------------
-# ****************************pruebas JAVIER *****************************
-#-------------------------------------------------------------------------
-#-------------------------------------------------------------------------
-#--------- indicadores socio econimicos ----------------------------------
-#-------------------------------------------------------------------------
+""" 
+Modulo Indicadores Socio Econimicos
+"""
 
 @app.route('/asiento_ind/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
 @login_required
@@ -1447,7 +1442,6 @@ def asiento_ind(idloc, nomloc):
         cat_ids = list(cat_ids_[0].split(","))      # list ok
         # EN PANTALLA PARA NUEVO, SI NO HAY INDICADOR CREADO => SE SALE A LA LISTA DE ASIENTOS
         if cat_ids[0] == '':
-            print('NO hay indicador para guardar----------------')
             return redirect(url_for('asientos_list'))
         else:
             # convertir a numeros la lista
@@ -1463,11 +1457,8 @@ def asiento_ind(idloc, nomloc):
         if with_cate:
             # verifica si todos loa elementos a ACTUALIZAR son distinos
             if(len(categ_ids) == len(set(categ_ids))):
-                print('todos DISTINTOS => 1ro borrar datos de la BBDD......')
                 lc.del_loc_cate(idloc)
-
                 for n in range(len(cat_ids)):
-                    print(f'Grabando => ...{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
                     #GUARDANDO DATOS
                     lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n],ind_obs[n], \
                     datetime.datetime.now(), \
@@ -1480,7 +1471,6 @@ def asiento_ind(idloc, nomloc):
         else:
             # verifica si todos loa elementos a INSERTAR son distinos
             if(len(categ_ids) == len(set(categ_ids))):
-                print('todos DISTINTOS  GRABANDO DATOS......')
                 for n in range(len(cat_ids)):
                     print(f'{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
                     #GUARDANDO DATOS
@@ -1490,9 +1480,7 @@ def asiento_ind(idloc, nomloc):
                     datetime.datetime.now())
             else:
                 print('DATOS repetidos.....No se pudo guardar')
-                #GRABA
-                #li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
-
+                
         return redirect(url_for('asientos_list'))
 
     else:
@@ -1504,10 +1492,6 @@ def asiento_ind(idloc, nomloc):
             return render_template('asiento_ind.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr)
 
-
-#-------------------------------------------------------------------------
-#--------- -------------- ------------------------------------------------
-#-------------------------------------------------------------------------
 
 # start the server with the 'run()' method
 if __name__ == '__main__':

@@ -47,20 +47,14 @@ class LocCate:
         new_locCate = loc_id, cate_id, subcate_id, obs, fechaAct, usuario, fechaIngreso
         s = "insert into loc_cate (loc_id, cate_id, subcate_id, obs, fechaAct, usuario, fechaIngreso) values " + \
             " (%s,%s, %s, %s, %s, %s, %s) "
-        #c.sql2(s, new_locCate)
-        #c.cnx.commit()
-        #c.cnx.close()
         self.cur.execute(s, new_locCate)
         self.cx.commit()
-        print("REGISTRO PARA loc_cate adicionado...")
-
+       
     # borra registros en base al 'loc_id'
     def del_loc_cate(self, id):
         s = "delete from loc_cate where loc_id = %d"
         try:
             self.cur.execute(s, id)
             self.cx.commit()
-            print("En loc_cate => Registros eliminados")
-
         except:
             print ('Error --del--  loc_cate')
