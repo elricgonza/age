@@ -530,6 +530,10 @@ def asiento(idloc):
 '''
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
+        if usrdep != 0:
+                docRspNal = 0
+        if usrdep == 0:
+                docRspNal = request.form['docRspNal']
         if idloc == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -545,12 +549,12 @@ def asiento(idloc):
 
                 a.add_asiento2(nextid, request.form['etapa'], \
                               request.form['obsUbicacion'], request.form['obs'], request.form['fechaIngreso'][:-7], \
-                              fa, request.form['usuario'], request.form['docAct'], request.form['docRspNal'])
+                              fa, request.form['usuario'], request.form['docAct'], docRspNal)
 
-                d.upd_doc(request.form['docAct'], request.form['docRspNal'], request.form['doc_idAct'], request.form['doc_idRspNal'])
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'])
 
                 rows = a.get_asientos_all(usrdep)
-                return render_template('asientos_list.html', asientos=rows)  # render a template
+                return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
         else: # Es Edit
             a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
                           request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
@@ -560,17 +564,16 @@ def asiento(idloc):
             fa = str(datetime.datetime.now())[:-7]     # fechaAct
             if a.existe_en_loc2(idloc):
                 # Debe actualizar fechaAct y usuario
-
                 a.upd_asiento2(idloc, request.form['etapa'], \
                               request.form['obsUbicacion'], request.form['obs'], \
-                              str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], request.form['docRspNal'])
+                              request.form['fechaIngreso'], fa, usr, request.form['docAct'], docRspNal)
 
                 d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'])
 
             else:
                 a.add_asiento2(idloc, request.form['etapa'], request.form['obsUbicacion'], \
                                request.form['obs'], request.form['fechaIngreso'], fa, request.form['usuario'], \
-                               request.form['docAct'], request.form['docRspNal'])
+                               request.form['docAct'], docRspNal)
 
                 d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'])
 

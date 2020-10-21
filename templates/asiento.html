@@ -372,7 +372,7 @@
                 <label for="fechaIngreso">Fecha Ingreso al Sistema:</label>
                 <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Ingreso." name="fechaIngreso" readonly "  
                         {% if load %}
-                            value="{{ fecha(a.fechaIngreso) }}"
+                            value="{{ a.fechaIngreso }}"
                         {% else %}
                             value="{{ idatetime }}"
                         {% endif %}
@@ -383,7 +383,7 @@
                 <label for="fechaAct">Fecha Actualización:</label>
                 <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha de Actualización" name="fechaAct" readonly "  
                         {% if load %}
-                            value="{{ fecha(a.fechaAct) }}"
+                            value="{{ a.fechaAct }}"
                         {% else %}
                             value="{{ idatetime }}"
                         {% endif %}

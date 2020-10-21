@@ -22,6 +22,8 @@ class Asientos:
     obs = ''
     fechaIngreso = ''
     fechaAct = ''
+    doc_idA = 0
+    docRspNal = 0
     usuario = ''
 
     _departamento = ''
@@ -204,13 +206,11 @@ class Asientos:
     
     def upd_asiento2(self, idloc, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal):
-
         asiento = etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, idloc
-
         s = "update bdge.dbo.loc2" + \
             " set etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
-            " fechaAct= %s, usuario= %s, doc_idA= %s, doc_idRN= %s" + \
+            " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d" + \
             " where idloc = %d"
         try:
             self.cur.execute(s, asiento)
