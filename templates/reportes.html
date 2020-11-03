@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrMTfBa9NXyO3izpTE1hrR96YGxmMin4g"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/buildmap_rep.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
+{% endblock %}
+<div class="container">
+    <h2 class="text-center text-blue pt-3">Reportes</h2>
+    <form id="form1" method="POST" action="{{ url_for('reportespdf') }}" target="_blank">
+        <div class="form-row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <label for="">.</label>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoall(event)" >Visualizar imágen Satelital</button>
+            </div>
+        </div>
+        <div class="my-content">
+            <div class="container">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-sm-12 col-sm-offset-3 myform-cont">
+                                <div class="myform-top">
+                                    <div class="myform-top-left">
+                                        <h3>Asiento Electoral.</h3>
+                                        <p>Busquedas Nacionales:</p>
+                                    </div>
+                                    <div class="myform-top-right">
+                                        <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                    </div>
+                                    <!--<script>var i=console.log(funcion());</script>-->
+                                    <div class="myreport-bottom-left">
+                                        <a href="javascript:void();" onclick="document.getElementById('form1').submit();"><i class="fas fa-file-pdf" style="font-size: 35px;"></i></a>
+                                    </div>
+                                </div>
+                                <div class="myform-bottom">
+                                    <form role="form" action="" method="post" id="limpiar_formulario">
+                                        <div class="form-group">  
+                                        <label for="dpto">Por Departamento:</label>                                          
+                                            <select id="idpto" name="dpto" class="form-control" onchange="cargar(this.value, 0)">
+                                                <option></option>                                                          
+                                                <option value=1>Chuquisaca</option>
+                                                <option value=2>La Paz</option>
+                                                <option value=3>Cochabamba</option>
+                                                <option value=4>Oruro</option>
+                                                <option value=5>Potosí</option>
+                                                <option value=6>Tarija</option>
+                                                <option value=7>Santa Cruz</option>
+                                                <option value=8>Bení</option>
+                                                <option value=9>Pando</option>                                            
+                                            </select>                                             
+                                            <div class="invalid-feedback">Debe Seleccionar un Departamento...</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="provincia">Por Provincia:</label>
+                                            <select id="iprovincia" name="provincia" class="form-control" onchange="cargar(this.value, 1)">         
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="municipio">Por Municipio:</label>
+                                            <select id="imunicipio" name="municipio" class="form-control"> 
+                                            </select>
+                                        </div>                                        
+                                        <label for="docAct">Por Tipo de Circunscripción:</label>
+                                        <div class="form-group">                                            
+                                            <div class="form-check form-check-inline">
+                                              <input class="form-check-input" type="checkbox" name="cir1" id="icir1" value="1">
+                                              <label class="form-check-label" for="cir1">Uninominal</label> 
+                                            </div> 
+                                            <div class="form-check form-check-inline"> 
+                                              <input class="form-check-input" type="checkbox" name="cir2" id="icir2" value="2">
+                                              <label class="form-check-label" for="cir2">Especial</label>
+                                            </div> 
+                                            <div class="form-check form-check-inline"> 
+                                              <input class="form-check-input" type="checkbox" name="cir3" id="icir3" value="3">
+                                              <label class="form-check-label" for="cir3">Mixto</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="estado">Por Estado:</label>
+                                            <select id="iestado" name="estado" class="form-control">
+                                                <option></option>
+                                                <option value=1>Habilitado TED</option>
+                                                <option value=2>Rehabilitado TED</option>
+                                                <option value=3>Suspendido TED</option>
+                                                <option value=4>Suprimido TED</option>
+                                                <option value=101>Habilitado TSE</option>
+                                                <option value=102>Rehabilitado TSE</option>
+                                                <option value=103>Suspendido TSE</option>
+                                                <option value=104>Suprimido TSE</option>                                                
+                                            </select>
+                                        </div>
+                                        <label for="docAct">Por rango de Fechas:</label>
+                                        <div class="input-group">
+                                          <input name="inicio" id="iinicio" type="date" class="form-control">
+                                          <span class="input-group-addon">-</span>
+                                          <input name="final" id="ifinal" type="date" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="localidad">Por Asiento:</label>
+                                            <input type="text" name="localidad" placeholder="Nombre del Asiento..." class="form-control" id="ilocalidad">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="mybtn" onclick="getgeoall(event)">Buscar</button>
+                                            <button type="button" class="btn btn-secondary" type="reset" data-dismiss="modal" id="btnBorrar">Limpiar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="map" style="position:relative; width:100%; height:780px; background: rgba(0, 0, 0, 0.10);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+       $("#btnBorrar").click(function(event) {
+           $("#limpiar_formulario")[0].reset();
+       });
+    </script>
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+</div> <!--main-->
+
+{% endblock %}
+

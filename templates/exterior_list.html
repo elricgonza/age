@@ -19,11 +19,11 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-8">
-                <h5>Asientos Electorales </h5>
+                <h5>Asientos Exterior </h5>
             </div>
             {% if puede_adicionar %}
             <div class="col-xs-6 col-md-4">
-                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('asiento', idloc=0) }} >Adicionar Asiento Electoral</a></button>
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('exterior', idloc=0) }} >Adicionar Asiento Exterior</a></button>
             </div>
             {% endif %}
         </div>
@@ -35,32 +35,28 @@
                     <thead>
                         <tr>
                            <th>IdLoc</th>
+                           <th>Pais</th>
                            <th>Departamento</th>
                            <th>Provincia</th>
                            <th>Municipio</th>
                            <th>Asiento</th>
-                           <th>Tipo Circun.</th>
                            <th>Estado</th>
                            <th>Editar</th>
-                           <th>Imágen</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                    {% for asiento in asientos %}
+                    {% for exterior in exteriors %}
                     <tr>
-                        <td>{{ asiento[0] }}</td>
-                        <td>{{ asiento[1] }}</td>
-                        <td>{{ asiento[2] }}</td>
-                        <td>{{ asiento[3] }}</td>
-                        <td>{{ asiento[4] }}</td>
-                        <td>{{ asiento[5] }}</td>
-                        <td>{{ asiento[9] }}</td>
+                        <td>{{ exterior[0] }}</td>
+                        <td>{{ exterior[1] }}</td>
+                        <td>{{ exterior[2] }}</td>
+                        <td>{{ exterior[3] }}</td>
+                        <td>{{ exterior[4] }}</td>
+                        <td>{{ exterior[5] }}</td>
+                        <td>{{ exterior[6] }}</td>
                         <td>
-                            <a href={{ url_for('asiento', idloc=asiento[0]) }}><span class="fas fa-edit"></span></a>                
-                        </td>
-                        <td>
-                            <a href={{ url_for('asiento_img', idloc=asiento[0], nomloc=asiento[4]) }}><span class="fas fa-camera"></span></a>                        
+                            <a href={{ url_for('exterior', idloc=exterior[0]) }}><span class="fas fa-edit"></span></a>                
                         </td>
                     </tr>
                     {% endfor %}
