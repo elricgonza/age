@@ -1,0 +1,114 @@
+// Para visor en asientos/recintos a partir de coordenadas
+// -ric 
+function getgeoreci(event) {
+    var x = event.keyCode;
+    //alert(x)
+    if (x == 27 || x == 9 || 'undefined') {
+            $.getJSON('/get_geo', {
+                latitud: $('input[name="latitud"]').val(),
+                longitud: $('input[name="longitud"]').val()
+            }, function(data) {
+                document.getElementById("ideploc").setAttribute("value", data.dep)
+                document.getElementById("idepartamento").setAttribute("value", data.departamento)
+                document.getElementById("iprovloc").setAttribute("value", data.prov)
+                document.getElementById("iprovincia").setAttribute("value", data.provincia)
+                document.getElementById("isecloc").setAttribute("value", data.sec)
+                document.getElementById("imunicipio").setAttribute("value", data.municipio)
+                document.getElementById("icircun").setAttribute("value", data.nrocircun)
+            });
+          
+        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
+        asientosReci($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+    };
+} //getgeo
+
+function buildMap(lat,lon)  {
+    document.getElementById('dmap').innerHTML = "<div id='map' style='width: 100%; height: 100%;'></div>";
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osmAttrib = 'only osmAttrib',
+            landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
+            thunAttrib = 'only Attrib',
+            googleSatUrl = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+            googleMapUrl = 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
+            mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibzJicGlja2luIiwiYSI6ImNpbXUyMzNldTAyNTF1cmtrZXdnbWZycDIifQ.JdYE50MBxDn1fdZtVFYXZw';
+
+        var osmMap = L.tileLayer(osmUrl, {attribution: ''}),
+            landMap = L.tileLayer(landUrl, {attribution: ''}),
+            googleSat = L.tileLayer(googleSatUrl, {Attribution: 'gsat'}),
+            googleMap = L.tileLayer(googleMapUrl, {Attribution: 'gmap'}),
+            mbStreet = L.tileLayer(mbUrl, {id: 'mapbox.streets', attribution: 'mbSat'}), 
+            mbSat = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: 'mbSat'}) ;
+
+        var map = L.map('map', {
+			    layers: [googleSat] // only add one!
+		    })
+		    .setView([lat, lon], 15);
+
+		var baseLayers = {
+			"OSM Mapnik": osmMap,
+			"Landscape": landMap,
+			"Google Satellite": googleSat,
+            "Google Map": googleMap,
+            "MapBox Satellite": mbSat,
+            "MapBox Streets": mbStreet
+		};
+
+
+		L.control.layers(baseLayers).addTo(map);
+
+    // to marker --
+        //iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
+        //shadowUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-shadow.png"
+    const markerIcon = L.icon({
+        iconSize: [25, 41],
+        iconAnchor: [10, 41],
+        popupAnchor: [2, -40],
+        // specify the path here
+        iconUrl:   "../../static/css/leaflet1.5.1/images/marker-icon.png",
+        shadowUrl: "../../static/css/leaflet1.5.1/images/marker-shadow.png"
+    });
+
+    L.marker([lat, lon],
+        {
+            title: "Asiento",
+            opacity: 0.8,
+            icon: markerIcon
+        }
+    ).addTo(map);
+
+    L.circle([lat, lon], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.06,
+            radius: 500
+        }).addTo(map);
+} //buildMap
+
+function asientosReci(dep, prov, sec, cir) {
+    var x = event.keyCode;
+    if (x == 27 || x == 9 || 'undefined') {
+        $('#iasiento').html('');
+        $.getJSON("/get_asientos_all", function(datos){
+            $("#iasiento").append('<option></option>');
+            $.each(datos, function(index, obj){
+                if(dep==obj[0] && prov==obj[1] && sec==obj[2]){
+                    $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                }
+            });
+        });
+    };
+}
+
+function asientoZona(event) {
+    var x = event.keyCode;
+    //alert(x)
+    if (x == 27 || x == 9 || 'undefined') {
+            console.log($('input[name="idloc"]').val());
+            $.getJSON('/asientoz', {
+                azona: $('input[name="idloc"]').val()
+            }, function(data) {
+                document.getElementById("inomloc").setAttribute("value", data.nomasi)
+            });
+    };
+} 

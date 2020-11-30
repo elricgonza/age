@@ -1,0 +1,600 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
+{% endblock %}
+
+<div class="container">
+    <h2 class="text-center text-blue pt-5" >Recinto Electoral</h2>
+    <br>
+    <form class="needs-validation" action="{{ url_for('recinto', idreci = rc.reci, idlocreci = rc.idlocreci) }}" novalidate method='POST' onsubmit="return Validation(this)" name="form">
+        <div class="form-row">
+            <div class="col-md-3">
+                <label for="latitud">Latitud:</label>
+                <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}"
+                        {% if load %}
+                            value="{{ rc.latitud }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
+            </div>
+            <div class="col-md-3">
+                <label for="longitud">Longitud:</label>
+                <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeoreci(event)"
+                        {% if load %}
+                            value="{{ rc.longitud }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
+            </div>
+            <div class="col-md-1">
+                <label for="circun">CIR:</label>
+                <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
+                        {% if load %}
+                            value="{{ rc.circundist }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir CIRCUN.</div>
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-4">
+                <label for="">.</label>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoreci(event)" >Visualizar imágen Satelital</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <label for="dep">DEP:</label>
+                <input type="text" class="form-control" id="ideploc" title="" placeholder="DEP" name="deploc"  readonly required pattern="[0-9]{1}"
+                        {% if load %}
+                            value="{{ rc.deploc }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir DEP.</div>
+            </div>
+            <div class="col-md-2">
+                <label for="departamento">Departamento:</label>
+                <input type="text" class="form-control" id="idepartamento" title="" placeholder="departamento" name="departamento" disabled
+                        {% if load %}
+                            value="{{ rc.nomdep }}"
+                        {% endif %}
+                    >
+            </div>
+
+            <div class="col-md-1">
+                <label for="prov">PROV:</label>
+                <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  readonly required pattern="[0-9]{1}"
+                        {% if load %}
+                            value="{{ rc.provloc }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir PROV.</div>
+            </div>
+            <div class="col-md-2">
+                <label for="provincia">Provincia:</label>
+                <input type="text" class="form-control" id="iprovincia" title="" placeholder="provincia" name="provincia" disabled
+                        {% if load %}
+                            value="{{ rc.nomprov }}"
+                        {% endif %}
+                    >
+            </div>
+
+            <div class="col-md-1">
+                <label for="sec">SEC:</label>
+                <input type="text" class="form-control" id="isecloc" title="" placeholder="SEC" name="secloc"  readonly required pattern="[0-9]{1}"
+                        {% if load %}
+                            value="{{ rc.secloc }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir SEC.</div>
+            </div>
+            <div class="col-md-2">
+                <label for="municipio">Municipio:</label>
+                <input type="text" class="form-control" id="imunicipio" title="" placeholder="municipio" name="municipio" disabled
+                        {% if load %}
+                            value="{{ rc.nomsec }}"
+                        {% endif %}
+                    >
+            </div>
+            <div class="col-md-3">
+                <label for="asiento">Asientos del Municipio:</label>
+                <input type="hidden" name="reci_idasiento" value="rc.idlocreci">
+                <select id="iasiento" name=asiento class="form-control" onchange="cargar(this.value, 5)" required>
+                    {% for asientoReci in asientoRecis %}
+                        {% if rc.deploc==asientoReci[0] and rc.provloc==asientoReci[1] and rc.secloc==asientoReci[2] %}
+                            {% if load and rc.idlocreci==asientoReci[3] %}
+                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                            {% else %}
+                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
+                            {% endif %}
+                       {% endif %}                                                     
+                    {% endfor %}        
+                </select>
+                <div class="invalid-feedback">Debe Seleccionar un Asiento...</div>
+            </div>
+        </div> <!--row-->
+
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+            <div id="dmap" style="width: 1110px; height: 600px;"></div>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-md-1">
+                <label for="idloc">IdLoc:</label>
+                <input type="text" class="form-control" id="iidloc" title="" placeholder="IdLoc" name="idloc" disabled
+                        {% if load %}
+                            value="{{ rc.idlocreci }}"
+                        {% endif %}
+                    >
+            </div>
+            <div class="col-md-1">
+                <label for="reci">Reci:</label>
+                <input type="text" class="form-control" id="ireci" title="" placeholder="Reci" name="reci" disabled
+                        {% if load %}
+                            value="{{ rc.reci }}"
+                        {% endif %}
+                    >
+            </div>
+            <div class="col-md-4">
+                <label for="nomreci">Recinto ELectoral:</label>
+                <input type="text" class="form-control" id="inomreci" title="" placeholder="Introduzca nombre de Recinto" name="nomreci"  required 
+                        {% if load %}
+                            value="{{ rc.nomreci }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir un nombre válido.</div>
+            </div>
+            <div class="col-md-2">
+                <label for="ruereci">Cod. RUE:</label>
+                <input type="text" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 1000000)"
+                        {% if load %}
+                            value="{{ rc.codrue }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback" id="v_poblacionloc">Debe introducir un dato válido.</div>
+            </div>
+            <div class="col-md-2">
+                <label for="edireci">Cod. Edificio:</label>
+                <input type="text" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 700000)"
+                        {% if load %}
+                            value="{{ rc.codrueedif }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback" id="v_poblacionelecloc">Debe introducir un dato válido.</div>
+            </div>
+            <div class="col-md-2">
+                <label for="depenreci">Tipo de Dependencia:</label>
+                <input type="hidden" name="reci_iddepen" value="">                          
+                <select id="idepenreci" name=depenreci class="form-control" required>
+                        <option></option>                                                          
+                        <option value=1 
+                            {% if load  and rc.depend == 1 %}
+                                    selected
+                                {% elif usrdep == 1 %}
+                                    selected  
+                            {% endif %}
+                        >Particular</option>
+                        <option value=2
+                            {% if load  and rc.depend == 2 %}
+                                    selected
+                                {% elif usrdep == 2 %}
+                                    selected 
+                            {% endif %}
+                        >Fiscal</option>
+                        <option value=3
+                            {% if load  and rc.depend == 3 %}
+                                    selected
+                                {% elif usrdep == 3 %}
+                                    selected 
+                            {% endif %}
+                        >Convénio</option>
+                        <option value=4 
+                            {% if load  and rc.depend == 4 %}
+                                    selected
+                                {% elif usrdep == 4 %}
+                                    selected 
+                            {% endif %}
+                        >Otro</option>
+                </select>
+                <div class="invalid-feedback">Debe Seleccionar un Tipo de Dependencia...</div>
+            </div>
+        </div> <!--row-->
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="aulasreci">Cantidad de Aulas:</label>
+                <input type="text" class="form-control" id="iaulasreci" title="" placeholder="Introduzca cantidad de aulas" name="aulasreci"  required pattern="^ *\d[\d ]*$" onkeypress="return validacionAulas(event)"
+                        {% if load %}
+                            value="{{ rc.nroaulas }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir un nombre válido.</div>
+            </div>
+            <div class="col-md-3">
+                <label for="pisosreci">Cantidad de Pisos:</label>
+                <input type="text" class="form-control" id="ipisosreci" title="" placeholder="Introduzca cantidad de pisos" name="pisosreci"  required pattern="^ *\d[\d ]*$" onkeypress="return validacionPisos(event)"
+                        {% if load %}
+                            value="{{ rc.cantpisos }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir un dato válido.</div>
+            </div>
+            <div class="col-md-4">
+                <label for="zonareci">Zona del Recinto:</label>
+                <input type="hidden" name="reci_idzona" value="{{ rc.zonareci }}">
+                <select id="izonareci" name="zonareci" class="form-control" required>                          
+                    <option></option>
+                    {% for zonasreci in zonasRecis %}
+                        {% if rc.idlocreci==zonasreci[0] and rc.circundist==zonasreci[3] %}
+                            {% if load and rc.zonareci==zonasreci[1] %}
+                                    <option value = "{{ zonasreci[1] }}" selected>{{ zonasreci[2] ~'('~'Dist '~zonasreci[3]~')' }}</option>
+                            {% else %}
+                                    <option value = "{{ zonasreci[1] }}">{{ zonasreci[2] ~'('~'Dist '~zonasreci[3]~')' }}</option>
+                            {% endif %}
+                        {% endif %}                                                                
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Debe Seleccionar la Zona del Recinto...</div>
+            </div>
+            <div class="col-md-2">
+                <label for="zonareci">Zona y Distrito:</label>
+                <button type="button" class="btn btn-info btn-block openBtn">Registrar</button>
+            </div>
+        </div> <!--row-->
+        <br>
+        <div class="row">
+            <div class="col-md-1">
+                <label for="mesasreci">Mesa(max.):</label> 
+                <input type="text" class="form-control" id="imesasreci" title="" placeholder="Max." name="mesasreci"  required pattern="^ *\d[\d ]*$"  onkeypress="return validacionMax(event)"
+                        {% if load %}
+                            value="{{ rc.maxmesasreci }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback" id="v_poblacionloc">Debe introducir un dato válido.</div>
+            </div>
+            <div class="col-md-5">
+                <label for="dirreci">Dirección del Recinto:</label>
+                <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci"  
+                        {% if load %}
+                            value="{{ rc.direccion }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir un dato válido.</div>
+            </div>
+            <div class="col-md-3">
+                <label for="iestado">Estado</label>
+                <select id="iestado" name=estado class="form-control">
+                    <option value=1 
+                        {% if load  and rc.estado == 1 %}
+                            selected 
+                        {% endif %}
+                    >Habilitado</option>
+                    <option value=2
+                        {% if load  and rc.estado == 2 %}
+                            selected 
+                        {% endif %}
+                    >Rehabilitado   </option>
+                    <option value=3
+                        {% if load  and rc.estado == 3 %}
+                            selected 
+                        {% endif %}
+                    >Bloqueado</option>
+                    <option value=6
+                        {% if load  and rc.estado == 6 %}
+                            selected 
+                        {% endif %}
+                    >Saturado</option>
+                </select> 
+            </div>
+            <div class="col-md-3">
+                <label>Tipo de Circunscripción</label>
+
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label
+                {% if load and rc.tiporecinto==1 %}
+                      class="btn btn-outline-dark active"
+                {% else %}
+                      class="btn btn-outline-dark"
+                {% endif %}
+                >
+                    <input type="radio" value=1 name="tiporeci" id="itiporeci1" autocomplete="off">Uninominal
+                </label>
+
+                <label
+                {% if load and rc.tiporecinto==2 %}
+                      class="btn btn-outline-dark active"
+                {% else %}
+                      class="btn btn-outline-dark"
+                {% endif %}
+                >
+                    <input type="radio" value=2 name="tiporeci" id="itiporeci2" autocomplete="off">Especial
+                </label>
+
+                <label 
+                {% if load and rc.tiporecinto==3 %}
+                      class="btn btn-outline-dark active"
+                {% else %}
+                      class="btn btn-outline-dark"
+                {% endif %}
+                >
+                    <input type="radio" value=3 name="tiporeci" id="itiporeci3" autocomplete="off">Mixto
+                </label>
+                </div>
+
+            </div>
+        </div> <!--row-->
+        
+        <div class="row">
+            <div class="col-md-3">
+                <label for="fechaIngreso">Fecha Ingreso al Sistema:</label>
+                <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Ingreso." name="fechaIngreso" readonly "  
+                        {% if load %}
+                            value="{{ rc.fechaIngreso }}"
+                        {% else %}
+                            value="{{ idatetime }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir una fecha válida.</div>
+            </div>
+            <div class="col-md-3">
+                <label for="fechaAct">Fecha Actualización:</label>
+                <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha de Actualización" name="fechaAct" readonly "  
+                        {% if load %}
+                            value="{{ rc.fechaAct }}"
+                        {% else %}
+                            value="{{ idatetime }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir una fecha válida.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="usuario">Usr.que realizó la última actualización:</label>
+                <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly "
+                        {% if load %}
+                            value="{{ rc.usuario }}"
+                        {% else %}
+                            value="{{ usuario }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback">Debe introducir un nombre válido.</div>
+            </div>
+        </div> <!--row-->
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button"  onclick="javascript: window.location.href = '/recintos_list';"  class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-outline-success btn-lg btn-block" 
+                    {% if puede_editar %}
+                        enabled
+                    {% else %}
+                        disabled
+                    {% endif %}
+                >Aceptar</button>
+            </div>
+        </div> <!--row-->
+
+    </form>
+
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+</div> <!--main-->
+
+<script>
+    $('.openBtn').on('click',function(){
+        $('.modal-body').load('/zona1.html',function(){
+            $('#exampleModal').modal({show:true});
+        });
+    });
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+            // Asigna value recuperado solo cuando es EDIT 
+            if ('{{load}}'=='True') {
+                switch('{{rc.tiporecinto}}'.trim()) {
+                    case '1':
+                        document.getElementById('itiporeci1').checked = true;
+                        break;
+                    case '2':
+                        document.getElementById('itiporeci2').checked = true;
+                        break;
+                    case '3':
+                        document.getElementById('itiporeci3').checked = true;
+                        break;
+                }
+            }
+        }, false);
+    })();
+
+function validacionMax(event) {
+  var key = event.which || event.keyCode;
+  /* Observamos el resultado que generará la tecla */
+  var max = parseInt(form.mesasreci.value + String.fromCharCode(key)
+  );
+  /* Si no está dentro de lo esperado cancelamos la pulsación */
+  if (isNaN(max) === true || max < 1 || max > 300) {
+    return false;
+  }
+  return true;
+}
+
+function validacionAulas(event) {
+  var key = event.which || event.keyCode;
+  /* Observamos el resultado que generará la tecla */
+  var max = parseInt(form.aulasreci.value + String.fromCharCode(key)
+  );
+  /* Si no está dentro de lo esperado cancelamos la pulsación */
+  if (isNaN(max) === true || max < 1 || max > 100) {
+    return false;
+  }
+  return true;
+}
+function validacionPisos(event) {
+  var key = event.which || event.keyCode;
+  /* Observamos el resultado que generará la tecla */
+  var max = parseInt(form.pisosreci.value + String.fromCharCode(key)
+  );
+  /* Si no está dentro de lo esperado cancelamos la pulsación */
+  if (isNaN(max) === true || max < 1 || max > 10) {
+    return false;
+  }
+  return true;
+}
+
+// Below Function Executes On Form Submit
+function Validation(f) {
+    if (f.tiporeci.value == '') {
+        alert('Debe especificar tipo de circunscripción...');
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-11">  
+          <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>  
+          <div class="modal-body">
+            <form action="{{ url_for('zonasr', idloc = 0, idzona = 0, iddist = 0) }}" class="needs-validation" novalidate method="POST">                
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="idloc">IdLoc:</label>
+                        <input type="text" class="form-control" id="iidlocreci" title="" placeholder="Instroduzca IdLoc" name="idlocreci" required readonly 
+                                {% if load %}
+                                    value="{{ rc.idlocreci }}"
+                                {% endif %}
+                            >
+                        <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
+                    </div>
+                    <div class="col-md-9">
+                    </div>
+                </div> <!--row-->
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="nomzona">Nombre de la Zona:</label>
+                        <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
+                            {% if load %}
+                                value=""        
+                            {% endif %}
+                        >
+                        <div class="invalid-feedback">Por favor ingrese la Zona...</div>
+                    </div>
+                </div>
+                <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="nrodist">Nro.:</label>
+                        <input type="text" class="form-control" id="inrodist" placeholder="Nro." name="nrodist" required readonly
+                            {% if load %}
+                                value="{{ rc.circundist }}"        
+                            {% endif %}
+                        >
+                        <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
+                    </div>
+                    <div class="col-md-10">
+                        <label for="nomdist">Nombre del Distrito:</label>
+                        <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required
+                            {% if load %}
+                                value=""        
+                            {% endif %}
+                        >
+                        <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="fechaIngreso">Registro:</label>
+                        <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
+                                {% if load_d %}
+                                    value=""
+                                {% else %}
+                                    value="{{ idatetime }}"
+                                {% endif %}
+                            >
+                        <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fechaAct">Actual:</label>
+                        <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                                {% if load_d %}
+                                    value=""
+                                {% else %}
+                                    value="{{ idatetime }}"
+                                {% endif %}
+                            >
+                        <div class="invalid-feedback" id="v_fechaAct">Debe introducir una fecha válida.</div>
+                    </div>                        
+                    <div class="col-md-4">
+                        <label for="usuario">Usuario:</label>
+                        <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                                {% if load_d %}
+                                    value=""
+                                {% else %}
+                                    value="{{ usuario }}"
+                                {% endif %}
+                            >
+                        <div class="invalid-feedback">Debe introducir un nombre válido.</div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <button type="button" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cancelar</button>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <button type="submit" class="btn btn-outline-success btn-md btn-block" 
+                        >Aceptar</button>
+                    </div>
+                </div> <!--row-->
+            </form>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+<!--https://programacion.net/articulo/como_cargar_contenido_dinamico_en_un_modal_de_bootstrap_1867-->
