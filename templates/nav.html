@@ -1,7 +1,7 @@
 <!--<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">-->
 <nav class="navbar navbar-expand-md bg-secondary navbar-dark  sticky-top">
     <a class="navbar-brand" href="#">
-          <img src="http://placehold.it/200x50?text=Logo Geografía" alt="">
+          <img src="static/iconos/Logo.png" alt="" style="border-radius: 5px; width: 200px height: 50px;">
         </a>
         <!--<a class="navbar-brand" href="#">WebSiteName</a>-->
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
@@ -17,30 +17,41 @@
         <a class="nav-link" href="/tmptest">RecintosZ </a>
       </li>
       -->
-      <li class="nav-item">
-        <a class="nav-link" href="/asientos_list">Asientos Electorales</a>
-      </li>
 
+      {% if current_user.is_authenticated %}
+      <div class="dropdown">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Asientos
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="/asientos_list">Asientos Electorales</a>
+              {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
+                <a class="dropdown-item" href="/exterior_list">Asientos Exterior</a>
+              {% endif %}
+          </div>
 
-            <!-- PARA UNIDAD TERRITORIAL -->
-            {% if current_user.is_authenticated %}
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Ord. Territorial
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="/mundo">Mundo</a>
-                    <a class="dropdown-item" href="/pais">Pais</a>
-                    <a class="dropdown-item" href="/deptos">Departamento</a>
-                    <a class="dropdown-item" href="/provincias">Provincia</a>
-                    <a class="dropdown-item" href="/seccion">Seccion</a>
+      </div>
+      {% endif %}
 
-                    <a class="dropdown-item" href="/localidad">Localidad</a>
-                    <a class="dropdown-item" href="/circun">Circunscripcion</a>
-                </div>
+      <!-- PARA UNIDAD TERRITORIAL -->
+      {% if current_user.is_authenticated %}
+      <div class="dropdown">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Ord. Territorial
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="/mundo">Mundo</a>
+              <a class="dropdown-item" href="/pais">Pais</a>
+              <a class="dropdown-item" href="/deptos">Departamento</a>
+              <a class="dropdown-item" href="/provincias">Provincia</a>
+              <a class="dropdown-item" href="/seccion">Seccion</a>
 
-            </div>
-            {% endif %}
+              <a class="dropdown-item" href="/localidad">Localidad</a>
+              <a class="dropdown-item" href="/circun">Circunscripcion</a>
+          </div>
+
+      </div>
+      {% endif %}
 
       {% if current_user.is_authenticated and current_user.usuario =='admin' %}
       <li class="nav-item">
@@ -54,7 +65,7 @@
       </li>
       <!--Codigo Grover-Final-->
       <li class="nav-item">
-        <a class="nav-link" href="#">Reportes</a>
+        <a class="nav-link" href="/reportes">Reportes</a>
       </li>            
       {% endif %}
     </ul>
