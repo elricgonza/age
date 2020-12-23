@@ -1,0 +1,162 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/uts/politicos.js') }}"></script>
+{% endblock %}
+
+<div class="container">
+    <h2 class="text-center text-blue pt-3">{{ titulo }}</h2>
+    <br> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+    <div id="login-row" class="row justify-content-center align-items-center">
+        <div id="login-box" class="col-md-12">
+            <form action="" class="needs-validation" novalidate method="POST">
+                <br>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="idoc">PAISES</label>
+                        <input type="hidden" name="idpais" value="{{ s.IdPais }}">
+                        <select id="ipais" name="pais" class="form-control" required onchange="cargar(this.value, 3)">                          
+                                <option></option>
+                                {% for tpais in tpaises %}
+                                        {% if load and s.IdPais == tpais[0] %}
+                                                <option value = "{{ tpais[0] }}" selected>{{ tpais[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tpais[0] }}">{{ tpais[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                        <div class="invalid-feedback">Debe Seleccionar un pais...</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="idoc">DEPARTAMENTOS</label>
+                        <input type="hidden" name="idDepto" value="{{ s.DepSec }}">
+                        <select id="idpto" name="depto" class="form-control" required onchange="cargar(this.value, 4)">                          
+                                <option></option>
+                                {% for tdepto in tdeptos %}
+                                        {% if load and s.DepSec == tdepto[0] %}
+                                                <option value = "{{ tdepto[0] }}" selected>{{ tdepto[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tdepto[0] }}">{{ tdepto[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                        <div class="invalid-feedback">Debe Seleccionar un departamento...</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="idoc">PROVINCIAS</label>
+                        <input type="hidden" name="idProv" value="{{ s.ProvSec }}">
+                        <select id="iprov" name="prov" class="form-control" required>                                                 
+                                <option></option>
+                                {% for tprov in tprovs %}
+                                        {% if load and s.ProvSec == tprov[0] %}
+                                                <option value = "{{ tprov[0] }}" selected>{{ tprov[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tprov[0] }}">{{ tprov[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                        <div class="invalid-feedback">Debe Seleccionar una provincia...</div>
+                    </div>
+
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="NumConceSec">NRO. DE CONSEJALES</label>
+                        <input type="text" class="form-control" id="iNumConceSec" placeholder="Introduzca Nro. de Consejales" name="numConceSec" required {% if load %} value="{{ s.NumConceSec }}" {% endif %}>
+                        <div class="invalid-feedback">Por favor ingrese datos.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="NomSec">MUNICIPIO</label>
+                        <input type="text" class="form-control" id="iNomSec" placeholder="Introduzca Municipio" name="nomSec" required {% if load %} value="{{ s.NomSec }}" {% endif %}>
+                        <div class="invalid-feedback">Debe Agregar un Municipio...</div>
+                    </div>
+
+
+                </div>
+
+                <br>
+
+                <div class="row ">
+
+                    <div class="col-md-4 ">
+                        <label for="fecharegistro ">Fecha y Hora de Registro:</label>
+                        <input type="date " class="form-control " id="ifechaIngreso" title=" " placeholder="Fecha de Registro. " name="fechaIngreso" readonly {% if load %} value="{{ s.fechaIngreso }} " {% else %} value="{{ idatetime }} " {% endif %}>
+                        <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                        <label for="fechaingreso ">Fecha y Hora Actual:</label>
+                        <input type="date " class="form-control " id="ifechaAct" title=" " placeholder="Fecha Actual. " name="fechaAct" readonly {% if load %} value="{{ s.fechaAct }} " {% else %} value="{{ idatetime }} " {% endif %}>
+                        <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                        <label for="usuario ">Usuario Logueado:</label>
+                        <input type="text " class="form-control " id="iusuario" title=" " placeholder="Usuario " name="usuario" readonly {% if load %} value="{{ s.usuario }} " {% else %} value="{{ usuario }} " {% endif %}>
+                        <div class="invalid-feedback ">Debe introducir un nombre válido.</div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row ">
+                    <div class="col-md-6 mb-3 ">
+                        <button type="button " onclick="javascript: window.location.href='/mun_list' ; " class="btn btn-outline-danger btn-md btn-block ">Cancelar</button>
+                    </div>
+                    <div class="col-md-6 mb-3 ">
+                        <button type="submit" class="btn btn-outline-success btn-md btn-block ">Aceptar</button>
+                    </div>
+                </div>
+                <!--row-->
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if error %}
+<br>
+<div class="alert alert-danger alert-dismissible fade show ">
+    <strong>Error!</strong> {{ error }}
+    <button type="button " class="close " data-dismiss="alert ">&times;</button>
+</div>
+{% endif %}
+
+</div>
+
+<script>
+    $('.custom-file-input').on('change', function() {
+        let fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').addClass("selected ").html(fileName);
+    });
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+{% endblock %}

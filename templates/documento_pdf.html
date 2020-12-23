@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center text-blue pt-5" >PDF de Asiento Electoral</h2>
+    <br>
+    <form action="" class="needs-validation" novalidate method='POST' enctype="multipart/form-data"  id='docform'>
+        <input type="hidden" id="id_imgsa" name="imgsa[]">
+        <div id="login-row" class="row justify-content-center align-items-center">  
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <div class="custom-file">
+                        <!--<input type="file" class="form-control" id="archivo" name="archivo" required>-->
+                        <input id="logo" type="file" class="custom-file-input" name="archivo" required>
+                        <label for="logo" class="custom-file-label">Seleccione el archivo...</label>
+                        <div class="invalid-feedback">Debe cargar el archivo PDF.</div>                                         
+                    </div>                            
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button"  onclick="javascript: window.location.href = '/documentos_list';"  class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+                        </div>                    
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-outline-success btn-md btn-block"  
+                                {% if puede_editar %}
+                                    enabled
+                                {% else %}
+                                    disabled
+                                {% endif %}
+                            >Aceptar</button>
+                        </div>                                        
+                    </div> <!--row-->
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+<script>    
+    $('.custom-file-input').on('change', function() { 
+          let fileName = $(this).val().split('\\').pop(); 
+          $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+    });
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+</script>
+
+
+</div>
+
+{% endblock %}

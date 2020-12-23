@@ -1,0 +1,142 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/uts/politicos.js') }}"></script>
+{% endblock %}
+
+<div class="container">
+    <h2 class="text-center text-blue pt-3">{{ titulo }}</h2>
+    <br> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+    <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-box" class="col-md-12">
+                <form action="" class="needs-validation" novalidate method="POST">
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="idoc">PAISES</label>
+                            <input type="hidden" name="idpais" value="{{ s.idPais }}">
+                            <select id="ipais" name="pais" class="form-control" required onchange="cargar(this.value, 3)">                          
+                                <option></option>
+                                {% for tpais in tpaises %}
+                                        {% if load and s.IdPais == tpais[0] %}
+                                                <option value = "{{ tpais[0] }}" selected>{{ tpais[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tpais[0] }}">{{ tpais[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Debe Seleccionar un pais...</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="idoc">DEPARTAMENTOS</label>
+                            <input type="hidden" name="idDepto" value="{{ s.idDepto }}">
+                            <select id="idpto" name="depto" class="form-control" required>                          
+                                <option></option>
+                                {% for tdepto in tdeptos %}
+                                        {% if load and s.DepProv == tdepto[0] %}
+                                                <option value = "{{ tdepto[0] }}" selected>{{ tdepto[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tdepto[0] }}">{{ tdepto[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Debe Seleccionar un departamento...</div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="NomProv">PROVINCIA</label>
+                            <input type="text" class="form-control" id="iNomProv" placeholder="Introduzca Provincia" name="NomProv" required {% if load %} value="{{ s.NomProv }}" {% endif %}>
+                            <div class="invalid-feedback">Debe Agregar una Provincia...</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="codprov">CODIGO DE PROVINCIA:</label>
+                            <input type="text" class="form-control" id="iCodProv" placeholder="Introduzca Codigo de Provincia" name="codprov" required {% if load %} value="{{ s.codprov }}" {% endif %}>
+                            <div class="invalid-feedback">Por favor ingrese datos.</div>
+                        </div>
+
+                    </div>
+            <br>
+
+            <div class="row ">
+
+                <div class="col-md-4 ">
+                    <label for="fecharegistro ">Fecha y Hora de Registro:</label>
+                    <input type="date " class="form-control " id="ifechaIngreso" title=" " placeholder="Fecha de Registro. " name="fechaIngreso" readonly {% if load %} value="{{ s.fechaingreso }} " {% else %} value="{{ idatetime }} " {% endif %}>
+                    <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                </div>
+
+                <div class="col-md-4 ">
+                    <label for="fechaingreso ">Fecha y Hora Actual:</label>
+                    <input type="date " class="form-control " id="ifechaAct" title=" " placeholder="Fecha Actual. " name="fechaAct" readonly {% if load %} value="{{ s.fechaactual }} " {% else %} value="{{ idatetime }} " {% endif %}>
+                    <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                </div>
+
+                <div class="col-md-4 ">
+                    <label for="usuario ">Usuario Logueado:</label>
+                    <input type="text " class="form-control " id="iusuario" title=" " placeholder="Usuario " name="usuario" readonly {% if load %} value="{{ s.usuario }} " {% else %} value="{{ usuario }} " {% endif %}>
+                    <div class="invalid-feedback ">Debe introducir un nombre válido.</div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row ">
+                <div class="col-md-6 mb-3 ">
+                    <button type="button " onclick="javascript: window.location.href='/provs_list' ; " class="btn btn-outline-danger btn-md btn-block ">Cancelar</button>
+                </div>
+                <div class="col-md-6 mb-3 ">
+                    <button type="submit" class="btn btn-outline-success btn-md btn-block ">Aceptar</button>
+                </div>
+            </div>
+            <!--row-->
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if error %}
+<br>
+<div class="alert alert-danger alert-dismissible fade show ">
+    <strong>Error!</strong> {{ error }}
+    <button type="button " class="close " data-dismiss="alert ">&times;</button>
+</div>
+{% endif %}
+
+</div>
+
+<script>
+    $('.custom-file-input').on('change', function() {
+        let fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').addClass("selected ").html(fileName);
+    });
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+{% endblock %}
