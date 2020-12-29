@@ -33,7 +33,7 @@
       </div>
       {% endif %}
       
-            <!-- PARA UNIDAD TERRITORIAL -->
+            <!-- PARA UNIDAD TERRITORIAL  -->
             {% if current_user.is_authenticated %}
             <div class="dropdown">
                 <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -58,7 +58,11 @@
               Recintos
           </a>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="/recintos_list">Recintos Electorales</a>
+              <a class="dropdown-item" href="/recintos_list">Uninominales</a>
+              <a class="dropdown-item" href="/reciespe_list">Especiales</a>
+              {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
+                <a class="dropdown-item" href="/reciespeciales_list">Casos Especiales</a>
+              {% endif %}
               <a class="dropdown-item" href="/zonas_list">Distritos</a>
           </div>
 

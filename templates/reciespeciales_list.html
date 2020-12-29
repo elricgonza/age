@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+<link href="{{ url_for('static', filename='DataTables/datatables.min.css') }}" rel="stylesheet" media="screen">
+<link href="{{ url_for('static', filename='DataTables/Datatables-1.10.20/css/datatables.bootstrap4.min.css') }}" rel="stylesheet" media="screen">
+
+<script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+
+{% endblock %}
+<div style="height:15px"></div>
+
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <h5>Recintos Casos Especiales </h5>
+            </div>
+            {% if puede_adicionar %}
+            <div class="col-xs-6 col-md-4">
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('reciespeciales', idreci=0, idlocreci=0) }} >Adicionar Recinto Caso Especial</a></button>
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="height:20px"></div>
+            
+            <div class="table-responsive">
+                <table id="id_dt" class="table table-striped table-bordered table-hover" style="width:150">
+                    <thead>
+                        <tr>
+                           <th>IdLoc</th>
+                           <th>Reci</th>
+                           <th>Departamento</th>
+                           <th>Provincia</th>
+                           <th>Municipio</th>
+                           <th>Recinto</th>
+                           <th>Tipo Circun.</th>
+                           <th>Estado</th>
+                           <th>Editar</th>
+                           <th>Imágen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for reciespecial in reciespeciales %}
+                    <tr>
+                        <td>{{ reciespecial[0] }}</td>
+                        <td>{{ reciespecial[1] }}</td>
+                        <td>{{ reciespecial[2] }}</td>
+                        <td>{{ reciespecial[3] }}</td>
+                        <td>{{ reciespecial[4] }}</td>
+                        <td>{{ reciespecial[5] }}</td>
+                        <td>{{ reciespecial[6] }}</td>
+                        <td>{{ reciespecial[10] }}</td>
+                        <td>
+                            <a href={{ url_for('reciespeciales', idreci=reciespecial[1], idlocreci=reciespecial[0]) }}><span class="fas fa-edit"></span></a>                
+                        </td>
+                        <td>
+                            <a href="#"><span class="fas fa-camera"></span></a>                        
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+</script>
+
+{% endblock %}
+

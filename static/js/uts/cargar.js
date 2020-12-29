@@ -40,7 +40,6 @@ function cargar(valor, data) {
                 $("#idpto").append('<option></option>');                
                 $.each(datos2, function(index2, obj2){           
                     if(pa==obj2[2]){
-                        console.log(obj2[0]+', '+obj2[2]);
                         $("#idpto").append('<option value="' + obj2[0] + '">' + obj2[1] + '</option>');
                         j++;    
                     }
@@ -67,23 +66,38 @@ function cargar(valor, data) {
                 });
             });
             $('#inomdist').html('');
-            $.getJSON("/get_distritos_all", function(datos6){
+            $.getJSON("/get_distritos_all", {
+                circun: cir[0]
+            }, function(datos6){
+                console.log(datos6);
                 $("#inomdist").append('<option></option>');                
                 $.each(datos6, function(index6, obj6){           
-                    if(cir[0]==obj6[2]){
-                        $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Dist ' + obj6[2] +')'+'</option>');
-                    }
+                    $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Dist ' + obj6[2] +')'+'</option>');
                 });
             });
         }else if(data==7){
             var circun = document.getElementById("inrodist").value;
+            var idlocreci = document.getElementById("iidlocreci").value;
             $('#inomdist').html('');
-            $.getJSON("/get_distritos_all", function(datos7){
+            $.getJSON("/get_distritos_all", {
+                circun: circun,
+                idlocreci: idlocreci
+            }, function(datos7){
                 $("#inomdist").append('<option></option>');                
-                $.each(datos7, function(index6, obj7){           
-                    if(circun==obj7[2]){
-                        $("#inomdist").append('<option value="' + obj7[1] + '">' + obj7[3] + '('+ 'Dist ' + obj7[2] +')'+'</option>');
-                    }
+                $.each(datos7, function(index7, obj7){           
+                    $("#inomdist").append('<option value="' + obj7[1] + '">' + obj7[3] + '('+ 'Dist ' + obj7[2] +')'+'</option>');
+                });
+            });
+        }else if(data==8){
+            var dep = document.getElementById("ideploc").value;
+            $('#ipueblo').html('');
+            $.getJSON("/get_pueblos_all", {
+                dep: dep
+            }, function(datos8){
+                console.log(datos8);
+                $("#ipueblo").append('<option></option>');                
+                $.each(datos8, function(index8, obj8){           
+                    $("#ipueblo").append('<option value="' + obj8[0] + '">' + obj8[1] + '</option>');
                 });
             });
         } 

@@ -9,27 +9,28 @@
     <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/buildmap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar_esp.js') }}"></script>
 {% endblock %}
 
 <div class="container">
-    <h2 class="text-center text-blue pt-5" >Recinto Electoral</h2>
+    <h2 class="text-center text-blue pt-5" >Recinto Casos Especiales</h2>
     <br>
-    <form class="needs-validation" action="{{ url_for('recinto', idreci = rc.reci, idlocreci = rc.idlocreci) }}" novalidate method='POST' onsubmit="return Validation(this)" name="form">
+    <form class="needs-validation" action="{{ url_for('reciespeciales', idreci = rces.reci, idlocreci = rces.idlocreci) }}" novalidate method='POST' onsubmit="return Validation(this)" name="form">
         <div class="form-row">
             <div class="col-md-3">
                 <label for="latitud">Latitud:</label>
                 <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}"
                         {% if load %}
-                            value="{{ rc.latitud }}"
+                            value="{{ rces.latitud }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
             </div>
             <div class="col-md-3">
                 <label for="longitud">Longitud:</label>
-                <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeo(event)"
+                <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeoespecial(event)"
                         {% if load %}
-                            value="{{ rc.longitud }}"
+                            value="{{ rces.longitud }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
@@ -38,7 +39,7 @@
             </div>
             <div class="col-md-4">
                 <label for="">.</label>
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeo(event)" >Visualizar imágen Satelital</button>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoespecial(event)" >Visualizar imágen Satelital</button>
             </div>
         </div>
         <br>
@@ -47,60 +48,78 @@
                 <label for="dep">DEP:</label>
                 <input type="text" class="form-control" id="ideploc" title="" placeholder="DEP" name="deploc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
-                            value="{{ rc.deploc }}"
+                            value="{{ rces.deploc }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir DEP.</div>
             </div>
             <div class="col-md-2">
                 <label for="departamento">Departamento:</label>
-                <input type="text" class="form-control" id="idepartamento" title="" placeholder="departamento" name="departamento" disabled
-                        {% if load %}
-                            value="{{ rc.nomdep }}"
-                        {% endif %}
-                    >
+                <input type="hidden" id="idepto" name="depto">
+                <select id="idepartamento" name=departamento class="form-control" onchange="cargaresp(this.value, 0)" required>
+                    <option></option>
+                    {% for dpto in dptos %}
+                        {% if load and rces.deploc == dpto[0]%}
+                            <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
+                        {% else %}
+                            <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
+                        {% endif %}                               
+                    {% endfor %}
+                </select>
             </div>
-
             <div class="col-md-1">
                 <label for="prov">PROV:</label>
                 <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
-                            value="{{ rc.provloc }}"
+                            value="{{ rces.provloc }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir PROV.</div>
             </div>
             <div class="col-md-2">
                 <label for="provincia">Provincia:</label>
-                <input type="text" class="form-control" id="iprovincia" title="" placeholder="provincia" name="provincia" disabled
-                        {% if load %}
-                            value="{{ rc.nomprov }}"
-                        {% endif %}
-                    >
+                <input type="hidden" id="iprovi" name="provi">
+                <select id="iprovincia" name=provincia class="form-control" onchange="cargaresp(this.value, 1)" required>
+                    {% for provincia in provincias %}
+                        {% if rces.deploc == provincia[0] %}
+                            {% if load and rces.provloc == provincia[1]%}
+                                <option value = "{{ provincia[1] }}" selected>{{ provincia[2] }}</option>
+                            {% else %}
+                                <option value = "{{ provincia[1] }}">{{ provincia[2] }}</option>
+                            {% endif %}
+                        {% endif %}                               
+                    {% endfor %}      
+                </select>
             </div>
-
             <div class="col-md-1">
                 <label for="sec">SEC:</label>
                 <input type="text" class="form-control" id="isecloc" title="" placeholder="SEC" name="secloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
-                            value="{{ rc.secloc }}"
+                            value="{{ rces.secloc }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir SEC.</div>
             </div>
             <div class="col-md-4">
                 <label for="municipio">Municipio:</label>
-                <input type="text" class="form-control" id="imunicipio" title="" placeholder="municipio" name="municipio" disabled
-                        {% if load %}
-                            value="{{ rc.nomsec }}"
-                        {% endif %}
-                    >
+                <input type="hidden" id="imuni" name="muni">
+                <select id="imunicipio" name=municipio class="form-control" onchange="cargaresp(this.value, 2)" required>
+                    {% for municipio in municipios %}
+                        {% if rces.deploc == municipio[0] and rces.provloc == municipio[1]%}
+                            {% if load and rces.secloc == municipio[2]%}
+                                <option value = "{{ municipio[2] }}" selected>{{ municipio[3] }}</option>
+                            {% else %}
+                                <option value = "{{ municipio[2] }}">{{ municipio[3] }}</option>
+                            {% endif %}
+                        {% endif %}                               
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-md-1">
                 <label for="circun">CIR:</label>
-                <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
+                <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun" required onkeypress="return validacionCircun(event)"
                         {% if load %}
-                            value="{{ rc.circundist }}"
+                            value="{{ rces.circundist }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
@@ -110,18 +129,18 @@
         <div class="row">
             <div class="col-md-3">
                 <label for="">.</label>
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoreci1(event)" >Ver Asientos / Zonas</button>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoreci(event)" >Ver Asientos / Zonas</button>
             </div>
             <div class="col-md-3">
                 <label for="asiento">Asientos del Municipio:</label>
-                <input type="hidden" name="reci_idasiento" value="rc.idlocreci">
+                <input type="hidden" name="reci_idasiento" value="rces.idlocreci">
                 <select id="iasiento" name=asiento class="form-control" onchange="cargar(this.value, 5)" required>
                     {% for asientoReci in asientoRecis %}
-                        {% if rc.deploc==asientoReci[0] and rc.provloc==asientoReci[1] and rc.secloc==asientoReci[2] %}
-                            {% if load and rc.idlocreci==asientoReci[3] %}
-                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                        {% if rces.deploc==asientoReci[0] and rces.provloc==asientoReci[1] and rces.secloc==asientoReci[2] %}
+                            {% if load and rces.idlocreci==asientoReci[3] %}
+                                    <option value = "{{ rces.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
                             {% else %}
-                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
+                                    <option value = "{{ rces.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
                             {% endif %}
                        {% endif %}                                                     
                     {% endfor %}        
@@ -130,12 +149,12 @@
             </div>
             <div class="col-md-4">
                 <label for="zonareci">Zona del Recinto:</label>
-                <input type="hidden" name="reci_idzona" value="{{ rc.zonareci }}">
+                <input type="hidden" name="reci_idzona" value="{{ rces.zonareci }}">
                 <select id="izonareci" name="zonareci" class="form-control" required>                          
                     <option></option>
                     {% for zonasreci in zonasRecis %}
-                        {% if rc.idlocreci==zonasreci[0] and rc.circundist==zonasreci[3] %}
-                            {% if load and rc.zonareci==zonasreci[1] %}
+                        {% if rces.idlocreci==zonasreci[0] and rces.circundist==zonasreci[3] %}
+                            {% if load and rces.zonareci==zonasreci[1] %}
                                     <option value = "{{ zonasreci[1] }}" selected>{{ zonasreci[2] ~'('~'Dist '~zonasreci[3]~')' }}</option>
                             {% else %}
                                     <option value = "{{ zonasreci[1] }}">{{ zonasreci[2] ~'('~'Dist '~zonasreci[3]~')' }}</option>
@@ -164,7 +183,7 @@
                 <label for="idloc">IdLoc:</label>
                 <input type="text" class="form-control" id="iidloc" title="" placeholder="IdLoc" name="idloc" disabled
                         {% if load %}
-                            value="{{ rc.idlocreci }}"
+                            value="{{ rces.idlocreci }}"
                         {% endif %}
                     >
             </div>
@@ -172,7 +191,7 @@
                 <label for="reci">Reci:</label>
                 <input type="text" class="form-control" id="ireci" title="" placeholder="Reci" name="reci" disabled
                         {% if load %}
-                            value="{{ rc.reci }}"
+                            value="{{ rces.reci }}"
                         {% endif %}
                     >
             </div>
@@ -180,7 +199,7 @@
                 <label for="nomreci">Recinto ELectoral:</label>
                 <input type="text" class="form-control" id="inomreci" title="" placeholder="Introduzca nombre de Recinto" name="nomreci"  required 
                         {% if load %}
-                            value="{{ rc.nomreci }}"
+                            value="{{ rces.nomreci }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir un nombre válido.</div>
@@ -190,7 +209,7 @@
                 <select id="iestado" name=estado class="form-control">
                     <option></option>
                     {% for estado in estados %}
-                        {% if load and rc.estado==estado[0] %}
+                        {% if load and rces.estado==estado[0] %}
                                 <option value = "{{ estado[0] }}" selected>{{ estado[1] }}</option>
                         {% else %}
                                 <option value = "{{ estado[0] }}">{{ estado[1] }}</option>
@@ -207,7 +226,7 @@
                 <select id="itiporeci" name="tiporeci" class="form-control" onchange="carg(this);">
                     <option></option>
                     {% for trecinto in trecintos %}
-                        {% if load and rc.tiporecinto==trecinto[0] %}
+                        {% if load and rces.tiporecinto==trecinto[0] %}
                                 <option value = "{{ trecinto[0] }}" selected>{{ trecinto[1] }}</option>
                         {% else %}
                                 <option value = "{{ trecinto[0] }}">{{ trecinto[1] }}</option>
@@ -219,8 +238,8 @@
             <div class="col-md-2">
                 <label for="ruereci">Cod. RUE:</label>
                 <input type="text" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci"  required pattern="^ *\d[\d ]*$"
-                        {% if load and rc.codrue != '0' %}
-                            enabled value="{{ rc.codrue }}"
+                        {% if load and rces.codrue != '0' %}
+                            enabled value="{{ rces.codrue }}"
                          {% else %}
                             disabled   
                         {% endif %}
@@ -230,8 +249,8 @@
             <div class="col-md-2">
                 <label for="edireci">Cod. Edificio:</label>
                 <input type="text" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"  required pattern="^ *\d[\d ]*$"
-                        {% if load and rc.codrueedif != '0' %}
-                            enabled value="{{ rc.codrueedif }}"
+                        {% if load and rces.codrueedif != '0' %}
+                            enabled value="{{ rces.codrueedif }}"
                          {% else %}
                             disabled
                         {% endif %}
@@ -244,28 +263,28 @@
                 <select id="idepenreci" name=depenreci class="form-control" required>
                         <option></option>                                                          
                         <option value=1 
-                            {% if load  and rc.depend == 1 %}
+                            {% if load  and rces.depend == 1 %}
                                     selected
                                 {% elif usrdep == 1 %}
                                     selected  
                             {% endif %}
                         >Particular</option>
                         <option value=2
-                            {% if load  and rc.depend == 2 %}
+                            {% if load  and rces.depend == 2 %}
                                     selected
                                 {% elif usrdep == 2 %}
                                     selected 
                             {% endif %}
                         >Fiscal</option>
                         <option value=3
-                            {% if load  and rc.depend == 3 %}
+                            {% if load  and rces.depend == 3 %}
                                     selected
                                 {% elif usrdep == 3 %}
                                     selected 
                             {% endif %}
                         >Convénio</option>
                         <option value=4 
-                            {% if load  and rc.depend == 4 %}
+                            {% if load  and rces.depend == 4 %}
                                     selected
                                 {% elif usrdep == 4 %}
                                     selected 
@@ -281,7 +300,7 @@
                 <label for="pisosreci">Cantidad de Pisos:</label>
                 <input type="text" class="form-control" id="ipisosreci" title="" placeholder="Introduzca cantidad de pisos" name="pisosreci"  required pattern="^ *\d[\d ]*$" onkeypress="return validacionPisos(event)"
                         {% if load %}
-                            value="{{ rc.cantpisos }}"
+                            value="{{ rces.cantpisos }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir un dato válido.</div>
@@ -290,7 +309,7 @@
                 <label for="mesasreci">Mesa(max.):</label> 
                 <input type="text" class="form-control" id="imesasreci" title="" placeholder="Max." name="mesasreci"  required pattern="^ *\d[\d ]*$"  onkeypress="return validacionMax(event)"
                         {% if load %}
-                            value="{{ rc.maxmesasreci }}"
+                            value="{{ rces.maxmesasreci }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback" id="v_poblacionloc">Debe introducir un dato válido.</div>
@@ -299,7 +318,7 @@
                 <label for="dirreci">Dirección del Recinto:</label>
                 <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci"  
                         {% if load %}
-                            value="{{ rc.direccion }}"
+                            value="{{ rces.direccion }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir un dato válido.</div>
@@ -311,28 +330,28 @@
                 <label for="ietapa">Etapa</label>
                 <select id="ietapa" name=etapa class="form-control" onchange="carg1(this);">
                     <option value=1 
-                        {% if load  and rc.etapa == 1 %}
+                        {% if load  and rces.etapa == 1 %}
                             selected 
                         {% endif %}
                     >Propuesta</option>
                     <option value=2 
-                        {% if load  and rc.etapa == 2 %}
+                        {% if load  and rces.etapa == 2 %}
                             selected 
                         {% endif %}
                     >Devuelto</option>
                     {% if usrdep == 0 %}
                     <option value=3
-                        {% if load  and rc.etapa == 3 %}
+                        {% if load  and rces.etapa == 3 %}
                             selected 
                         {% endif %}
                     >Revisión</option>
                     <option value=4
-                        {% if load  and rc.etapa == 4 %}
+                        {% if load  and rces.etapa == 4 %}
                             selected 
                         {% endif %}
                     >Aprobado</option>
                     <option value=5
-                        {% if load  and rc.etapa == 5 %}
+                        {% if load  and rces.etapa == 5 %}
                             selected 
                         {% endif %}
                     >Aprobado con Correpción</option>
@@ -345,7 +364,7 @@
                 <select id="idocAct" name=docAct class="form-control" required>                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
-                        {% if load and rc.doc_idA == tpdfA[0] %}
+                        {% if load and rces.doc_idA == tpdfA[0] %}
                                 <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
                         {% else %}
                                 <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
@@ -354,7 +373,7 @@
                 </select>
                 <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
             </div>
-            <div class="col-md-1"><a href="{{ rc.rutaA }}" target="_blank">
+            <div class="col-md-1"><a href="{{ rces.rutaA }}" target="_blank">
                                     {% if load %}
                                         <i class="fas fa-file-pdf" style="font-size: 25px;display: inline-block; margin-top: 40px;"></i>
                                     {% endif %}
@@ -369,7 +388,7 @@
                 <select id="idocActF" name=docActF class="form-control" required disabled>                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
-                        {% if load and rc.doc_idAF == tpdfA[0] %}
+                        {% if load and rces.doc_idAF == tpdfA[0] %}
                                 <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
                         {% else %}
                                 <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
@@ -378,7 +397,7 @@
                 </select>
                 <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
             </div>
-            <div class="col-md-1"><a href="{{ rc.rutaAF }}" target="_blank">
+            <div class="col-md-1"><a href="{{ rces.rutaAF }}" target="_blank">
                                     {% if load %}
                                         <i class="fas fa-file-pdf" style="font-size: 25px;display: inline-block; margin-top: 40px;"></i>
                                     {% endif %}
@@ -391,7 +410,7 @@
                 <label for="fechaIngreso">Fecha Ingreso al Sistema:</label>
                 <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Ingreso." name="fechaIngreso" readonly "  
                         {% if load %}
-                            value="{{ rc.fechaIngreso }}"
+                            value="{{ rces.fechaIngreso }}"
                         {% else %}
                             value="{{ idatetime }}"
                         {% endif %}
@@ -402,7 +421,7 @@
                 <label for="fechaAct">Fecha Actualización:</label>
                 <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha de Actualización" name="fechaAct" readonly "  
                         {% if load %}
-                            value="{{ rc.fechaAct }}"
+                            value="{{ rces.fechaAct }}"
                         {% else %}
                             value="{{ idatetime }}"
                         {% endif %}
@@ -413,7 +432,7 @@
                 <label for="usuario">Usr.que realizó la última actualización:</label>
                 <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly "
                         {% if load %}
-                            value="{{ rc.usuario }}"
+                            value="{{ rces.usuario }}"
                         {% else %}
                             value="{{ usuario }}"
                         {% endif %}
@@ -426,7 +445,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <button type="button"  onclick="javascript: window.location.href = '/recintos_list';"  class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
+                <button type="button"  onclick="javascript: window.location.href = '/reciespeciales_list';"  class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
             </div>
             <div class="col-md-6">
                 <button type="submit" class="btn btn-outline-success btn-lg btn-block" 
@@ -528,6 +547,17 @@
       }
       return true;
     }
+    function validacionCircun(event) {
+      var key = event.which || event.keyCode;
+      /* Observamos el resultado que generará la tecla */
+      var max = parseInt(form.circun.value + String.fromCharCode(key)
+      );
+      /* Si no está dentro de lo esperado cancelamos la pulsación */
+      if (isNaN(max) === true || max < 1 || max > 99) {
+        return false;
+      }
+      return true;
+    }
 
     // Below Function Executes On Form Submit
     function Validation(f) {
@@ -555,7 +585,7 @@
                         <label for="idloc">IdLoc:</label>
                         <input type="text" class="form-control" id="iidlocreci" title="" placeholder="Instroduzca IdLoc" name="idlocreci" required readonly 
                                 {% if load %}
-                                    value="{{ rc.idlocreci }}"
+                                    value="{{ rces.idlocreci }}"
                                 {% endif %}
                             >
                         <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
@@ -585,7 +615,7 @@
                         <label for="nrodist">Circun.:</label>
                         <input type="text" class="form-control" id="inrodist" placeholder="Nro." name="nrodist" required readonly
                             {% if load %}
-                                value="{{ rc.circundist }}"        
+                                value="{{ rces.circundist }}"        
                             {% endif %}
                         >
                         <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
@@ -708,7 +738,7 @@
                         <label for="idloc">IdLoc:</label>
                         <input type="text" class="form-control" id="iidlocreci1" title="" placeholder="Instroduzca IdLoc" name="idlocreci1" required readonly 
                                 {% if load %}
-                                    value="{{ rc.idlocreci }}"
+                                    value="{{ rces.idlocreci }}"
                                 {% endif %}
                             >
                         <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
@@ -721,7 +751,7 @@
                         <label for="nrodist">Circun.:</label>
                         <input type="text" class="form-control" id="inrodist1" placeholder="Nro." name="nrodist1" required readonly
                             {% if load %}
-                                value="{{ rc.circundist }}"        
+                                value="{{ rces.circundist }}"        
                             {% endif %}
                         >
                         <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
