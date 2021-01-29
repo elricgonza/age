@@ -1,0 +1,51 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<link href="{{ url_for('static', filename='DataTables/datatables.min.css') }}" rel="stylesheet" media="screen">
+<link href="{{ url_for('static', filename='DataTables/Datatables-1.10.20/css/datatables.bootstrap4.min.css') }}" rel="stylesheet" media="screen">
+<script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+{% endblock %}
+
+<div style="height:15px"></div>
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-8">
+                    <h5>CLASIFICADOR</h5>
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('clas_ABC', clas_id = 0,  clas_grup_id = clasificadores[0][3]) }}>Adicionar Clasificador</a></button>
+                </div>
+            </div>
+
+            <div style="height:20px"></div>
+
+            <div class="table-responsive">
+                <table id="id_dt" class="table table-striped table-bordered table-hover" style="width:150">
+                    <thead>
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Descripcion del Clasificador</th>
+                            <th>Subgrupo</th>
+                            <th>Editar</th>
+                            <!-- <th>Eliminar</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for Clasificador in clasificadores %}
+                        <tr>
+                            <td>{{ Clasificador[3] }}</td>
+                            <td>{{ Clasificador[1] }}</td>
+                            <td>{{ Clasificador[2] }}</td>
+
+                            <td>
+                                <a href={{ url_for( 'clas_ABC', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-edit"></span></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endblock %}

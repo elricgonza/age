@@ -8,6 +8,7 @@ class Prov:
     fechaIngreso = ''
     fechaAct = ''
     usuario = ''
+    DescNivelId = ''
 
     def __init__(self, cx):
         self.cx = cx
@@ -26,7 +27,7 @@ class Prov:
 
     def get_provs_id(self, iddepprov, idprov):
         varAux = iddepprov, idprov
-        s = "select pa.IdPais, p.DepProv, p.Prov, p.NomProv, p.codprov, p.fechaIngreso, p.fechaAct, p.usuario" + \
+        s = "select pa.IdPais, p.DepProv, p.Prov, p.NomProv, p.codprov, p.fechaIngreso, p.fechaAct, p.usuario, p.descNivelId" + \
             " from [GeografiaElectoral_app].[dbo].[PROV] p inner join [GeografiaElectoral_app].[dbo].[DEP] d" + \
             " on p.DepProv=d.Dep inner join [GeografiaElectoral_app].[dbo].[PAIS] pa on d.IdPais=pa.IdPais" + \
             " where p.DepProv = %d  and p.prov = %d"
@@ -43,20 +44,21 @@ class Prov:
             self.fechaingreso = row[5]
             self.fechaactual = row[6]
             self.usuario = row[7]
+            self.descNivelId = row[8]
             return True
 
-    def add_prov(self, depto, Prov, NomProv, codprov, fechaIngreso, fechaAct, usuario):
-        new_prov = depto, Prov, NomProv, codprov, fechaIngreso, fechaAct, usuario
-        s = "insert into GeografiaElectoral_app.dbo.prov(DepProv, Prov, NomProv, codprov, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s) "
+    def add_prov(self, depto, Prov, NomProv, codprov, descNivelId, fechaIngreso, fechaAct, usuario):
+        new_prov = depto, Prov, NomProv, codprov, descNivelId,fechaIngreso, fechaAct, usuario
+        s = "insert into GeografiaElectoral_app.dbo.prov(DepProv, Prov, NomProv, codprov, descNivelId, fechaIngreso, fechaAct, usuario) values " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s) "
         self.cur.execute(s, new_prov)
         self.cx.commit()
         print("adicionado...Provincias")
 
-    def upd_prov(self, DepProv, Prov, NomProv, codprov, fechaAct, usuario):
-        new_prov = NomProv, codprov, fechaAct, usuario, DepProv, Prov
+    def upd_prov(self, DepProv, Prov, NomProv, codprov, descNivelId, fechaAct, usuario):
+        new_prov = NomProv, codprov, descNivelId, fechaAct, usuario, DepProv, Prov
         s = "update [GeografiaElectoral_app].[dbo].[PROV]" + \
-            " set NomProv= %s, codprov= %s, " + \
+            " set NomProv= %s, codprov= %s, descNivelId=%s, " + \
             " fechaAct= %s, usuario= %s " + \
             " where [GeografiaElectoral_app].[dbo].[PROV].DepProv = %d and " + \
             "  [GeografiaElectoral_app].[dbo].[PROV].Prov = %d "
@@ -65,7 +67,7 @@ class Prov:
             self.cx.commit()
             print('provincia actualizado')
         except Exception as e:
-            print("Error - actualización de depto")
+            print("Error - actualización de provincia")
             print(e)
     
     def get_next_idprov(self, depto_id):
@@ -102,3 +104,12 @@ class Prov:
             self.dep = row[0]
             self.nomDep = row[1]
         return True
+
+    def get_combo_descNivel(self, usrdep):
+        s = "SELECT [idClasif],[descripcion] FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=6"             
+        self.cur.execute(s) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows 

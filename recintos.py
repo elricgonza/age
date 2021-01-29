@@ -35,10 +35,10 @@ class Recintos:
             " ELSE 'oother'  END as Estado" + \
             " from [bdge].[dbo].[GeoRecintos_all]"
         if usrdep != 0 :
-            s = s + " where DEP = %d order by prov, sec"
+            s = s + " where TipoCircun = 1 and DEP = %d order by prov, sec"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " order by Dep, Prov, Sec"
+            s = s + " where TipoCircun = 1 order by Dep, Prov, Sec"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -52,7 +52,8 @@ class Recintos:
         s = "select a.IdLocReci, a.Reci, g.CircunDist, b.DepLoc, c.NomDep, b.ProvLoc, " + \
             "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
-            "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario " + \
+            "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
+            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -60,6 +61,8 @@ class Recintos:
             "inner join [GeografiaElectoral_app].[dbo].[SEC] e on b.SecLoc=e.Sec and b.DepLoc=e.DepSec and b.ProvLoc=e.ProvSec " + \
             "inner join [GeografiaElectoral_app].[dbo].[ZONA] f on a.IdLocReci=f.IdLocZona and a.ZonaReci=f.Zona " + \
             "inner join [GeografiaElectoral_app].[dbo].[DIST] g on f.IdLocZona=g.IdLocDist and f.DistZona=g.Dist " + \
+            "left join [bdge].[dbo].[doc] h on a.doc_idA=h.id " + \
+            "left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id " + \
             "where a.IdLocReci = %d and a.Reci = %d"
         mod_recinto = idlocreci, idreci
         self.cur.execute(s, mod_recinto)
@@ -91,6 +94,11 @@ class Recintos:
             self.fechaIngreso = row[21]
             self.fechaAct = row[22]
             self.usuario = row[23]
+            self.etapa = row[24]
+            self.doc_idA = row[25]
+            self.doc_idAF = row[26]
+            self.rutaA = row[27]
+            self.rutaAF = row[28]
             return True
 
 
@@ -98,18 +106,18 @@ class Recintos:
                     maxmesasreci, direccion, latitud, longitud, \
                     estado, tiporecinto, codrue, \
                     codrueedif, depend, \
-                    cantpisos, fechaIngreso, fechaAct, usuario):
+                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF):
 
         new_recinto = idlocreci, reci, nomreci, '', '', zonareci, \
             maxmesasreci, direccion, latitud, longitud, \
             estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaIngreso, fechaAct, usuario
+            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, '0'
 
         s = "insert into [GeografiaElectoral_app].[dbo].[RECI] (IdLocReci, Reci, NomReci, SupReci, ApoyoReci, " + \
             " ZonaReci, MaxMesasReci, Direccion, latitud, " + \
             " longitud, estado, tipoRecinto, codRue, codRueEdif, " + \
-            " depend, cantPisos, fechaIngreso, fechaAct, usuario) VALUES " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            " depend, cantPisos, fechaIngreso, fechaAct, usuario, etapa, doc_idA, doc_idAF, nacionId) VALUES " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_recinto)
             self.cx.commit()
@@ -122,17 +130,18 @@ class Recintos:
                     maxmesasreci, direccion, latitud, longitud, \
                     estado, tiporecinto, codrue, \
                     codrueedif, depend, \
-                    cantpisos, fechaIngreso, fechaAct, usuario):
+                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF):
 
         recinto = idlocreci, nomreci, zonareci, \
             maxmesasreci, direccion, latitud, longitud, \
             estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaIngreso, fechaAct, usuario, reci
+            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, reci
 
         s = "update GeografiaElectoral_app.dbo.reci" + \
             " set IdLocReci= %s, NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %d, " + \
             " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
-            " depend= %d, cantPisos= %s, fechaIngreso= %s, fechaAct= %s, usuario= %s " + \
+            " depend= %d, cantPisos= %s, fechaIngreso= %s, fechaAct= %s, usuario= %s, " + \
+            " etapa= %s, doc_idA= %s, doc_idAF= %s " + \
             " where Reci = %s"
         try:
             self.cur.execute(s, recinto)
@@ -166,3 +175,6 @@ class Recintos:
             return False
         else:
             return rows
+
+
+    

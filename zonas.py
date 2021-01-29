@@ -126,4 +126,10 @@ class Zonas:
         row = self.cur.fetchone()
         return row[0]
 
+    def get_ultimodist(self, idloc):
+        s = "select max(dist) from GeografiaElectoral_app.dbo.dist where IdLocDist = %d"
+        self.cur.execute(s, idloc)
+        row = self.cur.fetchone()
+        return row[0]
+
     

@@ -1,0 +1,47 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<link href="{{ url_for('static', filename='DataTables/datatables.min.css') }}" rel="stylesheet" media="screen">
+<link href="{{ url_for('static', filename='DataTables/Datatables-1.10.20/css/datatables.bootstrap4.min.css') }}" rel="stylesheet" media="screen">
+<script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+{% endblock %}
+
+<div style="height:15px"></div>
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-8">
+                    <h5>CLASIFICADOR</h5>
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <input type="hidden" class="form-control" id="idGrupo" placeholder="Introduzca la Descripcion del Clasificador" name="grupo" required {% if load %} value="{{ s.clasifGrupoId }}" {% endif %}>
+
+                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('clas_ABC', clas_id = 0,  clas_grup_id = grupo_id)}}>Adicionar Clasificador</a></button>
+                </div>
+            </div>
+
+            <div style="height:20px"></div>
+
+            <div class="table-responsive">
+                <table id="id_dt" class="table table-striped table-bordered table-hover" style="width:150">
+                    <thead>
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Descripcion del Clasificador</th>
+                            <th>Editar</th>
+                            <!-- <th>Eliminar</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endblock %}

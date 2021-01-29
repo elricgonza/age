@@ -150,9 +150,9 @@
                     {% for zonasreci in zonasRecis %}
                         {% if rce.idlocreci==zonasreci[0] and rce.circundist==zonasreci[3] %}
                             {% if load and rce.zonareci==zonasreci[1] %}
-                                    <option value = "{{ zonasreci[1] }}" selected>{{ zonasreci[2] ~'('~'Dist '~zonasreci[3]~')' }}</option>
+                                    <option value = "{{ zonasreci[1] }}" selected>{{ zonasreci[2] ~'('~'Cir '~zonasreci[3]~')' }}</option>
                             {% else %}
-                                    <option value = "{{ zonasreci[1] }}">{{ zonasreci[2] ~'('~'Dist '~zonasreci[3]~')' }}</option>
+                                    <option value = "{{ zonasreci[1] }}">{{ zonasreci[2] ~'('~'Cir '~zonasreci[3]~')' }}</option>
                             {% endif %}
                         {% endif %}                                                                
                     {% endfor %}
@@ -255,7 +255,13 @@
             <div class="col-md-4">
                 <label for="depenreci">Tipo de Dependencia:</label>
                 <input type="hidden" name="reci_iddepen" value="">                          
-                <select id="idepenreci" name=depenreci class="form-control" required>
+                <select id="idepenreci" name=depenreci class="form-control" required
+                        {% if load and rce.codrueedif != '0' %}
+                                enabled
+                         {% else %}
+                                disabled
+                        {% endif %}
+                        >
                         <option></option>                                                          
                         <option value=1 
                             {% if load  and rce.depend == 1 %}
@@ -467,19 +473,22 @@
 <script>
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
+    var depenreci = document.getElementById('idepenreci');
 
     function carg(elemento) {
       d = elemento.value;
-      console.log(d)
       if(d == 7){
         ruereci.disabled = false;
         edireci.disabled = false;
+        depenreci.disabled = false;
         ruereci.focus();
       }else{
         ruereci.disabled = true;
         edireci.disabled = true;
+        depenreci.disabled = true;
         ruereci.value="";
         edireci.value="";
+        document.getElementById('idepenreci').selectedIndex = 0;
       }
     }
 
@@ -619,7 +628,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label for="fechaIngreso">Registro:</label>
-                        <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
+                        <input type="datetime" class="form-control" id="ifechaIngresoM" title="" placeholder="Fecha de Registro." name="fechaIngresoM" readonly
                                 {% if load_d %}
                                     value=""
                                 {% else %}
@@ -630,7 +639,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="fechaAct">Actual:</label>
-                        <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                        <input type="datetime" class="form-control" id="ifechaActM" title="" placeholder="Fecha Actual." name="fechaActM" readonly
                                 {% if load_d %}
                                     value=""
                                 {% else %}
@@ -676,8 +685,8 @@
         var nomzona = document.getElementById('inomzona').value;
         var circundist = document.getElementById('inrodist').value;
         var nomdist = document.getElementById('inomdist').value;
-        var fingreso = document.getElementById('ifechaIngreso').value;
-        var factual = document.getElementById('ifechaAct').value;
+        var fingreso = document.getElementById('ifechaIngresoM').value;
+        var factual = document.getElementById('ifechaActM').value;
         var usuario = document.getElementById('iusuario').value;
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario;
@@ -699,6 +708,14 @@
             }
 
         });
+        setTimeout(function(){
+               $('#exampleModal').modal('hide')
+        }, 3000);
+        /*$('#button').submit(function(e) {
+               e.preventDefault();
+               $('#exampleModal').modal('hide');
+               return false;
+        });*/
     }
     function cerrarmodal(){
         $('#successAlert').hide();

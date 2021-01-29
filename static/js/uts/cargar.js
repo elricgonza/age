@@ -48,7 +48,6 @@ function cargar(valor, data) {
         }else if(data==5){
             var ia = document.getElementById("iasiento").value;
             var cir = ia.split(':');
-            console.log(cir[0]+', '+cir[1]);
             document.getElementById('iidloc').value = cir[1];
             document.getElementById('iidlocreci').value = cir[1];
             document.getElementById('inrodist').value = cir[0];
@@ -59,20 +58,18 @@ function cargar(valor, data) {
                 idloc: cir[1],
                 circun: cir[0]
             }, function(datos5){
-                console.log(datos5);
                 $("#izonareci").append('<option></option>');                
                 $.each(datos5, function(index5, obj5){       
-                    $("#izonareci").append('<option value="' + obj5[1] + '">' + obj5[2] + '('+ 'Dist ' + cir[0] +')'+'</option>');
+                    $("#izonareci").append('<option value="' + obj5[1] + '">' + obj5[2] +' - '+ obj5[3] + '('+ 'Cir ' + cir[0] +')'+'</option>');
                 });
             });
             $('#inomdist').html('');
             $.getJSON("/get_distritos_all", {
                 circun: cir[0]
             }, function(datos6){
-                console.log(datos6);
                 $("#inomdist").append('<option></option>');                
                 $.each(datos6, function(index6, obj6){           
-                    $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Dist ' + obj6[2] +')'+'</option>');
+                    $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Cir ' + obj6[2] +')'+'</option>');
                 });
             });
         }else if(data==7){
@@ -85,7 +82,7 @@ function cargar(valor, data) {
             }, function(datos7){
                 $("#inomdist").append('<option></option>');                
                 $.each(datos7, function(index7, obj7){           
-                    $("#inomdist").append('<option value="' + obj7[1] + '">' + obj7[3] + '('+ 'Dist ' + obj7[2] +')'+'</option>');
+                    $("#inomdist").append('<option value="' + obj7[1] + '">' + obj7[1] +' - '+ obj7[3] +'('+ 'Cir ' + obj7[2] +')'+'</option>');
                 });
             });
         }else if(data==8){

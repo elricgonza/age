@@ -12,14 +12,14 @@
     {% endfor %} {% endif %} {% endwith %}
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
-                <form action="" class="needs-validation" novalidate method="POST">
-                    <br>
+            <form action="" class="needs-validation" novalidate method="POST">
+                <br>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="idoc">PAISES</label>
-                            <input type="hidden" name="idpais" value="{{ s.idPais }}">
-                            <select id="iPais" name="pais" class="form-control" required>                          
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="idoc">PAISES</label>
+                        <input type="hidden" name="idpais" value="{{ s.idPais }}">
+                        <select id="iPais" name="pais" class="form-control" required>                          
                                 <option></option>
                                 {% for tpais in tpaises %}
                                         {% if load and s.idPais == tpais[0] %}
@@ -29,64 +29,80 @@
                                         {% endif %}                                                                
                                 {% endfor %}
                             </select>
-                            <div class="invalid-feedback">Debe Seleccionar un pais...</div>
-                        </div>
+                        <div class="invalid-feedback">Debe Seleccionar un pais...</div>
                     </div>
 
-                    <br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="NomDep">DEPARTAMENTO</label>
-                            <input type="text" class="form-control" id="iNomDep" placeholder="Introduzca Departamento" name="nomDep" required {% if load %} value="{{ s.nomDep }}" {% endif %}>
-                            <div class="invalid-feedback">Debe Seleccionar un Departamento...</div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="Diputados">DIPUTADOS:</label>
-                            <input type="text" class="form-control" id="iDiputados" placeholder="Introduzca Nro. de Diputados" name="diputados" required {% if load %} value="{{ s.diputados }}" {% endif %}>
-                            <div class="invalid-feedback">Por favor ingrese datos.</div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="diputadosUninominales">UNINOMINALES:</label>
-                            <input type="text" class="form-control" id="iDiputadosUninominales" placeholder="Introduzca Nro. de Uninominales" name="diputadosUninominales" required {% if load %} value="{{ s.diputadosUninominales }}" {% endif %}>
-                            <div class="invalid-feedback">Por favor ingrese datos.</div>
-                        </div>
+                    <div class="col-md-6">
+                        <label for="idoc">DESCRIPCION DE NIVEL</label>
+                        <input type="hidden" name="nivel" value="{{ s.descNivelId }}">
+                        <select id="idescNivel" name="descNivelId" class="form-control" required>                          
+                                <option></option>
+                                {% for tclasif in tdescNivel %}
+                                        {% if load and s.descNivelId|int == tclasif[0] %}
+                                                <option value = "{{ tclasif[0] }}" selected>{{ tclasif[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tclasif[0] }}">{{ tclasif[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                        <div class="invalid-feedback">Debe Seleccionar un clasificador...</div>
                     </div>
-            <br>
-
-            <div class="row ">
-
-                <div class="col-md-4 ">
-                    <label for="fecharegistro ">Fecha y Hora de Registro:</label>
-                    <input type="date " class="form-control " id="ifechaIngreso" title=" " placeholder="Fecha de Registro. " name="fechaIngreso" readonly {% if load %} value="{{ s.fechaIngreso }} " {% else %} value="{{ idatetime }} " {% endif %}>
-                    <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
                 </div>
 
-                <div class="col-md-4 ">
-                    <label for="fechaingreso ">Fecha y Hora Actual:</label>
-                    <input type="date " class="form-control " id="ifechaAct" title=" " placeholder="Fecha Actual. " name="fechaAct" readonly {% if load %} value="{{ s.fechaAct }} " {% else %} value="{{ idatetime }} " {% endif %}>
-                    <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="NomDep">DEPARTAMENTO</label>
+                        <input type="text" class="form-control" id="iNomDep" placeholder="Introduzca Departamento" name="nomDep" required {% if load %} value="{{ s.nomDep }}" {% endif %}>
+                        <div class="invalid-feedback">Debe Seleccionar un Departamento...</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="Diputados">DIPUTADOS:</label>
+                        <input type="text" class="form-control" id="iDiputados" placeholder="Introduzca Nro. de Diputados" name="diputados" required {% if load %} value="{{ s.diputados }}" {% endif %}>
+                        <div class="invalid-feedback">Por favor ingrese datos.</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="diputadosUninominales">UNINOMINALES:</label>
+                        <input type="text" class="form-control" id="iDiputadosUninominales" placeholder="Introduzca Nro. de Uninominales" name="diputadosUninominales" required {% if load %} value="{{ s.diputadosUninominales }}" {% endif %}>
+                        <div class="invalid-feedback">Por favor ingrese datos.</div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row ">
+
+                    <div class="col-md-4 ">
+                        <label for="fecharegistro ">Fecha y Hora de Registro:</label>
+                        <input type="date " class="form-control " id="ifechaIngreso" title=" " placeholder="Fecha de Registro. " name="fechaIngreso" readonly {% if load %} value="{{ s.fechaIngreso }} " {% else %} value="{{ idatetime }} " {% endif %}>
+                        <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                        <label for="fechaingreso ">Fecha y Hora Actual:</label>
+                        <input type="date " class="form-control " id="ifechaAct" title=" " placeholder="Fecha Actual. " name="fechaAct" readonly {% if load %} value="{{ s.fechaAct }} " {% else %} value="{{ idatetime }} " {% endif %}>
+                        <div class="invalid-feedback " id="v_fechaIngreso ">Debe introducir una fecha válida.</div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                        <label for="usuario ">Usuario Logueado:</label>
+                        <input type="text " class="form-control " id="iusuario" title=" " placeholder="Usuario " name="usuario" readonly {% if load %} value="{{ s.usuario }} " {% else %} value="{{ usuario }} " {% endif %}>
+                        <div class="invalid-feedback ">Debe introducir un nombre válido.</div>
+                    </div>
                 </div>
 
-                <div class="col-md-4 ">
-                    <label for="usuario ">Usuario Logueado:</label>
-                    <input type="text " class="form-control " id="iusuario" title=" " placeholder="Usuario " name="usuario" readonly {% if load %} value="{{ s.usuario }} " {% else %} value="{{ usuario }} " {% endif %}>
-                    <div class="invalid-feedback ">Debe introducir un nombre válido.</div>
-                </div>
-            </div>
+                <br>
 
-            <br>
-
-            <div class="row ">
-                <div class="col-md-6 mb-3 ">
-                    <button type="button " onclick="javascript: window.location.href='/deptos_list' ; " class="btn btn-outline-danger btn-md btn-block ">Cancelar</button>
+                <div class="row ">
+                    <div class="col-md-6 mb-3 ">
+                        <button type="button " onclick="javascript: window.location.href='/deptos_list' ; " class="btn btn-outline-danger btn-md btn-block ">Cancelar</button>
+                    </div>
+                    <div class="col-md-6 mb-3 ">
+                        <button type="submit" class="btn btn-outline-success btn-md btn-block ">Aceptar</button>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3 ">
-                    <button type="submit" class="btn btn-outline-success btn-md btn-block ">Aceptar</button>
-                </div>
-            </div>
-            <!--row-->
+                <!--row-->
             </form>
         </div>
     </div>

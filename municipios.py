@@ -12,6 +12,7 @@ class Municipio:
     fechaIngreso = ''
     fechaAct = ''
     usuario = ''
+    DescNivelId = ''
 
     def __init__(self, cx):
         self.cx = cx
@@ -33,7 +34,7 @@ class Municipio:
 
     def get_mun_id(self, idDepSec, idProvSec, idSec):
         varAux = idDepSec, idProvSec, idSec
-        s = "SELECT pa.IdPais, s.DepSec, s.ProvSec, s.Sec, s.NumConceSec, s.NomSec, s.CircunSec, s.CodProv, s.CodSecc, s.fechaIngreso, s.fechaAct, s.usuario " + \
+        s = "SELECT pa.IdPais, s.DepSec, s.ProvSec, s.Sec, s.NumConceSec, s.NomSec, s.CircunSec, s.CodProv, s.CodSecc, s.fechaIngreso, s.fechaAct, s.usuario, s.descNivelId " + \
             "FROM [GeografiaElectoral_app].[dbo].[SEC] AS s INNER JOIN [GeografiaElectoral_app].[dbo].[DEP] AS d " + \
             "ON s.DepSec = d.Dep INNER JOIN [GeografiaElectoral_app].[dbo].[PAIS] AS pa ON d.IdPais = pa.IdPais " + \
             "WHERE(s.DepSec = %d) AND (s.ProvSec = %d) AND (s.Sec = %d)"
@@ -56,20 +57,21 @@ class Municipio:
             self.fechaIngreso = row[9]
             self.fechaAct = row[10]
             self.usuario = row[11]
+            self.descNivelId = row[12]
             return True
 
-    def add_mun(self, DepSec, ProvSec, Sec, NumConceSec, NomSec, fechaIngreso, fechaAct, usuario):
-        new_mun =  DepSec, ProvSec, Sec, NumConceSec, NomSec, fechaIngreso, fechaAct, usuario
-        s = "insert into GeografiaElectoral_app.dbo.sec(DepSec, ProvSec, Sec, NumConceSec, NomSec, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s) "
+    def add_mun(self, DepSec, ProvSec, Sec, NumConceSec, NomSec,descNivelId, fechaIngreso, fechaAct, usuario):
+        new_mun =  DepSec, ProvSec, Sec, NumConceSec, NomSec, descNivelId, fechaIngreso, fechaAct, usuario
+        s = "insert into GeografiaElectoral_app.dbo.sec(DepSec, ProvSec, Sec, NumConceSec, NomSec, descNivelId,fechaIngreso, fechaAct, usuario) values " + \
+            " (%s, %s, %s, %s, %s, %s,%s, %s, %s) "
         self.cur.execute(s, new_mun)
         self.cx.commit()
         print("adicionado...municipio")
 
-    def upd_mun(self, DepSec, ProvSec, Sec, NumConceSec, NomSec, fechaAct, usuario):
-        new_mun = NumConceSec, NomSec, fechaAct, usuario, DepSec, ProvSec, Sec
+    def upd_mun(self, DepSec, ProvSec, Sec, NumConceSec, NomSec, descNivelId, fechaAct, usuario):
+        new_mun = NumConceSec, NomSec, descNivelId, fechaAct, usuario, DepSec, ProvSec, Sec
         s = "update [GeografiaElectoral_app].[dbo].[SEC]" + \
-            " set NumConceSec= %s, NomSec= %s, " + \
+            " set NumConceSec= %s, NomSec= %s, descNivelId= %s, " + \
             " fechaAct= %s, usuario= %s " + \
             " where [GeografiaElectoral_app].[dbo].[SEC].DepSec = %d and " + \
             " [GeografiaElectoral_app].[dbo].[SEC].ProvSec = %d and " + \
@@ -127,3 +129,12 @@ class Municipio:
             self.dep = row[0]
             self.nomDep = row[1]
         return True
+
+    def get_combo_descNivel(self, usrdep):
+        s = "SELECT [idClasif],[descripcion] FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=6"             
+        self.cur.execute(s) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows     

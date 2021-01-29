@@ -8,7 +8,9 @@ class Departamento:
     IdPais = 0
     fechaIngreso = ''
     fechaAct = ''
-    usuario = ''
+    usuario = '' 
+    DescNivelId = ''
+
 
     def __init__(self, cx):
         self.cx = cx
@@ -26,7 +28,7 @@ class Departamento:
                 return rows
 
     def get_depto_iddep(self, Dep):
-        s = "select Dep, NomDep, Diputados, DiputadosUninominales, IdPais, fechaIngreso, fechaAct, usuario " + \
+        s = "select Dep, NomDep, Diputados, DiputadosUninominales, IdPais, fechaIngreso, fechaAct, usuario, descNivelId " + \
                 " from [GeografiaElectoral_app].[dbo].[DEP] where Dep = %d "
         self.cur.execute(s, Dep)
         row = self.cur.fetchone()
@@ -41,21 +43,22 @@ class Departamento:
             self.fechaIngreso = row[5]
             self.fechaAct = row[6]
             self.usuario = row[7]
+            self.descNivelId = row[8]
+
             return True
 
-    def add_depto(self, Dep, NomDep, Diputados, DiputadosUninominales, IdPais, fechaIngreso, fechaAct, usuario):
-        new_depto = Dep, NomDep, Diputados, DiputadosUninominales, IdPais, fechaIngreso, fechaAct, usuario
-        s = "insert into GeografiaElectoral_app.dbo.Dep (Dep, NomDep, Diputados, DiputadosUninominales, IdPais, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s) "
+    def add_depto(self, Dep, NomDep, Diputados, DiputadosUninominales, IdPais, descNivelId, fechaIngreso, fechaAct, usuario):
+        new_depto = Dep, NomDep, Diputados, DiputadosUninominales, IdPais, descNivelId, fechaIngreso, fechaAct, usuario
+        s = "insert into GeografiaElectoral_app.dbo.Dep (Dep, NomDep, Diputados, DiputadosUninominales, IdPais, descNivelId, fechaIngreso, fechaAct, usuario) values " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s, %s) "
         self.cur.execute(s, new_depto)
         self.cx.commit()
-        print("adicionado...deptos")
 
-    def upd_depto(self, dep, nomDep, diputados, diputadosUninominales, idPais, fechaAct, usuario):
-        new_depto = nomDep, diputados, diputadosUninominales, idPais, fechaAct, usuario, dep
+    def upd_depto(self, dep, nomDep, diputados, diputadosUninominales, idPais, descNivelId, fechaAct, usuario):
+        new_depto = nomDep, diputados, diputadosUninominales, idPais, descNivelId, fechaAct, usuario,  dep
         s = "update [GeografiaElectoral_app].[dbo].[DEP]" + \
             " set NomDep= %s, Diputados= %s, DiputadosUninominales= %s, IdPais= %s, " + \
-            " fechaAct= %s, usuario= %s " + \
+            " descNivelId= %s, fechaAct= %s, usuario= %s " + \
             " where [GeografiaElectoral_app].[dbo].[DEP].Dep = %d"
         try:
             self.cur.execute(s, new_depto)
@@ -78,3 +81,12 @@ class Departamento:
             return False
         else:
             return rows    
+
+    def get_combo_descNivel(self, usrdep):
+        s = "SELECT [idClasif],[descripcion] FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=6"             
+        self.cur.execute(s) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows 

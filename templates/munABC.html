@@ -70,13 +70,29 @@
 
                 <br>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="NumConceSec">NRO. DE CONSEJALES</label>
                         <input type="text" class="form-control" id="iNumConceSec" placeholder="Introduzca Nro. de Consejales" name="numConceSec" required {% if load %} value="{{ s.NumConceSec }}" {% endif %}>
                         <div class="invalid-feedback">Por favor ingrese datos.</div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label for="idoc">DESCRIPCION DE NIVEL</label>
+                        <input type="hidden" name="nivel" value="{{ s.descNivelId }}">
+                        <select id="idescNivel" name="descNivelId" class="form-control" required>                          
+                                <option></option>
+                                {% for tclasif in tdescNivel %}
+                                        {% if load and s.descNivelId|int == tclasif[0] %}
+                                                <option value = "{{ tclasif[0] }}" selected>{{ tclasif[1] }}</option>
+                                        {% else %} 
+                                                <option value = "{{ tclasif[0] }}">{{ tclasif[1] }}</option>
+                                        {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                        <div class="invalid-feedback">Debe Seleccionar un clasificador...</div>
+                    </div>
+
+                    <div class="col-md-4">
                         <label for="NomSec">MUNICIPIO</label>
                         <input type="text" class="form-control" id="iNomSec" placeholder="Introduzca Municipio" name="nomSec" required {% if load %} value="{{ s.NomSec }}" {% endif %}>
                         <div class="invalid-feedback">Debe Agregar un Municipio...</div>
