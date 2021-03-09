@@ -109,15 +109,25 @@ class Municipio:
         else:
             return rows   
     
-    def get_combo_prov(self, usrdep):
+    def get_combo_prov_new(self, usrdep):
         s = "SELECT Prov, NomProv, DepProv FROM [GeografiaElectoral_app].[dbo].[PROV] order by DepProv;"             
         self.cur.execute(s) 
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False
         else:
-            return rows  
- 
+            return rows
+
+    def get_combo_prov(self, DepSec, ProvSec):
+        new_prov = DepSec, ProvSec
+        s = "SELECT Prov, NomProv, DepProv FROM [GeografiaElectoral_app].[dbo].[PROV] where [GeografiaElectoral_app].[dbo].[PROV].DepProv = %s and [GeografiaElectoral_app].[dbo].[PROV].Prov = %s;"      
+        self.cur.execute(s,new_prov) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows 
+
     def get_depto_idPais(self, Dep):
         s = "select Dep, NomDep, Diputados, DiputadosUninominales, IdPais, fechaIngreso, fechaAct, usuario " + \
                 " from [GeografiaElectoral_app].[dbo].[DEP] where IdPais = %d "

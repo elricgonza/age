@@ -15,7 +15,7 @@
                     <h5>CLASIFICADOR</h5>
                 </div>
                 <div class="col-xs-6 col-md-4">
-                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('clas_ABC', clas_id = 0,  clas_grup_id = clasificadores[0][3]) }}>Adicionar Clasificador</a></button>
+                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('clas_ABC', clas_id = 0, clas_grup_id = clasificadores[0][2]) }}>Adicionar Clasificador</a></button>
                 </div>
             </div>
 
@@ -29,15 +29,14 @@
                             <th>Descripcion del Clasificador</th>
                             <th>Subgrupo</th>
                             <th>Editar</th>
-                            <!-- <th>Eliminar</th> -->
                         </tr>
                     </thead>
                     <tbody>
                         {% for Clasificador in clasificadores %}
                         <tr>
-                            <td>{{ Clasificador[3] }}</td>
-                            <td>{{ Clasificador[1] }}</td>
                             <td>{{ Clasificador[2] }}</td>
+                            <td>{{ Clasificador[1] }}</td>
+                            <td>{{ Clasificador[3] }}</td>
 
                             <td>
                                 <a href={{ url_for( 'clas_ABC', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-edit"></span></a>

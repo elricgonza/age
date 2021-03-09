@@ -28,14 +28,14 @@ class Zonas:
 
 
     def get_next_zona(self, idloc):
-        s = "select max(zona) + 1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
+        s = "select isnull(max(zona), 0)+1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
         return row[0]
 
-
+    """ Aqui esta el ERRROR """    
     def get_next_dist(self, idloc):
-        s = "select max(dist) + 1 from GeografiaElectoral_app.dbo.dist where IdLocDist = %d"
+        s = "select isnull(max(dist), 0)+1 from GeografiaElectoral_app.dbo.dist where IdLocDist = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
         return row[0]

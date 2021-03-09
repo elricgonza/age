@@ -29,18 +29,21 @@ import zonas as zo
 import geo as geo
 import img
 import loc_img
+import reci_img
 
-'''
 import paises
-import departamentos
-import mundo as mun
-import provincias as prov
-import seccion as secc
-import localidad as locc
-import circunscripcion as ccircun
-import tipolocloc as locloc
-import historicolocloc2
-'''
+import deptos as deptoss
+import provincias as provs
+import municipios as muns
+import bitacoras
+import indcate
+import indsubcate
+import loc_cate
+import asiento_indi as indi
+import clas_grupo
+import clasificadores
+import clasif_get
+
 
 # create the application object
 app = Flask(__name__)
@@ -326,11 +329,11 @@ def asiento_img(idloc, nomloc):
             f  = uploaded_files[n]
             if f.filename != '':
                 securef = secure_filename(f.filename)
-                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))                
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
                 name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
-                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)                
+                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
                 resize_save_file(fpath, name_to_save, (1024, 768))
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
@@ -346,6 +349,7 @@ def asiento_img(idloc, nomloc):
             return render_template('asiento_img.html', rows=i.get_imgs('Asiento'), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr)
 
+'''
 def resize_save_file(in_file, out_file, size):
     with open('.' + in_file, 'rb') as fd:
         image = resizeimage.resize_thumbnail(Image.open(fd), size)
@@ -353,6 +357,7 @@ def resize_save_file(in_file, out_file, size):
     image.save('.' + os.path.join(app.config['IMG_ASIENTOS'], out_file))
     image.close()
     #return(out_file)
+'''
 
 #Codigo Grover-Inicio
 @app.route('/documentos_list', methods=['GET', 'POST'])
@@ -361,39 +366,39 @@ def documentos_list():
     d = docu.Documentos(cxms)
     rows = d.get_documentos_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados            
+        if permisos_usr:    # tiene pemisos asignados
             return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print ('Sin Documentos...') 
-        return render_template('documentos_list.html', puede_adicionar='Documentos - Adición' in permisos_usr)             
+        print ('Sin Documentos...')
+        return render_template('documentos_list.html', puede_adicionar='Documentos - Adición' in permisos_usr)
 
 @app.route('/documento/<doc_id>', methods=['GET', 'POST'])
-def documento(doc_id):    
+def documento(doc_id):
     d = docu.Documentos(cxms)
     tdocu = tdoc.TipoDocs(cxms)
     error = None
 
-    if request.method == 'POST':        
-        if doc_id == '0':  # es NEW            
+    if request.method == 'POST':
+        if doc_id == '0':  # es NEW
             nextid = d.get_next_id_doc()
             tipo = d.tipo_doc(request.form['doc'])
             tipo = tipo.lower()
             f = request.files['archivo']
-            if allowed_file(f.filename):                
+            if allowed_file(f.filename):
                 filename = secure_filename(f.filename)
-                filename = doc_id + '_' + filename        
+                filename = doc_id + '_' + filename
                 f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
                 fpath = os.path.join(app.config['SUBIR_PDF'], filename)
                 fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(nextid) + "_" + str(tipo) + ext            
+                name_to_save = str(nextid) + "_" + str(tipo) + ext
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
             else:
                 flash('Debe cargar solo archivos PDFs')
-                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))          
+                return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
             d.add_documento(request.form['doc'], \
                         request.form['dep'], \
                         request.form['cite'], \
@@ -402,39 +407,39 @@ def documento(doc_id):
                         request.form['obs'], \
                         request.form['fecharegistro'], \
                         request.form['usuario'], \
-                        request.form['fechaingreso'])            
+                        request.form['fechaingreso'])
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
         else: # es EDIT
             f = request.files['archivo']
-            if allowed_file(f.filename):                            
+            if allowed_file(f.filename):
                 tipodo = d.tipo_doc(request.form['tipodocu'])
                 tipodo = doc_id + "_" + tipodo + '.pdf'
-                tipodo = tipodo.lower()                   
+                tipodo = tipodo.lower()
                 ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 directorio = pathlib.Path(ejemplo_dir)
                 for fichero in directorio.iterdir():
                     if fichero.name == tipodo:
                             os.remove(ejemplo_dir + fichero.name)
-                
+
                 tipo = d.tipo_doc(request.form['doc'])
                 tipo = tipo.lower()
                 f = request.files['archivo']
                 filename = secure_filename(f.filename)
-                filename = doc_id + '_' + filename        
+                filename = doc_id + '_' + filename
                 f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
                 fpath = os.path.join(app.config['SUBIR_PDF'], filename)
                 fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = doc_id + "_" + str(tipo) + ext            
+                name_to_save = doc_id + "_" + str(tipo) + ext
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
-            else:                
+            else:
                 tipo = d.tipo_doc(request.form['doc'])
                 tipo = tipo.lower()
                 name_to_save = doc_id + "_" + str(tipo) + '.pdf'
                 tipodo = d.tipo_doc(request.form['tipodocu'])
                 tipodo = tipodo.lower()
-                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'            
+                name_to_save1 = doc_id + "_" + str(tipodo) + '.pdf'
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
                 directorio = pathlib.Path(ejemplo_dir)
@@ -442,7 +447,7 @@ def documento(doc_id):
                     if fichero.name == name_to_save1:
                             os.rename(ejemplo_dir + fichero.name, ejemplo_dir + name_to_save)
 
-            fa = str(datetime.datetime.now())[:-7]                            
+            fa = str(datetime.datetime.now())[:-7]
             d.upd_documento(doc_id, \
                         request.form['doc'], \
                         request.form['dep'], \
@@ -456,9 +461,9 @@ def documento(doc_id):
                 return render_template('documentos_list.html', documentos=d.get_documentos())
             return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
 
-    else: # viene de listado DOCUMENTOS            
-        if doc_id != 0:  # EDIT            
-            if d.get_documento_id(doc_id) == True:                
+    else: # viene de listado DOCUMENTOS
+        if doc_id != 0:  # EDIT
+            if d.get_documento_id(doc_id) == True:
                 return render_template('documento.html', error=error, d=d, load_d=True, titulo='Modificacion de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
 
     return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
@@ -467,21 +472,21 @@ def documento(doc_id):
 @login_required
 def documento_pdf(doc_id, tipo):
     dp = dpdf.Documentos_pdf(cxms)
-    error = None  
+    error = None
 
-    if request.method == 'POST':            
+    if request.method == 'POST':
         f = request.files['archivo']
         filename = secure_filename(f.filename)
-        filename = doc_id + '_' + filename        
+        filename = doc_id + '_' + filename
         f.save(os.path.join('.' + app.config['SUBIR_PDF'], filename))
         fpath = os.path.join(app.config['SUBIR_PDF'], filename)
         fpath1 = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
         arch, ext = os.path.splitext(fpath)
         name_to_save = str(doc_id) + "_" + str(tipo) + ext
         ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
-        os.rename(fpath1 + filename, fpath1 + name_to_save)        
+        os.rename(fpath1 + filename, fpath1 + name_to_save)
 
-        if dp.upd_documentopdf_id(doc_id, ruta) == True: 
+        if dp.upd_documentopdf_id(doc_id, ruta) == True:
                 return render_template('documentos_list.html', documentos=dp.get_documentospdf_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
 
     return render_template('documento_pdf.html', error=error, dp=dp, load_dp=False, puede_editar='Documentos - Edición' in permisos_usr)
@@ -491,9 +496,9 @@ def documento_pdf(doc_id, tipo):
 @login_required
 def documento_del(doc_id, tipo_d):
     d = docu.Documentos(cxms)
-    d.del_documento(doc_id)      
+    d.del_documento(doc_id)
     tipod = doc_id + "_" + tipo_d + '.pdf'
-    tipod = tipod.lower()                    
+    tipod = tipod.lower()
     ejemplo_dir = os.path.join('.' + app.config['SUBIR_PDF'] + '/')
     directorio = pathlib.Path(ejemplo_dir)
     for fichero in directorio.iterdir():
@@ -503,7 +508,7 @@ def documento_del(doc_id, tipo_d):
     if rows:
         return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)
     else:
-        print ('Sin documentos...')    
+        print ('Sin documentos...')
 #Codigo Grover-Final
 
 @app.route('/asientos_list', methods=['GET', 'POST'])
@@ -559,7 +564,7 @@ def asiento(idloc):
                               request.form['estado'], '', \
                               request.form['etapa'], request.form['obsUbicacion'], request.form['obs'], \
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, docActF)
-                              
+
                 d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
                 rows = a.get_asientos_all(usrdep)
@@ -656,7 +661,7 @@ def exterior(idloc):
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
             if a.get_asiento_idloc(idloc) == True:
-        
+
                 if a.fechaIngreso == None:
                     a.fechaIngreso = str(datetime.datetime.now())[:-7]
                 if a.fechaAct == None:
@@ -664,13 +669,13 @@ def exterior(idloc):
                 if a.usuario == None:
                     a.usuario = usr
 
-                return render_template('exterior.html', error=error, a=a, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep), 
-                                       dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep), 
+                return render_template('exterior.html', error=error, a=a, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep),
+                                       dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep),
                                        municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
     return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
-
+''' dup c/ obtenido de rep - resultado idem
 @app.route('/get_departamentos_all', methods=['GET', 'POST'])
 def get_departamentos_all():
     ex = ext.Exterior(cxms)
@@ -681,7 +686,7 @@ def get_departamentos_all():
         return jsonify(departamento='NO',
                        provincia='EXISTE !!!',
                        municipio='DEPARTAMENTO....')
-
+'''
 
 @app.route('/get_geo_all', methods=['GET', 'POST'])
 def get_geo_all():
@@ -753,7 +758,7 @@ def reportespdf():
             url = "file:///home/r/pge/age/reporte.pdf"
             webbrowser.open(url,new=new)
             return ('PDF Generado')
-        else: 
+        else:
             return ('PDF Generado')
 
 
@@ -814,12 +819,12 @@ def recinto(idreci, idlocreci):
             docActF = 0
         else:
             docActF = request.form['docActF']
-        """Valida si el campo ruereci esta desactivado"""    
+        """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0
         else:
             ruereci = request.form['ruereci']
-        """Valida si el campo edireci esta desactivado"""    
+        """Valida si el campo edireci esta desactivado"""
         if request.form.get('edireci') == None:
             edireci = 0
         else:
@@ -900,7 +905,8 @@ def get_asientos_all2():
     dp = request.args.get('dpto')
     pro = request.args.get('provi')
     se = request.args.get('secci')
-    rca = recia.Reciasiento(cxms)
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
     rows = rca.get_asientos_all2(usrdep, dp, pro, se)
     if rows:
         return jsonify(rows)
@@ -973,12 +979,12 @@ def reciespe(idreci, idlocreci):
             docActF = 0
         else:
             docActF = request.form['docActF']
-        """Valida si el campo ruereci esta desactivado"""    
+        """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0
         else:
             ruereci = request.form['ruereci']
-        """Valida si el campo edireci esta desactivado"""    
+        """Valida si el campo edireci esta desactivado"""
         if request.form.get('edireci') == None:
             edireci = 0
         else:
@@ -1042,8 +1048,8 @@ def reciespe(idreci, idlocreci):
 def get_geo_esp():
     lat = request.args.get('latitud', 0, type=float)
     long = request.args.get('longitud', 0, type=float)
-
-    rca = recia.Reciasiento(cxms)
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
     rows = rca.get_geoesp_all(lat, long)
     if rows:
         return jsonify(dep=rca.dep,
@@ -1074,7 +1080,7 @@ def get_pueblos_all():
         return jsonify(0)
 
     cxms2.close()
-    
+
 #========== Modulo Zonas y Distritos ============#
 
 @app.route('/zonas_list', methods=['GET', 'POST'])
@@ -1101,7 +1107,7 @@ def zonas(idloc, iddist, ban):
 
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
-        
+
         if iddist == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -1115,7 +1121,7 @@ def zonas(idloc, iddist, ban):
                 if ban == '1':
                     flash('Registro grabado !!! CORRECTAMENTE !!!')
                     return render_template('zona.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
-                else:    
+                else:
                     rows = z.get_zonas_all(usrdep)
                     return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
         else: # Es Edit
@@ -1174,7 +1180,7 @@ def zonasre():
         if request.form.get('idlocreci1') == None:
             idloc = request.form.get('idlocreci1', 0)
         else:
-            idloc = request.form['idlocreci1']   
+            idloc = request.form['idlocreci1']
         if request.form.get('nrodist1') == None:
             nrodist = request.form.get('nrodist1', 0)
         else:
@@ -1231,12 +1237,12 @@ def reciespeciales(idreci, idlocreci):
             docActF = 0
         else:
             docActF = request.form['docActF']
-        """Valida si el campo ruereci esta desactivado"""    
+        """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0
         else:
             ruereci = request.form['ruereci']
-        """Valida si el campo edireci esta desactivado"""    
+        """Valida si el campo edireci esta desactivado"""
         if request.form.get('edireci') == None:
             edireci = 0
         else:
@@ -1289,12 +1295,12 @@ def reciespeciales(idreci, idlocreci):
                     rces.usuario = usr
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rces.get_estados(), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                                       estados=rces.get_estados(), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                                        dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep))
 
     # New
-    return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep), 
-                            provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(), trecintos=rces.get_tiporecintos(), 
+    return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
+                            provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(), trecintos=rces.get_tiporecintos(),
                             tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
@@ -1326,7 +1332,8 @@ def get_provespeciales_all1():
 
 @app.route('/get_muniespeciales_all', methods=['GET', 'POST'])
 def get_muniespeciales_all():
-    rces = recies.Reciespeciales(cxms)
+    cxms2 = dbcn.get_db_ms()
+    rces = recies.Reciespeciales(cxms2)
     rows = rces.get_muniespeciales_all(usrdep)
     if rows:
         return jsonify(rows)
@@ -1340,7 +1347,8 @@ def get_muniespeciales_all():
 def get_muniespeciales_all1():
     dep = request.args.get('dep')
     prov = request.args.get('prov')
-    rces = recies.Reciespeciales(cxms)
+    cxms2 = dbcn.get_db_ms()
+    rces = recies.Reciespeciales(cxms2)
     rows = rces.get_muniespeciales_all1(dep, prov)
     if rows:
         return jsonify(rows)
@@ -1382,726 +1390,488 @@ def logout():
     logout_user()
     return render_template('/logout.html')  # render a template
 
-# Código adicionado david
 
-# ****** CREA LINK SCRIPT MUNDO
-@app.route('/mundo', methods=['GET', 'POST'])
+@app.route('/asiento_ind/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
 @login_required
-def mundo():
-    print(('mundoooooooooooo'))
+def asiento_ind(idloc, nomloc):
+    """
+    Modulo Indicadores Socio Econimicos
+    """
+    # conexiones a las tablas
+    ind_cat = indcate.Indcate(cxms)
+    ind_subcate = indsubcate.Indsubcate(cxms)
+    lc = loc_cate.LocCate(cxms)
 
-    m = mun.Paisgral()
-    rows = m.get_paisgeneral()
-
-    if rows == False:
-        print ('Sin datos del mundo...')
-    else:
-        print(rows[0])
-        print('----------------------------')
-        print(rows[1])
-
-        #return('add..tabla para mundo')
-        return render_template('mundo.html', datos_mundo=rows)  # render a template
-
-
-# ****** CREA LINK PARA PAISES
-@app.route('/pais', methods=['GET', 'POST'])
-@login_required
-def pais():
-    p = paises.Pais()
-    rows = p.get_paises()
-
-    if rows == False:
-        print ('Sin datos departamentos...')
-    else:
-        print(rows[0])
-        #return 'mostrar tabla con paises'
-        return render_template('paises.html', datos_paises=rows)  # render a template
-
-# ****** FORM PARA PAIS
-@app.route('/pais_add/<pais_id>', methods=['GET', 'POST'])
-@login_required
-def pais_add(pais_id=None):
-    print(pais_id)
-    p = paises.Pais()
-    rows = p.get_paises()
+    with_cate = lc.get_loc_cates(idloc) # False or rows-img
 
     error = None
-
+    print(request.method + ' TIPO')
     if request.method == 'POST':
-        print('===RESULTADO DEL BOTON FORM en POST Aceptar')
-        print(pais_id)
+        fa = str(datetime.datetime.now())[:-7]
+        cat_ids_ = request.form.getlist('imgsa[]')  # options CATEGORIAS for Asiento
+        cat_ids = list(cat_ids_[0].split(","))      # list ok
 
-        if pais_id == '0':  # es NEW PAIS
-            print('++++++++ LISTOS A guardar en bd dbo.PAIS +++++++')
-            print(request.form['fIdPais'])
-            print(request.form['fPais'])
-            print(request.form['fNomPais'])
+        # EN PANTALLA PARA NUEVO, SI NO HAY INDICADOR CREADO => SE SALE A LA LISTA DE ASIENTOS
+        print('EXISTE REGISTRO ' + cat_ids[0])
+        print(with_cate)
 
-            p.add_pais(request.form['fIdPais'], \
-                        request.form['fPais'], \
-                        request.form['fNomPais'], \
-                        request.form['fNacionalidad'], \
-                        request.form['fEstado'], \
-                        request.form['fCodigoInternacional'], \
-                     #    request.form['fIdPais'])
-                        request.form['fCodigoInternacionalISO3166'])
+        if len(with_cate) :
+            if  with_cate[0] != '' and cat_ids[0] == '':
+                lc.del_loc_cate(with_cate[0])
+                return redirect(url_for('asientos_list'))
 
-            return render_template('welcome.html')
+        if cat_ids[0] == '':
+            return redirect(url_for('asientos_list'))
+        else:
+            categ_ids = [int(x) for x in cat_ids]
+        subcat_ids_ = request.form.getlist('filesa[]')  # options SUBCATEGORIAS for Asiento
+        subcat_ids = list(subcat_ids_[0].split(","))      # list ok
+        subcateg_ids = [int(x) for x in subcat_ids]    # lista con ids de subcategorias
 
-        else:   # UPDATE distinto a 0
-            #return 'luego de editar el FORM PARA ACTUALIZAR la BD'
-            p.upd_pais(pais_id, \
-                            request.form['fPais'], \
-                            request.form['fNomPais'], \
-                            request.form['fNacionalidad'], \
-                            request.form['fEstado'], \
-                            request.form['fCodigoInternacional'], \
-                            request.form['fCodigoInternacionalISO3166'])
+        ind_obs_ = request.form.getlist('filesv[]')  # options Observaciones for Asiento
+        ind_obs = list(ind_obs_[0].split(","))      # list ok  observaciones
 
-            return render_template('welcome.html')
-
-    else: # VIENE DEL LISTADO TABLA PAISES BOTON EDITAR
-        if pais_id != 0:  # EDIT
-            print('viene del Form Paises para editar')
-            if p.get_pais_id(pais_id) == True:
-                print('<<<<<<< RETORNO DE CONSULTA>>>>>>>>>')
-                print(p.Pais)
-                print(p.NomPais)
-                print(p.Nacionalidad)
-                print(p.Estado)
-                #return render_template('departamento_add.html', error=error, u=u, load_u=True)
-                return render_template('pais_add.html',p=p,Pais_id=pais_id,load_u=True)
-
-    #return 'para add paises'
-    return render_template('pais_add.html',datos_paises=rows)
+        # DE LA CONSULTA CON idloc, si hay registros OBTENIDOS  => actualizar
+        if with_cate:
+            # verifica si todos loa elementos a ACTUALIZAR son distinos
+            lc.del_loc_cate(idloc)
+            for n in range(len(cat_ids)):
+                # Graba
+                lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
+                fa, \
+                usr, \
+                fa)
 
 
-# ****** CREA LINK PARA DEPTOS
-@app.route('/deptos', methods=['GET', 'POST'])
-@login_required
-def deptos():
-    d = departamentos.Departamentos()
-    rows = d.get_departamentos()
+        # DE LA CONSULTA CON idloc, si NO hay registros  => CREAR NEW para 'loc_cate'
+        else:
+            #INSERTANDO NEW DATOS
+            # verifica si todos loa elementos a INSERTAR son distinos
+            if(len(categ_ids) == len(set(categ_ids))):
+                for n in range(len(cat_ids)):
+                    #print(f'{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
+                    #GUARDANDO DATOS
+                    lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
+                        fa, \
+                        usr, \
+                        fa)
 
-    print('---> entra tabla Departamennto')
+            else:
+                #GRABA
+                for n in range(len(cat_ids)):
+                    #print(f'{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
+                    #GUARDANDO DATOS
+                    lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
+                        fa, \
+                        usr, \
+                        fa)
 
-    # GRABANDO TABLA  prueba-1
-    #print('USUARIO---> '+us_ingresa_sesion)
-    #IP_remoto = request.remote_addr
-    #print('ip remoto -> '+IP_remoto)
-    print('---> DAto insertado a prueba-1')
+        return redirect(url_for('asientos_list'))
 
-    if rows == False:
-        print ('Sin datos departamentos...')
     else:
-        print(rows[0])
-        #return 'mostrar tabla con departamentos'
-        return render_template('departamentos.html', datos_deptos=rows)  # render a template
+        if with_cate:  # Edit  ENTRA LA 1RA VEZ  POR Lista Asientos[Indice]
+            #CREANDO UNA NEW ESTRUCTURA PARA DATOS REPETIDOS
+            lista_with_cate = []
+            nroReg = 0
+            for n in with_cate:
+                nroReg = nroReg + 1
+                n = list(n)
+                n.insert(0, nroReg)
+                n = tuple(n)
+                lista_with_cate.append(n)
+            #print(with_cate)
+            return render_template('asiento_ind_upd.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
+                                puede_editar='Asientos - Edición' in permisos_usr,
+                                loc_cate_loaded = with_cate, lista_with_cate=lista_with_cate)
+        else:  # New  with_cate = False
+            return render_template('asiento_ind.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
+                                puede_editar='Asientos - Edición' in permisos_usr)
 
-
-# ****** FORM PARA DEPTOS
-@app.route('/departamento_add/<depto_id>', methods=['GET', 'POST'])
+@app.route('/paises_list', methods=['GET', 'POST'])
 @login_required
-def departamento_add(depto_id=None):
+def paises_list():
+    s = paises.Pais(cxms)
+    rows = s.get_paises_all(usrdep)
 
-    print('addddddddddddddddddddddddddddddddddd')
-    print(depto_id)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin paises...')
 
-    p = paises.Pais()
-    rows = p.get_paises()
+@app.route('/paisesABC/<pais_id>', methods=['GET', 'POST'])
+@login_required
+def paisesABC(pais_id):
 
-    d = departamentos.Departamentos()
-    rows_d =  d.get_departamentos()
-
-    # HISTORICO
-    IP_remoto = request.remote_addr
-
-    hdep = historicodep.Historicodep()   # -> bdge
-    d2 = departamento2.Departamento2()   # -> bdge
-
-
+    s = paises.Pais(cxms)
     error = None
 
+    p = ('Paises - Edición' in permisos_usr)  # t/f
+
     if request.method == 'POST':
-        print('===RESULTADO DEL BOTON FORM en POST por new & sendbutton')
-        print(depto_id)
+        fa = str(datetime.datetime.now())[:-7]
+        if pais_id == '0':  # es NEW
+            if False:   # valida si neces POST
+                print('msg-err')
+            else:
+                nextid = s.get_next_idpais()
+                s.add_pais(nextid, request.form['Pais'], request.form['NomPais'], request.form['Nal'], request.form['Estado'],
+                           request.form['codInter'], request.form['codInterISO3166'], str(request.form['fecharegistro'])[:-8],
+                           fa, usr)
 
-        if depto_id == '0':  # es NEW
-            print('++++++++ LISTOS A guardar en bbdd ++++++++++++++++')
-            print(request.form['fDep'])
-            print(request.form['fNomDep'])
-            print('***  select  ***')
-            print(request.form['fNomPais'])
+                rows = s.get_paises_all(usrdep)
+                return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr)  # render a template
+        else: # Es Edit
+            s.upd_pais(pais_id, request.form['Pais'], request.form['NomPais'], request.form['Nal'], request.form['Estado'],
+                       request.form['codInter'], request.form['codInterISO3166'], str(request.form['fecharegistro'])[:-7],
+                       fa, usr)
 
-            d.add_departamento(request.form['fDep'], \
-                    #            request.form['fDep'], \
-                        request.form['fNomDep'], \
-                        request.form['fDiputados'], \
-                        request.form['fDiputadosUninominales'], \
-                    #    request.form['fIdPais'])
-                        request.form['fNomPais'])
+            rows = s.get_paises_all(usrdep)
+            return render_template('paises_list.html', paises=rows, puede_editar='Paises - Edicion' in permisos_usr)  # render a template
+    else: # Viene de <asientos_list>
+        if pais_id != '0':  # EDIT
+            if s.get_pais_idpais(pais_id) == True:
+                if s.fechaactual == None:
+                    s.fechaactual = str(datetime.datetime.now())[:-7]
+                if s.usuario == None:
+                    s.usuario = usr
 
-            d2.add_dep2(request.form['fDep'], \
-                request.form['fNomDep'], \
-                request.form['fNomPais'], \
-                request.form['fNomPais'], \
-                request.form['fNomPais'], \
-                request.form['fNomPais'])
+                return render_template('paisesABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Pais',puede_editar=p)
 
-            # REGISTRA EN HISTORICO-DEP   NUEVO-REG
-            hdep.add_historicodep(us_ingresa_sesion, IP_remoto, 'Add registro',0,'nn',0,0,0, \
-                request.form['fDep'], \
-                request.form['fNomDep'], \
-                request.form['fDiputados'], \
-                request.form['fDiputadosUninominales'], \
-                request.form['fNomPais'], \
-                'Nuevo registro'
-                )
+    # New
+    return render_template('paisesABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Pais', puede_editar=p)
 
-            return render_template('welcome.html')
-
-        else:   # UPDATE
-            #return 'luego de editar el FORM PARA ACTUALIZAR la BD'
-            if d.get_departamento_id(depto_id) == True:
-                print('<<<<<<< RETORNO DATOS ACTUALES ANTES D UPDATE>>>>>>>>>')
-                print(d.NomDep)
-                print(d.Diputados)
-                print(d.DiputadosUninominales)
-                print(d.IdPais)
-
-            d.upd_departamento(depto_id, \
-                            request.form['fNomDep'], \
-                            request.form['fDiputados'], \
-                            request.form['fDiputadosUninominales'], \
-                            request.form['fNomPais'])
-
-
-            # COMPARA CAMPOS ANTERIOR VS ACTUAL
-            cambioReg = ' '
-            if str(d.NomDep).strip() != str(request.form['fNomDep']).strip():
-                cambioReg = cambioReg + 'NombDep, '
-            if d.Diputados != int(request.form['fDiputados']):
-                cambioReg = cambioReg + 'Diputados, '
-            if d.DiputadosUninominales != int(request.form['fDiputadosUninominales']):
-                cambioReg = cambioReg + 'DiputadosUninominales, '
-            if d.IdPais != int(request.form['fNomPais']):
-                cambioReg = cambioReg + 'IdPais '
-            print(cambioReg)
-
-            # REGISTRA EN HISTORICO-DEP  ACTUALIZACION
-            hdep.add_historicodep(us_ingresa_sesion, IP_remoto, 'Actualiza Registro', \
-                depto_id, d.NomDep, d.Diputados, d.DiputadosUninominales, d.IdPais, \
-                depto_id, \
-                request.form['fNomDep'], \
-                request.form['fDiputados'], \
-                request.form['fDiputadosUninominales'], \
-                request.form['fNomPais'], \
-                cambioReg
-                )
-
-            return render_template('welcome.html')
-
-    else: # VIENE DEL LISTADO DEPARTAMENTOS BOTON EDITAR
-        if depto_id != 0:  # EDIT
-            print('viene del Form para editar')
-            if d.get_departamento_id(depto_id) == True:
-                print('<<<<<<< RETORNO DE CONSULTA>>>>>>>>>')
-                print(d.NomDep)
-                print(d.Diputados)
-                print(d.DiputadosUninominales)
-                print(d.IdPais)
-
-                # OBTIENE PAIS EN BASE A depto_id
-                #print(rows[int(d.IdPais)-1])
-                for c in rows:
-                    if c[0] == int(d.IdPais):
-                        print(c)
-                        nomPais = c[2]
-                        indPAis = c[0]
-                #return 'viene del Form para editar'
-                #return render_template('departamento_add.html', error=error, u=u, load_u=True)
-                return render_template('departamento_add.html', d=d,Dep_id=depto_id, datos_paises=rows, nomPais=nomPais, indPAis=indPAis,load_u=True)
-
-    print('<<<<<<  para obt ultimo indice >>> Dep')
-    for ind in rows_d:
-        indice = ind[0]
-
-    ind_depto = int(indice)+1
-    #print(ind_depto)
-
-    return render_template('departamento_add.html', datos_paises=rows, ind_depto=ind_depto)
-
-# ****** PARA ELIMINAR DEPARTAMENTO
-@app.route('/departamento_del/<depto_id>', methods=['GET', 'POST'])
-def departamento_del(depto_id):
-
-    d = departamentos.Departamentos()
-    # HISTORICO
-    IP_remoto = request.remote_addr
-    hdep = historicodep.Historicodep()   # -> bdge
-
-    print('-------------------')
-    print('EN func. para eliminar --->'+ depto_id)
-    print('-------------------')
-    if d.get_departamento_id(depto_id) == True:
-        print('<<<<<<< Obtiene datos a ELIMINAR >>>>>>>>>')
-        print(d.NomDep)
-        print(d.Diputados)
-        print(d.DiputadosUninominales)
-        print(d.IdPais)
-
-    d.del_departamento(depto_id)
-
-    # REGISTRA EN HISTORICO-DEP ELIMINACION
-    hdep.add_historicodep(us_ingresa_sesion, IP_remoto, 'Elimino Registro', \
-        depto_id, d.NomDep, d.Diputados, d.DiputadosUninominales, d.IdPais, \
-        0, 'nn', 0, 0, 0, \
-        'Registro Eliminado'
-    )
-
-
-    rows = d.get_departamentos()
-    if rows == False:
-        print ('Sin departamentos...')
-    else:
-        return render_template('departamentos.html', datos_deptos=rows)  # render a template
-    # return 'Para eliminar un departamento'
-
-
-# ****** CREA LINK PARA PROVINCIAS
-@app.route('/provincias', methods=['GET', 'POST'])
+@app.route('/deptos_list', methods=['GET', 'POST'])
 @login_required
-def provincias():
-    pv = prov.Provincia()
-    rows = pv.get_provincias()
-
-    print('prov normal...')
-
-    if rows == False:
-        print ('Sin datos departamentos...')
+def deptos_list():
+    s = deptoss.Departamento(cxms)
+    rows = s.get_deptos_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print(rows[0])
-        #return 'mostrar tabla con provincias'
-        return render_template('provincias.html', datos_prov=rows)  # render a template
+        print ('Sin Departamentos...')
 
-# ****** FORM PARA PROVINCIAS
-@app.route('/provincia_add/<prov_id>', methods=['GET', 'POST'])
+@app.route('/deptosABC/<dep_id>', methods=['GET', 'POST'])
 @login_required
-def provincia_add(prov_id=None):
-    print(prov_id)
-
-    d = departamentos.Departamentos()
-    rows = d.get_departamentos()
-    print(rows[0])
-
-    pv =  prov.Provincia()
+def deptosABC(dep_id):
+    s = deptoss.Departamento(cxms)
     error = None
-
+    p = ('Departamentos - Edición' in permisos_usr)  # t/f
     if request.method == 'POST':
-        print('===RESULTADO DEL BOTON FORM en POST Aceptar')
-        print(prov_id)
+        fa = str(datetime.datetime.now())[:-7]
+        if dep_id == '0':  # es NEW
+            if False:   # valida si neces POST
+                print('msg-err')
+            else:
+                nextid = s.get_next_iddep()
+                s.add_depto(nextid, request.form['nomDep'], request.form['diputados'], request.form['diputadosUninominales'], request.form['pais'], request.form['descNivelId'],
+                           str(request.form['fechaIngreso'])[:-8],
+                           fa, usr)
 
-        if prov_id == '0':  # es NEW PAIS
-            print('++++++++ LISTOS A guardar en bd dbo.PROV +++++++')
-            print(request.form['fDepProv'])
-            print(request.form['fProv'])
-            print(request.form['fNomProv'])
+                rows = s.get_deptos_all(usrdep)
+                return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr)  # render a template
+        else: # Es Edit
+            s.upd_depto(dep_id, request.form['nomDep'], request.form['diputados'], request.form['diputadosUninominales'], request.form['pais'], request.form['descNivelId'], fa, usr)
+            rows = s.get_deptos_all(usrdep)
+            return render_template('deptos_list.html', deptos=rows, puede_editar='Departamentos - Edicion' in permisos_usr)  # render a template
+    else: # Viene de <asientos_list>
+        if dep_id != '0':  # EDIT
+            if s.get_depto_iddep(dep_id) == True:
+                if s.fechaAct == None:
+                    s.fechaAct = str(datetime.datetime.now())[:-7]
+                if s.usuario == None:
+                    s.usuario = usr
+                return render_template('deptosABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Departamentos', tpaises=s.get_combo_paises(usrdep), tdescNivel=s.get_combo_descNivel(usrdep),puede_editar=p)
+    # New
+    return render_template('deptosABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Departamento', tpaises=s.get_combo_paises(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
 
-            pv.add_provincia(request.form['fDepProv'], \
-                        request.form['fProv'], \
-                        request.form['fNomProv'], \
-            #            request.form['fNacionalidad'], \
-            #            request.form['fEstado'], \
-            #            request.form['fCodigoInternacional'], \
-                     #    request.form['fIdPais'])
-                        request.form['fcodprov'])
-
-            return render_template('welcome.html')
-
-
-    #return 'Form para provincias'
-    return render_template('provincia_add.html', datos_depto=rows)
-
-
-@app.route('/provincia_add2/<prov_id>/<prov_id2>', methods=['GET', 'POST'])
+@app.route('/provs_list', methods=['GET', 'POST'])
 @login_required
-def provincia_add2(prov_id=None, prov_id2=None):
-    print(prov_id)
-    d = departamentos.Departamentos()
-    rows = d.get_departamentos()
-
-    pv =  prov.Provincia()
-
-    if request.method == 'POST':
-        print('<<< para actualizar form provincia en bbdd >>>')
-            #return 'luego de editar el FORM PARA ACTUALIZAR la BD'
-        pv.upd_provincia(prov_id, prov_id2, \
-                        request.form['fNomProv'], \
-                        request.form['fcodprov'])
-
-        return render_template('welcome.html')
-
-
-
-    else: # VIENE DEL LISTADO DEPARTAMENTOS BOTON EDITAR
-        print('viene del Form para editar')
-
-        if pv.get_provincia_id(prov_id, prov_id2) == True:
-            print('<<<<<<< RETORNO DE CONSULTA>>>>>>>>>')
-            print(pv.NomProv)
-            print(pv.codprov)
-
-            # OBTIENE DEPTO EN BASE A prov_id
-            #print(rows[int(d.IdPais)-1])
-            for c in rows:
-                if c[0] == int(prov_id):
-                    print(c)
-                    nomDepto = c[1]
-
-            #return render_template('departamento_add.html', error=error, u=u, load_u=True)
-            #return render_template('provincia_add.html', d=d,Dep_id=depto_id, datos_paises=rows, nomPais=nomPais,load_u=True)
-            return render_template('provincia_add.html', pv=pv, DepProv1=prov_id, nomDepto=nomDepto, Prov2=prov_id2, load_u=True)
-
-    return 'prov 2 parametros'
-    #return render_template('provincia_add.html')
-
-# ****** PARA ELIMINAR PROVINCIA
-@app.route('/provincia_del/<prov_id1>/<prov_id2>', methods=['GET', 'POST'])
-def provincia_del(prov_id1,prov_id2):
-    print(prov_id1)
-    print(prov_id2)
-    #return 'Para eliminar una provincia'
-
-    #d = departamentos.Departamentos()
-    #sc = secc.Seccion()
-    pv =  prov.Provincia()
-
-    print('-------------------')
-    print('EN func. para eliminar prov --->'+ prov_id2)
-    print('-------------------')
-
-    #d.del_departamento(depto_id)
-    #sc.del_seccion(secc_id1,secc_id2,secc_id3)
-    pv.del_provincia(prov_id1, prov_id2)
-
-    #rows = d.get_departamentos()
-    #rows = sc.get_seccion()
-    rows = pv.get_provincias()
-    if rows == False:
+def provs_list():
+    s = provs.Prov(cxms)
+    rows = s.get_provs_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
         print ('Sin provincias...')
-    else:
-        return render_template('provincias.html', datos_prov=rows)  # render a template
-    # return 'Para eliminar una provincia'
 
-
-
-#**************   TRES  PARAMETROS
-# ****** CREA LINK PARA SECCION
-@app.route('/seccion', methods=['GET', 'POST'])
+@app.route('/provsABC/<dep_id>/<prov_id>', methods=['GET', 'POST'])
 @login_required
-def seccion():
-    sc = secc.Seccion()
-    rows = sc.get_seccion()
-
-    print('SECC normal...')
-
-    if rows == False:
-        print ('Sin datos provincias...')
-    else:
-        print(rows[0])
-        #return 'mostrar tabla con secciones'
-        return render_template('seccion.html', datos_secc=rows)  # render a template
-
-
-# ****** FORM PARA SECCIONES
-@app.route('/seccion_add/<secc_id>', methods=['GET', 'POST'])
-@login_required
-def seccion_add(secc_id=None):
-    print(secc_id)
-
-    d = departamentos.Departamentos()
-    rows_d = d.get_departamentos()
-    print(rows_d[0])
-
-    pv =  prov.Provincia()
-    rows_p = pv.get_provincias()
-    print(rows_p[0])
-
-    sc = secc.Seccion()
+def provsABC(dep_id, prov_id):
+    s = provs.Prov(cxms)
     error = None
+    p = ('Provincias - Edición' in permisos_usr)  # t/f
+    if request.method == 'POST':
+        fa = str(datetime.datetime.now())[:-7]
+        if dep_id == '0' and prov_id == '0':  # es NEW
+            if False:   # valida si neces POST
+                print('msg-err')
+            else:
+                nextid = s.get_next_idprov(request.form['depto'])
+                if nextid == None:
+                    nextid =1
 
-    #return 'Form para SECCIONES' #0ro INICIO
+                s.add_prov(request.form['depto'], nextid, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],
+                           str(request.form['fechaIngreso'])[:-8],
+                           fa, usr)
 
-    if request.method == 'POST':  #2do
-        print('===RESULTADO DEL BOTON FORM en POST Aceptar')
-        print(secc_id)
+                rows = s.get_provs_all(usrdep)
+                return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr)  # render a template
+        else: # Es Edit
+            s.upd_prov(dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
+            rows = s.get_provs_all(usrdep)
+            return render_template('provs_list.html', listaProvincias=rows, puede_editar='Prov incias - Edicion' in permisos_usr)  # render a template
+    else: # Viene de <asientos_list>
+        if dep_id != '0' and prov_id != '0':  # EDIT
+            if s.get_provs_id(dep_id, prov_id) == True:
+                if s.fechaAct == None:
+                    s.fechaAct = str(datetime.datetime.now())[:-7]
+                if s.usuario == None:
+                    s.usuario = usr
 
-        if secc_id == '0':  # es NEW seccion
-            print('++++++++ LISTOS A guardar en bd dbo.PROV +++++++')
-            #return '+++++++++LISTOS PARA GUARDAR A BBDD'
-            print(request.form['fDepSec'])
-            print(request.form['fProvSec'])
-            print(request.form['fSec'])
-            print(request.form['fNomSec'])
-            #return '+++++++++LISTOS PARA GUARDAR A BBDD'
-            sc.add_seccion(request.form['fDepSec'], \
-                        request.form['fProvSec'], \
-                        request.form['fSec'], \
-                        request.form['fNumConceSec'], \
-                        request.form['fNomSec'], \
-                        request.form['fCircunSec'], \
-                        request.form['fCodProv'], \
-            #            request.form['fEstado'], \
-                        request.form['fCodSecc'])
+                return render_template('provsABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Provincias', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
+    # New
+    return render_template('provsABC.html', error=error, s=s, load=False, titulo='Registro de Nueva Provincia', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
 
-            return render_template('welcome.html')
+@app.route('/get_departamentos_all', methods=['GET', 'POST'])
+def get_departamentos_all():
+    s = rep.Reportes(cxms)
+    cxms2 = dbcn.get_db_ms()
+    rows = s.get_departamentos_all(usrdep)
 
-
-    #return 'Form para OJO secciones'  # 1ra vez entra form (vacio)
-    return render_template('seccion_add.html', datos_depto=rows_d, datos_prov=rows_p)
-
-
-@app.route('/seccion_add2/<secc_id1>/<secc_id2>/<secc_id3>', methods=['GET', 'POST'])
-@login_required
-def seccion_add2(secc_id1=None, secc_id2=None, secc_id3=None):
-    print(secc_id1)
-    print(secc_id2)
-    print(secc_id3)
-
-
-    d = departamentos.Departamentos()
-    rows_d = d.get_departamentos()
-
-    pv =  prov.Provincia()
-    rows_p = pv.get_provincias()
-
-    #pv =  prov.Provincia()
-    sc = secc.Seccion()
-    #return 'SECCION 3 parametros'
-
-    if request.method == 'POST':   # 2DO VIENE DEL FORM
-        print('<<< para actualizar form SECCION en bbdd >>>')
-            #return 'luego de editar el FORM PARA ACTUALIZAR la BD'
-        sc.upd_seccion(secc_id1, secc_id2, secc_id3, \
-                        request.form['fNumConceSec'], \
-                        request.form['fNomSec'], \
-                        request.form['fCircunSec'], \
-                        request.form['fCodProv'], \
-                        request.form['fCodSecc'])
-
-        return render_template('welcome.html')
-
-    else: # 1RO VIENE DEL LISTADO SECCIONES BOTON EDITAR
-        print('viene del Form para editar')
-
-        if sc.get_seccion_id(secc_id1, secc_id2, secc_id3) == True:
-            print('<<<<<<< RET CONSULTA 3 param a SECCION >>>>>>>>>')
-            print(sc.NomSec)
-            print(sc.CodSecc)
-
-            # OBTIENE DEPTO EN BASE A secc_id1
-            for c in rows_d:
-                if c[0] == int(secc_id1):
-                    print(c[1])
-                    nomDepto = c[1]
-
-            # OBTIENE PROV EN BASE A secc_id1 secc_id2
-            for c in rows_p:
-                if c[0] == int(secc_id1) and c[1] == int(secc_id2):
-                    print(c[2])
-                    nomProv = c[2]
-
-            #return render_template('provincia_add.html', d=d,Dep_id=depto_id, datos_paises=rows, nomPais=nomPais,load_u=True)
-            return render_template('seccion_add.html', sc=sc, nomDepto=nomDepto, nomProv=nomProv, codSec=secc_id3, load_u=True)
-
-    return 'seccion 3 parametros'
-    #return render_template('provincia_add.html')
-
-# ****** PARA ELIMINAR SECCION
-@app.route('/seccion_del/<secc_id1>/<secc_id2>/<secc_id3>', methods=['GET', 'POST'])
-def seccion_del(secc_id1,secc_id2,secc_id3):
-    print(secc_id1)
-    print(secc_id2)
-    print(secc_id3)
-    #return 'Para eliminar una SECCION'
-
-    #d = departamentos.Departamentos()
-    sc = secc.Seccion()
-
-    print('-------------------')
-    print('EN func. para eliminar seccion --->'+ secc_id3)
-    print('-------------------')
-
-    #d.del_departamento(depto_id)
-    sc.del_seccion(secc_id1,secc_id2,secc_id3)
-
-    #rows = d.get_departamentos()
-    rows = sc.get_seccion()
-    if rows == False:
-        print ('Sin secciones...')
+    if rows:
+        return jsonify(rows)
     else:
-        return render_template('seccion.html', datos_secc=rows)  # render a template
-    # return 'Para eliminar un departamento'
+        return jsonify(departamento='NO',
+                       provincia='EXISTE !!!',
+                       municipio='DEPARTAMENTO....')
+    cxms2.close()
 
 
-# ****** CREA LINK PARA LOCALIDADDES
-@app.route('/localidad', methods=['GET', 'POST'])
+@app.route('/mun_list', methods=['GET', 'POST'])
 @login_required
-def localidad():
-    loc = locc.Localidad()
-    rows = loc.get_localidad()
-    print('localidades normal...')
-
-    if rows == False:
-        print ('Sin datos localidad...')
+def mun_list():
+    s = muns.Municipio(cxms)
+    rows = s.get_mun_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print(rows[0])
-        #return 'mostrar tabla con localidad'
-        return render_template('localidad.html', datos_loc=rows)  # render a template
+        print ('Sin provincias...')
 
-
-
-# ****** CREA LINK PARA CIRCUNSCRIPCION
-@app.route('/circun', methods=['GET', 'POST'])
+@app.route('/munABC/<dep_id>/<prov_id>/<mun_id>', methods=['GET', 'POST'])
 @login_required
-def circun():
+def munABC(dep_id, prov_id, mun_id):
+    s = muns.Municipio(cxms)
+    error = None
+    p = ('Municipios - Edición' in permisos_usr)  # t/f
+    if request.method == 'POST':
+        fa = str(datetime.datetime.now())[:-7]
+        if dep_id == '0' and prov_id == '0' and mun_id == '0':  # es NEW
 
-    cir = ccircun.Circunscripcion()
-    rows = cir.get_circunscripcion()
-    print('circunscripcion normal...')
+            nextid = s.get_next_idmun(request.form['depto'], request.form['prov'])
+            if nextid == None:
+                nextid =1
 
-    if rows == False:
-        print ('Sin datos localidad...')
+            s.add_mun(request.form['depto'], request.form['prov'], nextid, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'],
+            str(request.form['fechaIngreso'])[:-8], fa, usr)
+
+            rows = s.get_mun_all(usrdep)
+            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr)  # render a template
+        else: # Es Edit
+            s.upd_mun(dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'],
+                    fa, usr)
+            rows = s.get_mun_all(usrdep)
+            return render_template('mun_list.html', municipios=rows, puede_editar='Municipios - Edicion' in permisos_usr)  # render a template
+    else: # Viene de <asientos_list>
+        if dep_id != '0' and prov_id != '0' and mun_id != '0': # EDIT
+            if s.get_mun_id(dep_id, prov_id, mun_id) == True:
+                if s.fechaAct == None:
+                    s.fechaAct = str(datetime.datetime.now())[:-7]
+                if s.usuario == None:
+                    s.usuario = usr
+                return render_template('munABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Municipios', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tprovs=s.get_combo_prov(dep_id,prov_id), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
+    # New
+    return render_template('munABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Municipio', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tprovs=s.get_combo_prov_new(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_adicionar=p)
+
+
+@app.route('/bitacora_list', methods=['GET', 'POST'])
+@login_required
+def bitacora_list():
+    """ Modulo log de Transacciones """
+    s = bitacoras.Bitacora(cxms)
+    rows = s.get_bitacora_all(usrdep)
+
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('bitacora_list.html', bitacoras=rows, puede_adicionar='Bitacoras - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print(rows[0])
-        #return 'mostrar tabla con circun'
-        return render_template('circunscripcion.html', datos_circun=rows)  # render a template
+        print ('Sin bitacora...')
 
-# ****** FORM PARA CIRCUNSCRIPCION
-@app.route('/circunscripcion_add/<circun_id>', methods=['GET', 'POST'])
+
+@app.route('/clas_grupo_list', methods=['GET', 'POST'])
 @login_required
-def circunscripcion_add(circun_id=None):
-    print(circun_id)
+def clas_grupo_list():
+    s = clas_grupo.Grupo(cxms)
+    rows = s.get_clas_grupos_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('clas_grupo_list.html', clas_grup=rows, puede_adicionar='Grupo - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Grupos...')
 
-    d = departamentos.Departamentos()
-    rows_d = d.get_departamentos_bol()
+@app.route('/clas_grupo_ABC/<grupo_id>', methods=['GET', 'POST'])
+@login_required
+def clas_grupo_ABC(grupo_id):
+    s = clas_grupo.Grupo(cxms)
+    error = None
+    p = ('clas_grupo - Edición' in permisos_usr)  # t/f
+    print(request.method)
+    if request.method == 'POST':
+        if grupo_id == '0':  # es NEW
+            if False:   # valida si neces POST
+                print('msg-err')
+            else:
+                nextid = s.get_next_idgrupo()
+                s.add_clas_grupo(nextid, request.form['descripcion'])
 
-    c = locloc.Tipocircunscripcion()
-    rows_c = c.get_tipocircunscripcion()
+                rows = s.get_clas_grupos_all(usrdep)
+                print('GRUPO ADICION')
+                return redirect(url_for('clas_grupo_list'))
+        else: # Es Edit
+            s.upd_grupo(grupo_id, request.form['descripcion'])
+            rows = s.get_clas_grupos_all(usrdep)
+            return render_template('clas_grupo_list.html', clas_grup=rows, puede_editar='Grupo - Edicion' in permisos_usr)  # render a template
+    else: # Viene de <asientos_list>
+        if grupo_id != '0':  # EDIT
+            if s.get_clas_grupo_idclasGrup(grupo_id) == True:
+                return render_template('clas_grupo_ABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de grupos', puede_editar=p)
+    # New
+    return render_template('clas_grupo_ABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo grupo', puede_editar=p)
 
-    print(rows_d[0])
-    print(rows_c[0])
 
-    cir = ccircun.Circunscripcion()
+@app.route('/clas_list/<grupo_id>', methods=['GET', 'POST'])
+@login_required
+def clas_list(grupo_id):
+    s = clasificadores.Clasificador(cxms)
+    if grupo_id != '0':  # EDIT
+            if s.get_clas_idclas(grupo_id) != False:
+                rows = s.get_clas_idclas(grupo_id)
+                if not rows:
+                    return render_template('clas_new.html', grupo_id=grupo_id)  # render a template
+                else:
+                    if permisos_usr:    # tiene pemisos asignados
+                        return render_template('clas_list.html', clasificadores=rows, puede_adicionar='Clasificador - Edición' in permisos_usr)  # render a template
+                    else:
+                        print('sin permisos')
+                        return render_template('msg.html', l1='Sin permisos asignados !!')
+
+
+@app.route('/clas_new/<grupo_id>', methods=['GET', 'POST'])
+@login_required
+def clas_new(grupo_id):
+    s = clasificadores.Clasificador(cxms)
+    if grupo_id != '0':  # EDIT
+            if s.get_clas_idclas(grupo_id) != False:
+                rows = s.get_clas_idclas(grupo_id)
+    else:
+        print('Nuevo...')
+
+
+@app.route('/clas_ABC/<clas_id>/<clas_grup_id>', methods=['GET', 'POST'])
+@login_required
+def clas_ABC(clas_id,clas_grup_id):
+    s = clasificadores.Clasificador(cxms)
+    error = None
+    p = ('clasificadores - Edición' in permisos_usr)  # t/f
+    print(request.method)
+    if request.method == 'POST':
+        if clas_id == '0':  # es NEW
+            if False:   # valida si neces POST
+                print('msg-err')
+            else:
+                nextid = s.get_next_idclas()
+                s.add_clas(nextid, request.form['descripcion'], clas_grup_id,request.form['subgrupo'])
+                rows = s.get_clas_idclas(clas_grup_id)
+                return render_template('clas_list.html', clasificadores=rows, puede_adicionar='Clasificador - Adición' in permisos_usr)  # render a template
+
+        else: # Es Edit
+            s.upd_clas(clas_id, request.form['descripcion'],request.form['subgrupo'])
+            rows = s.get_clas_idclas(request.form['grupo'])
+            return render_template('clas_list.html', clasificadores=rows, puede_editar='Clasificador - Edicion' in permisos_usr)  # render a template
+    else: # Viene de <asientos_list>
+        if clas_id != '0':  # EDIT
+            if s.get_clas_id(clas_id) == True:
+                return render_template('clas_ABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de clasificadores', puede_editar=p)
+    # New
+    return render_template('clas_ABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo clasificador', puede_editar=p)
+
+@app.route('/recinto_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
+@login_required
+def recinto_img(idloc, nomloc, idreci):
+
+    i = clasif_get.ClasifGet(cxms)  # conecta a la BD
+    li = reci_img.ReciImg(cxms)
+
+    with_img = li.get_reci_imgs(idloc)  # False or rows-img
+
     error = None
 
     if request.method == 'POST':
-        print('===RESULTADO DEL BOTON FORM en POST Aceptar')
-        print(circun_id)
+        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
+        img_ids = list(img_ids_[0].split(","))      # list ok
+        uploaded_files = request.files.getlist("filelist")
 
+        for n in range(len(img_ids)):
+            f  = uploaded_files[n]
+            if f.filename != '':
+                securef = secure_filename(f.filename)
+                f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
+                fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
+                arch, ext = os.path.splitext(fpath)
+                name_to_save = str(idloc).zfill(5) + "_" + str(idreci).zfill(5) + "_" + str(img_ids[n]).zfill(3)  + ext
+                fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)
 
-        if circun_id == '0':  # es NEW PAIS
-            print('++++++++ LISTOS A guardar en bd dbo.PROV +++++++')
-            print(request.form['fDepCircun'])
-            print(request.form['fCircun'])
-            print(request.form['fNomCircun'])
-            print(request.form['fTipoCircun'])
-            #return '+++++Form para circunscripcion'
+                #resize_save_file(fpath, name_to_save, (1024, 768), os.path.join(app.config['IMG_RECINTOS']))
+                resize_save_file(fpath, name_to_save, (1024, 768))
 
-            cir.add_circunscripcion(request.form['fDepCircun'], \
-                        request.form['fCircun'], \
-                        request.form['fNomCircun'], \
-                        request.form['fTipoCircun'])
+                li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
+                os.remove(fpath[1:])   # arch. fuente
 
-            return render_template('welcome.html')
+        return redirect(url_for('recintos_list'))
 
-
-    #return 'Form para circunscripcion 1ra vez'
-    return render_template('circunscripcion_add.html', datos_depto=rows_d, datos_tipocircun=rows_c)
-
-
-@app.route('/circunscripcion_add2/<circun_id1>/<circun_id2>', methods=['GET', 'POST'])
-@login_required
-def circunscripcion_add2(circun_id1=None, circun_id2=None):
-    print(circun_id1)
-    d = departamentos.Departamentos()
-    rows_d = d.get_departamentos_bol()
-
-    c = locloc.Tipocircunscripcion()
-    rows_c = c.get_tipocircunscripcion()
-
-    cir = ccircun.Circunscripcion()
-    #return 'luego de editar el FORM PARA ACTUALIZAR la BD'
-
-    if request.method == 'POST':
-        print('<<< para actualizar form circunscripcion en bbdd >>>')
-          #return 'luego de editar el FORM PARA ACTUALIZAR la BD'
-        cir.upd_circunscripcion(circun_id1, circun_id2, \
-                        request.form['fNomCircun'], \
-                        request.form['fTipoCircun'])
-
-        return render_template('welcome.html')
-
-
-
-    else: # VIENE DEL LISTADO DEPARTAMENTOS BOTON EDITAR
-        print('viene del Form para editar')
-
-        if cir.get_circunscripcion_id(circun_id1, circun_id2) == True:
-            print('<<<<<<< RETORNO DE CONSULTA>>>>>>>>>')
-            qnomCircun = cir.NomCircun
-            print(qnomCircun)
-            qtipoCircun = cir.TipoCircun
-            print(qtipoCircun)
-
-
-            # OBTIENE DEPTO EN BASE A circun_id1
-            for c in rows_d:
-                if c[0] == int(circun_id1):
-                    #print(c)
-                    nomDepto = c[1]
-                    print(nomDepto)
-            # OBTIENE TIPOCIRCUNSCRIP EN BASE A cir.TipoCircun
-            for c in rows_c:
-                if c[0] == int(qtipoCircun):
-                    #print(c)
-                    nomTipoCircun = c[1]
-                    print(nomTipoCircun)
-
-            #return 'circunscripcion todos parametros'
-
-            #return render_template('departamento_add.html', error=error, u=u, load_u=True)
-            #return render_template('provincia_add.html', d=d,Dep_id=depto_id, datos_paises=rows, nomPais=nomPais,load_u=True)
-            return render_template('circunscripcion_add.html',datos_tipocircun=rows_c ,pv=cir, depCircun=circun_id1, nomDepto=nomDepto, circun=circun_id2, qtipoCircun=qtipoCircun,nomTipoCircun=nomTipoCircun, load_u=True)
-
-    return 'circunscripcion 2 parametros'
-    #return render_template('provincia_add.html')
-
-# ****** PARA ELIMINAR CIRCUNSCRIPCION
-@app.route('/circunscripcion_del/<circun_id1>/<circun_id2>', methods=['GET', 'POST'])
-def circunscripcion_del(circun_id1, circun_id2):
-    print(circun_id1)
-    print(circun_id2)
-    #return 'Para eliminar una ciecunscripcion'
-
-    pv =  prov.Provincia()
-    cir = ccircun.Circunscripcion()
-
-    print('-------------------')
-    print('EN func. para eliminar circun --->'+ circun_id1+','+circun_id2)
-    print('-------------------')
-
-    cir.del_circunscripcion(circun_id1, circun_id2)
-
-    # para mostrar tabla actualizada
-    rows = cir.get_circunscripcion()
-    if rows == False:
-        print ('Sin circunscripciones...')
     else:
-        return render_template('circunscripcion.html', datos_circun=rows)  # render a template
+        if with_img:  # Edit
+            return render_template('recinto_img_upd.html', rows=i.get_descripcion(5), nomloc=nomloc,
+                                puede_editar='Recintos - Edición' in permisos_usr,
+                                imgs_loaded=with_img)
+        else:  # New
+            return render_template('recinto_img.html', rows=i.get_descripcion(5), nomloc=nomloc,
+                                puede_editar='Recintos - Edición' in permisos_usr)
 
-    # return 'Para eliminar una provincia'
+#def resize_save_file(in_file, out_file, size, ruta_img):
+def resize_save_file(in_file, out_file, size, ruta_img):
+    with open('.' + in_file, 'rb') as fd:
+        image = resizeimage.resize_thumbnail(Image.open(fd), size)
+
+    #image.save('.' + ruta_img, out_file)
+    image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
+    image.close()
+    #return(out_file)
 
 
 

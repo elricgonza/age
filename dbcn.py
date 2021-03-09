@@ -19,8 +19,9 @@ def get_db_ms():
 
 
 def get_db_pg():
-    #ppg = {'host': '192.168.46.216',  \
-    ppg = {'host': '192.168.80.224',  \
+    #ppg = {'host': '192.168.80.224',  \
+    #ppg = {'host': '10.100.107.205',  \
+    ppg = {'host': 'localhost',  \
         'user': 'appgeo', \
         'password': 'appgeo', \
         'port': '5432', \

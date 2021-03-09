@@ -22,13 +22,12 @@
                         <input type="text" class="form-control" id="idescrip" placeholder="Introduzca la Descripcion del Clasificador" name="descripcion" required {% if load %} value="{{ s.descripcion }}" {% endif %}>
                         <input type="hidden" class="form-control" id="idGrupo" placeholder="Introduzca la Descripcion del Clasificador" name="grupo" required {% if load %} value="{{ s.clasifGrupoId }}" {% endif %}>
                         <input type="hidden" class="form-control" id="idGrupo2" placeholder="Introduzca la Descripcion del Clasificador" name="grupo2" required {% if load %} value="{{ s.clasifGrupoId }}" {% endif %}>
-                        <!-- <input type="hidden" class="form-control" id="idGrupo2" placeholder="Introduzca la Descripcion del Clasificador" name="grupo2" value="3"> -->
                         <div class="invalid-feedback">Por favor ingrese datos.</div>
                     </div>
 
                     <div class="col-md-6">
                         <label for="Grupos">SUBGRUPO:</label>
-                        <input type="text" class="form-control" id="isubgrupo" placeholder="Introduzca SubGrupo del Clasificador" name="subgrupo" required {% if load %} value="{{ s.subgrupo }}" {% endif %}>
+                        <input type="text" class="form-control" id="isubgrupo" placeholder="Introduzca SubGrupo del Clasificador" name="subgrupo" required {% if load %} value="{{ s.clasifSubGrupo }}" {% endif %}>
                         <div class="invalid-feedback">Por favor ingrese datos.</div>
                     </div>
 

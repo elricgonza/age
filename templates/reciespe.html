@@ -709,7 +709,9 @@
 
         });
         setTimeout(function(){
-               $('#exampleModal').modal('hide')
+               $('#exampleModal').modal('hide');
+               $('#successAlert').hide();
+               $('#errorAlert').hide();
         }, 3000);
         /*$('#button').submit(function(e) {
                e.preventDefault();
