@@ -1864,12 +1864,13 @@ def recinto_img(idloc, nomloc, idreci):
                                 puede_editar='Recintos - Edición' in permisos_usr)
 
 #def resize_save_file(in_file, out_file, size, ruta_img):
-def resize_save_file(in_file, out_file, size, ruta_img):
+def resize_save_file(in_file, out_file, size):
     with open('.' + in_file, 'rb') as fd:
         image = resizeimage.resize_thumbnail(Image.open(fd), size)
 
     #image.save('.' + ruta_img, out_file)
-    image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
+    #image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
+    image.save('.' + os.path.join(app.config['IMG_ASIENTOS'], out_file))
     image.close()
     #return(out_file)
 

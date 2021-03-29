@@ -4,10 +4,12 @@ __pycache__/
 *$py.class
 
 #add
-static/imgbd
-testonly
+static/imgbd/
+static/pdfdoc/
 *.swp
 *.swo
+.*.swp
+.*.swo
 
 # C extensions
 *.so
