@@ -67,3 +67,22 @@ class LocImg:
             print ('Error en método  -get_loc_imgs- ')
             print (e)
 
+
+    def get_name_file_img(self, idLoc, imgId):
+        ''' get name file incluído el path '''
+
+        s = "select ruta from loc_img where idLoc = %d and imgId = %d "
+        parm = idLoc, imgId
+        try:
+            self.cur.execute(s, parm)
+            rows = self.cur.fetchall()
+            if rows: # encontrado
+                self._nro_rows = self.cur.rowcount
+                return rows[0][0]   # de tupla 1er elem.
+            else:
+                self._nro_rows = 0
+                return ''
+
+        except Exception as e:
+            print ('Error en método  -get_name_file_img- ')
+            print (e)

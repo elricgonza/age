@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 import webbrowser
 import re
 import os
+import sys
 import pathlib
 import datetime
 from werkzeug.utils import secure_filename
@@ -49,6 +50,7 @@ import clasif_get
 app = Flask(__name__)
 app.secret_key ='\xfd{H\xe7<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa7'
 app.config['LOGIN_DISABLED'] = False
+app.config['PATH_APP'] = '/var/www/flasks/age/'
 app.config['IMG_ASIENTOS'] = '/static/imgbd/asi'
 app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
 app.config['SUBIR_PDF'] = '/static/pdfdoc'
@@ -67,6 +69,10 @@ usr = ""
 usrdep = 99
 usrid = 0
 permisos_usr = []
+
+# path init - to save img, ..
+chd = os.chdir(app.config['PATH_APP'])
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -332,9 +338,16 @@ def asiento_img(idloc, nomloc):
                 f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
+
                 name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
                 fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
                 resize_save_file(fpath, name_to_save, (1024, 768))
+
+                if li.exist_img(idloc, img_ids[n]):   # si upd img
+                    file_to_del = li.get_name_file_img(idloc, img_ids[n])
+                    os.remove(file_to_del[1:]) # borra arch. de HD
+                    li.del_loc_img(idloc, img_ids[n]) # borra de bd
+
                 li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
 
