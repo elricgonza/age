@@ -12,6 +12,7 @@ import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
 from resizeimage import resizeimage
+
 import dbcn
 import usuarios
 import permisos as permisosU
@@ -44,7 +45,7 @@ import asiento_indi as indi
 import clas_grupo
 import clasificadores
 import clasif_get
-
+import get_json
 
 # create the application object
 app = Flask(__name__)
@@ -145,6 +146,15 @@ def inject_global():
 @app.errorhandler(401)
 def access_error(error):
     return render_template('401.html'), 401
+
+
+
+@app.route('/gjson/<dep>', methods=['GET', 'POST'])
+def gjson(dep):
+    j = get_json.GetJson(cxpg)
+    #geo_json = j.get_dep(dep)
+    geo_json = j.get_nal()
+    return render_template('gjson.html', geo_json = geo_json)
 
 
 @app.route('/get_geo', methods=['GET', 'POST'])
