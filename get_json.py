@@ -66,8 +66,60 @@ class GetJson:
                    from g_ut_sup as lg ) as f ) as fc
         '''
 
+        s = '''
+        select row_to_json(fc)   
+                from (select 'FeatureCollection' as Type, array_to_json(array_agg(f)) as features   
+                from (select 'Feature' as Type,   
+                   ST_AsGeoJSON(lg.geom)::json as geometry,   
+                   (   
+                   select row_to_json(t)   
+                   from (select id, nom_ut_sup, geom) t   
+                   )   
+                   as properties   
+                   from g_ut_sup as lg where id=6 ) as f ) as fc
+        '''
+
+        s = '''
+        SELECT row_to_json(fc)
+ FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features
+ FROM (SELECT 'Feature' As type
+    , ST_AsGeoJSON(lg.geom)::json As geometry
+    , row_to_json((id, nom_ut_sup)) As properties
+   FROM g_ut_sup As lg   ) As f )  As fc;
+        '''
+
+        s = '''
+SELECT jsonb_build_object(
+    'type',     'FeatureCollection',
+    'features', jsonb_agg(feature)
+)
+FROM (
+  SELECT jsonb_build_object(
+    'type',       'Feature',
+    'id',         id,
+    'geometry',   ST_AsGeoJSON(geom)::jsonb,
+    'properties', to_jsonb(row) - 'id' - 'geom'
+  ) AS feature
+  FROM (SELECT * FROM g_ut_sup) row) features;
+        '''
+
+ #16:40
+        s = '''
+SELECT jsonb_build_object(
+    'type',     'FeatureCollection',
+    'features', jsonb_agg(features.feature)
+)
+FROM (
+  SELECT jsonb_build_object(
+    'type',       'Feature',
+    'id',         id,
+    'geometry',   ST_AsGeoJSON(geom)::jsonb,
+    'properties', to_jsonb(inputs) - 'id' - 'geom'
+  ) AS feature
+  FROM (SELECT id, geom FROM g_ut_sup) inputs) features;
+        '''
+
         self.cur.execute(s)
 
         geo_json = self.cur.fetchone()
         return geo_json
-

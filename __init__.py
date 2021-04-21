@@ -149,12 +149,23 @@ def access_error(error):
 
 
 
-@app.route('/gjson/<dep>', methods=['GET', 'POST'])
-def gjson(dep):
+@app.route('/gjson_dep/<dep>', methods=['GET', 'POST'])
+def gjson_dep(dep):
     j = get_json.GetJson(cxpg)
-    #geo_json = j.get_dep(dep)
-    geo_json = j.get_nal()
+    geo_json = j.get_dep(dep)
     return render_template('gjson.html', geo_json = geo_json)
+
+
+@app.route('/gjson_nal/', methods=['GET', 'POST'])
+def gjson_nal():
+    j = get_json.GetJson(cxpg)
+    geo_json = j.get_nal()
+
+    #with open ('/home/r/gdep.geojson', 'r') as f:
+     #   print(geo_json)
+    #print(geo_json)
+    return render_template('gjson.html', geo_json = geo_json)
+
 
 
 @app.route('/get_geo', methods=['GET', 'POST'])
