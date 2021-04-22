@@ -161,8 +161,9 @@ def gjson_nal():
     j = get_json.GetJson(cxpg)
     geo_json = j.get_nal()
 
-    #with open ('/home/r/gdep.geojson', 'r') as f:
-     #   print(geo_json)
+    #with open ('/home/r/triandb4err.geojson', 'r') as f:
+        #geo_json = f.read()
+
     #print(geo_json)
     return render_template('gjson.html', geo_json = geo_json)
 
