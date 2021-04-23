@@ -167,26 +167,54 @@ FROM (
     def get_reci_nal(self):
         #R
         s = '''
-SELECT jsonb_build_object(
-    'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
-    'name',     'trian',
-    'type',     'FeatureCollection',
-    'features', jsonb_agg(features.feature)
-)
-FROM (
-  SELECT jsonb_build_object(
-    'type',       'Feature',
-    'id',         id,
-    'geometry',   ST_AsGeoJSON(geom)::jsonb,
-    'properties', to_jsonb(inputs) - 'id' - 'geom'
-  ) AS feature
-  FROM (SELECT id, nom_asiento, geom FROM ge_asiento)
-   inputs) features;
-        '''
-
-    #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
+        SELECT jsonb_build_object(
+            'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
+            'name',     'trian',
+            'type',     'FeatureCollection',
+            'features', jsonb_agg(features.feature)
+        )
+        FROM (
+          SELECT jsonb_build_object(
+            'type',       'Feature',
+            'id',         id,
+            'geometry',   ST_AsGeoJSON(geom)::jsonb,
+            'properties', to_jsonb(inputs) - 'id' - 'geom'
+          ) AS feature
+          FROM (SELECT id, nom_asiento, geom FROM ge_asiento)
+           inputs) features;
+                '''
+            #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
 
         self.cur.execute(s)
+
+        geo_json = self.cur.fetchone()
+        geo_json = geo_json[0]
+        return geo_json
+
+    def get_loc(self, dep):
+        #R
+        s = '''
+        SELECT jsonb_build_object(
+            'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
+            'name',     'trian',
+            'type',     'FeatureCollection',
+            'features', jsonb_agg(features.feature)
+        )
+        FROM (
+          SELECT jsonb_build_object(
+            'type',       'Feature',
+            'id',         id,
+            'geometry',   ST_AsGeoJSON(geom)::jsonb,
+            'properties', to_jsonb(inputs) - 'id' - 'geom'
+          ) AS feature
+          FROM (SELECT id, nom_localidad, geom FROM g_localidad
+                '''
+
+        ss = f'WHERE ut_sup_id= {dep} )'
+        sss = s + ss + 'inputs) features;'
+            #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
+
+        self.cur.execute(sss)
 
         geo_json = self.cur.fetchone()
         geo_json = geo_json[0]

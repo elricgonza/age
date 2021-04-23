@@ -180,6 +180,13 @@ def gjson_reci_nal():
     return render_template('gjson.html', geo_json = geo_json)
 
 
+@app.route('/gjson_loc/<dep>', methods=['GET', 'POST'])
+def gjson_loc(dep):
+    j = get_json.GetJson(cxpg)
+    geo_json = j.get_loc(dep)
+    return render_template('gjson.html', geo_json = geo_json)
+
+
 @app.route('/get_geo', methods=['GET', 'POST'])
 def get_geo():
     lat = request.args.get('latitud', 0, type=float)
