@@ -168,6 +168,17 @@ def gjson_nal():
     return render_template('gjson.html', geo_json = geo_json)
 
 
+@app.route('/gjson_reci_nal/', methods=['GET', 'POST'])
+def gjson_reci_nal():
+    j = get_json.GetJson(cxpg)
+    geo_json = j.get_reci_nal()
+
+    #with open ('/home/r/triandb4err.geojson', 'r') as f:
+        #geo_json = f.read()
+
+    #print(geo_json)
+    return render_template('gjson.html', geo_json = geo_json)
+
 
 @app.route('/get_geo', methods=['GET', 'POST'])
 def get_geo():

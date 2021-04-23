@@ -135,11 +135,59 @@ FROM (
   ) AS feature
   FROM (SELECT id, nombre, geom FROM trian) inputs) features;
         '''
+        #R
+        s = '''
+SELECT jsonb_build_object(
+    'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
+    'name',     'trian',
+    'type',     'FeatureCollection',
+    'features', jsonb_agg(features.feature)
+)
+FROM (
+  SELECT jsonb_build_object(
+    'type',       'Feature',
+    'id',         id,
+    'geometry',   ST_AsGeoJSON(geom)::jsonb,
+    'properties', to_jsonb(inputs) - 'id' - 'geom'
+  ) AS feature
+  FROM (SELECT id, nom_ut_sup, geom FROM g_ut_sup
+    WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
+   inputs) features;
+        '''
 
         self.cur.execute(s)
 
         geo_json = self.cur.fetchone()
         # delete - 1er, penùltimo y último  caracter para visor leaflet
         #geo_json = geo_json[1:-2]
+        geo_json = geo_json[0]
+        return geo_json
+
+
+    def get_reci_nal(self):
+        #R
+        s = '''
+SELECT jsonb_build_object(
+    'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
+    'name',     'trian',
+    'type',     'FeatureCollection',
+    'features', jsonb_agg(features.feature)
+)
+FROM (
+  SELECT jsonb_build_object(
+    'type',       'Feature',
+    'id',         id,
+    'geometry',   ST_AsGeoJSON(geom)::jsonb,
+    'properties', to_jsonb(inputs) - 'id' - 'geom'
+  ) AS feature
+  FROM (SELECT id, nom_asiento, geom FROM ge_asiento)
+   inputs) features;
+        '''
+
+    #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
+
+        self.cur.execute(s)
+
+        geo_json = self.cur.fetchone()
         geo_json = geo_json[0]
         return geo_json
