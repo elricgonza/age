@@ -60,15 +60,24 @@
                       layer.setStyle(highlight);  //highlights selected.
                   }); 
           }
+
+          function forEachFeatureMun(feature, layer) {
+
+                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+                      "</br>COD_DEP: " + feature.properties.ut_sup_id.toLocaleString() +
+                      "</br>MUNICIPIO: "+ feature.properties.nom_ut_basica + '</p>';
+
+                  layer.bindPopup(popupContent);
+
+                  layer.on("click", function (e) { 
+                      munLayer.setStyle(style); //resets layer colors
+                      layer.setStyle(highlight);  //highlights selected.
+                  }); 
+          }
           
         // Null variable that will hold layer
         var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
-
-        /*
-        $.getJSON({{ geo_json | safe }}, function(data) {
-                locLayer.addData(data);
-            });
-        */
+        var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
 
          locLayer.addTo(map);
 

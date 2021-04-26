@@ -186,6 +186,13 @@ def gjson_loc(dep):
     geo_json = j.get_loc(dep)
     return render_template('gjson.html', geo_json = geo_json)
 
+@app.route('/gj_test/<dep>', methods=['GET', 'POST'])
+def gj_test(dep):
+    j = get_json.GetJson(cxpg)
+    geo_json = j.get_loc(dep)
+    gj_mun = j.get_mun(dep)
+    return render_template('gj_test.html', geo_json=geo_json, gj_mun=gj_mun)
+
 
 @app.route('/get_geo', methods=['GET', 'POST'])
 def get_geo():

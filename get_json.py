@@ -25,7 +25,44 @@ class GetJson:
         }
 
         return geo_json
-    
+
+
+    def get_mun(self, dep):
+        s = ''' 
+        SELECT jsonb_build_object(
+            'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
+            'name',     'trian',
+            'type',     'FeatureCollection',
+            'features', jsonb_agg(features.feature)
+        )
+        FROM (
+          SELECT jsonb_build_object(
+            'type',       'Feature',
+            'id',         id,
+            'dep',        ut_sup_id,  
+            'geometry',   ST_AsGeoJSON(geom)::jsonb,
+            'properties', to_jsonb(inputs) - 'id' - 'geom'
+          ) AS feature
+          FROM (SELECT id, nom_ut_basica, ut_sup_id, geom FROM g_ut_basica
+            '''
+        
+        if (dep == '0'):
+            print('dep IGUAL A  0')
+            sss = s + ' ) inputs) features;'
+        else:
+            print('dep DIFERENTE a 0')
+            ss = f'WHERE ut_sup_id= {dep} '
+            sss = s + ss + ' ) inputs) features;'
+        #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
+        print('----------------------------')
+        #print(sss)
+        print('----------------------------')
+        self.cur.execute(sss)
+
+        geo_json = self.cur.fetchone()
+        geo_json = geo_json[0]
+        return geo_json
+
 
     def get_nal(self):
         '''
