@@ -209,11 +209,18 @@ FROM (
           ) AS feature
           FROM (SELECT id, nom_localidad, geom FROM g_localidad
                 '''
-
-        ss = f'WHERE ut_sup_id= {dep} )'
-        sss = s + ss + 'inputs) features;'
-            #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
-
+        
+        if (dep == '0'):
+            print('dep IGUAL A  0')
+            sss = s + ' ) inputs) features;'
+        else:
+            print('dep DIFERENTE a 0')
+            ss = f'WHERE ut_sup_id= {dep} '
+            sss = s + ss + ' ) inputs) features;'
+        #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
+        print('----------------------------')
+        #print(sss)
+        print('----------------------------')
         self.cur.execute(sss)
 
         geo_json = self.cur.fetchone()
