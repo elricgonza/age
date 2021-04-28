@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Page</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+    <style>
+        #map {  position: relative;
+                width: 600px;
+                height: 775px;
+                border: 3px solid #000000;}
+    </style>    
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+
+
+      var map = L.map('map').setView([-19.86,-67.52],6);
+      map.addControl(new L.Control.Fullscreen());
+
+        //L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=9GKOA9jJ3jCIWFUd8k00', {attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',}).addTo(map);
+
+        //L.geoJSON({{ geo_json | safe }}).addTo(map);
+        //
+
+        var url = 'usa.json';  // my GeoJSON data source, in same folder as my html page.
+
+          //var map = L.map('map').setView([47.7541, -107.05078], 3); 
+
+          var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+            
+          
+        // Set style function that sets fill color property
+        function style(feature) {
+            return {
+                fillColor: 'green', 
+                fillOpacity: 0.5,  
+                weight: 2,
+                opacity: 1,
+                color: '#ffffff',
+                dashArray: '3'
+            };
+        }
+
+        function styleProv(feature) {
+            return {
+                fillColor: 'orange', 
+                fillOpacity: 0.5,  
+                weight: 2,
+                opacity: 1,
+                color: '#ffffff',
+                dashArray: '3'
+            };
+        }
+
+
+          var highlight = {
+            'fillColor': 'yellow',
+            'weight': 2,
+            'opacity': 1
+          };
+          
+          function forEachFeature(feature, layer) {
+
+                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+                      "</br>LOCALIDAD: "+ feature.properties.nom_localidad + '</p>';
+
+                  layer.bindPopup(popupContent);
+
+                  layer.on("click", function (e) { 
+                      locLayer.setStyle(style); //resets layer colors
+                      layer.setStyle(highlight);  //highlights selected.
+                  }); 
+          }
+
+          function forEachFeatureMun(feature, layer) {
+
+                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+                      "</br>COD_DEP: " + feature.properties.ut_sup_id.toLocaleString() +
+                      "</br>MUNICIPIO: "+ feature.properties.nom_ut_basica + '</p>';
+
+                  layer.bindPopup(popupContent);
+
+                  layer.on("click", function (e) { 
+                      munLayer.setStyle(style); //resets layer colors
+                      layer.setStyle(highlight);  //highlights selected.
+                  }); 
+          }
+          
+          function forEachFeatureProv(feature, layer) {
+
+                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+                      "</br>COD_PROV: " + feature.properties.ut_sup_id.toLocaleString() +
+                      "</br>PROVINCIA: "+ feature.properties.nom_ut_intermedia + '</p>';
+
+                  layer.bindPopup(popupContent);
+
+                  layer.on("click", function (e) { 
+                      provLayer.setStyle(styleProv); //resets layer colors
+                      layer.setStyle(highlight);  //highlights selected.
+                  }); 
+          }
+
+
+          function forEachFeatureCircun(feature, layer) {
+
+                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+                      "</br>DEP: " + feature.properties.ut_sup_id.toLocaleString() +
+                      "</br>CIRCUNSCRIPCION: "+ feature.properties.nom_circunscripcion + '</p>';
+
+                  layer.bindPopup(popupContent);
+
+                  layer.on("click", function (e) { 
+                      circunLayer.setStyle(style); //resets layer colors
+                      layer.setStyle(highlight);  //highlights selected.
+                  }); 
+         }
+        // Null variable that will hold layer
+        var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
+        var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
+        var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
+        //var circunLayer = L.geoJson( {{ gj_circun | safe }}, {onEachFeature: forEachFeatureCircun, style: style});
+
+         provLayer.addTo(map);
+
+        // for Layer Control	
+        var baseMaps = {
+            "Open Street Map": osm  	
+        };
+
+        var overlayMaps = {
+            "Localidades":locLayer,
+            "Municipios":munLayer,
+            "Provincias":provLayer
+        };	
+            //"Circunscripciones":circunLayer
+          
+        //Add layer control
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+            </script>
+
+    {{ geo_json }}
+
+</body>
+</html>
+

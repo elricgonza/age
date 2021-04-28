@@ -199,6 +199,19 @@ def gj_test(dep):
                             gj_prov=gj_prov)
 
 
+@app.route('/gj_ptest/<dep>', methods=['GET', 'POST'])
+def gj_ptest(dep):
+    j = get_json.GetJson(cxpg)
+    geo_json = j.get_loc(dep)
+    gj_mun = j.get_mun(dep)
+    gj_prov = j.get_prov(dep)
+    #gj_circun = j.get_circun(dep)
+    return render_template('gj_ptest.html', 
+                            geo_json=geo_json, 
+                            gj_mun=gj_mun,
+                            gj_prov=gj_prov)
+
+
 @app.route('/get_geo', methods=['GET', 'POST'])
 def get_geo():
     lat = request.args.get('latitud', 0, type=float)
