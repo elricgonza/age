@@ -22,7 +22,10 @@
     <link href="{{ url_for('static', filename='css/leaflet.measurecontrol.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet.measurecontrol.js') }}"></script>
 
-    <!--<link href="{{ url_for('static', filename='css/demo.css') }}" rel="stylesheet" media="screen">-->
+    <!--Coordinates-->
+    <link href="{{ url_for('static', filename='css/Leaflet.Coordinates-0.1.5.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/Leaflet.Coordinates-0.1.5.min.js') }}"></script>
+
 
     <style>
         #map {  position: relative;
@@ -37,8 +40,39 @@
 
 
       var map = L.map('map').setView([-19.86,-67.52],6);
+      // add controls 
       map.addControl(new L.Control.Fullscreen());
+
       L.Control.measureControl().addTo(map);
+
+/*
+		L.control.coordinates().addTo(map);
+      
+		//add configured controls
+		L.control.coordinates({
+			position:"bottomleft",
+			decimals:2,
+			decimalSeperator:",",
+			labelTemplateLat:"Latitude: {y}",
+			labelTemplateLng:"Longitude: {x}"
+		}).addTo(map);
+		L.control.coordinates({
+			position:"topright",
+			useDMS:true,
+			labelTemplateLat:"N {y}",
+			labelTemplateLng:"E {x}",
+			useLatLngOrder:true
+		}).addTo(map);
+ */
+		L.control.coordinates({
+			position:"bottomleft",
+			decimals:5,
+			decimalSeperator:",",
+			labelTemplateLat:"Lat: {y}",
+			labelTemplateLng:"Lng: {x}"
+		}).addTo(map);
+
+
 
         //L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=9GKOA9jJ3jCIWFUd8k00', {attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',}).addTo(map);
 
