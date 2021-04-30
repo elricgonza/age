@@ -26,6 +26,11 @@
     <link href="{{ url_for('static', filename='css/Leaflet.Coordinates-0.1.5.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/Leaflet.Coordinates-0.1.5.min.js') }}"></script>
 
+    <!--search-->
+    <!--https://github.com/stefanocudini/leaflet-search - custom-tip.html -->
+    <link href="{{ url_for('static', filename='css/leaflet-search.min.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet-search.min.js') }}"></script>
+  
 
     <style>
         #map {  position: relative;
@@ -68,6 +73,7 @@
 			position:"bottomleft",
 			decimals:5,
 			decimalSeperator:",",
+      lngFirst:true,
 			labelTemplateLat:"Lat: {y}",
 			labelTemplateLng:"Lng: {x}"
 		}).addTo(map);
@@ -172,7 +178,13 @@
                       layer.setStyle(highlight);  //highlights selected.
                   }); 
          }
-        // Null variable that will hold layer
+
+        // to search
+        function customTip(text,val) {
+          return '<a href="#">'+text+'<em style="background:'+text+'; width:14px;height:14px;float:right"></em></a>';
+        }
+
+
         var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
         var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
         var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
@@ -194,7 +206,14 @@
           
         //Add layer control
         L.control.layers(baseMaps, overlayMaps).addTo(map);
-            </script>
+
+        map.addControl( new L.Control.Search({
+          layer: locLayer,
+          buildTip: customTip,
+          autoType: false
+        }) );
+
+        </script>
 
     {{ geo_json }}
 
