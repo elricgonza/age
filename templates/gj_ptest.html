@@ -28,9 +28,12 @@
 
     <!--search-->
     <!--https://github.com/stefanocudini/leaflet-search - custom-tip.html -->
-    <link href="{{ url_for('static', filename='css/leaflet-search.min.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet-search.min.js') }}"></script>
+    <link href="{{ url_for('static', filename='css/leaflet-search.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet-search.js') }}"></script>
   
+    <!--locate-->
+    <link href="{{ url_for('static', filename='css/Locate.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/Locate.js') }}"></script>
 
     <style>
         #map {  position: relative;
@@ -91,6 +94,11 @@
 
           var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+          
+		var topoUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+		var topoAttribution = 'Kartendaten: &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+			topo = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttribution});
             
           
         // Set style function that sets fill color property
@@ -194,6 +202,7 @@
 
         // for Layer Control	
         var baseMaps = {
+            "OpenTopoMap": topo,
             "Open Street Map": osm  	
         };
 
@@ -207,11 +216,74 @@
         //Add layer control
         L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+        /* first vers. :(
         map.addControl( new L.Control.Search({
           layer: locLayer,
           buildTip: customTip,
           autoType: false
         }) );
+         */
+
+      /*
+	map = new L.Map('map');
+		map.attributionControl.setPrefix(false);
+		map.dragging.enable();
+		map.touchZoom.enable();
+		map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+
+		map.addControl( new L.Control.Search({
+			url: 'https://nominatim.openstreetmap.org/search?format=json&accept-language=de-DE&q={s}',
+			jsonpParam: 'json_callback',
+			propertyName: 'display_name',
+			propertyLoc: ['lat','lon'],
+			markerLocation: true,
+			autoType: false,
+			autoCollapse: true,
+			minLength: 2,
+			zoom:10,
+			text: 'Calle, departamento, país...',
+			textCancel: 'Abbrechen',
+			textErr: 'No encontrado'
+		}) );
+
+		L.control.locate({
+			follow: true,
+			title: "Position bestimmen",
+			popupText: ["Sie befinden sich innerhalb "," von diesem Punkt"]
+		}).addTo(map);
+    */
+
+  /*
+  map.addControl( new L.Control.Search({
+		url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+		jsonpParam: 'json_callback',
+		propertyName: 'display_name',
+		propertyLoc: ['lat','lon'],
+		marker: L.circleMarker([0,0],{radius:30}),
+		autoCollapse: true,
+		autoType: false,
+		minLength: 2
+	}) );
+   */
+
+		map.addControl( new L.Control.Search({
+			url: 'https://nominatim.openstreetmap.org/search?format=json&accept-language=de-DE&q={s}',
+			jsonpParam: 'json_callback',
+			propertyName: 'display_name',
+			propertyLoc: ['lat','lon'],
+			markerLocation: true,
+			autoType: false,
+			autoCollapse: true,
+			minLength: 2,
+			zoom:10,
+			text: 'Dirección a buscar...lat long',
+			textCancel: 'Cancelar',
+			textErr: 'No encontrado... '
+		}) );
+
+	L.control.locate({showCompass:true,icon:"fa fa-crosshairs"}).addTo(map);
+
 
         </script>
 
