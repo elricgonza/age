@@ -139,7 +139,7 @@
           var highlight = {
             'fillColor': 'yellow',
             'weight': 2,
-            'opacity': 1
+            'opacity': 2
           };
           
           function forEachFeature(feature, layer) {
@@ -287,7 +287,7 @@
 			autoType: false,
 			autoCollapse: true,
 			minLength: 2,
-			zoom:10,
+			zoom:16,
 			text: 'Dirección a buscar ó lat long',
 			textCancel: 'Cancelar',
 			textErr: 'No encontrado... '
@@ -295,6 +295,35 @@
 
 	//L.control.locate({showCompass:true,icon:"fa fa-crosshairs"}).addTo(map);
 
+
+  // to locLayer Search
+    var searchControlLoc = new L.Control.Search({
+      layer: locLayer,
+      propertyName: 'nom_localidad',
+      zoom:12,
+			text: 'Recinto Electoral a buscar',
+			textCancel: 'Cancelar',
+			textErr: 'Localidad NO encontrada... '
+    });
+
+    map.addControl(searchControlLoc);
+
+  // to locMunic Search
+    var searchControlMun = new L.Control.Search({
+      layer: munLayer,
+      propertyName: 'nom_ut_basica',
+      zoom:9,
+      circleLocation: false,
+			text: 'Municipio a buscar',
+			textCancel: 'Cancelar',
+			textErr: 'Municipio NO encontrada... '
+    });
+
+            searchControlMun.on('search_locationfound', function(e) {
+                e.layer.setStyle({fillcolor: 'red', color: '#0f0'});
+                e.layer.setStyle(highlight);  //highlights selected.
+            })
+    map.addControl(searchControlMun);
 
             
 		//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
@@ -306,7 +335,8 @@
 
         </script>
 
-    {{ geo_json }}
+        <!--{{ geo_json }}-->
+    {{ gj_mun }}
 
 </body>
 </html>
