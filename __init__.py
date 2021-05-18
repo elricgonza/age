@@ -1126,17 +1126,16 @@ def reciespe(idreci, idlocreci):
 def get_geo_esp():
     lat = request.args.get('latitud', 0, type=float)
     long = request.args.get('longitud', 0, type=float)
-    cxms2 = dbcn.get_db_ms()
-    rca = recia.Reciasiento(cxms2)
-    rows = rca.get_geoesp_all(lat, long)
+    g = geo.LatLong(cxpg)
+    rows = g.get_geo(lat, long)
     if rows:
-        return jsonify(dep=rca.dep,
-                       departamento=rca.departamento,
-                       prov=rca.prov,
-                       provincia=rca.provincia,
-                       sec=rca.sec,
-                       municipio=rca.municipio,
-                       nrocircun=rca.nrocircun)
+        return jsonify(dep=g.dep,
+                       departamento=g.departamento,
+                       prov=g.prov,
+                       provincia=g.provincia,
+                       sec=g.sec,
+                       municipio=g.municipio,
+                       nrocircun=g.nrocircun)
     else:
         return jsonify(dep='---',
                        departamento='CIRCUNSCRIPCION',
@@ -1198,7 +1197,7 @@ def zonas(idloc, iddist, ban):
                            request.form['fechaIngreso'][:-7], fa, request.form['usuario'])
                 if ban == '1':
                     flash('Registro grabado !!! CORRECTAMENTE !!!')
-                    return render_template('zona.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
+                    return render_template('zonare.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
                 else:
                     rows = z.get_zonas_all(usrdep)
                     return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
@@ -1209,7 +1208,7 @@ def zonas(idloc, iddist, ban):
             rows = z.get_zonas_all(usrdep)
             return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
-        if iddist != '0':  # EDIT
+        if iddist != '0' or idloc !='0':  # EDIT
             if z.get_zonadist_idloc(idloc, iddist) == True:
                 """if a.docAct == None:
                     a.docAct = """
@@ -1232,11 +1231,11 @@ def zonasr():
     z = zo.Zonas(cxms)
     fa = request.form['factual'][:-7]
     idloc = request.form['idloc']
-    print(fa)
-    print(request.form['fingreso'][:-7])
+    nomdist = request.form['nomdist']
 
     nextidzona = z.get_next_zona(request.form['idloc'])
-    ultimodist = z.get_ultimodist(request.form['idloc'])
+    ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
+    
     z.add_zona(request.form['idloc'], nextidzona, request.form['nomzona'], \
                ultimodist, request.form['fingreso'][:-7], fa, request.form['usuario'])
 
@@ -1266,7 +1265,7 @@ def zonasre():
         if ban != 0:
             print('Otra Cosa')
         else:
-            return render_template('zona.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nrodist=nrodist)
+            return render_template('zonare.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nrodist=nrodist)
 
 
 @app.route('/asientoz', methods=['GET', 'POST'])
@@ -1342,7 +1341,7 @@ def reciespeciales(idreci, idlocreci):
                 rces.add_recinto(idlocreci[1], nextid, request.form['nomreci'], request.form['zonareci'], \
                                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                               ruereci, edireci, request. depenreci, \
+                               ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
                                request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF)
 

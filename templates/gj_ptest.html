@@ -39,6 +39,10 @@
     <link href="{{ url_for('static', filename='css/Control.MiniMap.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/Control.MiniMap.js') }}"></script>
 
+    <!--Street-view-->
+    <script src="{{ url_for('static', filename='js/StreetViewButtons.js') }}"></script>
+
+
     <style>
         #map {  position: relative;
                 width: 600px;
@@ -333,9 +337,18 @@
 		var rect2 = {color: "#0000AA", weight: 1, opacity:0, fillOpacity:0};
 		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
 
+
+    // Add the Street View buttons in the top left corner
+    // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
+    L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
+    // Add a marker to the centre of the map
+    var marker = L.marker(map.getCenter()).addTo(map);
+    // Make sure the marker stays in the centre when the map is moved
+    map.on('move', function() { marker.setLatLng(map.getCenter()); });
+
         </script>
 
-        <!--{{ geo_json }}-->
+    <!--{{ geo_json }}-->
     {{ gj_mun }}
 
 </body>
