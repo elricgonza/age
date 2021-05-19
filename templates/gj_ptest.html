@@ -346,7 +346,55 @@
     // Make sure the marker stays in the centre when the map is moved
     map.on('move', function() { marker.setLatLng(map.getCenter()); });
 
-        </script>
+    // add marker & popup with coord
+            /*
+            map.on('click', function(e){
+              var coord = e.latlng;
+              var lat = coord.lat;
+              var lng = coord.lng;
+              //alert('lat: ' +lat+ ' -- lng: '+ lng);
+                //L.marker([lat, lng]).addTo(map);
+              var marker = L.marker([lat, lng]).addTo(map);
+
+              var coord = e.latlng.toString().split(',');
+              var lat = coord[0].split('(');
+              var lng = coord[1].split(')');
+              //var marker = L.marker([lat, lng]).addTo(map);
+              marker.bindPopup('Latitud: ' + lat[1] + '  Longitud: ' + lng[0]);
+            })
+            */
+
+            // draggable
+                map.on('click',
+                  function mapClickListen(e) {
+                    var pos = e.latlng;
+                    console.log('map click event');
+                    var marker = L.marker(
+                      pos, {
+                        draggable: true
+                      }
+                    );
+                    marker.on('drag', function(e) {
+                      console.log('marker drag event');
+                    });
+                    marker.on('dragstart', function(e) {
+                      console.log('marker dragstart event');
+                      map.off('click', mapClickListen);
+                    });
+                    marker.on('dragend', function(e) {
+                      console.log('marker dragend event');
+                      setTimeout(function() {
+                        map.on('click', mapClickListen);
+                      }, 10);
+                    });
+                    marker.addTo(map);
+                  }
+                );
+
+
+
+
+    </script>
 
     <!--{{ geo_json }}-->
     {{ gj_mun }}
