@@ -52,6 +52,12 @@
 </head>
 <body>
     <div id="map"></div>
+    
+    <div class="row">
+      <input id="Latitude" placeholder="Latitud" name="Location.Latitude" />
+      <input id="Longitude" placeholder="Longitud" name="Location.Longitude" />
+    </div>
+
     <script>
 
 
@@ -364,7 +370,8 @@
             })
             */
 
-            // draggable
+                // draggable ok
+              /*
                 map.on('click',
                   function mapClickListen(e) {
                     var pos = e.latlng;
@@ -390,9 +397,54 @@
                     marker.addTo(map);
                   }
                 );
+              */
 
 
+                map.on('click',
+                  function mapClickListen(e) {
+                    var pos = e.latlng;
+                    console.log('map click event');
+                    var marker = L.marker(
+                      pos, {
+                        draggable: true
+                      }
+                    );
+                    marker.on('drag', function(e) {
+                      console.log('marker drag event');
+                    });
+                    marker.on('dragstart', function(e) {
+                      console.log('marker dragstart event');
+                      map.off('click', mapClickListen);
+                    });
 
+
+                    marker.on('dragend', function(event) {
+                      console.log('marker dragend event');
+                      var position = marker.getLatLng();
+                      marker.setLatLng(position, {
+                        draggable: 'true'
+                      }).bindPopup(position).update();
+
+                      $("#Latitude").val(position.lat);
+                      $("#Longitude").val(position.lng).keyup();
+                      
+
+                      setTimeout(function() {
+                        map.on('click', mapClickListen);
+                      }, 10);
+                    });
+
+                    //upd html coord
+                    $("#Latitude, #Longitude").change(function() {
+                      var position = [parseInt($("#Latitude").val()), parseInt($("#Longitude").val()) ];
+                      marker.setLatLng(position, {
+
+                      })
+                    })
+
+                    marker.addTo(map);
+                  }
+                );
 
     </script>
 
