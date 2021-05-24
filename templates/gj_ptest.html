@@ -2,6 +2,10 @@
 <html>
 <head>
     <title>Map Page</title>
+    <!--jquery-- only test -->
+    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 
@@ -214,7 +218,22 @@
         }
 
 
-        var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
+        //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
+
+            var iconLoc = L.icon({
+              iconUrl: '../static/iconos/icons8-street-view-48.png',
+              iconSize: [48, 48]
+            });
+
+            var locLayer = L.geoJson( {{ geo_json | safe }}, {
+              pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {icon: iconLoc});
+            },
+              onEachFeature: forEachFeature, style: style
+            });
+
+
+
         var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
         var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
         //var circunLayer = L.geoJson( {{ gj_circun | safe }}, {onEachFeature: forEachFeatureCircun, style: style});
@@ -348,7 +367,12 @@
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
     L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
     // Add a marker to the centre of the map
-    var marker = L.marker(map.getCenter()).addTo(map);
+            var iconStreet = L.icon({
+              iconUrl: '../static/iconos/icons8-street-view-48.png',
+              iconSize: [64, 64]
+            })
+    //var marker = L.marker(map.getCenter()).addTo(map);
+            var marker = L.marker(map.getCenter(), {icon:iconStreet}).addTo(map);
     // Make sure the marker stays in the centre when the map is moved
     map.on('move', function() { marker.setLatLng(map.getCenter()); });
 
@@ -425,8 +449,8 @@
                         draggable: 'true'
                       }).bindPopup(position).update();
 
-                      $("#Latitude").val(position.lat);
-                      $("#Longitude").val(position.lng).keyup();
+                      $("#Latitude").val(position.lat.toFixed(5));
+                      $("#Longitude").val(position.lng.toFixed(5)).keyup();
                       
 
                       setTimeout(function() {
