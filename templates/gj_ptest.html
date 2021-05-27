@@ -46,6 +46,13 @@
     <!--Street-view-->
     <script src="{{ url_for('static', filename='js/StreetViewButtons.js') }}"></script>
 
+    <!--markerClusterGroup-->
+    <link href="{{ url_for('static', filename='css/MarkerCluster.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/MarkerCluster.Default.css') }}" rel="stylesheet" media="screen">
+    <!--<script src="{{ url_for('static', filename='js/MarkerClusterGroup.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/markercluster-src.js') }}"></script>
+
+
 
     <style>
         #map {  position: relative;
@@ -221,8 +228,8 @@
         //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
 
             var iconLoc = L.icon({
-              iconUrl: '../static/iconos/icons8-street-view-48.png',
-              iconSize: [48, 48]
+              iconUrl: '../static/iconos/icons8-map-pin-30.png',
+              iconSize: [30, 30]
             });
 
             var locLayer = L.geoJson( {{ geo_json | safe }}, {
@@ -471,6 +478,12 @@
                     map.addLayer(marker);
                   }
                 );
+
+      // add markerClusterGroup
+              var markersMCG = L.markerClusterGroup();
+            markersMCG.addLayer(locLayer);
+            map.AddLayer(marker);
+
 
     </script>
 
