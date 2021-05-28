@@ -35,9 +35,10 @@
     <link href="{{ url_for('static', filename='css/leaflet-search.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet-search.js') }}"></script>
   
-    <!--locate-->
+    <!--locate
     <link href="{{ url_for('static', filename='css/Locate.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/Locate.js') }}"></script>
+    -->
 
     <!--mini-map-->
     <link href="{{ url_for('static', filename='css/Control.MiniMap.css') }}" rel="stylesheet" media="screen">
@@ -224,6 +225,11 @@
           return '<a href="#">'+text+'<em style="background:'+text+'; width:14px;height:14px;float:right"></em></a>';
         }
 
+      // add markerClusterGroup
+              var markersMCG = L.markerClusterGroup();
+            //markersMCG.addLayer(locLayer);
+            //map.AddLayer(markersMCG);
+
 
         //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
 
@@ -234,7 +240,10 @@
 
             var locLayer = L.geoJson( {{ geo_json | safe }}, {
               pointToLayer: function (feature, latlng) {
-                return L.marker(latlng, {icon: iconLoc});
+                //ok/ return L.marker(latlng, {icon: iconLoc});
+                var lm = L.marker(latlng, {icon: iconLoc});
+                markersMCG.addLayer(lm);
+                return lm;
             },
               onEachFeature: forEachFeature, style: style
             });
@@ -256,7 +265,8 @@
         var overlayMaps = {
             "Localidades":locLayer,
             "Municipios":munLayer,
-            "Provincias":provLayer
+          "Provincias":provLayer,
+          "cluster":markersMCG
         };	
             //"Circunscripciones":circunLayer
           
@@ -479,16 +489,11 @@
                   }
                 );
 
-      // add markerClusterGroup
-              var markersMCG = L.markerClusterGroup();
-            markersMCG.addLayer(locLayer);
-            map.AddLayer(marker);
-
 
     </script>
 
     <!--{{ geo_json }}-->
-    {{ gj_mun }}
+    <!--{{ gj_mun }}-->
 
 </body>
 </html>
