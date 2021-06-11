@@ -12,25 +12,77 @@ function getgeoext(event) {
 function getgeoesp(event) {
     var x = event.keyCode;
     //alert(x)
+    var ban=0;
     if (x == 27 || x == 9 || 'undefined') {
             $.getJSON('/get_geo_esp', {
                 latitud: $('input[name="latitud"]').val(),
                 longitud: $('input[name="longitud"]').val()
             }, function(data) {
-                console.log(data);
                 document.getElementById("ideploc").setAttribute("value", data.dep)
                 document.getElementById("idepartamento").setAttribute("value", data.departamento)
                 document.getElementById("iprovloc").setAttribute("value", data.prov)
                 document.getElementById("iprovincia").setAttribute("value", data.provincia)
                 document.getElementById("isecloc").setAttribute("value", data.sec)
                 document.getElementById("imunicipio").setAttribute("value", data.municipio)
-                document.getElementById("icircun").setAttribute("value", data.nrocircun)
+                //document.getElementById("icircun").setAttribute("value", data.dep);
+                //document.getElementById("icircun").setAttribute("value", circun(3));
+                switch(data.dep){
+                    case 2:{
+                        document.getElementById("icircun").setAttribute("value", '1');
+                        $('#icircun').css('color', 'black');
+                    }
+                    break;
+                    case 3:{
+                        document.getElementById("icircun").setAttribute("value", '2');
+                        $('#icircun').css('color', 'black');   
+                    }
+                    break;
+                    case 4:{
+                        document.getElementById("icircun").setAttribute("value", '3');
+                        $('#icircun').css('color', 'black');   
+                    }
+                    break;
+                    case 6:{
+                        document.getElementById("icircun").setAttribute("value", '4');
+                        $('#icircun').css('color', 'black');   
+                    }
+                    break;
+                    case 7:{
+                        document.getElementById("icircun").setAttribute("value", '5');   
+                    }
+                    break;
+                    case 8:{
+                        document.getElementById("icircun").setAttribute("value", '6');
+                        $('#icircun').css('color', 'black');  
+                    }
+                    break;
+                    case 9:{
+                        document.getElementById("icircun").setAttribute("value", '7');
+                        $('#icircun').css('color', 'black');  
+                    }
+                    break;
+                    default:{ 
+                        document.getElementById("icircun").setAttribute("value", 'No Hay');
+                        $('#icircun').css('color', 'red');
+                    } 
+                    break;
+                }
             });
-          
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
 } //getgeo
 
+/*function circun(valor){
+    $.getJSON("/get_circun", {
+            valor: valor
+        }, function(datos){                
+            $.each(datos, function(index, obj){
+                if(obj[0]==valor){
+                    return obj[1];
+                }           
+            });
+    });
+}*/
 
 function getgeo(event) {
     var x = event.keyCode;

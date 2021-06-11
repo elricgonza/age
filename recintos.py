@@ -53,7 +53,7 @@ class Recintos:
             "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
             "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
-            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF " + \
+            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -99,6 +99,7 @@ class Recintos:
             self.doc_idAF = row[26]
             self.rutaA = row[27]
             self.rutaAF = row[28]
+            self.nomloc = row[29]
             return True
 
 

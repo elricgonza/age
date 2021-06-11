@@ -541,7 +541,7 @@
     // Below Function Executes On Form Submit
     function Validation(f) {
         if (f.tiporeci.value == '') {
-            alert('Debe especificar tipo de circunscripción...');
+            alert('Debe especificar tipo de Recinto...');
             return false;
         }
 
@@ -651,7 +651,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <button type="button" id="cerrar" onclick="javascript: window.close();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="cerrar" onclick="cerrarmodal();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="submit" id="button" class="btn btn-outline-success btn-md btn-block" 
@@ -667,6 +667,14 @@
 </div>
 <script type="text/javascript">
     function enviar(){
+        var valor = document.getElementById("inomzona").value;
+        if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
+          return false;
+        }
+        var indice = document.getElementById("inomdist").selectedIndex;
+        if( indice == null || indice == 0 ) {
+          return false;
+        }
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
         var circundist = document.getElementById('inrodist').value;
@@ -697,6 +705,10 @@
                $('#exampleModal').modal('hide');
                $('#successAlert').hide();
                $('#errorAlert').hide();
+               $('#iasiento').html('');
+               $("#iasiento").append('<option></option>');
+               $('#izonareci').html('');
+               $("#izonareci").append('<option></option>');
         }, 3000);
         /*$('#button').submit(function(e) {
                e.preventDefault();
@@ -705,10 +717,10 @@
         });*/
     }
     function cerrarmodal(){
-        $('#successAlert').hide();
-        $('#errorAlert').hide();
-        $('#cerrar').modal('hide');
-        cargar(this.value, 5)
+        $("#iasiento").val('0');
+        $('#izonareci').html('');
+        $("#izonareci").append('<option></option>');
+        window.close();
     }
 </script>
 <!-- Otro Modal -->
@@ -720,7 +732,8 @@
         <div class="col-md-11">  
           <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>  
           <div class="modal-body">    
-            <form id="form1" action="{{ url_for('zonasre') }}" target="_blank" class="needs-validation" novalidate method="POST">                
+            <form id="form1" action="{{ url_for('zonasre') }}" target="_blank" class="needs-validation" novalidate method="POST">
+                <input type="hidden" name="nomloc" value="{{ rc.nomloc }}">                
                 <div class="row">
                     <div class="col-md-3">
                         <label for="idloc">IdLoc:</label>

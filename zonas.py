@@ -14,10 +14,10 @@ class Zonas:
         s = "select d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[DIST] d " + \
             "left join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist "
         if usrdep != 0 :
-            s = s + " where l.DepLoc = %d order by d.IdLocDist, d.Dist"
+            s = s + " where l.DepLoc = %d and d.Dist>0 order by d.IdLocDist, d.Dist"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " order by d.IdLocDist, d.Dist"
+            s = s + " where d.Dist>0 order by d.IdLocDist, d.Dist"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -88,7 +88,7 @@ class Zonas:
         up_zonadist = idloc, iddist
         s = "select l.IdLoc, l.NomLoc, d.Dist, d.CircunDist, d.NomDist, d.fechaIngreso, d.fechaAct, d.usuario " + \
             "from [GeografiaElectoral_app].[dbo].[DIST] d " + \
-            "left join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist " + \
+            "inner join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist " + \
             "where d.IdLocDist= %d and d.Dist= %d"
         self.cur.execute(s, up_zonadist)
         row = self.cur.fetchone()
@@ -126,10 +126,13 @@ class Zonas:
         row = self.cur.fetchone()
         return row[0]
 
-    def get_ultimodist(self, idloc):
-        s = "select max(dist) from GeografiaElectoral_app.dbo.dist where IdLocDist = %d"
-        self.cur.execute(s, idloc)
+    def get_ultimodist(self, nomdist, idloc):
+        con1 = nomdist, idloc
+        s = "select max(dist) from GeografiaElectoral_app.dbo.dist where Dist = %d and IdLocDist = %d"
+        self.cur.execute(s, con1)
         row = self.cur.fetchone()
         return row[0]
+
+
 
     

@@ -12,13 +12,25 @@
     <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
     <br>    
     <div id="login-row" class="row justify-content-center align-items-center">
+        {% with messages = get_flashed_messages(with_categories=false) %}
+          {% if messages %}        
+            {% for message in messages %}         
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+            {% endfor %}        
+          {% endif %}
+        {% endwith %}
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
-                <form action="" class="needs-validation" novalidate method="POST">                
+                <form action="{{ url_for('zonas', idloc = 0, iddist = 0, ban = 1) }}" class="needs-validation" novalidate method="POST">                
                     <div class="row">
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
-                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required onkeydown="asientoZona(event)" 
+                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
                                     {% if load %}
                                         value="{{ z.idloc }}"
                                       {% else %}
@@ -32,6 +44,8 @@
                             <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
                                     {% if load %}
                                         value="{{ z.nomloc }}"
+                                    {% else %}
+                                        value="{{ nomloc }}"
                                     {% endif %}
                                 >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
@@ -40,7 +54,7 @@
                     <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
                     <div class="row">
                         <div class="col-md-2">
-                            <label for="nrodist">Nro.:</label>
+                            <label for="nrodist">Circun.:</label>
                             <input type="text" class="form-control" maxlength="2" id="inrodist" placeholder="Nro." name="nrodist" required
                                 {% if load %}
                                     value="{{ z.circundist }}"
@@ -101,10 +115,27 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <button type="button" onclick="javascript: window.location.href = '/zonas_list';" class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+                            <button type="button"
+                            {% if load_d %}  
+                                    onclick="javascript: window.close();"
+                                {% else %}
+                                    onclick="javascript: window.close();"
+                            {% endif %}      
+                            class="btn btn-outline-danger btn-md btn-block">
+                            {% if load_d %}
+                                    Cerrar
+                                {% else %}
+                                    Cancelar
+                            {% endif %}        
+                            </button>
                         </div>
                         <div class="col-md-6 mb-3">
                             <button type="submit" class="btn btn-outline-success btn-md btn-block"
+                            {% if load_d %}
+                                disabled
+                            {% else %}
+                                enabled
+                            {% endif %}
                             >Aceptar</button>
                         </div>
                     </div> <!--row-->

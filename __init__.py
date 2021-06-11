@@ -863,6 +863,8 @@ def recinto(idreci, idlocreci):
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
                                request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF)
 
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+
                 rows = rc.get_recintos_all(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
         else: # Es Edit
@@ -874,6 +876,8 @@ def recinto(idreci, idlocreci):
                                ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'], fa, \
                                usr, request.form['etapa'], request.form['docAct'], docActF)
+
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rc.get_recintos_all(usrdep)
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
@@ -1023,6 +1027,8 @@ def reciespe(idreci, idlocreci):
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
                                request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'])
 
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+
                 rows = rce.get_reciespe_all(usrdep)
                 return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
         else: # Es Edit
@@ -1034,6 +1040,8 @@ def reciespe(idreci, idlocreci):
                                ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'], fa, \
                                usr, request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'])
+
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rce.get_reciespe_all(usrdep)
             return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
@@ -1061,17 +1069,16 @@ def reciespe(idreci, idlocreci):
 def get_geo_esp():
     lat = request.args.get('latitud', 0, type=float)
     long = request.args.get('longitud', 0, type=float)
-    cxms2 = dbcn.get_db_ms()
-    rca = recia.Reciasiento(cxms2)
-    rows = rca.get_geoesp_all(lat, long)
+    g = geo.LatLong(cxpg)
+    rows = g.get_geo(lat, long)
     if rows:
-        return jsonify(dep=rca.dep,
-                       departamento=rca.departamento,
-                       prov=rca.prov,
-                       provincia=rca.provincia,
-                       sec=rca.sec,
-                       municipio=rca.municipio,
-                       nrocircun=rca.nrocircun)
+        return jsonify(dep=g.dep,
+                       departamento=g.departamento,
+                       prov=g.prov,
+                       provincia=g.provincia,
+                       sec=g.sec,
+                       municipio=g.municipio,
+                       nrocircun=g.nrocircun)
     else:
         return jsonify(dep='---',
                        departamento='CIRCUNSCRIPCION',
@@ -1093,6 +1100,19 @@ def get_pueblos_all():
         return jsonify(0)
 
     cxms2.close()
+
+"""@app.route('/get_circun', methods=['GET', 'POST'])
+def get_circun():
+    valor = request.args.get('valor')
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_circun(valor)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()"""
 
 #========== Modulo Zonas y Distritos ============#
 
@@ -1132,8 +1152,8 @@ def zonas(idloc, iddist, ban):
                 z.add_dist(request.form['idloc'], nextiddist, request.form['nrodist'], request.form['nomdist'], \
                            request.form['fechaIngreso'][:-7], fa, request.form['usuario'])
                 if ban == '1':
-                    flash('Registro grabado !!! CORRECTAMENTE !!!')
-                    return render_template('zona.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
+                    #flash('Registro grabado !!! CORRECTAMENTE !!!')
+                    return render_template('zonare.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
                 else:
                     rows = z.get_zonas_all(usrdep)
                     return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
@@ -1144,7 +1164,7 @@ def zonas(idloc, iddist, ban):
             rows = z.get_zonas_all(usrdep)
             return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
-        if iddist != '0':  # EDIT
+        if iddist != '0' or idloc !='0':  # EDIT
             if z.get_zonadist_idloc(idloc, iddist) == True:
                 """if a.docAct == None:
                     a.docAct = """
@@ -1167,11 +1187,11 @@ def zonasr():
     z = zo.Zonas(cxms)
     fa = request.form['factual'][:-7]
     idloc = request.form['idloc']
-    print(fa)
-    print(request.form['fingreso'][:-7])
+    nomdist = request.form['nomdist']
 
     nextidzona = z.get_next_zona(request.form['idloc'])
-    ultimodist = z.get_ultimodist(request.form['idloc'])
+    ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
+    
     z.add_zona(request.form['idloc'], nextidzona, request.form['nomzona'], \
                ultimodist, request.form['fingreso'][:-7], fa, request.form['usuario'])
 
@@ -1194,6 +1214,11 @@ def zonasre():
             idloc = request.form.get('idlocreci1', 0)
         else:
             idloc = request.form['idlocreci1']
+        print(request.form.get('nomloc'))    
+        if request.form.get('nomloc') == None:
+            nomloc = request.form.get('nomloc', 0)
+        else:
+            nomloc = request.form['nomloc']
         if request.form.get('nrodist1') == None:
             nrodist = request.form.get('nrodist1', 0)
         else:
@@ -1201,7 +1226,7 @@ def zonasre():
         if ban != 0:
             print('Otra Cosa')
         else:
-            return render_template('zona.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nrodist=nrodist)
+            return render_template('zonare.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
 
 
 @app.route('/asientoz', methods=['GET', 'POST'])
@@ -1277,9 +1302,11 @@ def reciespeciales(idreci, idlocreci):
                 rces.add_recinto(idlocreci[1], nextid, request.form['nomreci'], request.form['zonareci'], \
                                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                               ruereci, edireci, request. depenreci, \
+                               ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
                                request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF)
+
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
                 rows = rces.get_reciespeciales_all(usrdep)
                 return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
@@ -1293,6 +1320,8 @@ def reciespeciales(idreci, idlocreci):
                                request.form['pisosreci'], request.form['fechaIngreso'], fa, \
                                usr, request.form['etapa'], request.form['docAct'], docActF)
 
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+            
             rows = rces.get_reciespeciales_all(usrdep)
             return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
@@ -1319,7 +1348,7 @@ def reciespeciales(idreci, idlocreci):
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
 def get_provespeciales_all():
     cxms2 = dbcn.get_db_ms()
-    rces = recies.Reciespeciales(cxm2)
+    rces = recies.Reciespeciales(cxms2)
     rows = rces.get_provespeciales_all(usrdep)
     if rows:
         return jsonify(rows)
@@ -1403,103 +1432,98 @@ def logout():
     logout_user()
     return render_template('/logout.html')  # render a template
 
+""" Inicio de Indicadores """
 
-@app.route('/asiento_ind/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
+@app.route('/asiento_indicadores/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
 @login_required
-def asiento_ind(idloc, nomloc):
-    """
-    Modulo Indicadores Socio Econimicos
-    """
-    # conexiones a las tablas
-    ind_cat = indcate.Indcate(cxms)
-    ind_subcate = indsubcate.Indsubcate(cxms)
+def asiento_indicadores(idloc, nomloc):
     lc = loc_cate.LocCate(cxms)
+    ctgoria = lc.get_loc_cates(idloc);
+    cate = lc.get_categorias_all();
+    subctgoria = lc.get_subcategorias_all1();
+    return render_template('asiento_ind.html', nomloc=nomloc, idloc=idloc, ctgorias=ctgoria, subctgorias=subctgoria, cates=cate, load=False, puede_editar='Asientos - Edición' in permisos_usr)
 
-    with_cate = lc.get_loc_cates(idloc) # False or rows-img
 
+@app.route('/insertar_indicador', methods=['GET', 'POST'])
+@login_required
+def insertar_indicador():
+    lc = loc_cate.LocCate(cxms)
     error = None
-    print(request.method + ' TIPO')
     if request.method == 'POST':
-        fa = str(datetime.datetime.now())[:-7]
-        cat_ids_ = request.form.getlist('imgsa[]')  # options CATEGORIAS for Asiento
-        cat_ids = list(cat_ids_[0].split(","))      # list ok
-
-        # EN PANTALLA PARA NUEVO, SI NO HAY INDICADOR CREADO => SE SALE A LA LISTA DE ASIENTOS
-        print('EXISTE REGISTRO ' + cat_ids[0])
-        print(with_cate)
-
-        if len(with_cate) :
-            if  with_cate[0] != '' and cat_ids[0] == '':
-                lc.del_loc_cate(with_cate[0])
-                return redirect(url_for('asientos_list'))
-
-        if cat_ids[0] == '':
-            return redirect(url_for('asientos_list'))
-        else:
-            categ_ids = [int(x) for x in cat_ids]
-        subcat_ids_ = request.form.getlist('filesa[]')  # options SUBCATEGORIAS for Asiento
-        subcat_ids = list(subcat_ids_[0].split(","))      # list ok
-        subcateg_ids = [int(x) for x in subcat_ids]    # lista con ids de subcategorias
-
-        ind_obs_ = request.form.getlist('filesv[]')  # options Observaciones for Asiento
-        ind_obs = list(ind_obs_[0].split(","))      # list ok  observaciones
-
-        # DE LA CONSULTA CON idloc, si hay registros OBTENIDOS  => actualizar
-        if with_cate:
-            # verifica si todos loa elementos a ACTUALIZAR son distinos
-            lc.del_loc_cate(idloc)
-            for n in range(len(cat_ids)):
-                # Graba
-                lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
-                fa, \
-                usr, \
-                fa)
+        fechaAct = str(datetime.datetime.now())[:-7]
+        fechaIngreso = str(datetime.datetime.now())[:-7]
+        loc_id = request.form['loc_id']
+        nomloc = request.form['nomloc']
+        cate_id = request.form['categoria']
+        subcate_id = request.form['subcategoria']
+        obs = request.form['obs']
+        nextid = lc.get_next_idloccate(loc_id)
+        lc.add_loc_cate(loc_id, cate_id, subcate_id, obs, fechaAct, usr, fechaIngreso, nextid)
+        ctgoria = lc.get_loc_cates(loc_id);
+        cate = lc.get_categorias_all();
+        return render_template('asiento_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asientos - Edición' in permisos_usr)
 
 
-        # DE LA CONSULTA CON idloc, si NO hay registros  => CREAR NEW para 'loc_cate'
-        else:
-            #INSERTANDO NEW DATOS
-            # verifica si todos loa elementos a INSERTAR son distinos
-            if(len(categ_ids) == len(set(categ_ids))):
-                for n in range(len(cat_ids)):
-                    #print(f'{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
-                    #GUARDANDO DATOS
-                    lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
-                        fa, \
-                        usr, \
-                        fa)
+@app.route('/modificar_indicador', methods=['GET', 'POST'])
+@login_required
+def modificar_indicador():
+    lc = loc_cate.LocCate(cxms)
+    error = None
+    if request.method == 'POST':
+        fechaAct = str(datetime.datetime.now())[:-7]
+        loc_id = request.form['loc_id']
+        nomloc = request.form['nomloc']
+        sec = request.form['sec']
+        cate_id = request.form['categoria']
+        subcate_id = request.form['subcategoria']
+        obs = request.form['obs']
+        lc.upd_loc_cate(loc_id, cate_id, subcate_id, obs, fechaAct, usr, sec)
+        ctgoria = lc.get_loc_cates(loc_id);
+        cate = lc.get_categorias_all();
+        return render_template('asiento_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asientos - Edición' in permisos_usr)
 
-            else:
-                #GRABA
-                for n in range(len(cat_ids)):
-                    #print(f'{idloc}, {cat_ids[n]}, {subcateg_ids[n]}')
-                    #GUARDANDO DATOS
-                    lc.add_loc_cate(idloc, cat_ids[n], subcateg_ids[n], ind_obs[n], \
-                        fa, \
-                        usr, \
-                        fa)
 
-        return redirect(url_for('asientos_list'))
+@app.route('/eliminar_indicador', methods=['GET', 'POST'])
+@login_required
+def eliminar_indicador():
+    lc = loc_cate.LocCate(cxms)
+    error = None
+    if request.method == 'POST':
+        fechaAct = str(datetime.datetime.now())[:-7]
+        loc_id = request.form['loc_id']
+        nomloc = request.form['nomloc']
+        sec = request.form['sec']
+        lc.del_loc_cate(loc_id, sec)
+        ctgoria = lc.get_loc_cates(loc_id);
+        cate = lc.get_categorias_all();
+        return render_template('asiento_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asientos - Edición' in permisos_usr)
 
+
+@app.route('/asiento_ind', methods=['GET', 'POST'])
+@login_required
+def asiento_ind():
+    lc = loc_cate.LocCate(cxms)
+    idloc = request.args.get('idloc')
+    rows = lc.get_loc_cates(idloc)
+    if rows:
+        return jsonify(rows)
     else:
-        if with_cate:  # Edit  ENTRA LA 1RA VEZ  POR Lista Asientos[Indice]
-            #CREANDO UNA NEW ESTRUCTURA PARA DATOS REPETIDOS
-            lista_with_cate = []
-            nroReg = 0
-            for n in with_cate:
-                nroReg = nroReg + 1
-                n = list(n)
-                n.insert(0, nroReg)
-                n = tuple(n)
-                lista_with_cate.append(n)
-            #print(with_cate)
-            return render_template('asiento_ind_upd.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
-                                puede_editar='Asientos - Edición' in permisos_usr,
-                                loc_cate_loaded = with_cate, lista_with_cate=lista_with_cate)
-        else:  # New  with_cate = False
-            return render_template('asiento_ind.html', rows=ind_cat.get_cate('admin'),subcat=ind_subcate.get_subcate_all('admin'), nomloc=nomloc,
-                                puede_editar='Asientos - Edición' in permisos_usr)
+        return jsonify(0)
 
+
+@app.route('/get_subcategorias_all', methods=['GET', 'POST'])
+def get_subcategorias_all():
+    cxms2 = dbcn.get_db_ms()
+    lc = loc_cate.LocCate(cxms2)
+    cate_id = request.args.get('cate_id')
+    rows = lc.get_subcategorias_all(cate_id)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+""" Final de Indicadores """
+    
 @app.route('/paises_list', methods=['GET', 'POST'])
 @login_required
 def paises_list():

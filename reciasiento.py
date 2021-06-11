@@ -106,31 +106,6 @@ class Reciasiento:
         else:
             return rows
 
-    def get_geoesp_all(self, lat, long):
-        s = "select l.IdLoc, l.DepLoc, d.NomDep, l.ProvLoc, p.NomProv, l.SecLoc, s.NomSec, c.Circun" + \
-            " from GeografiaElectoral_app.dbo.LOC l" + \
-            " left join GeografiaElectoral_app.dbo.DEP d on l.DepLoc=d.Dep" + \
-            " left join GeografiaElectoral_app.dbo.PROV p on l.ProvLoc=p.Prov and l.DepLoc=p.DepProv" + \
-            " left join GeografiaElectoral_app.dbo.SEC s on l.SecLoc=s.Sec and l.ProvLoc=s.ProvSec and l.DepLoc=s.DepSec" + \
-            " left join GeografiaElectoral_app.dbo.ZONA z on l.IdLoc=z.IdLocZona" + \
-            " left join GeografiaElectoral_app.dbo.DIST di on l.IdLoc=di.IdLocDist and z.DistZona=di.Dist" + \
-            " left join GeografiaElectoral_app.dbo.Circun c on l.DepLoc=c.DepCircun and di.CircunDist=c.Circun" + \
-            " where l.latitud = %s and l.longitud = %s" + \
-            " group by l.IdLoc, l.DepLoc, d.NomDep, l.ProvLoc, p.NomProv, l.SecLoc, s.NomSec, c.Circun"
-        coord = lat, long
-        self.cur.execute(s, coord)
-        row = self.cur.fetchone()
-        if row == None:
-            return False
-        else:
-            self.dep = row[1]
-            self.departamento = row[2]
-            self.prov = row[3]
-            self.provincia = row[4]
-            self.sec = row[5]
-            self.municipio = row[6]
-            self.nrocircun = row[7]
-            return True
 
     def get_pueblos_all(self, dep):      
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifSubGrupo = %s order by descripcion"
@@ -141,4 +116,12 @@ class Reciasiento:
         else:
             return rows
 
+    """def get_circun(self, valor):      
+        s = "select DepCircun, Circun from [GeografiaElectoral_app].[dbo].[circun] where TipoCircun=2 and DepCircun = %d order by TipoCircun, DepCircun"
+        self.cur.execute(s, valor)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows"""
     

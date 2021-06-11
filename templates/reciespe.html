@@ -117,7 +117,7 @@
                         {% endif %}                                                                
                     {% endfor %}
                 </select>
-                <div class="invalid-feedback">Debe Seleccionar el Publo Indigena...</div>
+                <div class="invalid-feedback">Debe Seleccionar el Pueblo Indigena...</div>
             </div>
         </div> <!--row-->
         <br>
@@ -555,7 +555,7 @@
     // Below Function Executes On Form Submit
     function Validation(f) {
         if (f.tiporeci.value == '') {
-            alert('Debe especificar tipo de circunscripción...');
+            alert('Debe especificar tipo de Recinto...');
             return false;
         }
 
@@ -681,6 +681,14 @@
 </div>
 <script type="text/javascript">
     function enviar(){
+        var valor = document.getElementById("inomzona").value;
+        if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
+          return false;
+        }
+        var indice = document.getElementById("inomdist").selectedIndex;
+        if( indice == null || indice == 0 ) {
+          return false;
+        }
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
         var circundist = document.getElementById('inrodist').value;
@@ -712,6 +720,10 @@
                $('#exampleModal').modal('hide');
                $('#successAlert').hide();
                $('#errorAlert').hide();
+               $('#iasiento').html('');
+               $("#iasiento").append('<option></option>');
+               $('#izonareci').html('');
+               $("#izonareci").append('<option></option>');
         }, 3000);
         /*$('#button').submit(function(e) {
                e.preventDefault();
@@ -720,10 +732,10 @@
         });*/
     }
     function cerrarmodal(){
-        $('#successAlert').hide();
-        $('#errorAlert').hide();
-        $('#cerrar').modal('hide');
-        cargar(this.value, 5)
+        $("#iasiento").val('0');
+        $('#izonareci').html('');
+        $("#izonareci").append('<option></option>');
+        window.close();
     }
 </script>
 <!-- Otro Modal -->
