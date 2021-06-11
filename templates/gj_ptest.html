@@ -57,8 +57,8 @@
 
     <style>
         #map {  position: relative;
-                width: 600px;
-                height: 775px;
+                width: 1300px;
+                height: 900px;
                 border: 3px solid #000000;}
     </style>    
 </head>
@@ -264,9 +264,9 @@
 
         var overlayMaps = {
             "Localidades":locLayer,
+          "Cluster-Loc":markersMCG,
             "Municipios":munLayer,
-          "Provincias":provLayer,
-          "cluster":markersMCG
+          "Provincias":provLayer
         };	
             //"Circunscripciones":circunLayer
           
@@ -352,7 +352,7 @@
 			textErr: 'Localidad NO encontrada... '
     });
 
-    map.addControl(searchControlLoc);
+    map.addControl(searchControlLoc);   // add control & checked locLayer
 
   // to locMunic Search
     var searchControlMun = new L.Control.Search({
