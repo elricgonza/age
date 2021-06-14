@@ -53,6 +53,9 @@
     <!--<script src="{{ url_for('static', filename='js/MarkerClusterGroup.js') }}"></script> -->
     <script src="{{ url_for('static', filename='js/markercluster-src.js') }}"></script>
 
+    <!--easybutton-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
 
 
     <style>
@@ -380,18 +383,6 @@
 		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
 
 
-    // Add the Street View buttons in the top left corner
-    // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
-    L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
-    // Add a marker to the centre of the map
-            var iconStreet = L.icon({
-              iconUrl: '../static/iconos/icons8-street-view-48.png',
-              iconSize: [64, 64]
-            })
-    //var marker = L.marker(map.getCenter()).addTo(map);
-            var marker = L.marker(map.getCenter(), {icon:iconStreet}).addTo(map);
-    // Make sure the marker stays in the centre when the map is moved
-    map.on('move', function() { marker.setLatLng(map.getCenter()); });
 
     // add marker & popup with coord
             /*
@@ -441,8 +432,8 @@
               */
 
 
-                map.on('click',
-                  function mapClickListen(e) {
+                map.on('dblclick',
+                  function mapDblClickListen(e) {
                     var pos = e.latlng;
                     console.log('map click event');
                     var marker = L.marker(
@@ -455,7 +446,7 @@
                     });
                     marker.on('dragstart', function(e) {
                       console.log('marker dragstart event');
-                      map.off('click', mapClickListen);
+                      map.off('dblclick', mapDblClickListen);
                     });
 
 
@@ -471,7 +462,7 @@
                       
 
                       setTimeout(function() {
-                        map.on('click', mapClickListen);
+                        map.on('dblclick', mapDblClickListen);
                       }, 10);
                     });
 
@@ -488,6 +479,36 @@
                     map.addLayer(marker);
                   }
                 );
+
+    //----- Add the Street View buttons in the top left corner -----
+    // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
+            var iconStreet = L.icon({
+              iconUrl: '../static/iconos/icons8-street-view-48.png',
+              iconSize: [64, 64]
+            })
+            //var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet}).addTo(map);
+            var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet});
+    // Make sure the marker stays in the centre when the map is moved
+    map.on('move', function() { marker_gsv.setLatLng(map.getCenter()); });
+
+      //----- Add easyButton - gsv -----
+        var sw_marker_gsv = 0;
+          var helloPopup = L.popup().setContent('Servicio: Google Street View (GSV) y otros Habilitado...');
+
+      L.easyButton('fa-globe', function(btn, map){
+        if (sw_marker_gsv == 0) {
+              L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
+              helloPopup.setLatLng(map.getCenter()).openOn(map);
+              marker_gsv.addTo(map);
+              sw_marker_gsv = 1;
+            }
+        else {
+            //map.removeControl(MyStreetView);
+            map.removeLayer(marker_gsv);
+            sw_marker_gsv = 0;
+          }
+          }).addTo(map);
+
 
 
     </script>
