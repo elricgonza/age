@@ -82,6 +82,37 @@
 
       L.Control.measureControl().addTo(map);
 
+    //----- Add the Street View buttons in the bottom left corner -----
+    // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
+    var iconStreet = L.icon({
+        iconUrl: '../static/iconos/icons8-street-view-52.png',
+        iconSize: [52, 52]
+        })
+    var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet});
+    map.on('move', function() { marker_gsv.setLatLng(map.getCenter()); });
+
+      //----- Add easyButton gsv - StreetView-----
+      var sw_marker_gsv = 0;
+      var gsvPopup = L.popup().setContent('<u><i>Servicio</i></u>: <b>Google Street View (GSV)</b> \
+              y otros Habilitado. Ubique posición y presione click en opciones  \
+              (ubicado en la parte inferior/izquierda) ');
+
+      L.easyButton('<img src="../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
+        if (sw_marker_gsv == 0) {
+           sv = L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
+           gsvPopup.setLatLng(map.getCenter()).openOn(map);
+           marker_gsv.addTo(map);
+           sw_marker_gsv = 1;
+           }
+        else {
+           sv.remove();
+           map.removeLayer(marker_gsv);
+           gsvPopup.removeFrom(map);
+           sw_marker_gsv = 0;
+           }
+        },'Habilitar Google Street View').addTo(map);
+      // end Street View - easyButton
+
 /*
 		L.control.coordinates().addTo(map);
       
@@ -292,6 +323,9 @@
 		map.doubleClickZoom.enable();
     map.scrollWheelZoom.enable();
 
+
+
+
 		map.addControl( new L.Control.Search({
 			url: 'https://nominatim.openstreetmap.org/search?format=json&accept-language=de-DE&q={s}',
 			jsonpParam: 'json_callback',
@@ -479,36 +513,6 @@
                     map.addLayer(marker);
                   }
                 );
-
-    //----- Add the Street View buttons in the top left corner -----
-    // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
-            var iconStreet = L.icon({
-              iconUrl: '../static/iconos/icons8-street-view-48.png',
-              iconSize: [64, 64]
-            })
-            //var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet}).addTo(map);
-            var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet});
-    // Make sure the marker stays in the centre when the map is moved
-    map.on('move', function() { marker_gsv.setLatLng(map.getCenter()); });
-
-      //----- Add easyButton - gsv -----
-        var sw_marker_gsv = 0;
-          var helloPopup = L.popup().setContent('Servicio: Google Street View (GSV) y otros Habilitado...');
-
-      L.easyButton('fa-globe', function(btn, map){
-        if (sw_marker_gsv == 0) {
-              L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
-              helloPopup.setLatLng(map.getCenter()).openOn(map);
-              marker_gsv.addTo(map);
-              sw_marker_gsv = 1;
-            }
-        else {
-            //map.removeControl(MyStreetView);
-            map.removeLayer(marker_gsv);
-            sw_marker_gsv = 0;
-          }
-          }).addTo(map);
-
 
 
     </script>
