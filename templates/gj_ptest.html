@@ -81,7 +81,6 @@
 
       // Set up map
       var mapCenter = [-17.05678, -64.81934];
-      //var map = L.map('map').setView([-17.05678,-64.81934],6);
       var map = L.map('map', {
         defaultExtentControl: true,
         center: mapCenter,
@@ -151,15 +150,6 @@
         var url = 'usa.json';  // my GeoJSON data source, in same folder as my html page.
 
           
-		var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-		var osmAttrib='Map data &copy; OpenStreetMap contributors';
-          var osm=new L.tileLayer(osmUrl,{ 
-                attribution: osmAttrib}).addTo(map);
-          
-		var topoUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
-		var topoAttribution = 'Kartendaten: &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-			topo = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttribution});
-            
           
         // Set style function that sets fill color property
         function style(feature) {
@@ -254,8 +244,6 @@
 
       // add markerClusterGroup
               var markersMCG = L.markerClusterGroup();
-            //markersMCG.addLayer(locLayer);
-            //map.AddLayer(markersMCG);
 
 
         //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
@@ -267,7 +255,6 @@
 
             var locLayer = L.geoJson( {{ geo_json | safe }}, {
               pointToLayer: function (feature, latlng) {
-                //ok/ return L.marker(latlng, {icon: iconLoc});
                 var lm = L.marker(latlng, {icon: iconLoc});
                 markersMCG.addLayer(lm);
                 return lm;
@@ -282,6 +269,51 @@
         //var circunLayer = L.geoJson( {{ gj_circun | safe }}, {onEachFeature: forEachFeatureCircun, style: style});
 
          provLayer.addTo(map);
+
+      // baseMaps - overlayMaps
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osmAttrib = 'only osmAttrib',
+            landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
+            thunAttrib = 'only Attrib',
+            googleSatUrl = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+            googleMapUrl = 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
+            mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibzJicGlja2luIiwiYSI6ImNpbXUyMzNldTAyNTF1cmtrZXdnbWZycDIifQ.JdYE50MBxDn1fdZtVFYXZw';
+
+        var osmMap = L.tileLayer(osmUrl, {attribution: ''}),
+            landMap = L.tileLayer(landUrl, {attribution: ''}),
+            googleSat = L.tileLayer(googleSatUrl, {Attribution: 'gsat'}),
+            googleMap = L.tileLayer(googleMapUrl, {Attribution: 'gmap'}),
+            mbStreet = L.tileLayer(mbUrl, {id: 'mapbox.streets', attribution: 'mbSat'}), 
+            mbSat = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: 'mbSat'}) ;
+
+        var map = L.map('map', {
+			    layers: [googleSat] // only add one!
+		    })
+		    .setView([lat, lon], 15);
+
+		var baseLayers = {
+			"OSM Mapnik": osmMap,
+			"Landscape": landMap,
+			"Google Satellite": googleSat,
+            "Google Map": googleMap,
+            "MapBox Satellite": mbSat,
+            "MapBox Streets": mbStreet
+		};
+
+
+		L.control.layers(baseLayers).addTo(map);
+      // adapt
+
+		var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var osmAttrib='Map data &copy; OpenStreetMap contributors';
+    var osm=new L.tileLayer(osmUrl,{ 
+                attribution: osmAttrib}).addTo(map);
+          
+		var topoUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+		var topoAttribution = 'Kartendaten: &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+	  topo = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttribution});
+            
 
         // for Layer Control	
         var baseMaps = {
