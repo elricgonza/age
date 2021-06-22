@@ -61,17 +61,62 @@
     <link href="{{ url_for('static', filename='css/leaflet.defaultextent.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet.defaultextent.js') }}"></script>
 
+    <!--bing-->
+    <script src="{{ url_for('static', filename='js/leaflet-bing-layer.js') }}"></script>
 
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"
+    integrity="sha512-myckXhaJsP7Q7MZva03Tfme/MSF5a6HC2xryjAM4FxPLHGqlh5VALCbywHnzs2uPoF/4G/QVXyYDDSkp5nPfig=="
+    crossorigin=""></script>
+
+
+    <!--
     <style>
         #map {  position: relative;
                 width: 1100px;
                 height: 720px;
                 border: 3px solid #000000;}
     </style>    
+    -->
+    <style>
+        body {
+          padding: 0;
+          margin: 0;
+        }
+        html, body, #map {
+          height: 100%;
+        }
+    </style>
+
+    <style>
+  #recipro-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 70px;
+    z-index: 400;
+    background: white;
+    padding: 6px;
+  }
+  #basemaps {
+    margin-bottom: 5px;
+  }
+</style>
+
 </head>
 <body>
     <div id="map"></div>
-    
+
+<div id="recipro-wrapper" class="leaflet-bar">
+  <select id="recipro">
+    <option value="Nuevos">Nuevos</option>
+    <option value="Suprimidos">Suprimidos/Suspendidos</option>
+    <option value="Actualizados">Actualizados</option>
+  </select>
+</div>
+
+
+
+
     <div class="row">
       <input id="Latitude" placeholder="Latitud" name="Location.Latitude" />
       <input id="Longitude" placeholder="Longitud" name="Location.Longitude" />
@@ -212,6 +257,11 @@
             mbSat = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: 'mbSat'}) ;
             topoMap = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttrib});
 
+        var BING_KEY = 'AuhiCJHlGzhg93IqUH_oCpl_-ZUrIE6SPftlyGYUvr9Amx5nzA-WqGcPquyFZl4L';
+        var bingLayer = L.tileLayer.bing(BING_KEY);
+        var esriStreets = L.esri.basemapLayer('Streets');
+        var esriImagery = L.esri.basemapLayer('Imagery');
+
         var baseLayers = {
           "Open Street Map": osmMap,
           "Landscape": landMap,
@@ -220,6 +270,9 @@
           "MapBox Satellite": mbSat,
           "MapBox Streets": mbStreet,
           "Open TopoMap": topoMap,
+          "Bing Satellite": bingLayer,
+          "Esri Streets": esriStreets,
+          "Esri Imagery": esriImagery,
         };
 
         var overlayMaps = {
