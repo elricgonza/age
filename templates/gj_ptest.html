@@ -373,24 +373,13 @@
 			zoom:16,
 			text: 'Dirección a buscar ó lat long',
 			textCancel: 'Cancelar',
-			textErr: 'No encontrado... '
+      textErr: 'No encontrado... ',
+      position: 'topleft'
 		}) );
 		//marker: L.circleMarker([0,0],{radius:30}),
 
 	//L.control.locate({showCompass:true,icon:"fa fa-crosshairs"}).addTo(map);
 
-
-  // to locLayer Search
-    var searchControlLoc = new L.Control.Search({
-      layer: locLayer,
-      propertyName: 'nom_localidad',
-      zoom:12,
-			text: 'Recinto Electoral a buscar',
-			textCancel: 'Cancelar',
-			textErr: 'Localidad NO encontrada... '
-    });
-
-    map.addControl(searchControlLoc);   // add control & checked locLayer
 
   // to locMunic Search
     var searchControlMun = new L.Control.Search({
@@ -400,16 +389,29 @@
       circleLocation: false,
 			text: 'Municipio a buscar',
 			textCancel: 'Cancelar',
-			textErr: 'Municipio NO encontrada... '
+      textErr: 'Municipio NO encontrada... ',
+      position: 'topright'
     });
 
-            searchControlMun.on('search_locationfound', function(e) {
-                e.layer.setStyle({fillcolor: 'red', color: '#0f0'});
-                e.layer.setStyle(highlight);  //highlights selected.
-            })
+      searchControlMun.on('search_locationfound', function(e) {
+          e.layer.setStyle({fillcolor: 'red', color: '#0f0'});
+          e.layer.setStyle(highlight);  //highlights selected.
+      })
     map.addControl(searchControlMun);
 
+  // to locLayer Search
+    var searchControlLoc = new L.Control.Search({
+      layer: locLayer,
+      propertyName: 'nom_localidad',
+      zoom:12,
+			text: 'Recinto Electoral a buscar',
+			textCancel: 'Cancelar',
+			textErr: 'Recinto NO encontrado... ',
+      position: 'topright'
+    });
+    map.addControl(searchControlLoc);   // add control & checked locLayer
             
+
 		//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
 		var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
 
