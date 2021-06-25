@@ -218,8 +218,8 @@
         //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
 
             var iconLoc = L.icon({
-              iconUrl: '../static/iconos/icons8-map-pin-30.png',
-              iconSize: [30, 30]
+              iconUrl: '../static/iconos/icons8-map-pin-40.png',
+              iconSize: [35, 35]
             });
 
             var locLayer = L.geoJson( {{ geo_json | safe }}, {
@@ -258,7 +258,7 @@
             topoMap = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttrib});
 
         var BING_KEY = 'AuhiCJHlGzhg93IqUH_oCpl_-ZUrIE6SPftlyGYUvr9Amx5nzA-WqGcPquyFZl4L';
-        var bingLayer = L.tileLayer.bing(BING_KEY);
+        var bingSat = L.tileLayer.bing(BING_KEY);
         var esriStreets = L.esri.basemapLayer('Streets');
         var esriImagery = L.esri.basemapLayer('Imagery');
 
@@ -270,7 +270,7 @@
           "MapBox Satellite": mbSat,
           "MapBox Streets": mbStreet,
           "Open TopoMap": topoMap,
-          "Bing Satellite": bingLayer,
+          "Bing Satellite": bingSat,
           "Esri Streets": esriStreets,
           "Esri Imagery": esriImagery,
         };
