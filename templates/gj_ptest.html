@@ -35,10 +35,10 @@
     <link href="{{ url_for('static', filename='css/leaflet-search.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet-search.js') }}"></script>
   
-    <!--locate
-    <link href="{{ url_for('static', filename='css/Locate.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/Locate.js') }}"></script>
-    -->
+    <!--locate -->
+    <link href="{{ url_for('static', filename='css/L.Control.Locate.min.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/L.Control.Locate.js') }}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!--mini-map-->
     <link href="{{ url_for('static', filename='css/Control.MiniMap.css') }}" rel="stylesheet" media="screen">
@@ -253,7 +253,6 @@
             landMap = L.tileLayer(landUrl, {attribution: ''}),
             googleSat = L.tileLayer(googleSatUrl, {Attribution: 'gsat'}),
             googleMap = L.tileLayer(googleMapUrl, {Attribution: 'gmap'}),
-            mbStreet = L.tileLayer(mbUrl, {id: 'mapbox.streets', attribution: 'mbSat'}), 
             mbSat = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: 'mbSat'}) ;
             topoMap = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttrib});
 
@@ -262,17 +261,26 @@
         var esriStreets = L.esri.basemapLayer('Streets');
         var esriImagery = L.esri.basemapLayer('Imagery');
 
+        var tokenMapBox = 'pk.eyJ1IjoibWJ1Z2xlMjAyMSIsImEiOiJja3FpOHd4cjMyYmR0MnpuMHZrajF5c3pxIn0.2gFzBGWekEI59pMl0EflSw';
+        var mapboxUrl = 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/{z}/{x}/{y}@2x?access_token=' + tokenMapBox;
+        var mapboxAttrib = 'Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.';
+        var mapboxStreets = new L.TileLayer(mapboxUrl, {
+          attribution: mapboxAttrib,
+          tileSize: 512,
+          zoomOffset: -1
+        });
+
         var baseLayers = {
           "Open Street Map": osmMap,
-          "Landscape": landMap,
           "Google Satellite": googleSat,
-          "Google Map": googleMap,
+          "Google Streets": googleMap,
           "MapBox Satellite": mbSat,
-          "MapBox Streets": mbStreet,
-          "Open TopoMap": topoMap,
-          "Bing Satellite": bingSat,
+          "MapBox Streets": mapboxStreets,
           "Esri Streets": esriStreets,
           "Esri Imagery": esriImagery,
+          "Bing Satellite": bingSat,
+          "Landscape": landMap,
+          "Open TopoMap": topoMap
         };
 
         var overlayMaps = {
@@ -291,7 +299,7 @@
         defaultExtentControl: true,
         center: mapCenter,
         zoom: 6,
-			  layers: [googleMap] // only add one!
+			  layers: [mapboxStreets] // only add one!
       });
 
         //Add layer control
@@ -312,12 +320,14 @@
 
 
 
+    // add controls 
+    map.addControl(new L.Control.Fullscreen());
 
+    L.Control.measureControl().addTo(map);
 
-      // add controls 
-      map.addControl(new L.Control.Fullscreen());
-
-      L.Control.measureControl().addTo(map);
+    L.control.locate({
+      strings: {title: "Ver donde estoy.."}
+    }).addTo(map);
 
     //----- Add the Street View buttons in the bottom left corner -----
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
