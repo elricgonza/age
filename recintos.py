@@ -137,9 +137,8 @@ class Recintos:
             maxmesasreci, direccion, latitud, longitud, \
             estado, tiporecinto, codrue, codrueedif, \
             depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, reci
-
         s = "update GeografiaElectoral_app.dbo.reci" + \
-            " set IdLocReci= %s, NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %d, " + \
+            " set IdLocReci= %s, NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
             " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
             " depend= %d, cantPisos= %s, fechaIngreso= %s, fechaAct= %s, usuario= %s, " + \
             " etapa= %s, doc_idA= %s, doc_idAF= %s " + \

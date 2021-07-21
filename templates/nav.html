@@ -1,5 +1,6 @@
 <!--<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">-->
-<nav class="navbar navbar-expand-md bg-secondary navbar-dark  sticky-top">
+<nav class="navbar navbar-expand-md bg-secondary navbar-d
+ark  sticky-top">
     <a class="navbar-brand" href="#">
         <img src="static/iconos/Logo_OEP.png" alt="" style="border-radius: 5px; width: 200px height: 50px;">
     </a>
@@ -7,7 +8,8 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
     <span class="navbar-toggler-icon"></span>
   </button>
-    <div id="navb" class="navbar-collapse collapse hide">
+    <div id="navb" class="navbar-collapse collapse 
+    hide">
         <ul class="navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="/">Inicio</a>
@@ -20,8 +22,9 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <a class="dropdown-item" href="/asientos_list">Asientos Electorales</a> 
                         {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
-                            <a class="dropdown-item" href="/exterior_list">Asientos Exterior</a> 
-                        {% endif %}
+                            <a class="dropdown-item" href="/exterior_list"
+                                                        <a class="dropdown-item>Asientos Exterior</a> 
+         Actualizar JuridicciónHomoogación</a>  {% endif %}
                     </div>
                 </div>
             {% endif %} -->
@@ -53,18 +56,28 @@
 
             {% if current_user.is_authenticated %}
                 <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Recintos
-                            </a>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="/recintos_list">Uninominales</a>
-              <a class="dropdown-item" href="/reciespe_list">Especiales</a>
-              {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
-                <a class="dropdown-item" href="/reciespeciales_list">Casos Especiales</a>
-              {% endif %}
-              <a class="dropdown-item" href="/zonas_list">Distritos</a>
-          </div>
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recintos</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                         <a class="dropdown-item" href="/recintos_list">Uninominales</a>
+                         <a class="dropdown-item" href="/reciespe_list">Especiales</a>
+                         {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
+                           <a class="dropdown-item" href="/reciespeciales_list">Casos Especiales</a>
+                         {% endif %}
+                         <a class="dropdown-item" href="/zonas_list">Distritos</a>
+                         <hr>
+                         <a class="dropdown-item" href="/homologa_list">Asignar Homologación</a>
+                         <a class="dropdown-item" href="/homologacion_list">Listar Homologación</a>
+                    </div>
+                </div>
+            {% endif %}
 
+            {% if current_user.is_authenticated %}
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Act. Jurisdicción</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                         <a class="dropdown-item" href="/jurisd_asi_list">Asientos</a>
+                         <a class="dropdown-item" href="/jurisdiccion_list">Recintos</a>
+                    </div>
                 </div>
             {% endif %} 
 

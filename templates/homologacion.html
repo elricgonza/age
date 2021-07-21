@@ -1,0 +1,233 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrMTfBa9NXyO3izpTE1hrR96YGxmMin4g"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/buildmap_hom.js') }}"></script>
+    <style type="text/css">
+        .formulario {
+            background: #99A2A1;
+            border-radius: 10px 0 0 10px;
+        }
+        .titulo{
+            background-color: #555C5B;
+            padding: 10px;
+            border-radius:  10px 0 0 10px;
+            font-size: 15px;
+        }
+        .titulo1{
+            width: 100%;
+            padding: 10px;
+            background-color: #555C5B;
+            margin: 3px 0;
+            font-size: 15px;
+        }
+        .formulario .datos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .formulario .datos label {
+            margin: 0;
+            display: block;
+            font-size: 14px;
+        }
+        .formulario .datos p {
+            margin: 0;
+            padding: 1px 10px;
+        }
+        .formulario .datos input {
+            padding: .1em;
+            border: none;
+            background: none;
+            outline: 0;
+            color: #fff;
+            border-bottom: 1px solid #d63031;
+            font-size: 14px;
+        }
+        .formulario .datos .fila1{
+            width: 250px;
+        }
+        .formulario .datos .fila2, .fila7{
+            width: 160px;
+        }
+        .formulario .datos .fila3, .fila4, .fila5, .fila6, .fila8{
+            width: 250px;
+        }
+    </style>
+{% endblock %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+            <h5>Homologaciones</h5>
+        </div>
+        <div class="col-xs-6 col-md-4">
+        </div>
+    </div>
+    <form id="formhomologacion" method="POST" action="">
+        <div class="form-row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="gethomall(event)" >Visualizar imágen Satelital</button>
+            </div>
+        </div>
+        <div class="my-content">
+            <div class="container">
+                <div class="form-row">
+                    <div class="col-md-7">
+                        <input type="hidden" id="iinicio" name="inicio" value="{{ inicio }}">
+                        <input type="hidden" id="ifinal" name="final" value="{{ final }}">
+                        <input type="hidden" id="iidhom" name="idhom" value="{{ ahomo.idhom }}">
+                        <div class="formulario">
+                            <h5 class="titulo">Recinto electoral Homologado (Origen)</h5>
+                            <div class="datos">
+                                <p>
+                                    <label>IdLoc:</label>
+                                    <input class="fila1" type="text" name="idloc" value="{{ ahomo.idloc }}">
+                                </p>
+                                <p>
+                                    <label>Reci:</label>
+                                    <input class="fila1" type="text" name="reci" value="{{ ahomo.reci }}">
+                                </p>
+                                <p>
+                                    <label>Dep:</label>
+                                    <input class="fila2" type="text" name="departamento" value="{{ ahomo.departamento }}">
+                                </p>
+                                <p>
+                                    <label>Prov:</label>
+                                    <input class="fila2" type="text" name="provincia" value="{{ ahomo.provincia }}">
+                                </p>
+                                <p>
+                                    <label>Sec:</label>
+                                    <input class="fila2" type="text" name="municipio" value="{{ ahomo.municipio }}">
+                                </p>
+                                <p>
+                                    <label>Asiento:</label>
+                                    <input class="fila3" type="text" name="asiento" value="{{ ahomo.asiento }}">
+                                </p>
+                                <p>
+                                    <label>Dist:</label>
+                                    <input class="fila3" type="text" name="nomdist" value="{{ ahomo.nomdist }}">
+                                </p>
+                                <p>
+                                    <label>Zona:</label>
+                                    <input class="fila4" type="text" name="nomzona" value="{{ ahomo.nomzona }}">
+                                </p>
+                                <p>
+                                    <label>Recinto:</label>
+                                    <input class="fila4" type="text" name="recinto" value="{{ ahomo.recinto }}">
+                                </p>
+                                <p>
+                                    <label>Dirección:</label>
+                                    <input class="fila5" type="text" name="direccion" value="{{ ahomo.direccion }}">
+                                </p>
+                                <p>
+                                    <label>Circun:</label>
+                                    <input class="fila5" type="text" name="circun" value="{{ ahomo.circun }}">
+                                </p>
+                                <p>
+                                    <label>TipoCircun:</label>
+                                    <input class="fila6" type="text" name="tipocircun" value="{{ ahomo.tipocircun }}">
+                                </p>
+                                <p>
+                                    <label>Recinto:</label>
+                                    <input class="fila6" type="text" name="tiporecinto" value="{{ ahomo.tiporecinto }}">
+                                </p>
+                                <p>
+                                    <label>Latitud:</label>
+                                    <input class="fila7" type="text" name="latitud" value="{{ ahomo.latitud }}">
+                                </p>
+                                <p>
+                                    <label>Longitud:</label>
+                                    <input class="fila7" type="text" name="longitud" value="{{ ahomo.longitud }}">
+                                </p>
+                                <p>
+                                    <label>Documento:</label>
+                                    <input class="fila7" type="text" name="doc" value="{{ ahomo.doc }}">
+                                </p>
+                                <h5 class="titulo1">Recinto Destino</h5>
+                                <p>
+                                    <label>Dist:</label>
+                                    <input class="fila3" type="text" name="nomdist2" value="{{ ahomo.nomdist2 }}">
+                                </p>
+                                <p>
+                                    <label>Zona:</label>
+                                    <input class="fila3" type="text" name="nomzona2" value="{{ ahomo.nomzona2 }}">
+                                </p>
+                                <p>
+                                    <label>Recinto:</label>
+                                    <input class="fila4" type="text" name="recinto2" value="{{ ahomo.recinto2 }}">
+                                </p>
+                                <p>
+                                    <label>Dirección:</label>
+                                    <input class="fila4" type="text" name="direccion2" value="{{ ahomo.direccion2 }}">
+                                </p>
+                                <p>
+                                    <label>Circun:</label>
+                                    <input class="fila5" type="text" name="circun2" value="{{ ahomo.circun2 }}">
+                                </p>
+                                <p>
+                                    <label>TipoCircun:</label>
+                                    <input class="fila5" type="text" name="tipocircun2" value="{{ ahomo.tipocircun2 }}">
+                                </p>
+                                <p>
+                                    <label>TipoRecinto:</label>
+                                    <input class="fila7" type="text" name="tiporecinto2" value="{{ ahomo.tiporecinto2 }}">
+                                </p>
+                                <p>
+                                    <label>Latitud:</label>
+                                    <input class="fila7" type="text" name="latitud2" value="{{ ahomo.latitud2 }}">
+                                </p>
+                                <p>
+                                    <label>Longitud:</label>
+                                    <input class="fila7" type="text" name="longitud" value="{{ ahomo.longitud2 }}">
+                                </p>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div id="map" style="position:relative; width:100%; height:646px; background: rgba(0, 0, 0, 0.10); border-radius: 0 10px 10px 0;"></div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" onclick="pasa_homologa();" class="btn btn-outline-danger btn-md btn-block">Volver</button>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+       $("#btnBorrar").click(function(event) {
+           $("#limpiar_formulario")[0].reset();
+       });
+       function pasa_homologa(){
+            $("#iinicio").val();
+            $("#ifinal").val();
+            $('#formhomologacion').attr('action', '/homologacion_list');    
+        }
+    </script>
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+</div> <!--main-->
+
+{% endblock %}
+

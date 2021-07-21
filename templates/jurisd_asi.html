@@ -1,0 +1,253 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar_esp.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+{% endblock %}
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+            <h5>Actualizar Jurisd_Asi</h5>
+        </div>
+        <div class="col-xs-6 col-md-4">
+        </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}        
+        {% for category, message in messages %}         
+          <div class="alert {{category}}">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              {{ message }}
+          </div>
+        {% endfor %}        
+      {% endif %}
+    {% endwith %}
+    <form id="formjurisd_asi" method="POST" action="">
+        <div class="my-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-sm-offset-3 myform-cont">  
+                        <div class="myform-top">
+                            <div class="myform-top-left">
+                                <h5>{{ titulo }}</h5>
+                            </div>
+                        </div>
+                        <div class="myform-bottom">
+                            <div class="form-row">
+                                <div class="col-md-1">
+                                    <label for="idloc">IdLoc:</label>
+                                    <input type="text" class="form-control" id="iidloc" title=""  name="idloc" readonly style="text-align: right;" 
+                                            {% if load %}
+                                                value="{{ ja.idloc }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                                <div class="col-md-11">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-1">
+                                    <label for="deploc1">Dep:</label>
+                                    <input type="text" class="form-control" id="ideploc1" title="" name="deploc1" readonly 
+                                            {% if load %}
+                                                value="{{ ja.deploc }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="departamento1">Departamento:</label>
+                                    <input type="text" class="form-control" id="idepartamento1" title="" name="departamento1" readonly 
+                                            {% if load %}
+                                                value="{{ ja._departamento }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                                <div class="col-md-1">
+                                    <label for="provloc1">Prov:</label>
+                                    <input type="text" class="form-control" id="iproloc1" title="" name="provloc1" readonly 
+                                            {% if load %}
+                                                value="{{ ja.provloc }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="provincia1">Provincia:</label>
+                                    <input type="text" class="form-control" id="iprovincia1" title="" name="provincia1" readonly 
+                                            {% if load %}
+                                                value="{{ ja._provincia }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                                <div class="col-md-1">
+                                    <label for="secloc1">Mun:</label>
+                                    <input type="text" class="form-control" id="isecloc1" title="" name="secloc1" readonly 
+                                            {% if load %}
+                                                value="{{ ja.secloc }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="municipio1">Municipio:</label>
+                                    <input type="text" class="form-control" id="imunicipio1" title="" name="municipio1" readonly 
+                                            {% if load %}
+                                                value="{{ ja._municipio }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <label for="asiento">Asiento Electoral:</label>
+                                    <input type="text" class="form-control" id="iasiento" title="" name="asiento" readonly 
+                                            {% if load %}
+                                                value="{{ ja.nomloc }}"
+                                            {% endif %}
+                                        >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-1">
+                        <label for="deploc">Dep:</label>
+                        <input type="text" class="form-control" id="ideploc" title="" name="deploc" style="text-align:right;" readonly 
+                                {% if load %}
+                                    value="{{ ja.deploc }}"
+                                {% endif %}
+                            >
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="departamento" class="col-form-label">Departamento:</label>
+                        <select id="idepartamento" name="departamento" class="form-control" onchange="cargarjuri_a(this.value, 0)" required>
+                            <option></option>
+                            {% for dpto in dptos %}
+                                {% if load and ja.deploc == dpto[0] %}
+                                    <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
+                                {% else %}
+                                    <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
+                                {% endif %}                               
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="provloc" class="col-form-label">Prov:</label>
+                        <input type="text" class="form-control" id="iprovloc" title="" name="provloc" style="text-align:right;" readonly 
+                                {% if load %}
+                                    value="{{ ja.provloc }}"
+                                {% endif %}
+                            >
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="provincia" class="col-form-label">Provincia:</label>
+                        <select id="iprovincia" name="provincia" class="form-control" onchange="cargarjuri_a(this.value, 1)" required>
+                            {% for provincia in provincias %}
+                                {% if ja.deploc == provincia[0] %}
+                                    {% if load and ja.provloc == provincia[1] %}
+                                        <option value = "{{ provincia[1] }}" selected>{{ provincia[2] }}</option>
+                                    {% else %}
+                                        <option value = "{{ provincia[1] }}">{{ provincia[2] }}</option>
+                                    {% endif %}
+                                {% endif %}                               
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="secloc" class="col-form-label">Sec:</label>
+                        <input type="text" class="form-control" id="isecloc" title="" name="secloc" style="text-align:right;" readonly 
+                                {% if load %}
+                                    value="{{ ja.secloc }}"
+                                {% endif %}
+                            >
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="municipio" class="col-form-label">Municipio:</label>
+                        <select id="imunicipio" name="municipio" class="form-control" onchange="cargarjuri_a(this.value, 2)" required>
+                            {% for municipio in municipios %}
+                                {% if ja.deploc == municipio[0] and ja.provloc == municipio[1]%}
+                                    {% if load and ja.secloc == municipio[2] %}
+                                        <option value = "{{ municipio[2] }}" selected>{{ municipio[3] }}</option>
+                                    {% else %}
+                                        <option value = "{{ municipio[2] }}">{{ municipio[3] }}</option>
+                                    {% endif %}
+                                {% endif %}                               
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="circu" class="col-form-label">Circuns:</label>
+                        <select id="icircu" name="circu" class="form-control" required>
+                            <option></option>
+                            {% for circun in circuns %}
+                                {% if ja.deploc == circun[0] and ja.provloc == circun[1] and ja.secloc == circun[2] %}
+                                    {% if ban %}
+                                        {% if ja.circ == circun[3] %}
+                                               <option value = "{{ circun[3] }}" selected>{{ circun[3] }}</option>
+                                        {% else %}
+                                               <option value = "{{ circun[3] }}">{{ circun[3] }}</option> 
+                                        {% endif %}       
+                                    {% else %}
+                                            <option value = "{{ circun[3] }}">{{ circun[3] }}</option>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>    
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" id="boton"
+                        {% if boton=="Asignar" %} 
+                            onclick="guardar_jurisd_asi();"
+                        {% else %}
+                            onclick="modificar_jurisd_asi();"    
+                        {% endif %}     
+                        class="btn btn-outline-primary btn-md btn-block">{{ boton }}
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" onclick="pasa_jurisd_asi();" class="btn btn-outline-danger btn-md btn-block">Volver</button>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        function pasa_jurisd_asi(){
+            $('#formjurisd_asi').attr('action', '/jurisd_asi_list');    
+        }
+        function guardar_jurisd_asi(){
+            var idloc = $("#iidloc").val();
+            $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");
+        }
+        function modificar_jurisd_asi(){
+            var idloc = $("#iidloc").val();
+            $("#formjurisd_asi").attr("action", "/jurisd_asi_m/" + idloc + "");
+        }
+    </script>
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+</div> <!--main-->
+{% endblock %}
+

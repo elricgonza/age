@@ -13,8 +13,7 @@
     <h2 class="text-center text-blue pt-5" >Asiento Electoral</h2>
     <form class="needs-validation" novalidate method='POST' onsubmit="return Validation(this)" >
         <div class="form-row">
-            <div class="col-md-4">
-                <label for="latitud">Latitud:</label>
+            <div class="col-md-4">                <label for="latitud">Latitud:</label>
                 <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}"
                         {% if load %}
                             value="{{ a.latitud }}"

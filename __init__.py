@@ -31,6 +31,11 @@ import geo as geo
 import img
 import loc_img
 import reci_img
+import homologa as hom
+import homologacion as homo
+import homologacionPDF as hpdf
+import jurisdiccion as jur
+import jurisd_asi as jua
 
 import paises
 import deptos as deptoss
@@ -410,7 +415,7 @@ def documento(doc_id):
                 ruta = app.config['SUBIR_PDF'] + '/' + name_to_save
                 os.rename(fpath1 + filename, fpath1 + name_to_save)
             else:
-                flash('Debe cargar solo archivos PDFs')
+                #flash('Debe cargar solo archivos PDFs')
                 return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
             d.add_documento(request.form['doc'], \
                         request.form['dep'], \
@@ -609,7 +614,7 @@ def asiento(idloc):
                 return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
 @app.route('/exterior_list', methods=['GET', 'POST'])
@@ -768,7 +773,7 @@ def reportespdf():
         rows = rp.reporte_consulta(usrdep, request.form['dpto'], provincia, municipio,
                                    cir1, cir2, cir3, estado, inicio, final)
         if rows:
-            url = "file:///home/r/pge/age/reporte.pdf"
+            url = "file:///var/www/flasks/age/reporte.pdf"
             webbrowser.open(url,new=new)
             return ('PDF Generado')
         else:
@@ -1321,7 +1326,7 @@ def reciespeciales(idreci, idlocreci):
                                usr, request.form['etapa'], request.form['docAct'], docActF)
 
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
-            
+
             rows = rces.get_reciespeciales_all(usrdep)
             return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
@@ -1523,7 +1528,393 @@ def get_subcategorias_all():
         return jsonify(0)
 
 """ Final de Indicadores """
+
+""" Inicio de Asignar Homologaciones """
+
+@app.route('/homologa_list', methods=['GET', 'POST'])
+@login_required
+def homologa_list():
+    ahom = hom.Homologa(cxms)
+    if request.method == 'POST':
+        inicio = request.form['inicio']
+        final = request.form['final']
+    else:
+        inicio = '00-00-0000'
+        final = '00-00-0000'
+
+    rows = ahom.get_homologa_all(usrdep, inicio, final)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Homologas...')
+        return render_template('homologa_list.html', puede_adicionar='Homologa - Adición' in permisos_usr)
+
+
+@app.route('/a_homologa/<idreci>/<idlocreci>/<inicio>/<final>', methods=['GET', 'POST'])
+@login_required
+def a_homologa(idreci, idlocreci, inicio, final):
+    ahom = hom.Homologa(cxms)
+    error = None
     
+    if idreci != '0' and idlocreci !='0':  # LISTA
+        ahom.get_homologa_idlocreci(idreci, idlocreci)
+        circun = ahom.circun
+        rtos = ahom.get_recintos_idloc(idlocreci, circun);
+        if ahom.ver_homologa_idlocreci(idreci, idlocreci):
+            print('Modificar')
+            return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=False)
+        else:
+            if rtos != False:
+                print('Asignar')
+                return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=True)
+            else:
+                return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False , ban=True)
+
+
+@app.route('/a_homologa_m', methods=['GET', 'POST'])
+@login_required
+def a_homologa_m():
+    ahom = hom.Homologa(cxms)
+    error = None
+    if request.method == 'POST':
+        idloc = request.form['idloc']
+        reci = request.form['idlocreci']
+        idloc2 = request.form['idloc2']
+        reci2 = request.form['idlocreci2']
+        idloc21 = request.form['idloc21']
+        reci21 = request.form['idlocreci21']
+        inicio = request.form['inicio']
+        final = request.form['final']
+        if ahom.verificar_homologa_idlocreci(idloc, reci, idloc21, reci21):
+            f_actual = str(datetime.datetime.now())[:-7]
+            ahom.get_homologa_idlocreci_destino(idloc2, reci2)
+            ahom.upd_homologa(ahom.dep2, ahom.prov2, ahom.sec2, ahom.idloc2, ahom.dist2, ahom.zona2, ahom.reci2, ahom.departamento2, ahom.provincia2, \
+                              ahom.municipio2, ahom.asiento2, ahom.nomdist2, ahom.nomzona2, ahom.recinto2, ahom.direccion2, ahom.circun2, ahom.idtipocircun2, \
+                              ahom.tipocircun2, ahom.idtiporecinto2, ahom.tiporecinto2, ahom.latitud2, ahom.longitud2, f_actual, usr, ahom.idhom)
+        else:
+            f_ingreso = str(datetime.datetime.now())[:-7]
+            f_actual = str(datetime.datetime.now())[:-7]
+            ahom.get_homologa_idlocreci_origen(idloc, reci)
+            ahom.get_homologa_idlocreci_destino(idloc2, reci2)
+            ahom.add_homologa(ahom.dep, ahom.prov, ahom.sec, ahom.idloc, ahom.dist, ahom.zona, ahom.reci, ahom.departamento, ahom.provincia, ahom.municipio, \
+                              ahom.asiento, ahom.nomdist, ahom.nomzona, ahom.recinto, ahom.direccion, ahom.circun, ahom.idtipocircun, ahom.tipocircun, \
+                              ahom.idtiporecinto, ahom.tiporecinto, ahom.latitud, ahom.longitud, ahom.doc, ahom.doc1, ahom.dep2, ahom.prov2, ahom.sec2, \
+                              ahom.idloc2, ahom.dist2, ahom.zona2, ahom.reci2, ahom.departamento2, ahom.provincia2, ahom.municipio2, ahom.asiento2, ahom.nomdist2, \
+                              ahom.nomzona2, ahom.recinto2, ahom.direccion2, ahom.circun2, ahom.idtipocircun2, ahom.tipocircun2, ahom.idtiporecinto2, ahom.tiporecinto2, \
+                              ahom.latitud2, ahom.longitud2, f_ingreso, f_actual, usr)
+
+        rows = ahom.get_homologa_all(usrdep, inicio, final)
+        return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template 
+    else: # Viene de <homologa_list>
+        return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False, ban=True)
+
+""" Final de Asignar Homologaciones """
+""" Inicio de Listar Homologaciones """
+
+@app.route('/homologacion_list', methods=['GET', 'POST'])
+@login_required
+def homologacion_list():
+    ahomo = homo.Homologacion(cxms)
+    if request.method == 'POST':
+        inicio = request.form['inicio']
+        final = request.form['final']
+    else:
+        inicio = '00-00-0000'
+        final = '00-00-0000'
+    rows = ahomo.get_homologacion_all(usrdep, inicio, final)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Homologacion...')
+        return render_template('homologacion_list.html', puede_adicionar='Homologa - Adición' in permisos_usr)
+
+
+@app.route('/homologacion/<idhomo>/<inicio>/<final>', methods=['GET', 'POST'])
+@login_required
+def homologacion(idhomo, inicio, final):
+    ahomo = homo.Homologacion(cxms)
+    ahomo.get_homologacion_idhom(idhomo);
+    return render_template('homologacion.html', ahomo=ahomo, inicio=inicio, final=final, load=True, ban=True)
+
+
+@app.route('/get_hom_all', methods=['GET', 'POST'])
+def get_hom_all():
+    ahomo = homo.Homologacion(cxms)
+    idhom = request.args.get('idhom')
+    rows = ahomo.get_hom_all(idhom)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+
+@app.route('/homologacion_pdf', methods=['GET', 'POST'])
+def homologacion_pdf():
+    new = 2
+    rh = hpdf.HomologacionPDF(cxms)
+    if request.form['inicio'] == "":
+        inicio = ''
+    else:
+        inicio = request.form['inicio']
+
+    if request.form['final'] == "":
+        final = ''
+    else:
+        final = request.form['final']    
+    rows = rh.reporte_consulta_h(usrdep, inicio, final)
+    if rows:
+        url = "file:///var/www/flasks/age/reporteh.pdf"
+        webbrowser.open(url,new=new)
+        print('PDF Generado')
+        return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template
+    else:
+        return ('PDF No Generado')
+
+""" Final de Listar Homologaciones """
+""" Inicio de Actualizacion de Jurisdiccion """
+
+@app.route('/jurisdiccion_list', methods=['GET', 'POST'])
+@login_required
+def jurisdiccion_list():
+    ju = jur.Jurisdiccion(cxms)
+    rows = ju.get_jurisdiccion_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Recintos...')
+
+
+@app.route('/jurisdiccion/<reci>/<idloc>', methods=['GET', 'POST'])
+@login_required
+def jurisdiccion(reci, idloc):
+    ju = jur.Jurisdiccion(cxms)
+    rces = recies.Reciespeciales(cxms)
+    error = None
+    
+    if request.method == 'POST':
+        f_ingreso = str(datetime.datetime.now())[:-7]
+        f_actual = str(datetime.datetime.now())[:-7]
+        idloc = request.form['idloc']
+        reci = request.form['idlocreci']
+        idloc2 = request.form['idloc1']
+        reci2 = request.form['idlocreci']
+        idzona = request.form['zonad']
+        ju.get_jurisdiccion_idlocreci_origen(idloc, reci)
+        ju.get_zonadist_idloc2(idloc2, idzona)
+        ju.get_asiento_idloc2(idloc2)
+        ju.get_jurisdiccion_idlocreci_destino(idloc, reci)
+        ju.add_jurisdiccion(ju.dep, ju.prov, ju.sec, ju.idloc, ju.dist, ju.zona, ju.reci, ju.departamento, ju.provincia, ju.municipio, \
+                            ju.asiento, ju.nomdist, ju.nomzona, ju.recinto, ju.direccion, ju.circun, ju.idtipocircun, ju.tipocircun, \
+                            ju.idtiporecinto, ju.tiporecinto, ju.latitud, ju.longitud, ju.doc, ju.doc1, ju.dep2, ju.prov2, ju.sec2, \
+                            idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, \
+                            ju.nomzona2, ju.recinto2, ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
+                            ju.tiporecinto2, ju.latitud2, ju.longitud2, f_ingreso, f_actual, usr)
+
+        if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
+            nextid = ju.get_next_idreci(idloc2, reci)
+            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona)
+        else:
+            ju.upd_recinto_juri(idloc, reci, idloc2, idzona)
+
+        rows = ju.get_jurisdiccion_all(usrdep)
+        return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
+    else:
+        dptos=rces.get_depaespeciales_all(usrdep)
+        provincias=rces.get_provespeciales_all(usrdep)
+        municipios=rces.get_muniespeciales_all(usrdep)
+        if ju.get_jurisdiccion_idlocreci(reci, idloc):
+            rows = ju.get_asientos_all(usrdep)
+            zonasd = ju.get_zonasd_all(usrdep)
+
+        if ju.get_jurisdiccion_idloc(idloc, reci): # LISTA
+            return render_template('jurisdiccion.html', ju=ju, asientos=rows, zonasd=zonasd, dptos=dptos, provincias=provincias, municipios=municipios, load=True, titulo='Recinto a Modificar Jurisdicción', boton='Modificar')
+        else:
+            return render_template('jurisdiccion.html', ju=ju, asientos=rows, zonasd=zonasd, dptos=dptos, provincias=provincias, municipios=municipios, load=True, titulo='Recinto a Actualizar Jurisdicción', boton='Asignar')
+
+
+@app.route('/jurisdiccion_m', methods=['GET', 'POST'])
+@login_required
+def jurisdiccion_m():
+    ju = jur.Jurisdiccion(cxms)
+    rces = recies.Reciespeciales(cxms)
+    error = None
+    
+    if request.method == 'POST':
+        f_actual = str(datetime.datetime.now())[:-7]
+        idloc = request.form['idloc']
+        reci = request.form['idlocreci']
+        idloc2 = request.form['idloc1']
+        reci2 = request.form['idlocreci']
+        idzona = request.form['zonad']
+        idjurisd = request.form['idjurisd']
+        ju.get_zonadist_idloc2(idloc2, idzona)
+        ju.get_asiento_idloc2(idloc2)
+        ju.get_jurisdiccion_idlocreci_destino(idloc, reci)
+        ju.upd_jurisdiccion(ju.dep2, ju.prov2, ju.sec2, idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, \
+                            ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, ju.nomzona2, ju.recinto2, \
+                            ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
+                            ju.tiporecinto2, ju.latitud2, ju.longitud2, f_actual, usr, idjurisd)
+
+        if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
+            print('aqui')
+            nextid = ju.get_next_idreci(idloc2, reci)
+            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona)
+        else:
+            print('por aqui')
+            ju.upd_recinto_juri(idloc, reci, idloc2, idzona)
+
+        rows = ju.get_jurisdiccion_all(usrdep)
+        return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
+
+
+@app.route('/get_asijuri_all', methods=['GET', 'POST'])
+@login_required
+def get_asijuri_all():
+    ju = jur.Jurisdiccion(cxms)
+    dp = request.args.get('dp')
+    pr = request.args.get('pr')
+    mu = request.args.get('mu')
+    rows = ju.get_asijuri_all(dp, pr, mu)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+
+@app.route('/get_zondist_all', methods=['GET', 'POST'])
+@login_required
+def get_zondist_all():
+    ju = jur.Jurisdiccion(cxms)
+    idloc = request.args.get('as')
+    rows = ju.get_zondist_all(idloc)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+
+""" Inicio de Actualizacion de Jurisd_asi """
+@app.route('/jurisd_asi_list', methods=['GET', 'POST'])
+@login_required
+def jurisd_asi_list():
+    ja = jua.Jurisd_asi(cxms)
+    rows = ja.get_jurisd_asi_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Asientos...')
+
+
+@app.route('/jurisd_asi/<idloc>', methods=['GET', 'POST'])
+@login_required
+def jurisd_asi(idloc):
+    ja = jua.Jurisd_asi(cxms)
+    rces = recies.Reciespeciales(cxms)
+    error = None
+    
+    if request.method == 'POST':
+        f_ingreso = str(datetime.datetime.now())[:-7]
+        f_actual = str(datetime.datetime.now())[:-7]
+        dep2 = request.form['deploc']
+        prov2 = request.form['provloc']
+        sec2 = request.form['secloc']
+        ja.get_dpto(dep2)
+        departamento2 = ja.nomdep
+        ja.get_prov(dep2, prov2)
+        provincia2 = ja.nomprov
+        ja.get_sec(dep2, prov2, sec2)
+        municipio2 = ja.nomsec
+        circun = request.form['circu']
+        ja.get_zonadist_idloc(idloc, circun)
+        if ja.add_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
+                                   ja.nomzona, ja.circun, f_ingreso, f_actual, usr):
+            #Actualiza el asiento y sus recintos
+            ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2)
+            ja.upd_recinto_juriasi(idloc, ja.zona)
+        else:
+            flash("El Asiento No Tiene Recintos", 'alert-warning')
+            dptos=rces.get_depaespeciales_all(usrdep)
+            provincias=rces.get_provespeciales_all(usrdep)
+            municipios=rces.get_muniespeciales_all(usrdep)
+            if ja.get_jurisd_asi_idloc(idloc):
+                rows = ja.get_circuns_all(usrdep)
+            
+            if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
+                return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
+            else:
+                return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')
+    else:
+        dptos=rces.get_depaespeciales_all(usrdep)
+        provincias=rces.get_provespeciales_all(usrdep)
+        municipios=rces.get_muniespeciales_all(usrdep)
+        if ja.get_jurisd_asi_idloc(idloc):
+            rows = ja.get_circuns_all(usrdep)
+        
+        if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
+            return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
+        else:
+            return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')    
+
+    rows = ja.get_jurisd_asi_all(usrdep)
+    return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
+
+
+@app.route('/jurisd_asi_m/<idloc>', methods=['GET', 'POST'])
+@login_required
+def jurisd_asi_m(idloc):
+    ja = jua.Jurisd_asi(cxms)
+    rces = recies.Reciespeciales(cxms)
+    error = None
+    
+    if request.method == 'POST':
+        f_actual = str(datetime.datetime.now())[:-7]
+        dep2 = request.form['deploc']
+        prov2 = request.form['provloc']
+        sec2 = request.form['secloc']
+        ja.get_dpto(dep2)
+        departamento2 = ja.nomdep
+        ja.get_prov(dep2, prov2)
+        provincia2 = ja.nomprov
+        ja.get_sec(dep2, prov2, sec2)
+        municipio2 = ja.nomsec
+        circun = request.form['circu']
+        ja.get_zonadist_idloc(idloc, circun)
+        ja.upd_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
+                            ja.nomzona, ja.circun, f_actual, usr)
+        #Actualiza el asiento y sus recintos
+        ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2)
+        ja.upd_recinto_juriasi(idloc, ja.zona)
+
+    rows = ja.get_jurisd_asi_all(usrdep)
+    return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
+
+
+@app.route('/get_circuns_dps', methods=['GET', 'POST'])
+@login_required
+def get_circuns_dps():
+    ja = jua.Jurisd_asi(cxms)
+    dp = request.args.get('dp')
+    pr = request.args.get('pr')
+    mu = request.args.get('mu')
+    rows = ja.get_circuns_dps(dp, pr, mu)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+""" Final de Actualizacion de Jurisd_asi """
+""" Final de Actualizacion de Jurisdiccion """
 @app.route('/paises_list', methods=['GET', 'POST'])
 @login_required
 def paises_list():

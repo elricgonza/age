@@ -15,13 +15,10 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-8">
-                    <h5>Asientos Electorales </h5>
+                    <h5>Actualización de Jurisd_Asi </h5>
                 </div>
-                {% if puede_adicionar %}
                 <div class="col-xs-6 col-md-4">
-                    <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('asiento', idloc=0) }} >Adicionar Asiento Electoral</a></button>
                 </div>
-                {% endif %}
             </div>
 
             <div style="height:20px"></div>
@@ -37,32 +34,27 @@
                             <th>Asiento</th>
                             <th>Tipo Cir.</th>
                             <th>Estado</th>
-                            <th>Editar</th>
-                            <th>Imágen</th>
-                            <th>Ind.</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {% for asiento in asientos %}
-                        <tr>
-                            <td>{{ asiento[0] }}</td>
-                            <td>{{ asiento[1] }}</td>
-                            <td>{{ asiento[2] }}</td>
-                            <td>{{ asiento[3] }}</td>
-                            <td>{{ asiento[4] }}</td>
-                            <td>{{ asiento[5] }}</td>
-                            <td>{{ asiento[9] }}</td>
+                        {% for jurisd in jurisd_asis %}
+                        <tr style="text-align: center; font-size: 15px;">
+                            <td>{{ jurisd[0] }}</td>
+                            <td>{{ jurisd[1] }}</td>
+                            <td>{{ jurisd[2] }}</td>
+                            <td>{{ jurisd[3] }}</td>
+                            <td>{{ jurisd[4] }}</td>
+                            <td>{{ jurisd[5] }}</td>
+                            <td>{{ jurisd[9] }}</td>
                             <td>
-                                <a href={{ url_for( 'asiento', idloc=asiento[0]) }}><span class="fas fa-edit"></span></a>
+                                {% if jurisd[11] == 'A' %}
+                                        <a href="{{ url_for( 'jurisd_asi', idloc=jurisd[0]) }}"><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                {% else %}
+                                        <a href="{{ url_for( 'jurisd_asi', idloc=jurisd[0]) }}" style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Trasladar</a>
+                                {% endif %}
                             </td>
-                            <td>
-                                <a href={{ url_for( 'asiento_img', idloc=asiento[0], nomloc=asiento[4] ) }}><span class="fas fa-camera"></span></a>
-                            </td>
-                            <td>
-                                <a href={{ url_for( 'asiento_indicadores', idloc=asiento[0], nomloc=asiento[4]) }}><span class="fas fa-chart-line"></span></a>
-                            </td>
-
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -71,8 +63,5 @@
         </div>
     </div>
 </div>
-
-<script>
-</script>
 
 {% endblock %}

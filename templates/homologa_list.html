@@ -1,0 +1,109 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+<link href="{{ url_for('static', filename='DataTables/datatables.min.css') }}" rel="stylesheet" media="screen">
+<link href="{{ url_for('static', filename='DataTables/Datatables-1.10.20/css/datatables.bootstrap4.min.css') }}" rel="stylesheet" media="screen">
+
+<script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+
+{% endblock %}
+<div style="height:15px"></div>
+
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <form action="" novalidate method='POST' id='formhomologa' name='formhomologa'>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <h5>Asignación de Homologaciones</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <label class="float-left" for="fechadoc">Periodo de Busqueda.:</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="float-right" for="fechadoc">Desde.:</label>
+                    </div>
+                    <div class="col-md-3 float-left">
+                        <input type="date" class="form-control" id="iinicio" name="inicio" placeholder="Introduzca fecha de Busqueda" name="inicio" min="2012-01-01" max="2025-01-01"
+                                {% if load %}
+                                    value="{{ inicio }}"  
+                                {% endif %}
+                            >
+                        <div class="invalid-feedback" id="v_fechadoc">Debe introducir una fecha válida.</div>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="float-right" for="fechadoc">Hasta.:</label>
+                    </div>
+                    <div class="col-md-3 float-left">
+                        <input type="date" class="form-control" id="ifinal" name="final" placeholder="Introduzca fecha de Busqueda" name="final" min="2012-01-01" max="2025-01-01"
+                                {% if load %}
+                                    value="{{ final }}"  
+                                {% endif %}
+                            >
+                        <div class="invalid-feedback" id="v_fechadoc">Debe introducir una fecha válida.</div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary" onclick="pasa_homologa()">Buscar</button>
+                    </div>
+                </div>
+            </form>
+            <div style="height:20px"></div>
+            <div class="table-responsive">
+                <table id="id_dt" class="table table-striped table-bordered table-hover" style="width:150">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th>IdLoc</th>
+                            <th>Reci</th>
+                            <th>Depto</th>
+                            <th>Asiento</th>
+                            <th>Recinto</th>
+                            <th>Estado</th>
+                            <th>IdLocDestino</th>
+                            <th>ReciDestino</th>
+                            <th>RecintoDestino</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for homologa in homologas %}
+                        <tr style="font-size: 14px;">
+                            <td>{{ homologa[0] }}</td>
+                            <td>{{ homologa[1] }}</td>
+                            <td>{{ homologa[2] }}</td>
+                            <td>{{ homologa[3] }}</td>
+                            <td>{{ homologa[4] }}</td>
+                            <td>{{ homologa[5] }}</td>
+                            <td>{{ homologa[6] }}</td>
+                            <td>{{ homologa[7] }}</td>
+                            <td>{{ homologa[8] }}</td>
+                            <td style="text-align: center; font-size: 15px;">
+                                {% if homologa[6] == None %}
+                                        <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
+                                {% else %}
+                                        <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function pasa_homologa(){
+        $("#iinicio").val();
+        $("#ifinal").val();
+        $('#formhomologa').attr('action', '/homologa_list');    
+    }
+</script>
+
+{% endblock %}

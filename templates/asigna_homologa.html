@@ -1,0 +1,201 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='DataTables/datatables_init.js') }}"></script>
+{% endblock %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+            <h5>Asignar Homologación</h5>
+        </div>
+        <div class="col-xs-6 col-md-4">
+        </div>
+    </div>
+    <form id="formhomologa" method="POST" action="">
+        <div class="my-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-sm-offset-3 myform-cont">
+                        {% if ban %}
+                            <input type="hidden" id="iinicio" name="inicio" value="{{ inicio }}">
+                            <input type="hidden" id="ifinal" name="final" value="{{ final }}">
+                            <input type="hidden" id="iidloc2" name="idloc2">
+                            <input type="hidden" id="iidlocreci2" name="idlocreci2">
+                            <input type="hidden" id="iidloc21" name="idloc21">
+                            <input type="hidden" id="iidlocreci21" name="idlocreci21">
+                        {% else %}
+                            <input type="hidden" id="iinicio" name="inicio" value="{{ inicio }}">
+                            <input type="hidden" id="ifinal" name="final" value="{{ final }}">
+                            <input type="hidden" id="iidloc2" name="idloc2">
+                            <input type="hidden" id="iidlocreci2" name="idlocreci2">
+                            <input type="hidden" id="iidloc21" name="idloc21" value="{{ ho.idloc2}}">
+                            <input type="hidden" id="iidlocreci21" name="idlocreci21" value="{{ ho.reci2}}">
+                        {% endif %}    
+                        {% if load %}
+                            <div class="myform-top">
+                                <div class="myform-top-left">
+                                    <h5>Recinto electoral a homologar</h5>
+                                </div>
+                            </div>
+                            <div class="myform-bottom">
+                                <div class="form-row">
+                                    <div class="col-md-1">
+                                        <label for="idloc">IdLoc:</label>
+                                        <input type="text" class="form-control" id="iidloc" title=""  name="idloc" readonly style="text-align: right;" 
+                                                {% if load %}
+                                                    value="{{ ho.idlocreci }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="idlocreci">Reci:</label>
+                                        <input type="text" class="form-control" id="iidlocreci" title="" name="idlocreci" readonly style="text-align: right;" 
+                                                {% if load %}
+                                                    value="{{ ho.idreci }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                    <div class="col-md-9">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="circun">Circun:</label>
+                                        <input type="text" class="form-control" id="icircun" title="" name="circun" readonly style="text-align: right;" 
+                                                {% if load %}
+                                                    value="{{ ho.circun }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-2">
+                                        <label for="dpto">Departamento:</label>
+                                        <input type="text" class="form-control" id="idpto" title="" name="dpto" readonly 
+                                                {% if load %}
+                                                    value="{{ ho.departamento }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="asiento">Asiento Electoral:</label>
+                                        <input type="text" class="form-control" id="iasiento" title="" name="asiento" readonly 
+                                                {% if load %}
+                                                    value="{{ ho.asiento }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="recinto">Nombre del Recinto:</label>
+                                        <input type="text" class="form-control" id="irecinto" title="" name="recinto" readonly 
+                                                {% if load %}
+                                                    value="{{ ho.recinto }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="estado">Estado:</label>
+                                        <input type="text" class="form-control" id="iestado" title="" name="estado" readonly 
+                                                {% if load %}
+                                                    value="{{ ho.estado }}"
+                                                {% endif %}
+                                            >
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="id_dt" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr style="font-size: 14px;">
+                                   <th>IdLoc</th>
+                                   <th>Reci</th>
+                                   <th>Recinto</th>
+                                   <th>Zona</th>
+                                   <th>Distrito</th>
+                                   <th>Circun</th>
+                                   <th>Direccion</th>
+                                   <th>Asignar</th>                           
+                                </tr>
+                            </thead>
+                            <tbody>    
+                                {% for reci in recis %}
+                                <tr style="font-size: 14px;">
+                                    <td>{{ reci[0] }}</td>
+                                    <td>{{ reci[1] }}</td>
+                                    <td>{{ reci[2] }}</td>
+                                    <td>{{ reci[3] }}</td>
+                                    <td>{{ reci[4] }}</td>
+                                    <td>{{ reci[5] }}</td>
+                                    <td>{{ reci[6] }}</td>
+                                    {% if reci[0] == ho.idloc2 and reci[1] == ho.reci2 %}
+                                            <td style="text-align: center; font-size: 18px;"><input class="form-check-input" type="radio" name="asignar" value="{{ reci[0]~':'~reci[1] }}" checked></td>
+                                    {% else %}
+                                            <td style="text-align: center; font-size: 18px;"><input class="form-check-input" type="radio" name="asignar" value="{{ reci[0]~':'~reci[1] }}"></td>
+                                    {% endif %}        
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" id="boton" onclick="guardar_homologa();" class="btn btn-outline-primary btn-md btn-block">Asignar</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" onclick="pasa_homologa();" class="btn btn-outline-danger btn-md btn-block">Volver</button>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        function pasa_homologa(){
+            $("#iinicio").val();
+            $("#ifinal").val();
+            $('#formhomologa').attr('action', '/homologa_list');    
+        }
+        function guardar_homologa(){
+            $("#iinicio").val();
+            $("#ifinal").val();
+            if($("#formhomologa input[name='asignar']:radio").is(':checked')){
+                var i = $('input:radio[name=asignar]:checked').val();
+                var ir = i.split(':');
+                $("#iidloc2").val(ir[0]);
+                $("#iidlocreci2").val(ir[1]);
+                $("#iidloc21").val();
+                $("#iidlocreci21").val();
+                $("#iidloc").val();
+                $("#iidlocreci").val();
+                $('#formhomologa').attr('action', '/a_homologa_m');
+            }else{
+                alert('Debe Seleccionar El Distrito al Cual Homologar. !!!');
+            }
+        }
+    </script>
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+</div> <!--main-->
+
+{% endblock %}
+

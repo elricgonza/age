@@ -56,10 +56,10 @@
             <div class="col-md-2">
                 <label for="departamento">Departamento:</label>
                 <input type="hidden" id="idepto" name="depto">
-                <select id="idepartamento" name=departamento class="form-control" onchange="cargaresp(this.value, 0)" required>
+                <select id="idepartamento" name="departamento" class="form-control" onchange="cargaresp(this.value, 0)" required>
                     <option></option>
                     {% for dpto in dptos %}
-                        {% if load and rces.deploc == dpto[0]%}
+                        {% if load and rces.deploc == dpto[0] %}
                             <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
                         {% else %}
                             <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
@@ -68,7 +68,7 @@
                 </select>
             </div>
             <div class="col-md-1">
-                <label for="prov">PROV:</label>
+                <label for="provloc">PROV:</label>
                 <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ rces.provloc }}"
@@ -79,7 +79,7 @@
             <div class="col-md-2">
                 <label for="provincia">Provincia:</label>
                 <input type="hidden" id="iprovi" name="provi">
-                <select id="iprovincia" name=provincia class="form-control" onchange="cargaresp(this.value, 1)" required>
+                <select id="iprovincia" name="provincia" class="form-control" onchange="cargaresp(this.value, 1)" required>
                     {% for provincia in provincias %}
                         {% if rces.deploc == provincia[0] %}
                             {% if load and rces.provloc == provincia[1]%}
@@ -103,7 +103,7 @@
             <div class="col-md-4">
                 <label for="municipio">Municipio:</label>
                 <input type="hidden" id="imuni" name="muni">
-                <select id="imunicipio" name=municipio class="form-control" onchange="cargaresp(this.value, 2)" required>
+                <select id="imunicipio" name="municipio" class="form-control" onchange="cargaresp(this.value, 2)" required>
                     {% for municipio in municipios %}
                         {% if rces.deploc == municipio[0] and rces.provloc == municipio[1]%}
                             {% if load and rces.secloc == municipio[2]%}
