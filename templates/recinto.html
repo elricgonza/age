@@ -115,7 +115,7 @@
             <div class="col-md-3">
                 <label for="asiento">Asientos del Municipio:</label>
                 <input type="hidden" name="reci_idasiento" value="rc.idlocreci">
-                <select id="iasiento" name=asiento class="form-control" onchange="cargar(this.value, 5)" required>
+                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5)" required>
                     {% for asientoReci in asientoRecis %}
                         {% if rc.deploc==asientoReci[0] and rc.provloc==asientoReci[1] and rc.secloc==asientoReci[2] %}
                             {% if load and rc.idlocreci==asientoReci[3] %}
@@ -187,7 +187,7 @@
             </div>
             <div class="col-md-3">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name=estado class="form-control">
+                <select id="iestado" name="estado" class="form-control">
                     <option></option>
                     {% for estado in estados %}
                         {% if load and rc.estado==estado[0] %}
@@ -348,7 +348,7 @@
             <div class="col-md-5">
                 <label for="docAct">Documento Actualización:</label>
                 <input type="hidden" name="doc_idAct" value="">
-                <select id="idocAct" name=docAct class="form-control" required>                          
+                <select id="idocAct" name="docAct" class="form-control" required>                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if load and rc.doc_idA == tpdfA[0] %}
@@ -372,7 +372,7 @@
             </div>
             <div class="col-md-5">
                 <label for="docAct">Documento Actualización Final:</label>
-                <select id="idocActF" name=docActF class="form-control" required disabled>                          
+                <select id="idocActF" name="docActF" class="form-control" required disabled>                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if load and rc.doc_idAF == tpdfA[0] %}

@@ -132,15 +132,14 @@ class Recintos:
                     estado, tiporecinto, codrue, \
                     codrueedif, depend, \
                     cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF):
-
-        recinto = idlocreci, nomreci, zonareci, \
+        recinto = nomreci, zonareci, \
             maxmesasreci, direccion, latitud, longitud, \
             estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, reci
-        s = "update GeografiaElectoral_app.dbo.reci" + \
-            " set IdLocReci= %s, NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
+            depend, cantpisos, fechaAct, usuario, etapa, docAct, docActF, reci
+        s = "update GeografiaElectoral_app.dbo.RECI" + \
+            " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
             " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
-            " depend= %d, cantPisos= %s, fechaIngreso= %s, fechaAct= %s, usuario= %s, " + \
+            " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
             " etapa= %s, doc_idA= %s, doc_idAF= %s " + \
             " where Reci = %s"
         try:
@@ -149,6 +148,7 @@ class Recintos:
             print('Recinto actualizado')
         except Exception as e:
             print("Error - actualización de Recinto...")
+            print(e)
 
 
     def get_next_reci(self):
