@@ -14,9 +14,11 @@
                 <div class="col-xs-12 col-sm-6 col-md-8">
                     <h5>CLASIFICADOR DE GRUPOS</h5>
                 </div>
+                {% if puede_adicionar %}
                 <div class="col-xs-6 col-md-4">
-                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('clas_grupo_ABC', grupo_id = 0) }} >Adicionar Grupo</a></button>
+                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-folder-plus"></span> <a href = {{ url_for('clas_grupo_ABC', grupo_id = 0) }} >Adicionar Grupo</a></button>
                 </div>
+                {% endif %}
             </div>
 
             <div style="height:20px"></div>
@@ -27,7 +29,8 @@
                         <tr>
                             <th>Descripcion del Grupo</th>
                             <th>Editar</th>
-                            <th>Adicionar Clasificador</th>
+                            <th>Eliminar</th>
+                            <th>Ver Clasificadores</th>
                             <!-- <th>Eliminar</th> -->
                         </tr>
                     </thead>
@@ -36,14 +39,22 @@
                         <tr>
                             <td>{{ grup[1] }}</td>
                             <td>
-                                <a href={{ url_for( 'clas_grupo_ABC', grupo_id=grup[0]) }}><span class="fas fa-edit"></span></a>
+                                {% if puede_editar %}
+                                    <a href={{ url_for( 'clas_grupo_ABC', grupo_id=grup[0]) }}><span class="fas fa-edit"></span></a>
+                                {% else %}
+                                    <a "/"><span class="fas fa-edit"></span></a>
+                                {% endif %}
                             </td>
                             <td>
-                                <a href={{ url_for( 'clas_list', grupo_id=grup[0]) }}><span class="fas fa-edit"></span></a>
+                                {% if puede_eliminar %}
+                                    <a href="#" data-href={{ url_for('grupo_del', grupo_id=grup[0]) }}  data-toggle="modal" data-target="#confirm-delete"><span class="fas fa-trash"></span></a>
+                                {% else %}
+                                    <a "/"><span class="fas fa-trash"></span></a>
+                                {% endif %}
                             </td>
-
-
-
+                            <td>
+                                <a href={{ url_for( 'clas_list', grupo_id=grup[0]) }}><span class="fas fa-list-alt"></span></a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -52,5 +63,36 @@
         </div>
 
 
+<!-- Modal -->
+     <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+ 
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                     <h4 class="modal-title" id="myModalLabel">Confirme Eliminación</h4>
+                 </div>
+ 
+                 <div class="modal-body">
+                     <p>Eliminará un Grupo... </p>
+                     <p>Esta seguro?</p>
+                     <p class="debug-url"></p>
+                 </div>
+ 
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                     <a class="btn btn-danger btn-ok">Eliminar</a>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <script>
+         $('#confirm-delete').on('show.bs.modal', function(e) {
+             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+             
+             $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+         });
+     </script>
 
-        {% endblock %}
+
+     {% endblock %}

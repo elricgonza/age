@@ -2179,10 +2179,15 @@ def bitacora_list():
 @login_required
 def clas_grupo_list():
     s = clas_grupo.Grupo(cxms)
-    rows = s.get_clas_grupos_all(usrdep)
+    rows = s.get_clas_grupos_all()
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('clas_grupo_list.html', clas_grup=rows, puede_adicionar='Grupo - Adición' in permisos_usr)  # render a template
+        if ('Grupo - Consulta' in permisos_usr):    # tiene pemisos asignados
+            return render_template('clas_grupo_list.html', clas_grup=rows, \
+                                   puede_adicionar='Grupo - Adición' in permisos_usr, \
+                                   puede_editar='Grupo - Edición' in permisos_usr, \
+                                   puede_eliminar='Grupo - Eliminación' in permisos_usr, \
+                                   puede_consultar='Grupo - Consulta' in permisos_usr \
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -2203,12 +2208,12 @@ def clas_grupo_ABC(grupo_id):
                 nextid = s.get_next_idgrupo()
                 s.add_clas_grupo(nextid, request.form['descripcion'])
 
-                rows = s.get_clas_grupos_all(usrdep)
+                rows = s.get_clas_grupos_all()
                 print('GRUPO ADICION')
                 return redirect(url_for('clas_grupo_list'))
         else: # Es Edit
             s.upd_grupo(grupo_id, request.form['descripcion'])
-            rows = s.get_clas_grupos_all(usrdep)
+            rows = s.get_clas_grupos_all()
             return render_template('clas_grupo_list.html', clas_grup=rows, puede_editar='Grupo - Edicion' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
         if grupo_id != '0':  # EDIT
@@ -2248,7 +2253,7 @@ def clas_new(grupo_id):
 
 @app.route('/clas_ABC/<clas_id>/<clas_grup_id>', methods=['GET', 'POST'])
 @login_required
-def clas_ABC(clas_id,clas_grup_id):
+def clas_ABC(clas_id, clas_grup_id):
     s = clasificadores.Clasificador(cxms)
     error = None
     p = ('clasificadores - Edición' in permisos_usr)  # t/f
@@ -2273,6 +2278,20 @@ def clas_ABC(clas_id,clas_grup_id):
                 return render_template('clas_ABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de clasificadores', puede_editar=p)
     # New
     return render_template('clas_ABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo clasificador', puede_editar=p)
+
+
+@app.route('/grupo_del/<grupo_id>', methods=['GET', 'POST'])
+@login_required
+def grupo_del(grupo_id):
+    g = clas_grupo.Grupo(cxms)
+    g.del_grupo(grupo_id)
+
+    rows = g.get_clas_grupos_all()
+    if rows:
+        return render_template('clas_grupo_list.html', clas_grup=rows, puede_adicionar='Grupo - Adición' in permisos_usr)  # render a template
+    else:
+        print ('Sin grupos...')
+
 
 @app.route('/recinto_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
 @login_required
