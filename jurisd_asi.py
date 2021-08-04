@@ -16,12 +16,8 @@ class Jurisd_asi:
         "a.AsientoElectoral as Asiento, a.NombreTipoLocLoc as Tipo_Circun, a.DEP, a.PROV, a.SEC, " + \
             "CASE WHEN a.estado = 1 THEN 'Habilitado TED' " + \
                     "WHEN a.estado = 2 THEN 'Rehabilitado TED' " + \
-                    "WHEN a.estado = 3 THEN 'Suspendido TED' " + \
-                    "WHEN a.estado = 4 THEN 'Suprimido TED' " + \
                     "WHEN a.estado = 101 THEN 'Habilitado TSE' " + \
                     "WHEN a.estado = 102 THEN 'Rehabilitado TSE' " + \
-                    "WHEN a.estado = 103 THEN 'Suspendido TSE' " + \
-                    "WHEN a.estado = 104 THEN 'Suprimido TSE' " + \
             "ELSE 'oother'  END as Estado, j.idLoc, j.origen" + \
         " from [bdge].[dbo].[GeoAsientos_Nacional_all] a" + \
         " left join [bdge].[dbo].[actJurisd] j on a.IdLoc=j.idLoc"
@@ -121,12 +117,25 @@ class Jurisd_asi:
         else:
             return rows
 
+    def get_zonas_dps(self, dp, pr, mu, ci):  
+        s = "select d.Dist, z.Zona, z.NomZona, d.CircunDist from GeografiaElectoral_app.dbo.DIST d " + \
+            "inner join GeografiaElectoral_app.dbo.ZONA z on d.Dist=z.DistZona " + \
+            "inner join GeografiaElectoral_app.dbo.LOC a on d.IdLocDist=a.IdLoc and z.IdLocZona=a.IdLoc " + \
+            "where d.IdLocDist=z.IdLocZona and d.CircunDist=%d and a.DepLoc=%d and a.ProvLoc=%d and a.SecLoc=%d " + \
+            "group by d.Dist, z.Zona, z.NomZona, d.CircunDist order by z.NomZona"
+        lista = ci, dp, pr, mu    
+        self.cur.execute(s, lista)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
 
-    def get_zonadist_idloc(self, idloc, circun):
+    def get_zonadist_idloc(self, zonade, circun):
         s = "Select d.Dist, z.Zona, d.NomDist, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
-            "[GeografiaElectoral_app].[dbo].[DIST] d where z.DistZona=d.Dist and z.IdLocZona = %d and d.IdLocDist= %d " +\
-            "and d.CircunDist = %d"
-        lista= idloc, idloc, circun        
+            "[GeografiaElectoral_app].[dbo].[DIST] d where z.DistZona=d.Dist and z.IdLocZona = d.IdLocDist " + \
+            "and d.CircunDist=%d and z.Zona=%d group by d.Dist, z.Zona, d.NomDist, z.NomZona, d.CircunDist"
+        lista= circun, zonade        
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
         if  row == None:
@@ -172,7 +181,7 @@ class Jurisd_asi:
             return True
 
     def add_llenado_recintos(self, idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, dist, zona, \
-                         nomdist, nomzona, circun, f_ingreso, f_actual, usr):
+                         nomdist, nomzona, circun, f_ingreso, f_actual, usr, idocact):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona," + \
             " NombreRecinto, Direccion, CircunDist, TipoLocLoc, NombreTipoLocLoc, idClasif, descripcion, latitud, longitud, doc_idA, doc_idAF" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
@@ -185,7 +194,7 @@ class Jurisd_asi:
             for recinto in rows:
                 new_jurisd_asi = recinto[0], recinto[1], recinto[2], recinto[3], recinto[4], recinto[5], recinto[6], recinto[7], \
                 recinto[8], recinto[9], recinto[10], recinto[11], recinto[12], recinto[13], recinto[14], recinto[15], recinto[16], \
-                recinto[17], recinto[18], recinto[19], recinto[20], recinto[21], recinto[22], recinto[23], dep2, prov2, sec2, recinto[3], \
+                recinto[17], recinto[18], recinto[19], recinto[20], recinto[21], idocact, recinto[23], dep2, prov2, sec2, recinto[3], \
                 dist, zona, recinto[6], departamento2, provincia2, municipio2, recinto[10], nomdist, nomzona, recinto[13], \
                 recinto[14], circun, recinto[16], recinto[17], recinto[18], recinto[19], recinto[20], recinto[21], 0, f_ingreso, f_actual, usr, 'A'
                 s = "insert into bdge.dbo.actJurisd (dep, prov, sec, idloc, dist, zona, reci, nomDep, nomProv, nomSec, nomLoc," + \
@@ -201,7 +210,7 @@ class Jurisd_asi:
             return True
 
     def upd_llenado_recintos(self, idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, dist, zona, \
-                         nomdist, nomzona, circun, f_actual, usr):
+                         nomdist, nomzona, circun, f_actual, usr, idocact):
         s = "Select id from actJurisd where idLoc = %s"  
         self.cur.execute(s, idloc)
         rows = self.cur.fetchall()
@@ -209,10 +218,10 @@ class Jurisd_asi:
             return False
         else:
             for recinto in rows:
-                upd_jurisd_asi = dep2, prov2, sec2, dist, zona, departamento2, provincia2, municipio2, nomdist, nomzona, \
+                upd_jurisd_asi = idocact, dep2, prov2, sec2, dist, zona, departamento2, provincia2, municipio2, nomdist, nomzona, \
                                  circun, f_actual, usr, recinto[0]
                 s = "update bdge.dbo.actJurisd" + \
-                    " set dep2 = %s, prov2 = %s, sec2 = %s, dist2 = %s, zona2 = %s, nomDep2 = %s," + \
+                    " set doc = %s, dep2 = %s, prov2 = %s, sec2 = %s, dist2 = %s, zona2 = %s, nomDep2 = %s," + \
                     " nomProv2 = %s, nomSec2 = %s, nomDist2 = %s, nomZona2 = %s," + \
                     " circun2 = %s, fechaAct = %s, usuario = %s" + \
                     " where id = %d"
@@ -221,10 +230,10 @@ class Jurisd_asi:
 
             return True
 
-    def upd_asiento_juriasi(self, idloc, dep, prov, sec):
-        asiento = dep, prov, sec, idloc
+    def upd_asiento_juriasi(self, idloc, dep, prov, sec, idocact):
+        asiento = dep, prov, sec, idocact, idloc
         s = "update GeografiaElectoral_app.dbo.LOC" + \
-            " set DepLoc= %s, ProvLoc=%s, SecLoc = %s where IdLoc = %s"
+            " set DepLoc= %s, ProvLoc=%s, SecLoc = %s, doc_idA = %s where IdLoc = %s"
         try:
             self.cur.execute(s, asiento)
             self.cx.commit()
@@ -244,9 +253,9 @@ class Jurisd_asi:
             print("Error - actualización de Recinto...")    
     
     def get_jurisd_asi_idloc_idjurisd(self, idloc):        
-        s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2 from bdge.dbo.GeoAsientos_Nacional_all" + \
+        s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.GeoAsientos_Nacional_all" + \
             " left join bdge.dbo.actJurisd on bdge.dbo.GeoAsientos_Nacional_all.IdLoc=bdge.dbo.actJurisd.idLoc" + \
-            " where bdge.dbo.actJurisd.idLoc=%d group by bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2"    
+            " where bdge.dbo.actJurisd.idLoc=%d group by bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2"    
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
         if  row == None:
@@ -254,4 +263,22 @@ class Jurisd_asi:
         else:
             self.idloc = row[0]
             self.circ = row[1]
+            self.idzona = row[2]
+            self.dist = row[3]
             return True
+
+    def get_zonasd_all(self, usrdep):        
+        s = "Select d.Dist, z.Zona, z.NomZona, d.CircunDist, a.DepLoc, a.ProvLoc, a.SecLoc from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
+            "[GeografiaElectoral_app].[dbo].[DIST] d, [GeografiaElectoral_app].[dbo].[LOC] a"
+        if usrdep != 0:
+            s = s + " where z.DistZona=d.Dist and a.IdLoc=z.IdLocZona and a.IdLoc=d.IdLocDist and a.DepLoc = %d order by z.NomZona"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " where z.DistZona=d.Dist and a.IdLoc=z.IdLocZona and a.IdLoc=d.IdLocDist order by z.NomZona"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows

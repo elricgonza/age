@@ -15,7 +15,7 @@
     <br>
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-8">
-            <h5>Actualizar Jurisd_Asi</h5>
+            <h5>Actualizar Jurisdicción Asientos</h5>
         </div>
         <div class="col-xs-6 col-md-4">
         </div>
@@ -121,6 +121,8 @@
                 <br>
                 <div class="row">
                     <div class="col-lg-1">
+                    </div>
+                    <div class="col-lg-1">
                         <label for="deploc">Dep:</label>
                         <input type="text" class="form-control" id="ideploc" title="" name="deploc" style="text-align:right;" readonly 
                                 {% if load %}
@@ -165,13 +167,14 @@
                     </div>
                     <div class="col-lg-1">
                         <label for="secloc" class="col-form-label">Sec:</label>
+                        <input type="hidden" id="isecloc2" name="secloc2" value="{{ ja.secloc }}">
                         <input type="text" class="form-control" id="isecloc" title="" name="secloc" style="text-align:right;" readonly 
                                 {% if load %}
                                     value="{{ ja.secloc }}"
                                 {% endif %}
                             >
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <label for="municipio" class="col-form-label">Municipio:</label>
                         <select id="imunicipio" name="municipio" class="form-control" onchange="cargarjuri_a(this.value, 2)" required>
                             {% for municipio in municipios %}
@@ -186,8 +189,14 @@
                         </select>
                     </div>
                     <div class="col-lg-1">
+                    </div>    
+                </div>
+                <div class="row">
+                    <div class="col-lg-1">
+                    </div>
+                    <div class="col-lg-1">
                         <label for="circu" class="col-form-label">Circuns:</label>
-                        <select id="icircu" name="circu" class="form-control" required>
+                        <select id="icircu" name="circu" class="form-control" onchange="cargarjuri_a(this.value, 3)" required>
                             <option></option>
                             {% for circun in circuns %}
                                 {% if ja.deploc == circun[0] and ja.provloc == circun[1] and ja.secloc == circun[2] %}
@@ -203,6 +212,45 @@
                                 {% endif %}
                             {% endfor %}
                         </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="zonade" class="col-form-label">Lista de Zonas:</label>
+                            <select id="izonade" name="zonade" class="form-control" required>
+                                {% for zonad in zonasd %}
+                                    {% if ja.deploc == zonad[4] and ja.provloc == zonad[5] and ja.secloc == zonad[6] %}
+                                        {% if ban %}
+                                            {% if ja.circ == zonad[3] %}
+                                                {% if ja.idzona == zonad[1] %}
+                                                    {% if ja.dist == zonad[0] %}
+                                                        <option value = "{{ zonad[1] }}" selected>{{ zonad[2]~'(Circun: '~zonad[3]~')' }}</option>
+                                                    {% else %}
+                                                        <option value = "{{ zonad[1] }}">{{ zonad[2]~'(Circun: '~zonad[3]~')' }}</option>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div> 
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="docact" class="col-form-label">Doc. Actualización:</label>
+                            <select id="idocact" name="docact" class="form-control" required>                          
+                                <option></option>
+                                {% for tpdfA in tpdfsA %}
+                                    {% if load and ja.doc_idA==tpdfA[0] %}                                  
+                                        <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                                    {% else %}
+                                            <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                                    {% endif %}    
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
                     </div>    
                 </div>
                 <br>
@@ -234,7 +282,13 @@
         }
         function guardar_jurisd_asi(){
             var idloc = $("#iidloc").val();
-            $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");
+            var secloc = $("#isecloc").val();
+            var secloc2 = $("#isecloc2").val();
+            if(secloc2 != secloc){
+                $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");
+            }else{
+                alert('Debe Seleccionar Un Municipio DIFERENTE al cual Asignar el Asiento. !!!');
+            }
         }
         function modificar_jurisd_asi(){
             var idloc = $("#iidloc").val();

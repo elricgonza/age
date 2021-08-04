@@ -285,6 +285,27 @@
                     <div class="col-lg-1">
                     </div>    
                 </div>
+                <div class="row">
+                    <div class="col-lg-7">
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="docact">Doc. Actualización:</label>
+                            <select id="idocact" name="docact" class="form-control" required>                          
+                                <option></option>
+                                {% for tpdfA in tpdfsA %}
+                                    {% if load and ju.doc_idA==tpdfA[0] %}                                  
+                                        <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                                    {% else %}
+                                            <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                                    {% endif %}    
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                    </div>    
+                </div>
                 <br>
                 <div class="row">
                     <div class="col-md-3">
@@ -313,9 +334,14 @@
             $('#formjurisdiccion').attr('action', '/jurisdiccion_list');    
         }
         function guardar_jurisdiccion(){
-            $("#iidloc").val();
+            var idloc = $("#iidloc").val();
+            var idloc1 = $("#iidloc1").val();
             $("#iidlocreci").val();
-            $("#formjurisdiccion").attr("action", "/jurisdiccion/0/0");
+            if(idloc != idloc1){
+                $("#formjurisdiccion").attr("action", "/jurisdiccion/0/0");
+            }else{
+                alert('Debe Seleccionar Un Asiento DIFERENTE al cual Asignar el Recinto. !!!');
+            }
         }
         function modificar_jurisdiccion(){
             $("#iidloc").val();

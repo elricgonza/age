@@ -221,7 +221,7 @@ class Homologa:
 
     def get_recintos_idloc(self, idlocreci, circun):
         s = "select IdLocReci, Reci, NombreRecinto, NomZona, NomDist, CircunDist, Direccion from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional]" + \
-            " where IdLocReci = %d and CircunDist = %d and estado in (1, 2, 3, 6)"
+            " where IdLocReci = %d and CircunDist = %d and estado in (1, 2)"
         circuns = idlocreci, circun    
         self.cur.execute(s, circuns)
         rows = self.cur.fetchall()

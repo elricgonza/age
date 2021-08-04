@@ -303,16 +303,16 @@ class Jurisdiccion:
         except:
             print("Error - actualización de jurisdiccion...")
 
-    def upd_jurisdiccion(self, dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, \
+    def upd_jurisdiccion(self, idocact, dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, \
                      provincia2, municipio2, asiento2, nomdist2, nomzona2, recinto2, direccion2, \
                      circun2, idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, \
                      latitud2, longitud2, f_actual, usr, idjurisd):
-        upd_jurisd = dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, \
+        upd_jurisd = idocact, dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, \
             provincia2, municipio2, asiento2, nomdist2, nomzona2, recinto2, direccion2, circun2, \
             idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, latitud2, \
             longitud2, f_actual, usr, idjurisd
         s = "update bdge.dbo.actJurisd" + \
-            " set dep2 = %s, prov2 = %s, sec2 = %s, idLoc2 = %s, dist2 = %s, zona2 = %s, reci2 = %s, nomDep2 = %s," + \
+            " set doc = %s, dep2 = %s, prov2 = %s, sec2 = %s, idLoc2 = %s, dist2 = %s, zona2 = %s, reci2 = %s, nomDep2 = %s," + \
             " nomProv2 = %s, nomSec2 = %s, nomLoc2 = %s, nomDist2 = %s, nomZona2 = %s, nomReci2 = %s, direccion2 = %s," + \
             " circun2 = %s, idTipoCircun2 = %s, tipoCircun2 = %s, idTipoRecinto2 = %s, tipoRecinto2 = %s, latitud2 = %s, longitud2 = %s," + \
             " fechaAct = %s, usuario = %s" + \
@@ -324,10 +324,10 @@ class Jurisdiccion:
         except Exception as e:
             print("Error - actualización de Jurisdiccion...")
 
-    def upd_recinto_jurireci(self, idlocreci, reci, reci2, idloc2, zonareci):
-        recinto = idloc2, zonareci, reci2, idlocreci, reci
+    def upd_recinto_jurireci(self, idlocreci, reci, reci2, idloc2, zonareci, idocact):
+        recinto = idloc2, zonareci, reci2, idocact, idlocreci, reci
         s = "update GeografiaElectoral_app.dbo.reci" + \
-            " set IdLocReci= %s, ZonaReci= %s, Reci=%s where IdLocReci = %s and Reci = %s"
+            " set IdLocReci= %s, ZonaReci= %s, Reci=%s, doc_idA=%s where IdLocReci = %s and Reci = %s"
         try:
             self.cur.execute(s, recinto)
             self.cx.commit()
@@ -335,10 +335,10 @@ class Jurisdiccion:
         except Exception as e:
             print("Error - actualización de Recinto...")
 
-    def upd_recinto_juri(self, idlocreci, reci, idloc2, zonareci):
-        recinto = idloc2, zonareci, idlocreci, reci
+    def upd_recinto_juri(self, idlocreci, reci, idloc2, zonareci, idocact):
+        recinto = idloc2, zonareci, idocact, idlocreci, reci
         s = "update GeografiaElectoral_app.dbo.reci" + \
-            " set IdLocReci= %s, ZonaReci= %s where IdLocReci = %s and Reci = %s"
+            " set IdLocReci= %s, ZonaReci= %s, doc_idA=%s where IdLocReci = %s and Reci = %s"
         try:
             self.cur.execute(s, recinto)
             self.cx.commit()

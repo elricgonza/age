@@ -112,6 +112,7 @@ function cargarjuri_a(valor, data) {
             $('#iprovincia').html('');
             $('#imunicipio').html('');
             $('#icircu').html('');
+            $('#izonade').html('');
             $.getJSON("/get_provespeciales_all", function(datos){
                 $("#iprovincia").append('<option></option>');
                 $.each(datos, function(index, obj){
@@ -125,6 +126,7 @@ function cargarjuri_a(valor, data) {
             var dp = document.getElementById("idepartamento").value;
             $('#imunicipio').html('');
             $('#icircu').html('');
+            $('#izonade').html('');
             $.getJSON("/get_muniespeciales_all", function(datos1){
                 $("#imunicipio").append('<option></option>');                
                 $.each(datos1, function(index1, obj1){                 
@@ -139,6 +141,7 @@ function cargarjuri_a(valor, data) {
             var pr = document.getElementById("iprovincia").value;
             var mu = valor;
             $('#icircu').html('');
+            $('#izonade').html('');
             $.getJSON("/get_circuns_dps", {
                 dp: dp,
                 pr: pr,
@@ -147,6 +150,23 @@ function cargarjuri_a(valor, data) {
                 $("#icircu").append('<option></option>');                
                 $.each(datos1, function(index1, obj1){                 
                     $("#icircu").append('<option value="'+obj1[3]+'">'+obj1[3]+'</option>');  
+                });
+            });
+        }else if(data==3){
+            var dp = document.getElementById("idepartamento").value;
+            var pr = document.getElementById("iprovincia").value;
+            var mu = document.getElementById("imunicipio").value;
+            var ci = valor;
+            $('#izonade').html('');
+            $.getJSON("/get_zonas_dps", {
+                dp: dp,
+                pr: pr,
+                mu: mu,
+                ci: ci
+            }, function(datos1){
+                $("#izonade").append('<option></option>');                
+                $.each(datos1, function(index1, obj1){                 
+                    $("#izonade").append('<option value="'+obj1[1]+'">'+obj1[2]+'(Circun: '+obj1[3]+')'+'</option>');  
                 });
             });
         } 

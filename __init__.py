@@ -1588,13 +1588,13 @@ def a_homologa_m():
         reci21 = request.form['idlocreci21']
         inicio = request.form['inicio']
         final = request.form['final']
-        if ahom.verificar_homologa_idlocreci(idloc, reci, idloc21, reci21):
+        if ahom.verificar_homologa_idlocreci(idloc, reci, idloc21, reci21): #verifica si ya existe una asignacion previa
             f_actual = str(datetime.datetime.now())[:-7]
             ahom.get_homologa_idlocreci_destino(idloc2, reci2)
             ahom.upd_homologa(ahom.dep2, ahom.prov2, ahom.sec2, ahom.idloc2, ahom.dist2, ahom.zona2, ahom.reci2, ahom.departamento2, ahom.provincia2, \
                               ahom.municipio2, ahom.asiento2, ahom.nomdist2, ahom.nomzona2, ahom.recinto2, ahom.direccion2, ahom.circun2, ahom.idtipocircun2, \
                               ahom.tipocircun2, ahom.idtiporecinto2, ahom.tiporecinto2, ahom.latitud2, ahom.longitud2, f_actual, usr, ahom.idhom)
-        else:
+        else: #recinto para asignar
             f_ingreso = str(datetime.datetime.now())[:-7]
             f_actual = str(datetime.datetime.now())[:-7]
             ahom.get_homologa_idlocreci_origen(idloc, reci)
@@ -1698,6 +1698,7 @@ def jurisdiccion_list():
 def jurisdiccion(reci, idloc):
     ju = jur.Jurisdiccion(cxms)
     rces = recies.Reciespeciales(cxms)
+    d = docu.Documentos(cxms)
     error = None
     
     if request.method == 'POST':
@@ -1708,22 +1709,23 @@ def jurisdiccion(reci, idloc):
         idloc2 = request.form['idloc1']
         reci2 = request.form['idlocreci']
         idzona = request.form['zonad']
+        idocact = request.form['docact']
         ju.get_jurisdiccion_idlocreci_origen(idloc, reci)
         ju.get_zonadist_idloc2(idloc2, idzona)
         ju.get_asiento_idloc2(idloc2)
         ju.get_jurisdiccion_idlocreci_destino(idloc, reci)
         ju.add_jurisdiccion(ju.dep, ju.prov, ju.sec, ju.idloc, ju.dist, ju.zona, ju.reci, ju.departamento, ju.provincia, ju.municipio, \
                             ju.asiento, ju.nomdist, ju.nomzona, ju.recinto, ju.direccion, ju.circun, ju.idtipocircun, ju.tipocircun, \
-                            ju.idtiporecinto, ju.tiporecinto, ju.latitud, ju.longitud, ju.doc, ju.doc1, ju.dep2, ju.prov2, ju.sec2, \
+                            ju.idtiporecinto, ju.tiporecinto, ju.latitud, ju.longitud, idocact, ju.doc1, ju.dep2, ju.prov2, ju.sec2, \
                             idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, \
                             ju.nomzona2, ju.recinto2, ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
                             ju.tiporecinto2, ju.latitud2, ju.longitud2, f_ingreso, f_actual, usr)
 
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
             nextid = ju.get_next_idreci(idloc2, reci)
-            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona)
+            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact)
         else:
-            ju.upd_recinto_juri(idloc, reci, idloc2, idzona)
+            ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact)
 
         rows = ju.get_jurisdiccion_all(usrdep)
         return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
@@ -1735,10 +1737,10 @@ def jurisdiccion(reci, idloc):
             rows = ju.get_asientos_all(usrdep)
             zonasd = ju.get_zonasd_all(usrdep)
 
-        if ju.get_jurisdiccion_idloc(idloc, reci): # LISTA
-            return render_template('jurisdiccion.html', ju=ju, asientos=rows, zonasd=zonasd, dptos=dptos, provincias=provincias, municipios=municipios, load=True, titulo='Recinto a Modificar Jurisdicción', boton='Modificar')
-        else:
-            return render_template('jurisdiccion.html', ju=ju, asientos=rows, zonasd=zonasd, dptos=dptos, provincias=provincias, municipios=municipios, load=True, titulo='Recinto a Actualizar Jurisdicción', boton='Asignar')
+        if ju.get_jurisdiccion_idloc(idloc, reci): # Verifica si ya se asigno el recinto a otro asiento
+            return render_template('jurisdiccion.html', ju=ju, asientos=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, titulo='Recinto a Modificar Jurisdicción', boton='Modificar')
+        else:#se realiza la asignacion del recinto a otro asiento
+            return render_template('jurisdiccion.html', ju=ju, asientos=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, titulo='Recinto a Actualizar Jurisdicción', boton='Asignar')
 
 
 @app.route('/jurisdiccion_m', methods=['GET', 'POST'])
@@ -1755,11 +1757,12 @@ def jurisdiccion_m():
         idloc2 = request.form['idloc1']
         reci2 = request.form['idlocreci']
         idzona = request.form['zonad']
+        idocact = request.form['docact']
         idjurisd = request.form['idjurisd']
         ju.get_zonadist_idloc2(idloc2, idzona)
         ju.get_asiento_idloc2(idloc2)
         ju.get_jurisdiccion_idlocreci_destino(idloc, reci)
-        ju.upd_jurisdiccion(ju.dep2, ju.prov2, ju.sec2, idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, \
+        ju.upd_jurisdiccion(idocact, ju.dep2, ju.prov2, ju.sec2, idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, \
                             ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, ju.nomzona2, ju.recinto2, \
                             ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
                             ju.tiporecinto2, ju.latitud2, ju.longitud2, f_actual, usr, idjurisd)
@@ -1767,10 +1770,10 @@ def jurisdiccion_m():
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
             print('aqui')
             nextid = ju.get_next_idreci(idloc2, reci)
-            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona)
+            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact)
         else:
             print('por aqui')
-            ju.upd_recinto_juri(idloc, reci, idloc2, idzona)
+            ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact)
 
         rows = ju.get_jurisdiccion_all(usrdep)
         return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
@@ -1822,6 +1825,7 @@ def jurisd_asi_list():
 def jurisd_asi(idloc):
     ja = jua.Jurisd_asi(cxms)
     rces = recies.Reciespeciales(cxms)
+    d = docu.Documentos(cxms)
     error = None
     
     if request.method == 'POST':
@@ -1837,11 +1841,13 @@ def jurisd_asi(idloc):
         ja.get_sec(dep2, prov2, sec2)
         municipio2 = ja.nomsec
         circun = request.form['circu']
-        ja.get_zonadist_idloc(idloc, circun)
+        zonade = request.form['zonade']
+        idocact = request.form['docact']
+        ja.get_zonadist_idloc(zonade, circun)
         if ja.add_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
-                                   ja.nomzona, ja.circun, f_ingreso, f_actual, usr):
+                                   ja.nomzona, ja.circun, f_ingreso, f_actual, usr, idocact):
             #Actualiza el asiento y sus recintos
-            ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2)
+            ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact)
             ja.upd_recinto_juriasi(idloc, ja.zona)
         else:
             flash("El Asiento No Tiene Recintos", 'alert-warning')
@@ -1850,22 +1856,24 @@ def jurisd_asi(idloc):
             municipios=rces.get_muniespeciales_all(usrdep)
             if ja.get_jurisd_asi_idloc(idloc):
                 rows = ja.get_circuns_all(usrdep)
+                zonasd = ja.get_zonasd_all(usrdep)
             
             if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
-                return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
+                return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
             else:
-                return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')
+                return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')
     else:
         dptos=rces.get_depaespeciales_all(usrdep)
         provincias=rces.get_provespeciales_all(usrdep)
         municipios=rces.get_muniespeciales_all(usrdep)
         if ja.get_jurisd_asi_idloc(idloc):
             rows = ja.get_circuns_all(usrdep)
+            zonasd = ja.get_zonasd_all(usrdep)
         
         if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
-            return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
+            return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
         else:
-            return render_template('jurisd_asi.html', ja=ja, circuns=rows, dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')    
+            return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')    
 
     rows = ja.get_jurisd_asi_all(usrdep)
     return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
@@ -1890,11 +1898,13 @@ def jurisd_asi_m(idloc):
         ja.get_sec(dep2, prov2, sec2)
         municipio2 = ja.nomsec
         circun = request.form['circu']
-        ja.get_zonadist_idloc(idloc, circun)
+        zonade = request.form['zonade']
+        idocact = request.form['docact']
+        ja.get_zonadist_idloc(zonade, circun)
         ja.upd_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
-                            ja.nomzona, ja.circun, f_actual, usr)
+                            ja.nomzona, ja.circun, f_actual, usr, idocact)
         #Actualiza el asiento y sus recintos
-        ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2)
+        ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact)
         ja.upd_recinto_juriasi(idloc, ja.zona)
 
     rows = ja.get_jurisd_asi_all(usrdep)
@@ -1913,6 +1923,22 @@ def get_circuns_dps():
         return jsonify(rows)
     else:
         return jsonify(0)
+
+
+@app.route('/get_zonas_dps', methods=['GET', 'POST'])
+@login_required
+def get_zonas_dps():
+    ja = jua.Jurisd_asi(cxms)
+    dp = request.args.get('dp')
+    pr = request.args.get('pr')
+    mu = request.args.get('mu')
+    ci = request.args.get('ci')
+    rows = ja.get_zonas_dps(dp, pr, mu, ci)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
 """ Final de Actualizacion de Jurisd_asi """
 """ Final de Actualizacion de Jurisdiccion """
 @app.route('/paises_list', methods=['GET', 'POST'])
