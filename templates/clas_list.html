@@ -14,9 +14,11 @@
                 <div class="col-xs-12 col-sm-6 col-md-8">
                     <h5>CLASIFICADORES</h5>
                 </div>
+                {% if puede_adicionar %}
                 <div class="col-xs-6 col-md-4">
-                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-clone"></span> <a href = {{ url_for('clas_ABC', clas_id = 0, clas_grup_id = clasificadores[0][2]) }}>Adicionar Clasificador</a></button>
+                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-clone"></span> <a href = {{ url_for('clas', clas_id = 0, clas_grup_id = clasificadores[0][2]) }}>Adicionar Clasificador</a></button>
                 </div>
+                {% endif %}
             </div>
 
             <div style="height:20px"></div>
@@ -40,10 +42,18 @@
                             <td>{{ Clasificador[3] }}</td>
 
                             <td>
-                                <a href={{ url_for( 'clas_ABC', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-edit"></span></a>
+                                {% if puede_editar %}
+                                    <a href={{ url_for( 'clas', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-edit"></span></a>
+                                {% else %}
+                                    <a "/"><span class="fas fa-edit"</span></a>
+                                {% endif %}
                             </td>
                             <td>
-                                <a href={{ url_for( 'clas_ABC', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-trash"></span></a>
+                                {% if puede_eliminar %}
+                                    <a href={{ url_for( 'clas', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-trash"></span></a>
+                                {% else %}
+                                    <a "/"><span class="fas fa-trash"</span></a>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
