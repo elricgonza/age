@@ -50,7 +50,8 @@
                             </td>
                             <td>
                                 {% if puede_eliminar %}
-                                    <a href={{ url_for( 'clas', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-trash"></span></a>
+                                    <a href="#" data-href={{ url_for('clas_del', clasif_id=clasificadores[0]) }}  data-toggle="modal" data-target="#confirm-delete"><span class="fas fa-trash"></span></a>
+                                    <!--<a href={{ url_for( 'clas', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-trash"></span></a>-->
                                 {% else %}
                                     <a "/"><span class="fas fa-trash"</span></a>
                                 {% endif %}
@@ -61,4 +62,37 @@
                 </table>
             </div>
         </div>
-        {% endblock %}
+
+
+<!-- Modal -->
+     <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+ 
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                     <h4 class="modal-title" id="myModalLabel">Confirme Eliminación</h4>
+                 </div>
+ 
+                 <div class="modal-body">
+                     <p>Eliminará un Clasificador... </p>
+                     <p>Esta seguro?</p>
+                     <p class="debug-url"></p>
+                 </div>
+ 
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                     <a class="btn btn-danger btn-ok">Eliminar</a>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <script>
+         $('#confirm-delete').on('show.bs.modal', function(e) {
+             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+             
+             $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+         });
+     </script>
+
+{% endblock %}

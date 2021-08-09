@@ -2246,7 +2246,7 @@ def clas_list(grupo_id):
                         return render_template('clas_list.html', clasificadores=rows, \
                                                puede_adicionar='Clasificadores - Adición' in permisos_usr, \
                                                puede_editar='Clasificadores - Edición' in permisos_usr, \
-                                               puede_eliminar='Clasificadores - Supresión' in permisos_usr, \
+                                               puede_eliminar='Clasificadores - Eliminación' in permisos_usr, \
                                                puede_consultar='Clasificadores - Consulta' in permisos_usr, \
                                               )
                     else:
@@ -2267,6 +2267,15 @@ def clas_new(grupo_id):
         print('Nuevo...')
 
 
+@app.route('/clas_del/<clasif_id>', methods=['GET', 'POST'])
+@login_required
+def clas_del(clasif_id):
+    c = clasificadores.Clasificador(cxms)
+    c.del_clas(clasif_id)
+
+    return redirect(url_for('grupo_list'))
+
+
 @app.route('/clas/<clas_id>/<clas_grup_id>', methods=['GET', 'POST'])
 @login_required
 def clas(clas_id, clas_grup_id):
@@ -2281,15 +2290,24 @@ def clas(clas_id, clas_grup_id):
             else:
                 nextid = s.get_next_idclas()
                 s.add_clas(nextid, request.form['descripcion'], clas_grup_id,request.form['subgrupo'])
-                return redirect(url_for('clas_list'))
+                return redirect(url_for('clas_list', grupo_id=clas_grup_id))
                 #rows = s.get_clas_idclas(clas_grup_id)
                 #return render_template('clas_list.html', clasificadores=rows, puede_adicionar='Clasificador - Adición' in permisos_usr)  # render a template
 
         else: # Es Edit
+            print('POST-eS Edit-------------------------------º:w')
             s.upd_clas(clas_id, request.form['descripcion'],request.form['subgrupo'])
-            return redirect(url_for('clas_list'))
-            #rows = s.get_clas_idclas(request.form['grupo'])
+            #return redirect(url_for('clas_list', grupo_id=clas_grup_id))
+            #return redirect(url_for('clas_list', grupo_id=clas_grup_id))
+            #return redirect(url_for('grupo_list'))
+            rows = s.get_clas_idclas(request.form['grupo'])
             #return render_template('clas_list.html', clasificadores=rows, puede_editar='Clasificador - Edicion' in permisos_usr)  # render a template
+            return render_template('clas_list.html', clasificadores=rows, \
+                                   puede_adicionar='Clasificadores - Adición' in permisos_usr, \
+                                   puede_editar='Clasificadores - Edición' in permisos_usr, \
+                                   puede_eliminar='Clasificadores - Eliminación' in permisos_usr, \
+                                   puede_consultar='Clasificadores - Consulta' in permisos_usr, \
+                                  )
     else: # Viene de <asientos_list>
         if clas_id != '0':  # EDIT
             if s.get_clas_id(clas_id) == True:

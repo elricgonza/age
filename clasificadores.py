@@ -69,6 +69,20 @@ class Clasificador:
             print("Error - actualización de clasificador")
             print(e)
     
+
+    def del_clas(self, id):
+        '''Elimina clasificador '''
+
+        s = "delete from GeografiaElectoral_app.dbo.clasif where idClasif = %d"
+        try:
+            self.cur.execute(s, id)
+            self.cx.commit()
+            print('Clasificador eliminado')
+        except Exception as e:
+             print("Error --DEL--clasificador ...")
+             print(e)
+
+
     def get_next_idclas(self):
         self.cur.execute("select max(GeografiaElectoral_app.dbo.clasif.idClasif) + 1 from GeografiaElectoral_app.dbo.clasif")
         row = self.cur.fetchone()
