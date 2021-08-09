@@ -21,16 +21,12 @@ class Clasificador:
         else:
             return rows
 
+
     def get_clas_idclas(self, clasifGrupoId):
         s = "SELECT idClasif,descripcion,clasifGrupoId,clasifSubGrupo FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId = %d" 
         self.cur.execute(s, clasifGrupoId)
-        row = self.cur.fetchall()
-        if  self.cur.rowcount == 0:
-            print('filas vacias')
-            return row
-        else:
-            print('filas llenas')
-            return row
+        return self.cur.fetchall() #rows
+
 
     def get_clas_id(self, idClasif):
         s = "SELECT  idClasif,descripcion,clasifGrupoId,clasifSubGrupo  " + \
@@ -47,14 +43,14 @@ class Clasificador:
 
             return True
 
+
     def add_clas(self, idClasif,descripcion,clasifGrupoId,clasifSubGrupo):
         new_clas = idClasif,descripcion,clasifGrupoId,clasifSubGrupo
         s = "insert into GeografiaElectoral_app.dbo.clasif (idClasif,descripcion,clasifGrupoId,clasifSubGrupo) values (%s, %s, %s, %s)"
         self.cur.execute(s, new_clas)
         self.cx.commit()
-        print("adicionado...grupo")
+        print("Clasificador adicionado...")
                        
-
 
     def upd_clas(self, idClasif,descripcion,clasifSubGrupo):
         new_clas = descripcion,clasifSubGrupo,idClasif

@@ -18,7 +18,7 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <label for="Grupos">CLASIFICADORES:</label>
+                        <label for="Grupos">CLASIFICADORES::</label>
                         <input type="text" class="form-control" id="idescrip" placeholder="Introduzca la Descripcion del Clasificador" name="descripcion" required {% if load %} value="{{ s.descripcion }}" {% endif %}>
                         <input type="hidden" class="form-control" id="idGrupo" placeholder="Introduzca la Descripcion del Clasificador" name="grupo" required {% if load %} value="{{ s.clasifGrupoId }}" {% endif %}>
                         <input type="hidden" class="form-control" id="idGrupo2" placeholder="Introduzca la Descripcion del Clasificador" name="grupo2" required {% if load %} value="{{ s.clasifGrupoId }}" {% endif %}>
@@ -36,12 +36,15 @@
                 <br>
 
                 <div class="row ">
+                    <!--
                     <div class="col-md-6 mb-3 ">
-                        <button type="button " onclick="javascript: window.location.href='/clas_list' ; " class="btn btn-outline-danger btn-md btn-block ">Cancelar</button>
+                        <button type="button " onclick="javascript: window.location.href='/grupo_list' ; " class="btn btn-outline-danger btn-md btn-block ">Cancelar</button>
                     </div>
-                    <div class="col-md-6 mb-3 ">
+                    -->
+                    <div class="col-md-12 mb-3 ">
                         <button type="submit" class="btn btn-outline-success btn-md btn-block ">Aceptar</button>
                     </div>
+
                 </div>
                 <!--row-->
             </form>

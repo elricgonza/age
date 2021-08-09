@@ -2267,13 +2267,12 @@ def clas_new(grupo_id):
         print('Nuevo...')
 
 
-@app.route('/clas_del/<clasif_id>', methods=['GET', 'POST'])
+@app.route('/clas_del/<clasif_id>/<grupo_id>', methods=['GET', 'POST'])
 @login_required
-def clas_del(clasif_id):
+def clas_del(clasif_id, grupo_id):
     c = clasificadores.Clasificador(cxms)
-    c.del_clas(clasif_id)
-
-    return redirect(url_for('grupo_list'))
+    c.del_clas(int(clasif_id))
+    return redirect(url_for('clas_list', grupo_id=grupo_id))
 
 
 @app.route('/clas/<clas_id>/<clas_grup_id>', methods=['GET', 'POST'])
@@ -2282,7 +2281,6 @@ def clas(clas_id, clas_grup_id):
     s = clasificadores.Clasificador(cxms)
     error = None
     p = ('clasificadores - Edición' in permisos_usr)  # t/f
-    print(request.method)
     if request.method == 'POST':
         if clas_id == '0':  # es NEW
             if False:   # valida si neces POST
@@ -2291,17 +2289,10 @@ def clas(clas_id, clas_grup_id):
                 nextid = s.get_next_idclas()
                 s.add_clas(nextid, request.form['descripcion'], clas_grup_id,request.form['subgrupo'])
                 return redirect(url_for('clas_list', grupo_id=clas_grup_id))
-                #rows = s.get_clas_idclas(clas_grup_id)
-                #return render_template('clas_list.html', clasificadores=rows, puede_adicionar='Clasificador - Adición' in permisos_usr)  # render a template
-
         else: # Es Edit
-            print('POST-eS Edit-------------------------------º:w')
             s.upd_clas(clas_id, request.form['descripcion'],request.form['subgrupo'])
             #return redirect(url_for('clas_list', grupo_id=clas_grup_id))
-            #return redirect(url_for('clas_list', grupo_id=clas_grup_id))
-            #return redirect(url_for('grupo_list'))
             rows = s.get_clas_idclas(request.form['grupo'])
-            #return render_template('clas_list.html', clasificadores=rows, puede_editar='Clasificador - Edicion' in permisos_usr)  # render a template
             return render_template('clas_list.html', clasificadores=rows, \
                                    puede_adicionar='Clasificadores - Adición' in permisos_usr, \
                                    puede_editar='Clasificadores - Edición' in permisos_usr, \

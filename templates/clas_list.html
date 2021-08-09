@@ -50,8 +50,7 @@
                             </td>
                             <td>
                                 {% if puede_eliminar %}
-                                    <a href="#" data-href={{ url_for('clas_del', clasif_id=clasificadores[0]) }}  data-toggle="modal" data-target="#confirm-delete"><span class="fas fa-trash"></span></a>
-                                    <!--<a href={{ url_for( 'clas', clas_id=Clasificador[0], clas_grup_id=Clasificador[3]) }}><span class="fas fa-trash"></span></a>-->
+                                    <a href="#" data-href={{ url_for('clas_del', clasif_id=Clasificador[0], grupo_id=Clasificador[2] ) }}  data-toggle="modal" data-target="#confirm-delete"><span class="fas fa-trash"></span></a>
                                 {% else %}
                                     <a "/"><span class="fas fa-trash"</span></a>
                                 {% endif %}
