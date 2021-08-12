@@ -2217,7 +2217,7 @@ def grupo(grupo_id):
             if s.get_clas_grupo_idclasGrup(grupo_id) == True:
                 return render_template('grupo.html', error=error, \
                                        s=s, load=True, \
-                                       titulo='Edicion de Grupo', 
+                                       titulo='Edición de Grupo', 
                                        puede_editar=p)
     # New
     return render_template('grupo.html', error=error, s=s, load=False, titulo='Registro de Nuevo grupo', puede_editar=p)

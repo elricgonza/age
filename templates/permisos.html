@@ -67,9 +67,11 @@
                             role="listbox"
                             aria-labelledby="ms_av_l"
                             aria-multiselectable="true">
-                            {% for modulo in modulos %}
-                            <li id="{{ modulo[0] }}" role="option" aria-selected="false">{{ modulo[1] }}</li>
-                            {% endfor %}
+                            {% if modulos %}
+                                {% for modulo in modulos %}
+                                    <li id="{{ modulo[0] }}" role="option" aria-selected="false">{{ modulo[1] }}</li>
+                                {% endfor %}
+                            {% endif %}
                             </ul>
                         </div>
                         <div class="right-area" style="height:500px; overflow: scroll;">
