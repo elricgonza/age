@@ -153,103 +153,80 @@
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label
-                {% if load and a.tipolocloc.strip()=="1" %}
+                {% if load and a.tipolocloc.strip()=="67" %}
                       class="btn btn-outline-dark active"
                 {% else %}
                       class="btn btn-outline-dark"
                 {% endif %}
                 >
-                    <input type="radio" value=1 name="tipolocloc" id="itipolocloc1" autocomplete="off">Uninominal
+                    <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off">Uninominal
                 </label>
 
                 <label
-                {% if load and a.tipolocloc.strip()=="2" %}
+                {% if load and a.tipolocloc.strip()=="68" %}
                       class="btn btn-outline-dark active"
                 {% else %}
                       class="btn btn-outline-dark"
                 {% endif %}
                 >
 
-                    <input type="radio" value=2 name="tipolocloc" id="itipolocloc2" autocomplete="off">Especial
+                    <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off">Especial
                 </label>
 
                 <label 
-                {% if load and a.tipolocloc.strip()=="3" %}
+                {% if load and a.tipolocloc.strip()=="69" %}
                       class="btn btn-outline-dark active"
                 {% else %}
                       class="btn btn-outline-dark"
                 {% endif %}
                 >
-                    <input type="radio" value=3 name="tipolocloc" id="itipolocloc3" autocomplete="off">Mixto
+                    <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off">Mixto
                 </label>
                 </div>
 
             </div>
-            <div class="col-md-4">
-                <label>Habilitado/Inhabilitado</label>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label 
-                        {% if load  and a.marcaloc == "1" %}
-                            class="btn btn-outline-dark active"
-                        {% else %}
-                            class="btn btn-outline-dark"
-                        {% endif %}
-                >
-                    <input type="radio" value=1 name="marcaloc" id="imarcaloc1" autocomplete="off">Habilitado
-                </label>
-                <label
-                        {% if load  and a.marcaloc == "2" %}
-                            class="btn btn-outline-dark active"
-                        {% else %}
-                            class="btn btn-outline-dark"
-                        {% endif %}
-                >
-                    <input type="radio" value=2 name="marcaloc" id="imarcaloc2" autocomplete="off">Inhabilitado
-                </label>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name=estado class="form-control">
-                    <option value=1 
-                        {% if load  and a.estado == 1 %}
+                <select id="iestado" name="estado" class="form-control">
+                    <option value=16 
+                        {% if load  and a.estado == 16 %}
                             selected 
                         {% endif %}
                     >Habilitado TED</option>
-                    <option value=2
-                        {% if load  and a.estado == 2 %}
+                    <option value=17
+                        {% if load  and a.estado == 17 %}
                             selected 
                         {% endif %}
                     >Rehabilitado TED</option>
-                    <option value=3
-                        {% if load  and a.estado == 3 %}
+                    <option value=18
+                        {% if load  and a.estado == 18 %}
                             selected 
                         {% endif %}
                     >Suspendido TED</option>
-                    <option value=4
-                        {% if load  and a.estado == 4 %}
+                    <option value=19
+                        {% if load  and a.estado == 19 %}
                             selected 
                         {% endif %}
                     >Suprimido TED</option>
-                    <option value=101 
-                        {% if load  and a.estado == 101 %}
+                    <option value=75 
+                        {% if load  and a.estado == 75 %}
                             selected 
                         {% endif %}
                     >
                     {% if usrdep == 0 %}                                                 
                     Habilitado TSE</option>
-                    <option value=102
-                        {% if load  and a.estado == 102 %}
+                    <option value=76
+                        {% if load  and a.estado == 76 %}
                             selected 
                         {% endif %}
                     >Rehabilitado TSE</option>
-                    <option value=103
-                        {% if load  and a.estado == 103 %}
+                    <option value=77
+                        {% if load  and a.estado == 77 %}
                             selected 
                         {% endif %}
                     >Suspendido TSE</option>
-                    <option value=104
-                        {% if load  and a.estado == 104 %}
+                    <option value=78
+                        {% if load  and a.estado == 78 %}
                             selected 
                         {% endif %}
                     >Suprimido TSE</option>
@@ -267,29 +244,29 @@
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
                 <select id="ietapa" name=etapa class="form-control" onchange="carg(this);">
-                    <option value=1 
-                        {% if load  and a.etapa == 1 %}
+                    <option value=70 
+                        {% if load  and a.etapa == 70 %}
                             selected 
                         {% endif %}
                     >Propuesta</option>
-                    <option value=2 
-                        {% if load  and a.etapa == 2 %}
+                    <option value=71 
+                        {% if load  and a.etapa == 71 %}
                             selected 
                         {% endif %}
                     >Devuelto</option>
                     {% if usrdep == 0 %}
-                    <option value=3
-                        {% if load  and a.etapa == 3 %}
+                    <option value=72
+                        {% if load  and a.etapa == 72 %}
                             selected 
                         {% endif %}
                     >Revisión</option>
-                    <option value=4
-                        {% if load  and a.etapa == 4 %}
+                    <option value=73
+                        {% if load  and a.etapa == 73 %}
                             selected 
                         {% endif %}
                     >Aprobado</option>
-                    <option value=5
-                        {% if load  and a.etapa == 5 %}
+                    <option value=74
+                        {% if load  and a.etapa == 74 %}
                             selected 
                         {% endif %}
                     >Aprobado con Correpción</option>

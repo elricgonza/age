@@ -35,37 +35,10 @@ class Asientos:
         self.cx = cx
         self.cur = cx.cursor()
 
-    """def get_asientos(self, usrdep):
-        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio, "  + \
-	    "AsientoElectoral as Asiento, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC " + \
-	    " from [GeografiaElectoral_app].[dbo].[GeoAsientos_Nacional]"
-        if usrdep != 0 :
-            s = s + " where DEP = %d order by prov, sec"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " order by DEP, PROV, SEC"
-            print(s)
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-    """
     def get_asientos_all(self, usrdep):        
-        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio, "  + \
-	    "AsientoElectoral as Asiento, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC, " + \
-            "CASE WHEN estado = 1 THEN 'Habilitado TED' " + \
-                    "WHEN estado = 2 THEN 'Rehabilitado TED' " + \
-                    "WHEN estado = 3 THEN 'Suspendido TED' " + \
-                    "WHEN estado = 4 THEN 'Suprimido TED' " + \
-                    "WHEN estado = 101 THEN 'Habilitado TSE' " + \
-                    "WHEN estado = 102 THEN 'Rehabilitado TSE' " + \
-                    "WHEN estado = 103 THEN 'Suspendido TSE' " + \
-                    "WHEN estado = 104 THEN 'Suprimido TSE' " + \
-            "ELSE 'oother'  END as Estado" + \
-	    " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
+            " AsientoElectoral as Asiento, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
+            " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             s = s + " where DEP = %d order by prov, sec"
             self.cur.execute(s, usrdep)
@@ -141,13 +114,13 @@ class Asientos:
     def add_asiento(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
-                    marcaloc, latitud, longitud, \
+                    latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF):
 
         new_asiento = idloc, deploc, provloc, secloc, 0, \
             0, nomloc, poblacionloc, poblacionelecloc, fechacensoloc, \
-            tipolocloc, '2007-01-01', '', marcaloc, '', \
+            tipolocloc, '2007-01-01', '', 1, '', \
             '', 0, 0, 0, 0, \
             0, latitud, longitud, estado, circunconsulado, etapa, obsUbicacion, \
             obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF
@@ -170,7 +143,7 @@ class Asientos:
         
     def upd_asiento(self, idloc, nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
-                    marcaloc, latitud, longitud, \
+                    latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF):
         '''
@@ -179,13 +152,13 @@ class Asientos:
 
         asiento = nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
-                    marcaloc, latitud, longitud, \
+                    latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, idloc
         s = "update GeografiaElectoral_app.dbo.loc" + \
             " set nomloc= %s, poblacionloc= %d, " + \
             " poblacionelecloc= %s, fechacensoloc= %s, tipolocloc= %d, " + \
-            " marcaloc= %d, latitud= %s, longitud= %d, " + \
+            " latitud= %s, longitud= %d, " + \
             " estado= %d, circunconsulado= %s, " + \
             " etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
             " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d" + \
@@ -233,7 +206,7 @@ class Asientos:
 
     def get_geo_all(self, usrdep):
         s = "select gn.IdLoc, gn.Dep, gn.NomDep, gn.Prov, gn.NomProv, gn.Sec, gn.NombreMunicipio, gn.AsientoElectoral, gn.latitud," + \
-        " gn.longitud, gn.estado, Convert(CHAR(10),gn.fechaIngreso,23) as fecha, gn.NombreTipoLocLoc"  + \
+        " gn.longitud, gn.idEstado, Convert(CHAR(10),gn.fechaIngreso,23) as fecha, gn.TipoCircunscripcion"  + \
         " from [bdge].[dbo].[GeoAsientos_Nacional_all] AS gn"
         self.cur.execute(s)
         if usrdep != 0 :

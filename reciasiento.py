@@ -115,13 +115,4 @@ class Reciasiento:
             return False
         else:
             return rows
-
-    """def get_circun(self, valor):      
-        s = "select DepCircun, Circun from [GeografiaElectoral_app].[dbo].[circun] where TipoCircun=2 and DepCircun = %d order by TipoCircun, DepCircun"
-        self.cur.execute(s, valor)
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows"""
-    
+ 

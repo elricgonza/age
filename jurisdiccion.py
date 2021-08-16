@@ -14,15 +14,9 @@ class Jurisdiccion:
     def get_jurisdiccion_all(self, usrdep):        
         s = "Select [bdge].[dbo].[GeoRecintos_all].IdLocReci, [bdge].[dbo].[GeoRecintos_all].Reci, [bdge].[dbo].[GeoRecintos_all].NomDep" + \
             " as Departamento, [bdge].[dbo].[GeoRecintos_all].NomProv as Provincia, [bdge].[dbo].[GeoRecintos_all].NombreMunicipio as Municipio," + \
-            " [bdge].[dbo].[GeoRecintos_all].NombreRecinto, [bdge].[dbo].[GeoRecintos_all].NombreTipoLocLoc as Tipo_Circun, [bdge].[dbo].[GeoRecintos_all].DEP," + \
+            " [bdge].[dbo].[GeoRecintos_all].NombreRecinto, [bdge].[dbo].[GeoRecintos_all].TipoCircunscripcion, [bdge].[dbo].[GeoRecintos_all].DEP," + \
             " [bdge].[dbo].[GeoRecintos_all].PROV, [bdge].[dbo].[GeoRecintos_all].SEC," + \
-            " CASE WHEN [bdge].[dbo].[GeoRecintos_all].estado = 1 THEN 'Habilitado'" + \
-            " WHEN [bdge].[dbo].[GeoRecintos_all].estado = 2 THEN 'Rehabilitado'" + \
-            " WHEN [bdge].[dbo].[GeoRecintos_all].estado = 3 THEN 'Restringido (Cárcel)'" + \
-            " WHEN [bdge].[dbo].[GeoRecintos_all].estado = 4 THEN 'Suspendido'" + \
-            " WHEN [bdge].[dbo].[GeoRecintos_all].estado = 5 THEN 'Suprimido'" + \
-            " WHEN [bdge].[dbo].[GeoRecintos_all].estado = 6 THEN 'Saturado'" + \
-            " ELSE 'oother'  END as Estado, [bdge].[dbo].[actJurisd].idloc2, [bdge].[dbo].[actJurisd].reci2" + \
+            " [bdge].[dbo].[GeoRecintos_all].Estado, [bdge].[dbo].[actJurisd].idloc2, [bdge].[dbo].[actJurisd].reci2" + \
             " from [bdge].[dbo].[GeoRecintos_all] left join [bdge].[dbo].[actJurisd] on [bdge].[dbo].[GeoRecintos_all].IdLoc=[bdge].[dbo].[actJurisd].idloc2" + \
             " and [bdge].[dbo].[GeoRecintos_all].Reci=[bdge].[dbo].[actJurisd].reci2"
         if usrdep != 0 :
@@ -188,7 +182,7 @@ class Jurisdiccion:
 
     def get_jurisdiccion_idlocreci_origen(self, idloc, reci):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona," + \
-            " NombreRecinto, Direccion, CircunDist, TipoLocLoc, NombreTipoLocLoc, idClasif, descripcion, latitud, longitud, doc_idA, doc_idAF" + \
+            " NombreRecinto, Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud, doc_idA, doc_idAF" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where IdLocReci = %d and Reci = %d"
         lista = idloc, reci    
@@ -241,7 +235,7 @@ class Jurisdiccion:
             return True
 
     def get_asiento_idloc2(self, idloc):
-        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, NombreTipoLocLoc " + \
+        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion " + \
             "from [bdge].[dbo].[GeoAsientos_Nacional_all] where IdLoc = %d"   
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
@@ -260,7 +254,7 @@ class Jurisdiccion:
             return True
 
     def get_jurisdiccion_idlocreci_destino(self, idloc, reci):
-        s = "Select NombreRecinto, Direccion, idClasif, descripcion, latitud, longitud" + \
+        s = "Select NombreRecinto, Direccion, idTipoRecinto, TipoRecinto, latitud, longitud" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where IdLocReci = %d and Reci = %d"
         lista = idloc, reci    

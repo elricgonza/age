@@ -15,18 +15,15 @@ class Homologa:
         if inicio == "00-00-0000" and final == "00-00-0000":
             return False
         else:           
-            s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto," + \
-                " CASE WHEN estado = 4 THEN 'Suspendido'" + \
-                " WHEN estado = 5 THEN 'Suprimido'" + \
-                " ELSE 'oother'  END as Estado, idloc2, reci2, nomreci2" + \
+            s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2" + \
                 " from [bdge].[dbo].[GeoRecintos_Hom_all]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
-                s = s + " where estado in (4, 5) and TipoCircun = 1 and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
+                s = s + " where idEstado in (4, 5) and TipoCircun = 1 and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
                 self.cur.execute(s, lista)
             else:
                 lista = inicio, final
-                s = s + " where estado in (4, 5) and TipoCircun = 1 and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
+                s = s + " where idEstado in (4, 5) and TipoCircun = 1 and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
                 self.cur.execute(s, lista)
 
             rows = self.cur.fetchall()
@@ -36,11 +33,8 @@ class Homologa:
                 return rows
 
     def get_homologa_idloc(self, idlocreci):   
-        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto," + \
-            " CASE WHEN estado = 4 THEN 'Suspendido'" + \
-            " WHEN estado = 5 THEN 'Suprimido'" + \
-            " ELSE 'oother'  END as Estado, idloc2, reci2, nomreci2" + \
-            " from [bdge].[dbo].[GeoRecintos_Hom_all]"
+        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2" + \
+            " from [bdge].[dbo].[GeoRecintos_Hom_all]"    
         if usrdep != 0 :
             lista = usrdep, inicio, final
             s = s + " where TipoCircun = 1 and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
@@ -57,12 +51,9 @@ class Homologa:
             return rows
 
     def get_homologa_idlocreci(self, idreci, idlocreci):
-        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto," + \
-            " CASE WHEN estado = 4 THEN 'Suspendido'" + \
-            " WHEN estado = 5 THEN 'Suprimido'" + \
-            " ELSE 'oother'  END as Estado, CircunDist" + \
+        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, CircunDist" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where estado in (4, 5) and IdLocReci = %d and Reci = %d"
+            " where idEstado in (4, 5) and IdLocReci = %d and Reci = %d"
         lista = idlocreci, idreci    
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
@@ -80,7 +71,7 @@ class Homologa:
 
     def ver_homologa_idlocreci(self, idreci, idlocreci):
         s = "Select idLoc2, reci2 from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where estado in (4, 5) and IdLocReci = %d and Reci = %d and idLoc2 = %d"
+            " where idEstado in (4, 5) and IdLocReci = %d and Reci = %d and idLoc2 = %d"
         lista = idlocreci, idreci, idlocreci    
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
@@ -105,9 +96,9 @@ class Homologa:
 
     def get_homologa_idlocreci_origen(self, idloc, reci):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona, NombreRecinto," + \
-            " Direccion, CircunDist, TipoLocLoc, NombreTipoLocLoc, idClasif, descripcion, latitud, longitud, doc_idA, doc_idAF" + \
+            " Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud, doc_idA, doc_idAF" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where estado in (4, 5) and IdLocReci = %d and Reci = %d"
+            " where idEstado in (4, 5) and IdLocReci = %d and Reci = %d"
         lista = idloc, reci    
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
@@ -142,9 +133,9 @@ class Homologa:
 
     def get_homologa_idlocreci_destino(self, idloc2, reci2):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona, NombreRecinto," + \
-            " Direccion, CircunDist, TipoLocLoc, NombreTipoLocLoc, idClasif, descripcion, latitud, longitud" + \
+            " Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where estado in (1, 2, 3, 6) and IdLocReci = %d and Reci = %d"
+            " where idEstado in (1, 2, 3, 6) and IdLocReci = %d and Reci = %d"
         lista = idloc2, reci2    
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
@@ -220,7 +211,8 @@ class Homologa:
             print("Error - actualización de Homologa...")        
 
     def get_recintos_idloc(self, idlocreci, circun):
-        s = "select IdLocReci, Reci, NombreRecinto, NomZona, NomDist, CircunDist, Direccion from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional]" + \
+        s = "select IdLocReci, Reci, NombreRecinto, NomZona, NomDist, CircunDist, Direccion" + \
+            " from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional]" + \
             " where IdLocReci = %d and CircunDist = %d and estado in (1, 2)"
         circuns = idlocreci, circun    
         self.cur.execute(s, circuns)

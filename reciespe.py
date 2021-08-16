@@ -25,14 +25,7 @@ class Reciespe:
 
     def get_reciespe_all(self, usrdep):        
         s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " NombreRecinto, NombreTipoLocLoc as Tipo_Circun, DEP, PROV, SEC," + \
-            " CASE WHEN estado = 1 THEN 'Habilitado'" + \
-            " WHEN estado = 2 THEN 'Rehabilitado'" + \
-            " WHEN estado = 3 THEN 'Restringido (Cárcel)'" + \
-            " WHEN estado = 4 THEN 'Suspendido'" + \
-            " WHEN estado = 5 THEN 'Suprimido'" + \
-            " WHEN estado = 6 THEN 'Saturado'" + \
-            " ELSE 'oother'  END as Estado" + \
+            " NombreRecinto, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
             " from [bdge].[dbo].[GeoRecintos_all]"
         if usrdep != 0 :
             s = s + " where TipoCircun = 2 and DEP = %d order by prov, sec"
@@ -158,9 +151,15 @@ class Reciespe:
         return row[0]
 
 
-    def get_estados(self):
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=1"
-        self.cur.execute(s)
+    def get_estados(self, usrdep):
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif]"
+        if usrdep != 0 :
+            s = s + " where clasifGrupoId=1 and idClasif in (1, 2, 3, 4, 5, 6)"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " where clasifGrupoId=1"
+            self.cur.execute(s)
+
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False

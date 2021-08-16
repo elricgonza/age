@@ -59,7 +59,8 @@ app.config['PATH_APP'] = '/var/www/flasks/age/'
 app.config['IMG_ASIENTOS'] = '/static/imgbd/asi'
 app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
 app.config['SUBIR_PDF'] = '/static/pdfdoc'
-
+app.config['REPORTE_PDF'] = 'file:///var/www/flasks/age/reporteh.pdf'
+app.config['MODULO_REPORTES'] = 'file:///var/www/flasks/age/reporte.pdf'
 ALLOWED_EXTENSIONS = set(['pdf'])
 
 BCRYPT_LOG_ROUNDS = 15
@@ -578,8 +579,7 @@ def asiento(idloc):
                 a.add_asiento(nextid, request.form['deploc'], request.form['provloc'], \
                               request.form['secloc'], request.form['nomloc'], request.form['poblacionloc'], \
                               request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
-                              request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
-                              request.form['estado'], '', \
+                              request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
                               request.form['etapa'], request.form['obsUbicacion'], request.form['obs'], \
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, docActF)
 
@@ -591,7 +591,7 @@ def asiento(idloc):
             fa = str(datetime.datetime.now())[:-7]
             a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
                           request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
-                          request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
+                          request.form['latitud'], request.form['longitud'], \
                           request.form['estado'], '', request.form['etapa'], \
                           request.form['obsUbicacion'], request.form['obs'], \
                           str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, docActF)
@@ -773,8 +773,8 @@ def reportespdf():
         rows = rp.reporte_consulta(usrdep, request.form['dpto'], provincia, municipio,
                                    cir1, cir2, cir3, estado, inicio, final)
         if rows:
-            url = "file:///var/www/flasks/age/reporte.pdf"
-            webbrowser.open(url,new=new)
+            #url = "file:///var/www/flasks/age/reporte.pdf"
+            webbrowser.open(app.config['MODULO_REPORTES'], new=new)
             return ('PDF Generado')
         else:
             return ('PDF Generado')
@@ -817,6 +817,7 @@ def recintos_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
+        return render_template('recintos_list.html', puede_adicionar='Recintos - Adición' in permisos_usr)
 
 
 @app.route('/recinto/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -981,6 +982,7 @@ def reciespe_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
+        return render_template('reciespe_list.html', puede_adicionar='Recintos - Adición' in permisos_usr)
 
 
 @app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -1260,6 +1262,7 @@ def reciespeciales_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
+        return render_template('reciespeciales_list.html', puede_adicionar='Recintos - Adición' in permisos_usr)
 
 
 @app.route('/reciespeciales/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -1669,8 +1672,7 @@ def homologacion_pdf():
         final = request.form['final']    
     rows = rh.reporte_consulta_h(usrdep, inicio, final)
     if rows:
-        url = "file:///var/www/flasks/age/reporteh.pdf"
-        webbrowser.open(url,new=new)
+        webbrowser.open(app.config['REPORTE_PDF'], new=new)
         print('PDF Generado')
         return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template
     else:
@@ -1818,6 +1820,7 @@ def jurisd_asi_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin Asientos...')
+        return render_template('jurisd_asi_list.html', puede_adicionar='Juriss_asi - Adición' in permisos_usr)
 
 
 @app.route('/jurisd_asi/<idloc>', methods=['GET', 'POST'])

@@ -72,24 +72,24 @@
                     </thead>
                     <tbody>
                         {% for homologa in homologas %}
-                        <tr style="font-size: 14px;">
-                            <td>{{ homologa[0] }}</td>
-                            <td>{{ homologa[1] }}</td>
-                            <td>{{ homologa[2] }}</td>
-                            <td>{{ homologa[3] }}</td>
-                            <td>{{ homologa[4] }}</td>
-                            <td>{{ homologa[5] }}</td>
-                            <td>{{ homologa[6] }}</td>
-                            <td>{{ homologa[7] }}</td>
-                            <td>{{ homologa[8] }}</td>
-                            <td style="text-align: center; font-size: 15px;">
-                                {% if homologa[6] == None %}
-                                        <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
-                                {% else %}
-                                        <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
-                                {% endif %}
-                            </td>
-                        </tr>
+                            <tr style="font-size: 14px;">
+                                <td>{{ homologa[0] }}</td>
+                                <td>{{ homologa[1] }}</td>
+                                <td>{{ homologa[2] }}</td>
+                                <td>{{ homologa[3] }}</td>
+                                <td>{{ homologa[4] }}</td>
+                                <td>{{ homologa[5] }}</td>
+                                <td>{{ homologa[6] }}</td>
+                                <td>{{ homologa[7] }}</td>
+                                <td>{{ homologa[8] }}</td>
+                                <td style="text-align: center; font-size: 15px;">
+                                    {% if homologa[6] == None %}
+                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
+                                    {% else %}
+                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>

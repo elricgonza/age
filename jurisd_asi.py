@@ -13,21 +13,16 @@ class Jurisd_asi:
 
     def get_jurisd_asi_all(self, usrdep):        
         s = "select a.IdLoc, a.NomDep as Departamento, a.NomProv as Provincia, a.NombreMunicipio as Municipio, "  + \
-        "a.AsientoElectoral as Asiento, a.NombreTipoLocLoc as Tipo_Circun, a.DEP, a.PROV, a.SEC, " + \
-            "CASE WHEN a.estado = 1 THEN 'Habilitado TED' " + \
-                    "WHEN a.estado = 2 THEN 'Rehabilitado TED' " + \
-                    "WHEN a.estado = 101 THEN 'Habilitado TSE' " + \
-                    "WHEN a.estado = 102 THEN 'Rehabilitado TSE' " + \
-            "ELSE 'oother'  END as Estado, j.idLoc, j.origen" + \
-        " from [bdge].[dbo].[GeoAsientos_Nacional_all] a" + \
-        " left join [bdge].[dbo].[actJurisd] j on a.IdLoc=j.idLoc"
+            "a.AsientoElectoral as Asiento, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen" + \
+            " from [bdge].[dbo].[GeoAsientos_Nacional_all] a" + \
+            " left join [bdge].[dbo].[actJurisd] j on a.IdLoc=j.idLoc"
         if usrdep != 0 :
             s = s + " where a.DEP = %d group by a.IdLoc, a.NomDep, a.NomProv, a.NombreMunicipio, "  + \
-                    "a.AsientoElectoral, a.NombreTipoLocLoc, a.DEP, a.PROV, a.SEC, a.estado, j.idLoc, j.origen order by a.prov, a.sec"
+                    "a.AsientoElectoral, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen order by a.prov, a.sec"
             self.cur.execute(s, usrdep)
         else:
             s = s + " group by a.IdLoc, a.NomDep, a.NomProv, a.NombreMunicipio, "  + \
-                    "a.AsientoElectoral, a.NombreTipoLocLoc, a.DEP, a.PROV, a.SEC, a.estado, j.idLoc, j.origen order by a.DEP, a.PROV, a.SEC"
+                    "a.AsientoElectoral, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen order by a.DEP, a.PROV, a.SEC"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -183,7 +178,7 @@ class Jurisd_asi:
     def add_llenado_recintos(self, idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, dist, zona, \
                          nomdist, nomzona, circun, f_ingreso, f_actual, usr, idocact):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona," + \
-            " NombreRecinto, Direccion, CircunDist, TipoLocLoc, NombreTipoLocLoc, idClasif, descripcion, latitud, longitud, doc_idA, doc_idAF" + \
+            " NombreRecinto, Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud, doc_idA, doc_idAF" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where IdLocReci = %d"
         self.cur.execute(s, idloc)
