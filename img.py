@@ -11,10 +11,10 @@ class Img:
         self.cx = cx
         self.cur = cx.cursor()
 
-    def get_imgs(self, de):
-        s = "select * from img where de = %s"
+    def get_imgs(self):
+        s = "select * from GeografiaElectoral_app.dbo.clasif where clasifGrupoId = 9"
         try:
-            self.cur.execute(s, de)
+            self.cur.execute(s)
             rows = self.cur.fetchall()
             if  rows == None:
                 return False

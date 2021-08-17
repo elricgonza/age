@@ -361,11 +361,11 @@ def asiento_img(idloc, nomloc):
 
     else:
         if with_img:  # Edit
-            return render_template('asiento_img_upd.html', rows=i.get_imgs('Asiento'), nomloc=nomloc,
+            return render_template('asiento_img_upd.html', rows=i.get_imgs(), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('asiento_img.html', rows=i.get_imgs('Asiento'), nomloc=nomloc,
+            return render_template('asiento_img.html', rows=i.get_imgs(), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr)
 
 '''
