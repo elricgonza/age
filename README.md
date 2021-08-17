@@ -12,6 +12,7 @@ Resguardo de documentos en:
 using:
 -jquery 3.4.1
 -bootstrap 4.1.3
+-leafleta 1.5.1
 -fontawesome-free-5.10.1-web
     all.css
     webfonts (carpeta)
