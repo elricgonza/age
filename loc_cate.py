@@ -17,10 +17,11 @@ class LocCate:
         self.cur = cx.cursor()
 
     def get_loc_cates(self, idLoc):
-        s = "select lc.loc_id, c.id, c.categoria, sc.id, sc.subCategoria, lc.obs, lc.fechaAct, lc.usuario, lc.fechaIngreso, lc.id" + \
+        s = "select lc.loc_id, c.idClasifGrupo, c.descripcion as categoria, sc.idClasif, sc.descripcion as subcategoria, lc.obs," + \
+            " lc.fechaAct, lc.usuario, lc.fechaIngreso, lc.id" + \
             " from loc_cate lc" + \
-            " inner join cate c on lc.cate_id=c.id" + \
-            " inner join subcate sc on lc.subcate_id=sc.id" + \
+            " inner join GeografiaElectoral_app.dbo.clasifGrupo c on lc.cate_id=c.idClasifGrupo" + \
+            " inner join GeografiaElectoral_app.dbo.clasif sc on lc.subcate_id=sc.idClasif" + \
             " where lc.loc_id=%d order by lc.id"
         try:
             self.cur.execute(s, idLoc)
@@ -33,7 +34,7 @@ class LocCate:
             print (e)
 
     def get_categorias_all(self):
-        s = "select * from [bdge].[dbo].[cate]"
+        s = "select * from [GeografiaElectoral_app].[dbo].[clasifGrupo] where idClasifGrupo in (10, 11, 12, 13)"
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
@@ -42,7 +43,7 @@ class LocCate:
             return rows
 
     def get_subcategorias_all(self, cate_id):
-        s = "select id, subcategoria, cate_id from [bdge].[dbo].[subcate] where cate_id = %d"
+        s = "select idClasif, descripcion as subcategoria, clasifGrupoId from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId = %d"
         self.cur.execute(s, cate_id)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
@@ -51,7 +52,7 @@ class LocCate:
             return rows
 
     def get_subcategorias_all1(self):
-        s = "select id, subcategoria, cate_id from [bdge].[dbo].[subcate]"
+        s = "select idClasif, descripcion as subcategoria, clasifGrupoId from [GeografiaElectoral_app].[dbo].[clasif]"
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
