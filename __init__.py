@@ -49,6 +49,7 @@ import asiento_indi as indi
 import clas_grupo
 import clasificadores
 import clasif_get
+import get_json
 
 
 # create the application object
@@ -174,6 +175,21 @@ def get_geo():
                        provincia='INCORRECTA !!!',
                        sec='---',
                        municipio='INTENTE NUEVAMENTE....')
+
+
+@app.route('/vs/<dep>', methods=['GET', 'POST'])
+def vs(dep):
+    j = get_json.GetJson(cxpg)
+
+    #geo_json = j.get_loc(dep)
+    gj_reci = j.get_reci(dep)
+    gj_mun = j.get_mun(dep)
+    gj_prov = j.get_prov(dep)
+    gj_cir = j.get_circun(dep)
+    return render_template('vs.html', 
+                            gj_reci=gj_reci, 
+                            gj_mun=gj_mun,
+                            gj_prov=gj_prov)
 
 
 @app.route('/')
