@@ -38,7 +38,7 @@ class GetJson:
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT id, provincia, cod_dep from FROM provincias
+          FROM (SELECT id, provincia, cod_dep, geom FROM provincias
             '''
         
         if (dep == '0'):
@@ -46,6 +46,10 @@ class GetJson:
         else:
             ss = f'WHERE cod_dep= {dep} '
             sss = s + ss + ' ) inputs) features;'
+
+        print('*********************************************')
+        print(sss)
+        print('*********************************************')
 
         self.cur.execute(sss)
 
@@ -97,7 +101,7 @@ class GetJson:
         FROM (
           SELECT jsonb_build_object(
             'type',       'Feature',
-            'id',         id,
+            'nro_circun',  nro_circun,
             'dep',     cod_dep,  
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
@@ -141,7 +145,7 @@ class GetJson:
             sss = s + ' ) inputs) features;'
         else:
             print('dep DIFERENTE a 0')
-            ss = f'WHERE ut_sup_id= {dep} '
+            ss = f'WHERE cod_dep= {dep} '
             sss = s + ss + ' ) inputs) features;'
 
         self.cur.execute(sss)

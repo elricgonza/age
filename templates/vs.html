@@ -300,7 +300,7 @@
           tileSize: 512,
           zoomOffset: -1
         });
-        //20
+
         var baseLayers = {
           "Open Street Map": osmMap,
           "Google Satellite": googleSat,
@@ -315,7 +315,7 @@
         };
 
         var overlayMaps = {
-          "Localidades":locLayer,
+          "Localidades":reciLayer,
           "Cluster-Loc":markersMCG,
           "Municipios":munLayer,
           "Provincias":provLayer
@@ -423,15 +423,15 @@
 	//L.control.locate({showCompass:true,icon:"fa fa-crosshairs"}).addTo(map);
 
 
-  // to locMunic Search
+  // to munLayer Search
     var searchControlMun = new L.Control.Search({
       layer: munLayer,
-      propertyName: 'nom_ut_basica',
+      propertyName: 'municipio',
       zoom:9,
       circleLocation: false,
 			text: 'Municipio a buscar',
 			textCancel: 'Cancelar',
-      textErr: 'Municipio NO encontrada... ',
+      textErr: 'Municipio NO encontrado... ',
       position: 'topright'
     });
 
@@ -441,6 +441,7 @@
       })
     map.addControl(searchControlMun);
 
+  /*
   // to locLayer Search
     var searchControlLoc = new L.Control.Search({
       layer: locLayer,
@@ -452,7 +453,21 @@
       position: 'topright'
     });
     map.addControl(searchControlLoc);   // add control & checked locLayer
-            
+  */        
+
+
+  // to reciLayer Search
+    var searchControlReci = new L.Control.Search({
+      layer: reciLayer,
+      propertyName: 'recinto',
+      zoom:12,
+			text: 'Recinto Electoral a buscar',
+			textCancel: 'Cancelar',
+			textErr: 'Recinto NO encontrado... ',
+      position: 'topright'
+    });
+    map.addControl(searchControlReci);   // add control & checked locLayer
+
 
 		//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
 		var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
