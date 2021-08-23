@@ -169,24 +169,25 @@
 
 
           function forEachFeatureReci(feature, layer) {
-
-                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
-                      "</br>RECINTO: "+ feature.properties.recinto + '</p>';
+            var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + feature.properties.recinto +
+                      "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
+                      "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
+                      "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
+                      '</p>';
 
                   layer.bindPopup(popupContent);
 
                   layer.on("click", function (e) { 
-                      locLayer.setStyle(style); //resets layer colors
-                      layer.setStyle(highlight);  //highlights selected.
+                      reciLayer.setStyle(style); //resets layer colors
+                      reciLayer.setStyle(highlight);  //highlights selected.
                   }); 
           }
 
 
           function forEachFeatureMun(feature, layer) {
 
-                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
-                      "</br>COD_DEP: " + feature.properties.cod_dep.toLocaleString() +
-                      "</br>MUNICIPIO: "+ feature.properties.municipio + '</p>';
+                  var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
+                    "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
 
                   layer.bindPopup(popupContent);
 
@@ -198,9 +199,8 @@
           
           function forEachFeatureProv(feature, layer) {
 
-                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
-                      "</br>COD_DEP: " + feature.properties.cod_dep.toLocaleString() +
-                      "</br>PROVINCIA: "+ feature.properties.provincia + '</p>';
+                  var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
+                    "</br><b><span style='color:blue'>Provincia: </span></b>"+ feature.properties.provincia + '</p>';
 
                   layer.bindPopup(popupContent);
 
@@ -211,16 +211,14 @@
           }
 
 
-          function forEachFeatureCircun(feature, layer) {
+          function forEachFeatureCir(feature, layer) {
 
-                  var popupContent = "<p><b>NRO.CIRCUN: </b>"+ feature.properties.nro_circun +
-                      "</br>DEP: " + feature.properties.cod_dep.toLocaleString() +
-                      "</br>CIRCUNSCRIPCION: "+ feature.properties.circun + '</p>';
+                  var popupContent = "<p><b>Circunscripción: </b>"+ feature.properties.circun + '</p';
 
                   layer.bindPopup(popupContent);
 
                   layer.on("click", function (e) { 
-                      circunLayer.setStyle(style); //resets layer colors
+                      cirLayer.setStyle(style); //resets layer colors
                       layer.setStyle(highlight);  //highlights selected.
                   }); 
          }
@@ -259,13 +257,13 @@
                 markersMCG.addLayer(lm);
                 return lm;
             },
-              onEachFeature: forEachFeature, style: style
+              onEachFeature: forEachFeatureReci, style: style
             });
 
 
         var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
         var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
-        //var circunLayer = L.geoJson( {{ gj_circun | safe }}, {onEachFeature: forEachFeatureCircun, style: style});
+        //var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
 
 
       // baseMaps - overlayMaps
@@ -315,12 +313,12 @@
         };
 
         var overlayMaps = {
-          "Localidades":reciLayer,
-          "Cluster-Loc":markersMCG,
+          "Recintos":reciLayer,
+          "Cluster-Recintos":markersMCG,
           "Municipios":munLayer,
           "Provincias":provLayer
         };	
-        //"Circunscripciones":circunLayer
+          //"Circunscripciones":cirLayer,
           
 
       // Set up map
@@ -576,9 +574,9 @@
 
 
     </script>
-
+    alert('enddddddddddd');
     <!--{{ geo_json }}-->
-    <!--{{ gj_mun }}-->
+    {{ gj_cir }}
 
 </body>
 </html>

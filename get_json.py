@@ -33,12 +33,12 @@ class GetJson:
         FROM (
           SELECT jsonb_build_object(
             'type',       'Feature',
-            'id',         id,
             'dep',        cod_dep,  
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT id, provincia, cod_dep, geom FROM provincias
+          FROM (SELECT cod_dep::varchar(255) || '-' || cod_prov::varchar(255) as cod, 
+            provincia, cod_dep, geom FROM provincias
             '''
         
         if (dep == '0'):
@@ -46,10 +46,6 @@ class GetJson:
         else:
             ss = f'WHERE cod_dep= {dep} '
             sss = s + ss + ' ) inputs) features;'
-
-        print('*********************************************')
-        print(sss)
-        print('*********************************************')
 
         self.cur.execute(sss)
 
@@ -69,12 +65,12 @@ class GetJson:
         FROM (
           SELECT jsonb_build_object(
             'type',       'Feature',
-            'id',         id,
             'dep',        cod_dep,  
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT id, municipio, cod_dep, geom FROM municipios
+          FROM (SELECT cod_dep::varchar(255) || '-' || cod_prov::varchar(255) || '-' || cod_mun::varchar(255) as cod, 
+            municipio, cod_dep, geom FROM municipios
             '''
         
         if (dep == '0'):
@@ -90,7 +86,8 @@ class GetJson:
         return geo_json
 
 
-    def get_circun(self, dep):
+    def get_cir(self, dep):
+        # get circunscripciones
         s = ''' 
         SELECT jsonb_build_object(
             'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
@@ -101,14 +98,13 @@ class GetJson:
         FROM (
           SELECT jsonb_build_object(
             'type',       'Feature',
-            'nro_circun',  nro_circun,
             'dep',     cod_dep,  
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT nro_circun, circun, cod_dep, geom FROM circun
+          FROM (SELECT circun, cod_dep, geom FROM circun
             '''
-        
+
         if (dep == '0'):
             sss = s + ' ) inputs) features;'
         else:
@@ -133,11 +129,10 @@ class GetJson:
         FROM (
           SELECT jsonb_build_object(
             'type',       'Feature',
-            'id',         id,
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT id, recinto, geom FROM recintos
+          FROM (SELECT recinto, tipo_circun || ' - ' || circun::varchar(255) as circun, zona, direccion, geom FROM recintos
         '''
         
         if (dep == '0'):
