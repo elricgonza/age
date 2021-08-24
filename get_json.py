@@ -132,7 +132,12 @@ class GetJson:
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT recinto, tipo_circun || ' - ' || circun::varchar(255) as circun, zona, direccion, geom FROM recintos
+          FROM (SELECT recinto,  
+                cod_dep::varchar(255) || '-' || cod_prov::varchar(255) || '-' || cod_mun::varchar(255) as cod,
+                departamento || '-' || provincia || '-' || municipio as dpm,
+                tipo_circun || ' - ' || circun::varchar(255) as circun,
+                zona, direccion, geom 
+                FROM recintos
         '''
         
         if (dep == '0'):
