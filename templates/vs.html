@@ -89,20 +89,20 @@
     </style>
 
     <style>
-  #recipro-wrapper {
-    position: absolute;
-    top: 10px;
-    right: 70px;
-    z-index: 400;
-    background: white;
-    padding: 6px;
-  }
-  #basemaps {
-    margin-bottom: 5px;
-  }
-</style>
-
+      #recipro-wrapper {
+        position: absolute;
+        top: 10px;
+        right: 70px;
+        z-index: 400;
+        background: white;
+        padding: 6px;
+      }
+      #basemaps {
+        margin-bottom: 5px;
+      }
+    </style>
 </head>
+
 <body>
     <div id="map"></div>
 
@@ -154,75 +154,73 @@
           'opacity': 2
         };
         
-          function forEachFeature(feature, layer) {
 
-                  var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
-                      "</br>LOCALIDAD: "+ feature.properties.nom_localidad + '</p>';
+        function forEachFeature(feature, layer) {
+            var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+                "</br>LOCALIDAD: "+ feature.properties.nom_localidad + '</p>';
 
-                  layer.bindPopup(popupContent);
+            layer.bindPopup(popupContent);
 
-                  layer.on("click", function (e) { 
-                      locLayer.setStyle(style); //resets layer colors
-                      layer.setStyle(highlight);  //highlights selected.
-                  }); 
-          }
+            layer.on("click", function (e) { 
+                locLayer.setStyle(style); //resets layer colors
+                layer.setStyle(highlight);  //highlights selected.
+            }); 
+        }
 
 
           function forEachFeatureReci(feature, layer) {
-            var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + feature.properties.recinto +
-                      "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
-                      "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
-                      "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
-                      '</p>';
+              var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + feature.properties.recinto +
+                  "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
+                  "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
+                  "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
+                  '</p>';
 
-                  layer.bindPopup(popupContent);
+              layer.bindPopup(popupContent);
 
-                  layer.on("click", function (e) { 
-                      reciLayer.setStyle(style); //resets layer colors
-                      reciLayer.setStyle(highlight);  //highlights selected.
-                  }); 
+              layer.on("click", function (e) { 
+                  reciLayer.setStyle(style); //resets layer colors
+                  reciLayer.setStyle(highlight);  //highlights selected.
+              }); 
           }
 
 
           function forEachFeatureMun(feature, layer) {
+              var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
+                "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
 
-                  var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
-                    "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
+              layer.bindPopup(popupContent);
 
-                  layer.bindPopup(popupContent);
-
-                  layer.on("click", function (e) { 
-                      munLayer.setStyle(style); //resets layer colors
-                      layer.setStyle(highlight);  //highlights selected.
-                  }); 
+              layer.on("click", function (e) { 
+                  munLayer.setStyle(style); //resets layer colors
+                  layer.setStyle(highlight);  //highlights selected.
+              }); 
           }
           
+
           function forEachFeatureProv(feature, layer) {
+              var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
+                "</br><b><span style='color:blue'>Provincia: </span></b>"+ feature.properties.provincia + '</p>';
 
-                  var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
-                    "</br><b><span style='color:blue'>Provincia: </span></b>"+ feature.properties.provincia + '</p>';
+              layer.bindPopup(popupContent);
 
-                  layer.bindPopup(popupContent);
-
-                  layer.on("click", function (e) { 
-                      provLayer.setStyle(styleProv); //resets layer colors
-                      layer.setStyle(highlight);  //highlights selected.
-                  }); 
+              layer.on("click", function (e) { 
+                  provLayer.setStyle(styleProv); //resets layer colors
+                  layer.setStyle(highlight);  //highlights selected.
+              }); 
           }
 
-
+/*
           function forEachFeatureCir(feature, layer) {
+              var popupContent = "<p><b>Circunscripción: </b>"+ feature.properties.circun + '</p';
 
-                  var popupContent = "<p><b>Circunscripción: </b>"+ feature.properties.circun + '</p';
+              layer.bindPopup(popupContent);
 
-                  layer.bindPopup(popupContent);
-
-                  layer.on("click", function (e) { 
-                      cirLayer.setStyle(style); //resets layer colors
-                      layer.setStyle(highlight);  //highlights selected.
-                  }); 
-         }
-
+              layer.on("click", function (e) { 
+                  cirLayer.setStyle(style); //resets layer colors
+                  layer.setStyle(highlight);  //highlights selected.
+              }); 
+           }
+*/
 
       // add markerClusterGroup
               var markersMCG = L.markerClusterGroup();
@@ -246,19 +244,19 @@
             });
         */
 
-            var iconReci = L.icon({
-              iconUrl: '../static/iconos/icons8-map-pin-40.png',
-              iconSize: [35, 35]
-            });
+        var iconReci = L.icon({
+          iconUrl: '../static/iconos/icons8-map-pin-40.png',
+          iconSize: [35, 35]
+        });
 
-            var reciLayer = L.geoJson( {{ gj_reci | safe }}, {
-              pointToLayer: function (feature, latlng) {
-                var lm = L.marker(latlng, {icon: iconReci});
-                markersMCG.addLayer(lm);
-                return lm;
-            },
-              onEachFeature: forEachFeatureReci, style: style
-            });
+        var reciLayer = L.geoJson( {{ gj_reci | safe }}, {
+          pointToLayer: function (feature, latlng) {
+            var lm = L.marker(latlng, {icon: iconReci});
+            markersMCG.addLayer(lm);
+            return lm;
+        },
+          onEachFeature: forEachFeatureReci, style: style
+        });
 
 
         var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
@@ -575,8 +573,7 @@
 
     </script>
     alert('enddddddddddd');
-    <!--{{ geo_json }}-->
-    {{ gj_cir }}
+    <!--{{ gj_cir }}-->
 
 </body>
 </html>

@@ -186,6 +186,9 @@ def vs(dep):
     gj_mun = j.get_mun(dep)
     gj_prov = j.get_prov(dep)
     gj_cir = j.get_cir(dep)
+    print('*********************************************************')
+    print(gj_cir)
+    print('*********************************************************')
     return render_template('vs.html', 
                             gj_reci=gj_reci, 
                             gj_mun=gj_mun,
