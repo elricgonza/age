@@ -568,7 +568,11 @@ def asiento(idloc):
         if request.form.get('docActF') == None:
             docActF = 0
         else:
-            docActF = request.form['docActF']
+            docActF = request.form['docActF']    
+        if request.form.get('urural') == None:
+            urural = 0
+        else:
+            urural = request.form['urural']
         if idloc == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -581,7 +585,8 @@ def asiento(idloc):
                               request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
                               request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
                               request.form['etapa'], request.form['obsUbicacion'], request.form['obs'], \
-                              request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, docActF)
+                              request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
+                              docActF, urural)
 
                 d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
@@ -594,7 +599,8 @@ def asiento(idloc):
                           request.form['latitud'], request.form['longitud'], \
                           request.form['estado'], '', request.form['etapa'], \
                           request.form['obsUbicacion'], request.form['obs'], \
-                          str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, docActF)
+                          str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
+                          docActF, urural)
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
             rows = a.get_asientos_all(usrdep)
@@ -900,10 +906,10 @@ def recinto(idreci, idlocreci):
                     rc.usuario = usr
 
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
     # New
-    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(), trecintos=rc.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
+    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
@@ -1065,10 +1071,10 @@ def reciespe(idreci, idlocreci):
                     rce.usuario = usr
 
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(), trecintos=rce.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
+                                       estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
 
     # New
-    return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
+    return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
@@ -1345,12 +1351,12 @@ def reciespeciales(idreci, idlocreci):
                     rces.usuario = usr
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rces.get_estados(), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                       estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                                        dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep))
 
     # New
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
-                            provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(), trecintos=rces.get_tiporecintos(),
+                            provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
                             tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])

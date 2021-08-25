@@ -118,6 +118,23 @@
                 <div class="invalid-feedback">Debe introducir un nombre válido.</div>
             </div>
             <div class="col-md-2">
+                <label for="urural">Area de Poblacion:</label>
+                <select id="iurural" name="urural" class="form-control">
+                    <option></option>
+                    <option value=20 
+                        {% if load and a.urural == 20 %}
+                            selected 
+                        {% endif %}
+                    >Urbano</option>
+                    <option value=21 
+                        {% if load and a.urural == 21 %}
+                            selected 
+                        {% endif %}
+                    >Rural</option>
+                </select>
+                <div class="invalid-feedback">Debe Seleccionar el Tipo de Población...</div> 
+            </div>
+            <div class="col-md-2">
                 <label for="poblacionloc">Población Localidad:</label>
                 <input type="text" class="form-control" id="ipoblacionloc" title="" placeholder="Introduzca población en localidad" name="poblacionloc"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 1000000)"
                         {% if load %}
@@ -135,7 +152,7 @@
                     >
                 <div class="invalid-feedback" id="v_poblacionelecloc">Debe introducir un dato válido.</div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <label for="fechacensoloc">Fecha Censo:</label>
                 <input type="date" class="form-control" id="ifechacensoloc" title="" placeholder="Introduzca fecha del Censo" name="fechacensoloc" value="2012-01-01" min="2012-01-01" max="2025-01-01" "  
                         {% if load %}
@@ -183,7 +200,6 @@
                     <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off">Mixto
                 </label>
                 </div>
-
             </div>
             <div class="col-md-8">
                 <label for="iestado">Estado</label>

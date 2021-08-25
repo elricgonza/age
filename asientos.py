@@ -54,21 +54,21 @@ class Asientos:
 
     def get_asiento_idloc(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
-            "a.PoblacionLoc, a.PoblacionElecLoc, a.FechaCensoLoc, a.TipoLocLoc, a.fechaBaseLegLoc," + \
-            "a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \
-            "b.NomDep as _departamento, c.NomProv as _provincia, d.NomSec as _municipio, e.NombreTipoLocLoc as _tipo_circun," + \
-            "a.etapa, a.doc_idA, a.obsUbicacion, a.doc_idRN, a.obs, a.fechaIngreso, a.fechaAct, a.usuario " + \
-            ", g.ruta as rutaA, h.ruta as rutaRN, b.IdPais, a.doc_idAF, i.ruta as rutaAF " + \
-            "from [GeografiaElectoral_app].[dbo].[LOC] a" + \
-            "        left join [GeografiaElectoral_app].[dbo].[DEP] b on a.DepLoc= b.Dep " + \
-            "        left join [GeografiaElectoral_app].[dbo].[PROV] c on a.DepLoc= c.DepProv and a.ProvLoc= c.Prov" + \
-            "        left join [GeografiaElectoral_app].[dbo].[SEC] d on a.DepLoc= d.DepSec and a.ProvLoc= d.ProvSec and a.SecLoc= d.Sec" + \
-            "        left join [GeografiaElectoral_app].[dbo].[clTipoLocLoc] e on a.TipoLocLoc = e.Tipolocloc" + \
-            "        left join [bdge].[dbo].[doc] g on a.doc_idA=g.id " + \
-            "        left join [bdge].[dbo].[doc] h on a.doc_idRN=h.id " + \
-            "        left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id " + \
-            "where a.idloc = %d "
-
+            " a.PoblacionLoc, a.PoblacionElecLoc, a.FechaCensoLoc, a.TipoLocLoc, a.fechaBaseLegLoc," + \
+            " a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \
+            " b.NomDep as _departamento, c.NomProv as _provincia, d.NomSec as _municipio, e.descripcion as TipoCircunscripcion," + \
+            " a.etapa, a.doc_idA, a.obsUbicacion, a.doc_idRN, a.obs, a.fechaIngreso, a.fechaAct, a.usuario," + \
+            " g.ruta as rutaA, h.ruta as rutaRN, b.IdPais, a.doc_idAF, i.ruta as rutaAF, f.idClasif as urural" + \
+            " from [GeografiaElectoral_app].[dbo].[LOC] a" + \
+            " left join [GeografiaElectoral_app].[dbo].[DEP] b on a.DepLoc= b.Dep" + \
+            " left join [GeografiaElectoral_app].[dbo].[PROV] c on a.DepLoc= c.DepProv and a.ProvLoc= c.Prov" + \
+            " left join [GeografiaElectoral_app].[dbo].[SEC] d on a.DepLoc= d.DepSec and a.ProvLoc= d.ProvSec and a.SecLoc= d.Sec" + \
+            " left join [GeografiaElectoral_app].[dbo].[clasif] e on a.TipoLocLoc = e.idClasif" + \
+            " left join [GeografiaElectoral_app].[dbo].[clasif] f on a.urbanoRural = f.idClasif and f.clasifGrupoId=4" + \
+            " left join [bdge].[dbo].[doc] g on a.doc_idA=g.id" + \
+            " left join [bdge].[dbo].[doc] h on a.doc_idRN=h.id" + \
+            " left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id" + \
+            " where a.idloc = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
         if  row == None:
@@ -109,6 +109,7 @@ class Asientos:
             self.idpais = row[29]
             self.doc_idAF = row[30]
             self.rutaAF = row[31]
+            self.urural = row[32]
             return True
     
     def add_asiento(self, idloc, deploc, provloc, \
@@ -116,23 +117,23 @@ class Asientos:
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
-                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF):
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural):
 
         new_asiento = idloc, deploc, provloc, secloc, 0, \
             0, nomloc, poblacionloc, poblacionelecloc, fechacensoloc, \
             tipolocloc, '2007-01-01', '', 1, '', \
             '', 0, 0, 0, 0, \
             0, latitud, longitud, estado, circunconsulado, etapa, obsUbicacion, \
-            obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF
+            obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural
 
         s = "insert into GeografiaElectoral_app.dbo.loc (idloc, deploc, provloc, secloc, loc, " + \
             " idcanloc, nomloc, poblacionloc, poblacionelecloc, fechacensoloc, " + \
             " tipolocloc, fechabaselegloc, codbaselegloc, marcaloc, escabeceracanloc, " + \
             " escabecerasecloc, codprov, codsecc, tipocircun, circun, " + \
             " estadomapa, latitud, longitud, estado, circunconsulado, etapa, obsUbicacion, obs, fechaIngreso," + \
-            " fechaAct, usuario, doc_idA, doc_idRN, doc_idAF) VALUES " + \
+            " fechaAct, usuario, doc_idA, doc_idRN, doc_idAF, urbanoRural) VALUES " + \
             " (%s, %s, %s, %s, %s,  %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s," + \
-            " %s, %s,  %s, %s, %s,  %s, %s, %s, %s)"
+            " %s, %s,  %s, %s, %s,  %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_asiento)
             self.cx.commit()
@@ -145,7 +146,7 @@ class Asientos:
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
-                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF):
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural):
         '''
             NO actualiza datos de jurisdicción - dep, prov, sec
         '''
@@ -154,14 +155,14 @@ class Asientos:
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
-                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, idloc
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural, idloc
         s = "update GeografiaElectoral_app.dbo.loc" + \
             " set nomloc= %s, poblacionloc= %d, " + \
             " poblacionelecloc= %s, fechacensoloc= %s, tipolocloc= %d, " + \
             " latitud= %s, longitud= %d, " + \
             " estado= %d, circunconsulado= %s, " + \
             " etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
-            " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d" + \
+            " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d, urbanoRural= %d" + \
             " where idloc = %d"
         try:
             self.cur.execute(s, asiento)
