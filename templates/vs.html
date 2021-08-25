@@ -190,8 +190,9 @@
 
           function forEachFeatureReci(feature, layer) {
               var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + feature.properties.recinto +
-                  "</br><b><span style='color:blue'>Cod.: </b></span>"+ feature.properties.cod + 
+                  "</br><b><span style='color:blue'>Idloc/Reci: </b></span>"+ feature.properties.idlocreci + 
                   "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
+                  "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
                   "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
                   "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
                   "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
@@ -386,27 +387,28 @@
     var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet});
     map.on('move', function() { marker_gsv.setLatLng(map.getCenter()); });
 
-      //----- Add easyButton gsv - StreetView-----
-      var sw_marker_gsv = 0;
-      var gsvPopup = L.popup().setContent('<u><i>Servicio</i></u>: <b>Google Street View (GSV)</b> \
-              y otros Habilitado. Ubique posición y presione click en opciones  \
-              (ubicado en la parte inferior/izquierda) ');
 
-      L.easyButton('<img src="../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
-        if (sw_marker_gsv == 0) {
-           sv = L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
-           gsvPopup.setLatLng(map.getCenter()).openOn(map);
-           marker_gsv.addTo(map);
-           sw_marker_gsv = 1;
-           }
-        else {
-           sv.remove();
-           map.removeLayer(marker_gsv);
-           gsvPopup.removeFrom(map);
-           sw_marker_gsv = 0;
-           }
-        },'Habilitar/Inhabilitar Google Street View (GSV)').addTo(map);
-      // end Street View - easyButton
+    //----- Add easyButton gsv - StreetView-----
+    var sw_marker_gsv = 0;
+    var gsvPopup = L.popup().setContent('<u><i>Servicio</i></u>: <b>Google Street View (GSV)</b> \
+            y otros Habilitado. Ubique posición y presione click en opciones  \
+            (ubicado en la parte inferior/izquierda) ');
+
+    L.easyButton('<img src="../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
+      if (sw_marker_gsv == 0) {
+         sv = L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
+         gsvPopup.setLatLng(map.getCenter()).openOn(map);
+         marker_gsv.addTo(map);
+         sw_marker_gsv = 1;
+         }
+      else {
+         sv.remove();
+         map.removeLayer(marker_gsv);
+         gsvPopup.removeFrom(map);
+         sw_marker_gsv = 0;
+         }
+      },'Habilitar/Inhabilitar Google Street View (GSV)').addTo(map);
+    // end Street View - easyButton
 
 
 		L.control.coordinates({

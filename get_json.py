@@ -133,8 +133,9 @@ class GetJson:
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
           FROM (SELECT recinto,  
-                cod_dep::varchar(255) || '-' || cod_prov::varchar(255) || '-' || cod_mun::varchar(255) as cod,
+                idloc::varchar(255) || '-' || reci::varchar(255) as idlocreci,
                 departamento || '-' || provincia || '-' || municipio as dpm,
+                cod_dep::varchar(255) || '-' || cod_prov::varchar(255) || '-' || cod_mun::varchar(255) as cod,
                 tipo_circun || ' - ' || circun::varchar(255) as circun,
                 zona, direccion, geom 
                 FROM recintos
