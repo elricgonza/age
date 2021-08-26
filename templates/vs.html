@@ -106,6 +106,7 @@
 <body>
     <div id="map"></div>
 
+
 <!--
 <div id="recipro-wrapper" class="leaflet-bar">
   <select id="recipro">
@@ -207,6 +208,23 @@
           }
 
 
+          function forEachFeatureAsi(feature, layer) {
+              var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + feature.properties.asiento +
+                  "</br><b><span style='color:blue'>Idloc: </b></span>"+ feature.properties.idloc + 
+                  "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
+                  "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
+                  "</br><b><span style='color:blue'>Tipo Circunscripción: </b></span>"+ feature.properties.tipo_circun + 
+                  '</p>';
+
+              layer.bindPopup(popupContent);
+
+              layer.on("click", function (e) { 
+                  reciLayer.setStyle(style); //resets layer colors
+                  reciLayer.setStyle(highlight);  //highlights selected.
+              }); 
+          }
+
+
           function forEachFeatureMun(feature, layer) {
               var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
                 "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
@@ -266,6 +284,7 @@
             });
         */
 
+        // reciLayer
         var iconReci = L.icon({
           iconUrl: '../static/iconos/icons8-map-pin-40.png',
           iconSize: [35, 35]
@@ -278,6 +297,21 @@
             return lm;
         },
           onEachFeature: forEachFeatureReci, style: style
+        });
+
+
+        // asiLayer
+        var iconAsi = L.icon({
+          iconUrl: '../static/iconos/icons8-map-pin-40-red.png',
+          iconSize: [35, 35]
+        });
+
+        var asiLayer = L.geoJson( {{ gj_asi | safe }}, {
+          pointToLayer: function (feature, latlng) {
+            var lma = L.marker(latlng, {icon: iconAsi});
+            return lma;
+        },
+          onEachFeature: forEachFeatureAsi, style: style
         });
 
 
@@ -333,8 +367,9 @@
         };
 
         var overlayMaps = {
-          "Recintos":reciLayer,
-          "Cluster-Recintos":markersMCG,
+          "Recintos Electorales":reciLayer,
+          "Cluster-Recintos Elect.":markersMCG,
+          "Asientos Electorales":asiLayer,
           "Circunscripciones":cirLayer,
           "Municipios":munLayer,
           "Provincias":provLayer
@@ -464,11 +499,11 @@
   // to locLayer Search
     var searchControlLoc = new L.Control.Search({
       layer: locLayer,
-      propertyName: 'nom_localidad',
+      propertyName: 'Localidad',
       zoom:12,
-			text: 'Recinto Electoral a buscar',
+			text: 'Localidad a buscar',
 			textCancel: 'Cancelar',
-			textErr: 'Recinto NO encontrado... ',
+			textErr: 'Localidad NO encontrada... ',
       position: 'topright'
     });
     map.addControl(searchControlLoc);   // add control & checked locLayer
@@ -498,7 +533,7 @@
 
 
     // add marker & popup with coord
-            /*
+        /*
             map.on('click', function(e){
               var coord = e.latlng;
               var lat = coord.lat;
@@ -513,7 +548,7 @@
               //var marker = L.marker([lat, lng]).addTo(map);
               marker.bindPopup('Latitud: ' + lat[1] + '  Longitud: ' + lng[0]);
             })
-            */
+          */
 
                 // draggable ok
               /*
@@ -548,7 +583,7 @@
                 map.on('dblclick',
                   function mapDblClickListen(e) {
                     var pos = e.latlng;
-                    console.log('map click event');
+                    console.log('map dblclick event');
                     var marker = L.marker(
                       pos, {
                         draggable: true
@@ -590,6 +625,11 @@
 
                     //marker.addTo(map);
                     map.addLayer(marker);
+              var coord = e.latlng.toString().split(',');
+              var lat = coord[0].split('(');
+              var lng = coord[1].split(')');
+              //var marker = L.marker([lat, lng]).addTo(map);
+              marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
                   }
                 );
 

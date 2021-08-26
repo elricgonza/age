@@ -183,11 +183,13 @@ def vs(dep):
 
     #geo_json = j.get_loc(dep)
     gj_reci = j.get_reci(dep)
+    gj_asi = j.get_asi(dep)
     gj_mun = j.get_mun(dep)
     gj_prov = j.get_prov(dep)
     gj_cir = j.get_cir(dep)
     return render_template('vs.html', 
                             gj_reci=gj_reci, 
+                            gj_asi=gj_asi, 
                             gj_cir=gj_cir,
                             gj_mun=gj_mun,
                             gj_prov=gj_prov)
