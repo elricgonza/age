@@ -37,7 +37,7 @@ class Asientos:
 
     def get_asientos_all(self, usrdep):        
         s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " AsientoElectoral as Asiento, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
+            " AsientoElectoral as Asiento, tipoCircunscripcion, DEP, PROV, SEC, Estado" + \
             " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             s = s + " where DEP = %d order by prov, sec"
