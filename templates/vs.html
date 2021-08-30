@@ -106,7 +106,6 @@
 <body>
     <div id="map"></div>
 
-
 <!--
 <div id="recipro-wrapper" class="leaflet-bar">
   <select id="recipro">
@@ -117,15 +116,7 @@
 </div>
 -->
 
-
-    <div class="row">
-      <input id="Latitude" placeholder="Latitud" name="Location.Latitude" />
-      <input id="Longitude" placeholder="Longitud" name="Location.Longitude" />
-    </div>
-
     <script>
-
-          
         // Set style function that sets fill color property
         function style(feature) {
             return {
@@ -148,7 +139,6 @@
                 dashArray: '3'
             };
         }
-
 
         function styleCir(feature) {
             return {
@@ -262,8 +252,8 @@
               }); 
            }
 
-      // add markerClusterGroup
-              var markersMCG = L.markerClusterGroup();
+        // add markerClusterGroup
+        var markersMCG = L.markerClusterGroup();
 
 
         //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
@@ -386,22 +376,11 @@
 			  layers: [mapboxStreets] // only add one!
       });
 
-        //Add layer control
-        L.control.layers(baseLayers, overlayMaps).addTo(map);
+      //Add layer control
+      L.control.layers(baseLayers, overlayMaps).addTo(map);
 
       // Add defaultExtent
       //L.control.defaultExtent().addTo(map);
-
-
-      /*
-	map = new L.Map('map');
-		map.attributionControl.setPrefix(false);
-		map.dragging.enable();
-		map.touchZoom.enable();
-		map.doubleClickZoom.enable();
-    map.scrollWheelZoom.enable();
-*/
-
 
 
     // add controls 
@@ -531,111 +510,60 @@
 		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
 
 
-
     // add marker & popup with coord
-        /*
-            map.on('click', function(e){
-              var coord = e.latlng;
-              var lat = coord.lat;
-              var lng = coord.lng;
-              //alert('lat: ' +lat+ ' -- lng: '+ lng);
-                //L.marker([lat, lng]).addTo(map);
-              var marker = L.marker([lat, lng]).addTo(map);
+    var marker = L.marker([0,0]);
 
-              var coord = e.latlng.toString().split(',');
-              var lat = coord[0].split('(');
-              var lng = coord[1].split(')');
-              //var marker = L.marker([lat, lng]).addTo(map);
-              marker.bindPopup('Latitud: ' + lat[1] + '  Longitud: ' + lng[0]);
-            })
-          */
+    function markerOnClick(e)
+    {
+      var coord = e.latlng.toString().split(',');
+      var lat = coord[0].split('(');
+      var lng = coord[1].split(')');
+      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
+    }
 
-                // draggable ok
-              /*
-                map.on('click',
-                  function mapClickListen(e) {
-                    var pos = e.latlng;
-                    console.log('map click event');
-                    var marker = L.marker(
-                      pos, {
-                        draggable: true
-                      }
-                    );
-                    marker.on('drag', function(e) {
-                      console.log('marker drag event');
-                    });
-                    marker.on('dragstart', function(e) {
-                      console.log('marker dragstart event');
-                      map.off('click', mapClickListen);
-                    });
-                    marker.on('dragend', function(e) {
-                      console.log('marker dragend event');
-                      setTimeout(function() {
-                        map.on('click', mapClickListen);
-                      }, 10);
-                    });
-                    marker.addTo(map);
-                  }
-                );
-              */
+    map.on('dblclick',
+      function mapDblClickListen(e) {
+        var pos = e.latlng;
+        console.log('map dblclick event');
+        //var marker = L.marker(
+        marker = L.marker(
+          pos, {
+            draggable: true
+          }
+        );
+        marker.on('drag', function(e) {
+          console.log('marker drag event');
+        });
+        marker.on('dragstart', function(e) {
+          console.log('marker dragstart event');
+          map.off('dblclick', mapDblClickListen);
+        });
 
 
-                map.on('dblclick',
-                  function mapDblClickListen(e) {
-                    var pos = e.latlng;
-                    console.log('map dblclick event');
-                    var marker = L.marker(
-                      pos, {
-                        draggable: true
-                      }
-                    );
-                    marker.on('drag', function(e) {
-                      console.log('marker drag event');
-                    });
-                    marker.on('dragstart', function(e) {
-                      console.log('marker dragstart event');
-                      map.off('dblclick', mapDblClickListen);
-                    });
+        marker.on('dragend', function(event) {
+          console.log('marker dragend event');
+          var position = marker.getLatLng();
+          marker.setLatLng(position, {
+            draggable: 'true'
+          }).bindPopup(position).update();
+
+          $("#Latitude").val(position.lat.toFixed(5));
+          $("#Longitude").val(position.lng.toFixed(5)).keyup();
+          
+
+          setTimeout(function() {
+            map.on('dblclick', mapDblClickListen);
+          }, 10);
+        });
 
 
-                    marker.on('dragend', function(event) {
-                      console.log('marker dragend event');
-                      var position = marker.getLatLng();
-                      marker.setLatLng(position, {
-                        draggable: 'true'
-                      }).bindPopup(position).update();
+        //marker.addTo(map);
+        map.addLayer(marker);
+        marker.on('click', markerOnClick);
+      }
+    );
 
-                      $("#Latitude").val(position.lat.toFixed(5));
-                      $("#Longitude").val(position.lng.toFixed(5)).keyup();
-                      
-
-                      setTimeout(function() {
-                        map.on('dblclick', mapDblClickListen);
-                      }, 10);
-                    });
-
-                    //upd html coord
-                    $("#Latitude, #Longitude").change(function() {
-                      var position = [parseInt($("#Latitude").val()), parseInt($("#Longitude").val()) ];
-                      marker.setLatLng(position, {
-                        draggable: 'true'
-                      }).bindPopup(position).update();
-                      map.panTo(position);
-                    });
-
-                    //marker.addTo(map);
-                    map.addLayer(marker);
-              var coord = e.latlng.toString().split(',');
-              var lat = coord[0].split('(');
-              var lng = coord[1].split(')');
-              //var marker = L.marker([lat, lng]).addTo(map);
-              marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
-                  }
-                );
-
-
-    </script>
-    alert('enddddddddddd');
+</script>
     <!--{{ gj_cir }}-->
 
 </body>
