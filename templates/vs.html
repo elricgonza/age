@@ -15,16 +15,21 @@
     <!--add-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
 
-    <!-- Dependency to Leaflet Draw -->
+    <!-- Dependency to Leaflet Draw - for measurecontrol-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.js"></script>
 
-    <!-- Files from current project 
-    <link rel="stylesheet" href="leaflet.measurecontrol.css" />
-    <script src="leaflet.measurecontrol.js"></script> -->
-
+    <!-- measure control 
     <link href="{{ url_for('static', filename='css/leaflet.measurecontrol.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet.measurecontrol.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/leaflet.measurecontrol.js') }}"></script>-->
+
+    <!-- linear measure control -->
+    <link href="{{ url_for('static', filename='css/Leaflet.LinearMeasurement.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/Leaflet.LinearMeasurement.js') }}"></script>
+
+    <link href="{{ url_for('static', filename='css/onlytest.css') }}" rel="stylesheet" media="screen">
+    
+
 
     <!--Coordinates-->
     <link href="{{ url_for('static', filename='css/Leaflet.Coordinates-0.1.5.css') }}" rel="stylesheet" media="screen">
@@ -70,14 +75,6 @@
     crossorigin=""></script>
 
 
-    <!--
-    <style>
-        #map {  position: relative;
-                width: 1100px;
-                height: 720px;
-                border: 3px solid #000000;}
-    </style>    
-    -->
     <style>
         body {
           padding: 0;
@@ -104,283 +101,289 @@
 </head>
 
 <body>
-    <div id="map"></div>
+  <div id="map"></div>
 
-<!--
-<div id="recipro-wrapper" class="leaflet-bar">
-  <select id="recipro">
-    <option value="Nuevos">Nuevos</option>
-    <option value="Suprimidos">Suprimidos/Suspendidos</option>
-    <option value="Actualizados">Actualizados</option>
-  </select>
-</div>
--->
+  <!--
+  <div id="recipro-wrapper" class="leaflet-bar">
+    <select id="recipro">
+      <option value="Nuevos">Nuevos</option>
+      <option value="Suprimidos">Suprimidos/Suspendidos</option>
+      <option value="Actualizados">Actualizados</option>
+    </select>
+  </div>
+  -->
 
-    <script>
-        // Set style function that sets fill color property
-        function style(feature) {
-            return {
-                fillColor: 'green', 
-                fillOpacity: 0.5,  
-                weight: 2,
-                opacity: 1,
-                color: '#ffffff',
-                dashArray: '3'
-            };
-        }
+  <!--{{ gj_cir }}-->
 
-        function styleProv(feature) {
-            return {
-                fillColor: 'orange', 
-                fillOpacity: 0.5,  
-                weight: 2,
-                opacity: 1,
-                color: '#ffffff',
-                dashArray: '3'
-            };
-        }
-
-        function styleCir(feature) {
-            return {
-                fillColor: 'gray', 
-                fillOpacity: 0.5,  
-                weight: 2,
-                opacity: 1,
-                color: 'red',
-                dashArray: '3'
-            };
-        }
+</body>
+</html>
 
 
-        var highlight = {
-          'fillColor': 'yellow',
-          'weight': 2,
-          'opacity': 2
+<script>
+    // Set style function that sets fill color property
+    function style(feature) {
+        return {
+            fillColor: 'green', 
+            fillOpacity: 0.5,  
+            weight: 2,
+            opacity: 1,
+            color: '#ffffff',
+            dashArray: '3'
         };
-        
+    }
 
-        var highlightCir = {
-          'fillColor': '#a3c2c2',
-          'weight': 2,
-          'opacity': 2
+    function styleProv(feature) {
+        return {
+            fillColor: 'orange', 
+            fillOpacity: 0.5,  
+            weight: 2,
+            opacity: 1,
+            color: '#ffffff',
+            dashArray: '3'
         };
+    }
+
+    function styleCir(feature) {
+        return {
+            fillColor: 'gray', 
+            fillOpacity: 0.5,  
+            weight: 2,
+            opacity: 1,
+            color: 'red',
+            dashArray: '3'
+        };
+    }
 
 
-        function forEachFeature(feature, layer) {
-            var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
-                "</br>LOCALIDAD: "+ feature.properties.nom_localidad + '</p>';
+    var highlight = {
+      'fillColor': 'yellow',
+      'weight': 2,
+      'opacity': 2
+    };
+    
 
-            layer.bindPopup(popupContent);
-
-            layer.on("click", function (e) { 
-                locLayer.setStyle(style); //resets layer colors
-                layer.setStyle(highlight);  //highlights selected.
-            }); 
-        }
-
-
-          function forEachFeatureReci(feature, layer) {
-              var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + feature.properties.recinto +
-                  "</br><b><span style='color:blue'>Idloc/Reci: </b></span>"+ feature.properties.idlocreci + 
-                  "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
-                  "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
-                  "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
-                  "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
-                  "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
-                  '</p>';
-
-              layer.bindPopup(popupContent);
-
-              layer.on("click", function (e) { 
-                  reciLayer.setStyle(style); //resets layer colors
-                  reciLayer.setStyle(highlight);  //highlights selected.
-              }); 
-          }
+    var highlightCir = {
+      'fillColor': '#a3c2c2',
+      'weight': 2,
+      'opacity': 2
+    };
 
 
-          function forEachFeatureAsi(feature, layer) {
-              var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + feature.properties.asiento +
-                  "</br><b><span style='color:blue'>Idloc: </b></span>"+ feature.properties.idloc + 
-                  "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
-                  "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
-                  "</br><b><span style='color:blue'>Tipo Circunscripción: </b></span>"+ feature.properties.tipo_circun + 
-                  '</p>';
+    function forEachFeature(feature, layer) {
+        var popupContent = "<p><b>ID: </b>"+ feature.properties.id +
+            "</br>LOCALIDAD: "+ feature.properties.nom_localidad + '</p>';
 
-              layer.bindPopup(popupContent);
+        layer.bindPopup(popupContent);
 
-              layer.on("click", function (e) { 
-                  reciLayer.setStyle(style); //resets layer colors
-                  reciLayer.setStyle(highlight);  //highlights selected.
-              }); 
-          }
+        layer.on("click", function (e) { 
+            locLayer.setStyle(style); //resets layer colors
+            layer.setStyle(highlight);  //highlights selected.
+        }); 
+    }
 
 
-          function forEachFeatureMun(feature, layer) {
-              var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
-                "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
+    function forEachFeatureReci(feature, layer) {
+        var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + feature.properties.recinto +
+            "</br><b><span style='color:blue'>Idloc/Reci: </b></span>"+ feature.properties.idlocreci + 
+            "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
+            "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
+            "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
+            "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
+            "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
+            '</p>';
 
-              layer.bindPopup(popupContent);
+        layer.bindPopup(popupContent);
 
-              layer.on("click", function (e) { 
-                  munLayer.setStyle(style); //resets layer colors
-                  layer.setStyle(highlight);  //highlights selected.
-              }); 
-          }
-          
-
-          function forEachFeatureProv(feature, layer) {
-              var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
-                "</br><b><span style='color:blue'>Provincia: </span></b>"+ feature.properties.provincia + '</p>';
-
-              layer.bindPopup(popupContent);
-
-              layer.on("click", function (e) { 
-                  provLayer.setStyle(styleProv); //resets layer colors
-                  layer.setStyle(highlight);  //highlights selected.
-              }); 
-          }
+        layer.on("click", function (e) { 
+            reciLayer.setStyle(style); //resets layer colors
+            reciLayer.setStyle(highlight);  //highlights selected.
+        }); 
+    }
 
 
-          function forEachFeatureCir(feature, layer) {
-              var popupContent = "<p><b>Circunscripción: </b>"+ feature.properties.circun + "</p";
+    function forEachFeatureAsi(feature, layer) {
+        var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + feature.properties.asiento +
+            "</br><b><span style='color:blue'>Idloc: </b></span>"+ feature.properties.idloc + 
+            "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
+            "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
+            "</br><b><span style='color:blue'>Tipo Circunscripción: </b></span>"+ feature.properties.tipo_circun + 
+            '</p>';
 
-              layer.bindPopup(popupContent);
+        layer.bindPopup(popupContent);
 
-              layer.on("click", function (e) { 
-                  cirLayer.setStyle(styleCir); //resets layer colors
-                  layer.setStyle(highlightCir);  //highlights selected.
-              }); 
-           }
-
-        // add markerClusterGroup
-        var markersMCG = L.markerClusterGroup();
+        layer.on("click", function (e) { 
+            reciLayer.setStyle(style); //resets layer colors
+            reciLayer.setStyle(highlight);  //highlights selected.
+        }); 
+    }
 
 
-        //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
+    function forEachFeatureMun(feature, layer) {
+        var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
+          "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
 
-        /*
-            var iconLoc = L.icon({
-              iconUrl: '../static/iconos/icons8-map-pin-40.png',
-              iconSize: [35, 35]
-            });
+        layer.bindPopup(popupContent);
 
-            var locLayer = L.geoJson( {{ geo_json | safe }}, {
-              pointToLayer: function (feature, latlng) {
-                var lm = L.marker(latlng, {icon: iconLoc});
-                markersMCG.addLayer(lm);
-                return lm;
-            },
-              onEachFeature: forEachFeature, style: style
-            });
-        */
+        layer.on("click", function (e) { 
+            munLayer.setStyle(style); //resets layer colors
+            layer.setStyle(highlight);  //highlights selected.
+        }); 
+    }
+      
 
-        // reciLayer
-        var iconReci = L.icon({
+    function forEachFeatureProv(feature, layer) {
+        var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
+          "</br><b><span style='color:blue'>Provincia: </span></b>"+ feature.properties.provincia + '</p>';
+
+        layer.bindPopup(popupContent);
+
+        layer.on("click", function (e) { 
+            provLayer.setStyle(styleProv); //resets layer colors
+            layer.setStyle(highlight);  //highlights selected.
+        }); 
+    }
+
+
+    function forEachFeatureCir(feature, layer) {
+        var popupContent = "<p><b>Circunscripción: </b>"+ feature.properties.circun + "</p";
+
+        layer.bindPopup(popupContent);
+
+        layer.on("click", function (e) { 
+            cirLayer.setStyle(styleCir); //resets layer colors
+            layer.setStyle(highlightCir);  //highlights selected.
+        }); 
+    }
+
+    // add markerClusterGroup
+    var markersMCG = L.markerClusterGroup();
+
+
+    //tmp--var locLayer = L.geoJson( {{ geo_json | safe }}, {onEachFeature: forEachFeature, style: style});
+
+    /*
+        var iconLoc = L.icon({
           iconUrl: '../static/iconos/icons8-map-pin-40.png',
           iconSize: [35, 35]
         });
 
-        var reciLayer = L.geoJson( {{ gj_reci | safe }}, {
+        var locLayer = L.geoJson( {{ geo_json | safe }}, {
           pointToLayer: function (feature, latlng) {
-            var lm = L.marker(latlng, {icon: iconReci});
+            var lm = L.marker(latlng, {icon: iconLoc});
             markersMCG.addLayer(lm);
             return lm;
         },
-          onEachFeature: forEachFeatureReci, style: style
+          onEachFeature: forEachFeature, style: style
         });
+    */
+
+    // reciLayer
+    var iconReci = L.icon({
+      iconUrl: '../static/iconos/icons8-map-pin-40.png',
+      iconSize: [35, 35]
+    });
+
+    var reciLayer = L.geoJson( {{ gj_reci | safe }}, {
+      pointToLayer: function (feature, latlng) {
+        var lm = L.marker(latlng, {icon: iconReci});
+        markersMCG.addLayer(lm);
+        return lm;
+    },
+      onEachFeature: forEachFeatureReci, style: style
+    });
 
 
-        // asiLayer
-        var iconAsi = L.icon({
-          iconUrl: '../static/iconos/icons8-map-pin-40-red.png',
-          iconSize: [35, 35]
-        });
+    // asiLayer
+    var iconAsi = L.icon({
+      iconUrl: '../static/iconos/icons8-map-pin-40-red.png',
+      iconSize: [35, 35]
+    });
 
-        var asiLayer = L.geoJson( {{ gj_asi | safe }}, {
-          pointToLayer: function (feature, latlng) {
-            var lma = L.marker(latlng, {icon: iconAsi});
-            return lma;
-        },
-          onEachFeature: forEachFeatureAsi, style: style
-        });
-
-
-        var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
-        var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
-        var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
+    var asiLayer = L.geoJson( {{ gj_asi | safe }}, {
+      pointToLayer: function (feature, latlng) {
+        var lma = L.marker(latlng, {icon: iconAsi});
+        return lma;
+    },
+      onEachFeature: forEachFeatureAsi, style: style
+    });
 
 
-      // baseMaps - overlayMaps
+    var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
+    var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
+    var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
 
-        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            osmAttrib = 'Map data &copy; OpenStreetMap contributors',
-            landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
-            thunAttrib = 'only Attrib',
-            googleSatUrl = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-            googleMapUrl = 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
-            mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibzJicGlja2luIiwiYSI6ImNpbXUyMzNldTAyNTF1cmtrZXdnbWZycDIifQ.JdYE50MBxDn1fdZtVFYXZw',
-            topoUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-            topoAttrib = 'Kartendaten: &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)';
 
-        var osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib}),
-            landMap = L.tileLayer(landUrl, {attribution: ''}),
-            googleSat = L.tileLayer(googleSatUrl, {Attribution: 'gsat'}),
-            googleMap = L.tileLayer(googleMapUrl, {Attribution: 'gmap'}),
-            mbSat = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: 'mbSat'}) ;
-            topoMap = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttrib});
+    // baseMaps - overlayMaps
 
-        var BING_KEY = 'AuhiCJHlGzhg93IqUH_oCpl_-ZUrIE6SPftlyGYUvr9Amx5nzA-WqGcPquyFZl4L';
-        var bingSat = L.tileLayer.bing(BING_KEY);
-        var esriStreets = L.esri.basemapLayer('Streets');
-        var esriImagery = L.esri.basemapLayer('Imagery');
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        osmAttrib = 'Map data &copy; OpenStreetMap contributors',
+        landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
+        thunAttrib = 'only Attrib',
+        googleSatUrl = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+        googleMapUrl = 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
+        mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibzJicGlja2luIiwiYSI6ImNpbXUyMzNldTAyNTF1cmtrZXdnbWZycDIifQ.JdYE50MBxDn1fdZtVFYXZw',
+        topoUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        topoAttrib = 'Kartendaten: &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)';
 
-        var tokenMapBox = 'pk.eyJ1IjoibWJ1Z2xlMjAyMSIsImEiOiJja3FpOHd4cjMyYmR0MnpuMHZrajF5c3pxIn0.2gFzBGWekEI59pMl0EflSw';
-        var mapboxUrl = 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/{z}/{x}/{y}@2x?access_token=' + tokenMapBox;
-        var mapboxAttrib = 'Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.';
-        var mapboxStreets = new L.TileLayer(mapboxUrl, {
-          attribution: mapboxAttrib,
-          tileSize: 512,
-          zoomOffset: -1
-        });
+    var osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib}),
+        landMap = L.tileLayer(landUrl, {attribution: ''}),
+        googleSat = L.tileLayer(googleSatUrl, {Attribution: 'gsat'}),
+        googleMap = L.tileLayer(googleMapUrl, {Attribution: 'gmap'}),
+        mbSat = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: 'mbSat'}) ;
+        topoMap = new L.TileLayer(topoUrl, {minZoom: 1, maxZoom: 17, detectRetina: false, attribution: topoAttrib});
 
-        var baseLayers = {
-          "Open Street Map": osmMap,
-          "Google Satellite": googleSat,
-          "Google Streets": googleMap,
-          "MapBox Satellite": mbSat,
-          "MapBox Streets": mapboxStreets,
-          "Esri Streets": esriStreets,
-          "Esri Imagery": esriImagery,
-          "Bing Satellite": bingSat,
-          "Landscape": landMap,
-          "Open TopoMap": topoMap
-        };
+    var BING_KEY = 'AuhiCJHlGzhg93IqUH_oCpl_-ZUrIE6SPftlyGYUvr9Amx5nzA-WqGcPquyFZl4L';
+    var bingSat = L.tileLayer.bing(BING_KEY);
+    var esriStreets = L.esri.basemapLayer('Streets');
+    var esriImagery = L.esri.basemapLayer('Imagery');
 
-        var overlayMaps = {
-          "Recintos Electorales":reciLayer,
-          "Cluster-Recintos Elect.":markersMCG,
-          "Asientos Electorales":asiLayer,
-          "Circunscripciones":cirLayer,
-          "Municipios":munLayer,
-          "Provincias":provLayer
-        };	
-          
+    var tokenMapBox = 'pk.eyJ1IjoibWJ1Z2xlMjAyMSIsImEiOiJja3FpOHd4cjMyYmR0MnpuMHZrajF5c3pxIn0.2gFzBGWekEI59pMl0EflSw';
+    var mapboxUrl = 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/{z}/{x}/{y}@2x?access_token=' + tokenMapBox;
+    var mapboxAttrib = 'Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.';
+    var mapboxStreets = new L.TileLayer(mapboxUrl, {
+      attribution: mapboxAttrib,
+      tileSize: 512,
+      zoomOffset: -1
+    });
 
-      // Set up map
+    var baseLayers = {
+      "Open Street Map": osmMap,
+      "Google Satellite": googleSat,
+      "Google Streets": googleMap,
+      "MapBox Satellite": mbSat,
+      "MapBox Streets": mapboxStreets,
+      "Esri Streets": esriStreets,
+      "Esri Imagery": esriImagery,
+      "Bing Satellite": bingSat,
+      "Landscape": landMap,
+      "Open TopoMap": topoMap
+    };
 
-      var mapCenter = [-17.05678, -64.81934];
-      var map = L.map('map', {
-        defaultExtentControl: true,
-        center: mapCenter,
-        zoom: 6,
-			  layers: [mapboxStreets] // only add one!
-      });
+    var overlayMaps = {
+      "Recintos Electorales":reciLayer,
+      "Cluster-Recintos Elect.":markersMCG,
+      "Asientos Electorales":asiLayer,
+      "Circunscripciones":cirLayer,
+      "Municipios":munLayer,
+      "Provincias":provLayer
+    };	
+      
 
-      //Add layer control
-      L.control.layers(baseLayers, overlayMaps).addTo(map);
+    // Set up map
 
-      // Add defaultExtent
-      //L.control.defaultExtent().addTo(map);
+    var mapCenter = [-17.05678, -64.81934];
+    var map = L.map('map', {
+      defaultExtentControl: true,
+      center: mapCenter,
+      zoom: 6,
+      layers: [mapboxStreets] // only add one!
+    });
+
+    //Add layer control
+    L.control.layers(baseLayers, overlayMaps).addTo(map);
+
+    // Add defaultExtent
+    //L.control.defaultExtent().addTo(map);
 
 
     // add controls 
@@ -425,35 +428,35 @@
     // end Street View - easyButton
 
 
-		L.control.coordinates({
-			position:"bottomleft",
-			decimals:5,
-			decimalSeperator:",",
+    L.control.coordinates({
+      position:"bottomleft",
+      decimals:5,
+      decimalSeperator:",",
       lngFirst:true,
       labelTemplateLat:"<b>Latitud:</b> {y}",
       labelTemplateLng:"<b>Longitud:</b> {x}",
       useLatLngOrder: true
-		}).addTo(map);
+    }).addTo(map);
 
 
-		map.addControl( new L.Control.Search({
-			url: 'https://nominatim.openstreetmap.org/search?format=json&accept-language=de-DE&q={s}',
-			jsonpParam: 'json_callback',
-			propertyName: 'display_name',
-			propertyLoc: ['lat','lon'],
-			markerLocation: true,
-			autoType: false,
-			autoCollapse: true,
-			minLength: 2,
-			zoom:16,
-			text: 'Dirección a buscar ó lat long',
-			textCancel: 'Cancelar',
+    map.addControl( new L.Control.Search({
+      url: 'https://nominatim.openstreetmap.org/search?format=json&accept-language=de-DE&q={s}',
+      jsonpParam: 'json_callback',
+      propertyName: 'display_name',
+      propertyLoc: ['lat','lon'],
+      markerLocation: true,
+      autoType: false,
+      autoCollapse: true,
+      minLength: 2,
+      zoom:16,
+      text: 'Dirección a buscar ó lat long',
+      textCancel: 'Cancelar',
       textErr: 'No encontrado... ',
       position: 'topleft'
-		}) );
-		//marker: L.circleMarker([0,0],{radius:30}),
+    }) );
+    //marker: L.circleMarker([0,0],{radius:30}),
 
-	//L.control.locate({showCompass:true,icon:"fa fa-crosshairs"}).addTo(map);
+  //L.control.locate({showCompass:true,icon:"fa fa-crosshairs"}).addTo(map);
 
 
   // to munLayer Search
@@ -462,8 +465,8 @@
       propertyName: 'municipio',
       zoom:9,
       circleLocation: false,
-			text: 'Municipio a buscar',
-			textCancel: 'Cancelar',
+      text: 'Municipio a buscar',
+      textCancel: 'Cancelar',
       textErr: 'Municipio NO encontrado... ',
       position: 'topright'
     });
@@ -474,40 +477,44 @@
       })
     map.addControl(searchControlMun);
 
-  /*
-  // to locLayer Search
-    var searchControlLoc = new L.Control.Search({
-      layer: locLayer,
-      propertyName: 'Localidad',
-      zoom:12,
-			text: 'Localidad a buscar',
-			textCancel: 'Cancelar',
-			textErr: 'Localidad NO encontrada... ',
-      position: 'topright'
-    });
-    map.addControl(searchControlLoc);   // add control & checked locLayer
-  */        
+    /*
+    // to locLayer Search
+      var searchControlLoc = new L.Control.Search({
+        layer: locLayer,
+        propertyName: 'Localidad',
+        zoom:12,
+        text: 'Localidad a buscar',
+        textCancel: 'Cancelar',
+        textErr: 'Localidad NO encontrada... ',
+        position: 'topright'
+      });
+      map.addControl(searchControlLoc);   // add control & checked locLayer
+    */        
 
 
-  // to reciLayer Search
+    // to reciLayer Search
     var searchControlReci = new L.Control.Search({
       layer: reciLayer,
       propertyName: 'recinto',
       zoom:12,
-			text: 'Recinto Electoral a buscar',
-			textCancel: 'Cancelar',
-			textErr: 'Recinto NO encontrado... ',
+      text: 'Recinto Electoral a buscar',
+      textCancel: 'Cancelar',
+      textErr: 'Recinto NO encontrado... ',
       position: 'topright'
     });
     map.addControl(searchControlReci);   // add control & checked locLayer
 
 
-		//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
-		var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
+    //Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
+    var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
 
-		var rect1 = {color: "#ff1100", weight: 3};
-		var rect2 = {color: "#0000AA", weight: 1, opacity:0, fillOpacity:0};
-		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
+    var rect1 = {color: "#ff1100", weight: 3};
+    var rect2 = {color: "#0000AA", weight: 1, opacity:0, fillOpacity:0};
+    var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
+
+    // test for measure
+
+
 
 
     // add marker & popup with coord
@@ -564,8 +571,6 @@
     );
 
 </script>
-    <!--{{ gj_cir }}-->
 
-</body>
-</html>
 
+<script src="{{ url_for('static', filename='js/onlytest.js') }}"></script>
