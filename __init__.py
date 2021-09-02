@@ -56,7 +56,7 @@ import get_json
 app = Flask(__name__)
 app.secret_key ='\xfd{H\xe7<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa7'
 app.config['LOGIN_DISABLED'] = False
-app.config['PATH_APP'] = '/var/www/flasks/age/'
+app.config['PATH_APP'] = '/var/www/flasks/age_vstwo/'
 app.config['IMG_ASIENTOS'] = '/static/imgbd/asi'
 app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
 app.config['SUBIR_PDF'] = '/static/pdfdoc'

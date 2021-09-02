@@ -19,16 +19,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.js"></script>
 
-    <!-- measure control 
-    <link href="{{ url_for('static', filename='css/leaflet.measurecontrol.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet.measurecontrol.js') }}"></script>-->
-
     <!-- linear measure control -->
     <link href="{{ url_for('static', filename='css/Leaflet.LinearMeasurement.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/Leaflet.LinearMeasurement.js') }}"></script>
-
-    <link href="{{ url_for('static', filename='css/onlytest.css') }}" rel="stylesheet" media="screen">
-    
 
 
     <!--Coordinates-->
@@ -386,10 +379,13 @@
     //L.control.defaultExtent().addTo(map);
 
 
-    // add controls 
+    // add others controls 
     map.addControl(new L.Control.Fullscreen());
 
-    L.Control.measureControl().addTo(map);
+    map.addControl(new L.Control.LinearMeasurement({
+      unitSystem: 'metric',
+      color: '#FF6600'
+    }))
 
     L.control.locate({
       strings: {title: "Ver donde estoy.."}
@@ -572,5 +568,3 @@
 
 </script>
 
-
-<script src="{{ url_for('static', filename='js/onlytest.js') }}"></script>
