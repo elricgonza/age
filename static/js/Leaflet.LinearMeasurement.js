@@ -20,7 +20,7 @@
               me = this;
 
           link.href = '#';
-          link.title = 'Toggle measurement tool';
+          link.title = 'Habilitar/inhabilitar herramienta de medición';
 
           L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', function(){
               if(L.DomUtil.hasClass(link, 'icon-active')){

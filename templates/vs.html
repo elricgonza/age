@@ -445,7 +445,7 @@
       autoCollapse: true,
       minLength: 2,
       zoom:16,
-      text: 'Dirección a buscar ó lat long',
+      text: 'Buscar dirección ó lat long',
       textCancel: 'Cancelar',
       textErr: 'No encontrado... ',
       position: 'topleft'
@@ -508,10 +508,6 @@
     var rect2 = {color: "#0000AA", weight: 1, opacity:0, fillOpacity:0};
     var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
 
-    // test for measure
-
-
-
 
     // add marker & popup with coord
     var marker = L.marker([0,0]);
@@ -524,41 +520,28 @@
       marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
     }
 
-    map.on('dblclick',
-      function mapDblClickListen(e) {
+    map.on('contextmenu',
+      function mapContextmenuListen(e) {
         var pos = e.latlng;
-        console.log('map dblclick event');
-        //var marker = L.marker(
         marker = L.marker(
           pos, {
             draggable: true
           }
         );
-        marker.on('drag', function(e) {
-          console.log('marker drag event');
-        });
         marker.on('dragstart', function(e) {
-          console.log('marker dragstart event');
-          map.off('dblclick', mapDblClickListen);
+          map.off('contextmenu', mapContextmenuListen);
         });
-
 
         marker.on('dragend', function(event) {
-          console.log('marker dragend event');
           var position = marker.getLatLng();
           marker.setLatLng(position, {
             draggable: 'true'
           }).bindPopup(position).update();
 
-          $("#Latitude").val(position.lat.toFixed(5));
-          $("#Longitude").val(position.lng.toFixed(5)).keyup();
-          
-
           setTimeout(function() {
-            map.on('dblclick', mapDblClickListen);
+            map.on('contextmenu', mapContextmenuListen);
           }, 10);
         });
-
 
         //marker.addTo(map);
         map.addLayer(marker);
