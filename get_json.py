@@ -1,5 +1,6 @@
+''' get's for visor '''
+
 import json
-# get for visor
 
 class GetJson:
 
@@ -180,10 +181,8 @@ class GetJson:
         '''
         
         if (dep == '0'):
-            print('dep IGUAL A  0')
             sss = s + ' ) inputs) features;'
         else:
-            print('dep DIFERENTE a 0')
             ss = f'WHERE cod_dep= {dep} '
             sss = s + ss + ' ) inputs) features;'
 
@@ -195,7 +194,6 @@ class GetJson:
 
 
     def get_loc(self, dep):
-        #R
         s = '''
         SELECT jsonb_build_object(
             'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
@@ -220,10 +218,6 @@ class GetJson:
             print('dep DIFERENTE a 0')
             ss = f'WHERE ut_sup_id= {dep} '
             sss = s + ss + ' ) inputs) features;'
-        #WHERE trim(nom_ut_sup) = 'Tarija' or trim(nom_ut_sup)='Pando' )
-        print('----------------------------')
-        #print(sss)
-        print('----------------------------')
         self.cur.execute(sss)
 
         geo_json = self.cur.fetchone()
