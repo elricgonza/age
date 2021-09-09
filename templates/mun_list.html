@@ -15,7 +15,9 @@
                     <h5>MUNICIPIOS</h5>
                 </div>
                 <div class="col-xs-6 col-md-4">
-                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('munABC', dep_id = 0, prov_id = 0, mun_id = 0) }} >Adicionar Municipio</a></button>
+                    {% if puede_adicionar %}
+                        <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('munABC', dep_id = 0, prov_id = 0, mun_id = 0) }} >Adicionar Municipio</a></button>
+                    {% endif %}
                 </div>
             </div>
 
@@ -39,9 +41,12 @@
                             <td>{{ muni[5] }}</td>
                             <td>{{ muni[6] }}</td>
                             <td>{{ muni[7] }}</td>
-
                             <td>
-                                <a href={{ url_for( 'munABC', dep_id=muni[1], prov_id=muni[2], mun_id=muni[3]) }}><span class="fas fa-edit"></span></a>
+                                {% if puede_editar %}
+                                    <a href={{ url_for( 'munABC', dep_id=muni[1], prov_id=muni[2], mun_id=muni[3]) }}><span class="fas fa-edit"></span></a>
+                                {% else %}
+                                    <span class="fas fa-edit" style="color: grey"></span>
+                                {% endif%}
                             </td>
                         </tr>
                         {% endfor %}

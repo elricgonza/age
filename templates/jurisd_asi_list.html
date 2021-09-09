@@ -50,9 +50,17 @@
                             <td>{{ jurisd[9] }}</td>
                             <td>
                                 {% if jurisd[11] == 'A' %}
+                                    {% if puede_editar %}
                                         <a href="{{ url_for( 'jurisd_asi', idloc=jurisd[0]) }}"><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                    {% else %}
+                                        <i class="fas fa-file-signature" style="color: grey"></i><br>Modificar
+                                    {% endif %}    
                                 {% else %}
+                                    {% if puede_editar %}
                                         <a href="{{ url_for( 'jurisd_asi', idloc=jurisd[0]) }}" style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Trasladar</a>
+                                    {% else %}
+                                        <i class="fas fa-file-signature" style="color: grey"></i><br>Trasladar
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>

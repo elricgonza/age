@@ -385,8 +385,11 @@ def documentos_list():
     d = docu.Documentos(cxms)
     rows = d.get_documentos_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)  # render a template
+        if 'Documentos - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr, \
+                                    puede_editar='Documentos - Edición' in permisos_usr, \
+                                    puede_eliminar='Documentos - Eliminación' in permisos_usr
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -536,8 +539,11 @@ def asientos_list():
     a = asi.Asientos(cxms)
     rows = a.get_asientos_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
+        if 'Asientos - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
+                                    puede_editar='Asientos - Edición' in permisos_usr, \
+                                    puede_eliminar='Asientos - Eliminación' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -728,7 +734,10 @@ def get_geo_all():
 @login_required
 def reportes():
     r = rep.Reportes(cxms)
-    return render_template('reportes.html', load_r=False, puede_consultar='Reportes - Consulta' in permisos_usr)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('reportes.html', load_r=False, puede_consultar='Reportes - Consulta' in permisos_usr)
+    else:
+        return render_template('msg.html', l1='Sin permisos asignados !!')
 
 
 @app.route('/reportespdf', methods=['GET', 'POST'])
@@ -817,8 +826,10 @@ def recintos_list():
     rc = reci.Recintos(cxms)
     rows = rc.get_recintos_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+        if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                    puede_editar='Recintos - Edición' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -982,13 +993,15 @@ def reciespe_list():
     rce = recie.Reciespe(cxms)
     rows = rce.get_reciespe_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+        if 'Especiales - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                    puede_editar='Especiales - Edición' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
-        return render_template('reciespe_list.html', puede_adicionar='Recintos - Adición' in permisos_usr)
+        return render_template('reciespe_list.html', puede_adicionar='Especiales - Adición' in permisos_usr)
 
 
 @app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -1000,7 +1013,7 @@ def reciespe(idreci, idlocreci):
     d = docu.Documentos(cxms)
 
     error = None
-    p = ('Recintos - Edición' in permisos_usr)  # t/f
+    p = ('Especiales - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
@@ -1043,7 +1056,7 @@ def reciespe(idreci, idlocreci):
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
                 rows = rce.get_reciespe_all(usrdep)
-                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr)  # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             idlocreci = request.form['asiento'].split(':')
@@ -1057,7 +1070,7 @@ def reciespe(idreci, idlocreci):
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rce.get_reciespe_all(usrdep)
-            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
         if idreci != '0':  # EDIT
             if rce.get_recinto_idreci(idreci, idlocreci) == True:
@@ -1135,8 +1148,10 @@ def zonas_list():
     z = zo.Zonas(cxms)
     rows = z.get_zonas_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
+        if 'Zonas - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                    puede_editar='Zonas - Edición' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -1553,8 +1568,10 @@ def homologa_list():
 
     rows = ahom.get_homologa_all(usrdep, inicio, final)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template
+        if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                    puede_editar='Homologa - Edición' in permisos_usr
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -1635,13 +1652,13 @@ def homologacion_list():
         final = '00-00-0000'
     rows = ahomo.get_homologacion_all(usrdep, inicio, final)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template
+        if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin Homologacion...')
-        return render_template('homologacion_list.html', puede_adicionar='Homologa - Adición' in permisos_usr)
+        return render_template('homologacion_list.html', puede_consultar='Homologa - Consulta' in permisos_usr)
 
 
 @app.route('/homologacion/<idhomo>/<inicio>/<final>', methods=['GET', 'POST'])
@@ -1693,8 +1710,10 @@ def jurisdiccion_list():
     ju = jur.Jurisdiccion(cxms)
     rows = ju.get_jurisdiccion_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
+        if 'Jurisdicción - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr, \
+                                    puede_editar='Jurisdicción - Edición' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -1820,8 +1839,10 @@ def jurisd_asi_list():
     ja = jua.Jurisd_asi(cxms)
     rows = ja.get_jurisd_asi_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
+        if 'Jurisd_asi - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
+                                    puede_editar='Jurisd_asi - Edición' in permisos_usr
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -1957,8 +1978,10 @@ def paises_list():
     rows = s.get_paises_all(usrdep)
 
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr)  # render a template
+        if 'Paises - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr, \
+                                   puede_editar='Paises - Edición' in permisos_usr
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -2012,8 +2035,10 @@ def deptos_list():
     s = deptoss.Departamento(cxms)
     rows = s.get_deptos_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr)  # render a template
+        if 'Departamentos - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr, \
+                                    puede_editar='Departamentos - Edición' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -2059,8 +2084,10 @@ def provs_list():
     s = provs.Prov(cxms)
     rows = s.get_provs_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr)  # render a template
+        if 'Provincias - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr, \
+                                    puede_editar='Provincias - Edición' in permisos_usr
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -2125,8 +2152,10 @@ def mun_list():
     s = muns.Municipio(cxms)
     rows = s.get_mun_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr)  # render a template
+        if 'Municipios - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr, \
+                                    puede_editar='Municipios - Edición' in permisos_usr
+                                  )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -2173,15 +2202,36 @@ def munABC(dep_id, prov_id, mun_id):
 def bitacora_list():
     """ Modulo log de Transacciones """
     s = bitacoras.Bitacora(cxms)
-    rows = s.get_bitacora_all(usrdep)
+    if request.method == 'POST':
+        if request.form['inicio'] == "":
+            inicio = '00-00-0000'
+        else:
+            inicio = request.form['inicio']
+
+        if request.form['final'] == "":
+            final = '00-00-0000'
+        else:
+            final = request.form['final']
+
+        if request.form['usuario'] == 0:    
+            usuario = 0
+        else:
+            usuario = request.form['usuario']
+    else:
+        inicio = '00-00-0000'
+        final = '00-00-0000'
+        usuario = 0
+
+    rows = s.get_bitacora_all(inicio, final, usuario)
 
     if rows:
         if permisos_usr:    # tiene pemisos asignados
-            return render_template('bitacora_list.html', bitacoras=rows, puede_adicionar='Bitacoras - Adición' in permisos_usr)  # render a template
+            return render_template('bitacora_list.html', bitacoras=rows, usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin bitacora...')
+        return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)
 
 
 @app.route('/grupo_list', methods=['GET', 'POST'])
@@ -2315,7 +2365,7 @@ def clas(clas_id, clas_grup_id):
     # New
     return render_template('clas.html', error=error, s=s, load=False, titulo='Registro de Nuevo clasificador', puede_editar=p)
 
-
+#Recintos - Uninominales
 @app.route('/recinto_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
 @login_required
 def recinto_img(idloc, nomloc, idreci):
@@ -2343,7 +2393,7 @@ def recinto_img(idloc, nomloc, idreci):
                 fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)
 
                 #resize_save_file(fpath, name_to_save, (1024, 768), os.path.join(app.config['IMG_RECINTOS']))
-                resize_save_file(fpath, name_to_save, (1024, 768))
+                resize_save_file1(fpath, name_to_save, (1024, 768))
 
                 li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
                 os.remove(fpath[1:])   # arch. fuente
@@ -2352,12 +2402,57 @@ def recinto_img(idloc, nomloc, idreci):
 
     else:
         if with_img:  # Edit
-            return render_template('recinto_img_upd.html', rows=i.get_descripcion(5), nomloc=nomloc,
+            return render_template('recinto_img_upd.html', rows=i.get_descripcion(9), nomloc=nomloc,
                                 puede_editar='Recintos - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('recinto_img.html', rows=i.get_descripcion(5), nomloc=nomloc,
+            return render_template('recinto_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
                                 puede_editar='Recintos - Edición' in permisos_usr)
+
+#Recintos - Especiales
+@app.route('/reciespe_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
+@login_required
+def reciespe_img(idloc, nomloc, idreci):
+
+    i = clasif_get.ClasifGet(cxms)  # conecta a la BD
+    li = reci_img.ReciImg(cxms)
+
+    with_img = li.get_reci_imgs(idloc)  # False or rows-img
+
+    error = None
+
+    if request.method == 'POST':
+        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
+        img_ids = list(img_ids_[0].split(","))      # list ok
+        uploaded_files = request.files.getlist("filelist")
+
+        for n in range(len(img_ids)):
+            f  = uploaded_files[n]
+            if f.filename != '':
+                securef = secure_filename(f.filename)
+                f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
+                fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
+                arch, ext = os.path.splitext(fpath)
+                name_to_save = str(idloc).zfill(5) + "_" + str(idreci).zfill(5) + "_" + str(img_ids[n]).zfill(3)  + ext
+                fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)
+
+                #resize_save_file(fpath, name_to_save, (1024, 768), os.path.join(app.config['IMG_RECINTOS']))
+                resize_save_file1(fpath, name_to_save, (1024, 768))
+
+                li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
+                os.remove(fpath[1:])   # arch. fuente
+
+        return redirect(url_for('reciespe_list'))
+
+    else:
+        if with_img:  # Edit
+            return render_template('reciespe_img_upd.html', rows=i.get_descripcion(9), nomloc=nomloc,
+                                puede_editar='Especiales - Edición' in permisos_usr,
+                                imgs_loaded=with_img)
+        else:  # New
+            return render_template('reciespe_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
+                                puede_editar='Especiales - Edición' in permisos_usr)
+
 
 #def resize_save_file(in_file, out_file, size, ruta_img):
 def resize_save_file(in_file, out_file, size):
@@ -2367,6 +2462,16 @@ def resize_save_file(in_file, out_file, size):
     #image.save('.' + ruta_img, out_file)
     #image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
     image.save('.' + os.path.join(app.config['IMG_ASIENTOS'], out_file))
+    image.close()
+    #return(out_file)
+
+def resize_save_file1(in_file, out_file, size):
+    with open('.' + in_file, 'rb') as fd:
+        image = resizeimage.resize_thumbnail(Image.open(fd), size)
+
+    #image.save('.' + ruta_img, out_file)
+    #image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
+    image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
     image.close()
     #return(out_file)
 

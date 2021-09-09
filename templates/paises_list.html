@@ -14,11 +14,11 @@
                 <div class="col-xs-12 col-sm-6 col-md-8">
                     <h5>PAISES</h5>
                 </div>
-                
-                <div class="col-xs-6 col-md-4">
-                    <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href =  {{ url_for('paisesABC', pais_id = 0) }} >Adicionar Pais</a></button>
-                </div>
-             
+                {% if puede_adicionar %}
+                    <div class="col-xs-6 col-md-4">
+                        <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href =  {{ url_for('paisesABC', pais_id = 0) }} >Adicionar Pais</a></button>
+                    </div>
+                {% endif %}
             </div>
 
             <div style="height:20px"></div>
@@ -47,9 +47,12 @@
                             <td>{{ pais[4] }}</td>
                             <td>{{ pais[5] }}</td>
                             <td>{{ pais[6] }}</td>
-
                             <td>
-                                <a href={{ url_for( 'paisesABC', pais_id=pais[0]) }}><span class="fas fa-edit"></span></a>
+                                {% if puede_editar %}
+                                    <a href={{ url_for( 'paisesABC', pais_id=pais[0]) }}><span class="fas fa-edit"></span></a>
+                                {% else %}
+                                    <span class="fas fa-edit" style="color: grey"></span>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

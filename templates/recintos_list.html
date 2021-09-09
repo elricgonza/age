@@ -55,14 +55,18 @@
                             <td>{{ recinto[6] }}</td>
                             <td>{{ recinto[10] }}</td>
                             <td>
-                                <a href={{ url_for( 'recinto', idreci=recinto[1], idlocreci=recinto[0]) }}><span class="fas fa-edit"></span></a>
+                                {% if puede_editar %}
+                                    <a href={{ url_for( 'recinto', idreci=recinto[1], idlocreci=recinto[0]) }}><span class="fas fa-edit"></span></a>
+                                {% else %}
+                                    <span class="fas fa-edit" style="color: grey"></span>
+                                {% endif%}
                             </td>
                             <td>
-
-                                <a href={{ url_for( 'recinto_img', idloc=recinto[0], nomloc=recinto[5], idreci=recinto[1] ) }}><span class="fas fa-camera"></span></a>
-
-
-
+                                {% if puede_editar %}
+                                    <a href={{ url_for( 'recinto_img', idloc=recinto[0], nomloc=recinto[5], idreci=recinto[1] ) }}><span class="fas fa-camera"></span></a>
+                                {% else %}
+                                    <span class="fas fa-camera" style="color: grey"></span>
+                                {% endif%}
                             </td>
                         </tr>
                         {% endfor %}

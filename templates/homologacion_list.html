@@ -89,7 +89,11 @@
                             <td>{{ homologacion[7] }}</td>
                             <td>{{ homologacion[8] }}</td>
                             <td style="text-align: center; font-size: 20px;">
-                                <a href={{ url_for( 'homologacion', idhomo=homologacion[0], inicio=inicio, final=final) }}><i class="fas fa-search-plus"></i></a>
+                                {% if puede_consultar %}
+                                    <a href={{ url_for( 'homologacion', idhomo=homologacion[0], inicio=inicio, final=final) }}><i class="fas fa-search-plus"></i></a>
+                                {% else %}
+                                    <i class="fas fa-search-plus" style="color: grey"></i>
+                                {% endif%}
                             </td>
                         </tr>
                         {% endfor %}

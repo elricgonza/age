@@ -52,7 +52,11 @@
                         <td>{{ zona[3] }}</td>
                         <td>{{ zona[4] }}</td>
                         <td>
-                            <a href={{ url_for('zonas', idloc = zona[0], iddist = zona[2], ban = 0) }}><span class="fas fa-edit"></span></a>                
+                            {% if puede_editar %}
+                                <a href={{ url_for('zonas', idloc = zona[0], iddist = zona[2], ban = 0) }}><span class="fas fa-edit"></span></a>
+                            {% else %}
+                                <span class="fas fa-edit" style="color: grey"></span>
+                            {% endif%}                
                         </td>
                     </tr>
                     {% endfor %}

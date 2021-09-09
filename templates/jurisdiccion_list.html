@@ -52,9 +52,17 @@
                             <td>{{ jurisdiccion[10] }}</td>
                             <td>
                                 {% if jurisdiccion[11] == None and jurisdiccion[12] == None %}
+                                    {% if puede_adicionar %}
                                         <a href={{ url_for( 'jurisdiccion', reci=jurisdiccion[1], idloc=jurisdiccion[0]) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Trasladar</a>
+                                    {% else %}
+                                        <i class="fas fa-file-signature" style="color: grey"></i><br>Trasladar
+                                    {% endif %}
                                 {% else %}
+                                    {% if puede_editar %}
                                         <a href={{ url_for( 'jurisdiccion', reci=jurisdiccion[1], idloc=jurisdiccion[0]) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                    {% else %}
+                                        <i class="fas fa-file-signature" style="color: grey"></i><br>Modificar
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>

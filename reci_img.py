@@ -28,6 +28,7 @@ class ReciImg:
             print ('Error adición en -reci_img-')
             print (e)
 
+
     def exist_img_reci(self, idLoc, imgId, reci):
         s = "select * from reci_img where idLoc= %d and imgId= %d and reci= %d"
         parm = idLoc, imgId, reci
@@ -45,7 +46,7 @@ class ReciImg:
 
     def del_reci_img(self, idLoc, imgId, reci):
         if self.exist_img_reci(idLoc, imgId, reci):
-            s = "delete from reci_img where idloc= %d and imgId= %d and reci= %d"
+            s = "delete from reci_img where idLoc= %d and imgId= %d and reci= %d"
             parm = idLoc, imgId, reci
             try:
                 self.cur.execute(s, parm)

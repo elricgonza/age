@@ -84,9 +84,17 @@
                                 <td>{{ homologa[8] }}</td>
                                 <td style="text-align: center; font-size: 15px;">
                                     {% if homologa[6] == None %}
+                                        {% if puede_adicionar %}
                                             <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
+                                        {% else %}
+                                            <i class="fas fa-file-signature" style="color: grey"></i><br>Asignar
+                                        {% endif %}
                                     {% else %}
+                                        {% if puede_editar %}
                                             <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                        {% else %}
+                                            <i class="fas fa-file-signature" style="color: grey"></i><br>Modificar
+                                        {% endif %}    
                                     {% endif %}
                                 </td>
                             </tr>
