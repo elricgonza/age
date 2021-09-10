@@ -9,8 +9,8 @@ import psycopg2.extras
 
 def get_db_ms():
     #pms = ("192.168.110.1","appgeoh","1234qweAS","bdge")
+    #pms = ("192.168.110.1","appgeog","123qweAS","bdge")
     pms = ("10.100.107.31","appgeoh","1234qweAS","bdge")
-    #pms = ("10.100.107.240","sa","S1stemas","bdge")
     try:
         cx = mss.connect(*pms)
         print("cnx mssql ok -bdge-")
@@ -20,7 +20,6 @@ def get_db_ms():
 
 
 def get_db_pg():
-    #ppg = {'host': 'localhost',  \
     ppg = {'host': 'localhost',  \
         'user': 'appgeo', \
         'password': 'appgeo', \

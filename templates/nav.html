@@ -66,6 +66,8 @@
                          <hr>
                          <a class="dropdown-item" href="/homologa_list">Asignar Homologación</a>
                          <a class="dropdown-item" href="/homologacion_list">Listar Homologación</a>
+                         <hr>
+                         <a class="dropdown-item" href="/vs/{{ usrdep  }}">Visor Recintos/Asientos</a>
                     </div>
                 </div>
             {% endif %}
@@ -101,7 +103,7 @@
 
             {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/grupo_list">Parametricos</a>
+                    <a class="nav-link" href="/grupo_list">Clasificadores</a>
                 </li>
             {% endif %}
         </ul>
