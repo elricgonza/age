@@ -106,6 +106,16 @@ class Reciasiento:
         else:
             return rows
 
+    def get_distritos_all1(self, idloc):        
+        s = "select IdLocDist, Dist, CircunDist, NomDist from [GeografiaElectoral_app].[dbo].[DIST] where IdLocDist = %d order by Dist"
+        consulta = idloc
+        self.cur.execute(s, consulta)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
 
     def get_pueblos_all(self, dep):      
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifSubGrupo = %s order by descripcion"

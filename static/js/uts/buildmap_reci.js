@@ -55,7 +55,6 @@ function asientoZona(event) {
     var x = event.keyCode;
     //alert(x)
     if (x == 27 || x == 9 || 'undefined') {
-            console.log($('input[name="idloc"]').val());
             $.getJSON('/asientoz', {
                 azona: $('input[name="idloc"]').val()
             }, function(data) {

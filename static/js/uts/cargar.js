@@ -97,6 +97,17 @@ function cargar(valor, data) {
                     $("#ipueblo").append('<option value="' + obj8[0] + '">' + obj8[1] + '</option>');
                 });
             });
+        }else if(data==9){
+            var idloc = document.getElementById("iidloc").value;
+            $('#inomdist').html('');
+            $.getJSON("/get_distritos_all1", {
+                idloc: idloc
+            }, function(datos9){
+                $("#inomdist").append('<option></option>');                
+                $.each(datos9, function(index9, obj9){           
+                    $("#inomdist").append('<option value="' + obj9[1] + '">' + obj9[1] +' - '+ obj9[3] +'('+ 'Cir ' + obj9[2] +')'+'</option>');
+                });
+            });
         } 
     };
 } 
