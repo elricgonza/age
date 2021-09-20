@@ -59,10 +59,18 @@
                         <td>{{ reciespecial[6] }}</td>
                         <td>{{ reciespecial[10] }}</td>
                         <td>
-                            <a href={{ url_for('reciespeciales', idreci=reciespecial[1], idlocreci=reciespecial[0]) }}><span class="fas fa-edit"></span></a>                
+                            {% if puede_editar %}
+                                <a href={{ url_for('reciespeciales', idreci=reciespecial[1], idlocreci=reciespecial[0]) }}><span class="fas fa-edit"></span></a>
+                            {% else %}
+                                <span class="fas fa-edit" style="color: grey"></span>
+                            {% endif %}                
                         </td>
                         <td>
-                            <a href="#"><span class="fas fa-camera"></span></a>                        
+                            {% if puede_editar %}
+                                <a href={{ url_for('reciespeciales_img', idloc=reciespecial[0], nomloc=reciespecial[5], idreci=reciespecial[1]) }}><span class="fas fa-camera"></span></a>
+                            {% else %}
+                                <span class="fas fa-camera" style="color: grey"></span>
+                            {% endif %}                        
                         </td>
                     </tr>
                     {% endfor %}

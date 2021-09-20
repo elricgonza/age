@@ -1382,13 +1382,17 @@ def reciespeciales_list():
     rces = recies.Reciespeciales(cxms)
     rows = rces.get_reciespeciales_all(usrdep)
     if rows:
-        if permisos_usr:    # tiene pemisos asignados
-            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+        if 'Reci_espe - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Reci_espe - Adición' in permisos_usr, \
+                                    puede_editar='Reci_espe - Edición' in permisos_usr
+                                  )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
-        return render_template('reciespeciales_list.html', puede_adicionar='Recintos - Adición' in permisos_usr)
+        return render_template('reciespeciales_list.html', puede_adicionar='Reci_espe - Adición' in permisos_usr, \
+                                puede_editar='Reci_espe - Edición' in permisos_usr
+                              )
 
 
 @app.route('/reciespeciales/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -2557,6 +2561,51 @@ def reciespe_img(idloc, nomloc, idreci):
         else:  # New
             return render_template('reciespe_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
                                 puede_editar='Especiales - Edición' in permisos_usr)
+
+
+#Recintos - Casos Especiales
+@app.route('/reciespeciales_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
+@login_required
+def reciespeciales_img(idloc, nomloc, idreci):
+
+    i = clasif_get.ClasifGet(cxms)  # conecta a la BD
+    li = reci_img.ReciImg(cxms)
+
+    with_img = li.get_reci_imgs(idloc)  # False or rows-img
+
+    error = None
+
+    if request.method == 'POST':
+        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
+        img_ids = list(img_ids_[0].split(","))      # list ok
+        uploaded_files = request.files.getlist("filelist")
+
+        for n in range(len(img_ids)):
+            f  = uploaded_files[n]
+            if f.filename != '':
+                securef = secure_filename(f.filename)
+                f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
+                fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
+                arch, ext = os.path.splitext(fpath)
+                name_to_save = str(idloc).zfill(5) + "_" + str(idreci).zfill(5) + "_" + str(img_ids[n]).zfill(3)  + ext
+                fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)
+
+                #resize_save_file(fpath, name_to_save, (1024, 768), os.path.join(app.config['IMG_RECINTOS']))
+                resize_save_file1(fpath, name_to_save, (1024, 768))
+
+                li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
+                os.remove(fpath[1:])   # arch. fuente
+
+        return redirect(url_for('reciespeciales_list'))
+
+    else:
+        if with_img:  # Edit
+            return render_template('reciespeciales_img_upd.html', rows=i.get_descripcion(9), nomloc=nomloc,
+                                puede_editar='Reci_espe - Edición' in permisos_usr,
+                                imgs_loaded=with_img)
+        else:  # New
+            return render_template('reciespeciales_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
+                                puede_editar='Reci_espe - Edición' in permisos_usr)
 
 
 #def resize_save_file(in_file, out_file, size, ruta_img):
