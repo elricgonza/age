@@ -14,13 +14,14 @@
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
-                <form action="{{ url_for('zonass', idloczona = z.idloc, idzon = z.idzon) }}" class="needs-validation" novalidate method="POST" onsubmit="return Validation(this)" name="form">                
+                <form action="{{ url_for('zonass', idloczona = za.idloc, idzon = 0) }}" class="needs-validation" novalidate method="POST" onsubmit="return Validation(this)" name="form">                
                     <div class="row">
                         <div class="col-md-2">
                             <label for="idloc">IdLoc:</label>
+                            <input type="hidden" name="idzon" value="{{ za.idzon }}">
                             <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required onkeydown="asientoZona(event)" 
                                     {% if load %}
-                                        readonly value="{{ z.idloc }}"
+                                        readonly value="{{ za.idloc }}"
                                     {% endif %}
                                 >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
@@ -29,7 +30,7 @@
                             <label for="nomloc">Nombre Asiento:</label>
                             <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
                                     {% if load %}
-                                        value="{{ z.nomloc }}"
+                                        value="{{ za.nomloc }}"
                                     {% endif %}
                                 >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
@@ -49,7 +50,7 @@
                             <label for="nomdist">Nombre del Distrito:</label>
                             <select id="inomdist" name="nomdist" class="form-control" required>
                                 {% for distrito in distritos %}
-                                    {% if load and z.distzona==distrito[1] %}
+                                    {% if load and za.distzona==distrito[1] %}
                                             <option value = "{{ distrito[1] }}" selected>{{ distrito[1] ~' - '~ distrito[3] ~'('~ 'Cir ' ~ distrito[2] ~')' }}</option>
                                     {% else %}
                                             <option value = "{{ distrito[1] }}">{{ distrito[1] ~' - '~ distrito[3] ~'('~ 'Cir ' ~ distrito[2] ~')' }}</option>
@@ -62,7 +63,7 @@
                             <label for="nomzon">Nombre de la Zona:</label>
                             <input type="text" class="form-control" id="inomzon" placeholder="Introduzca el Nombre de la Zona" name="nomzon" required
                                 {% if load %}
-                                    value="{{ z.nomzona }}"        
+                                    value="{{ za.nomzona }}"        
                                 {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre de la Zona...</div>

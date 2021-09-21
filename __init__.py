@@ -1298,7 +1298,7 @@ def zon_list():
     rows = za.get_zon_all(usrdep)
     if rows:
         if 'Zon - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('zon_list.html', zonass=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
+            return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
                                     puede_editar='Zon - Edición' in permisos_usr
                                   )# render a template
         else:
@@ -1330,20 +1330,20 @@ def zonass(idloczona, idzon):
                            request.form['nomdist'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'])     
 
             rows = za.get_zon_all(usrdep)
-            return render_template('zon_list.html', zonass=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
+            return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
                                     puede_editar='Zon - Edición' in permisos_usr
                                   )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
-            za.upd_zon(idloczona, idzon, request.form['nomzon'], request.form['nomdist'], fa, usr)
+            za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], request.form['nomdist'], fa, usr)
 
             rows = za.get_zon_all(usrdep)
-            return render_template('zon_list.html', zonass=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
+            return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
                                     puede_editar='Zon - Edición' in permisos_usr
                                   )# render a template
         
-    else: # Viene de <asientos_list>
-        if idloczona != '0' and idzon !='0':  # EDIT
+    else: # Viene de <zon_list>
+        if idloczona != '0':  # EDIT
             if za.get_zon_idloc(idloczona, idzon) == True:
                 """if a.docAct == None:
                     a.docAct = """
@@ -1354,10 +1354,10 @@ def zonass(idloczona, idzon):
                 if za.usuario == None:
                     za.usuario = usr
 
-                return render_template('zons.html', error=error, distritos=rca.get_distritos_all1(idloczona), z=za, load=True, puede_editar=p, titulo='Modificación de Zonas')
+                return render_template('zons.html', error=error, distritos=rca.get_distritos_all1(idloczona), za=za, load=True, puede_editar=p, titulo='Modificación de Zonas')
 
     # New
-    return render_template('zons.html', error=error, z=za, load=False, puede_editar=p, titulo='Registro de Zonas')
+    return render_template('zons.html', error=error, za=za, load=False, puede_editar=p, titulo='Registro de Zonas')
 
 
 @app.route('/get_distritos_all1', methods=['GET', 'POST'])
@@ -2310,37 +2310,38 @@ def munABC(dep_id, prov_id, mun_id):
 @login_required
 def bitacora_list():
     """ Modulo log de Transacciones """
-    s = bitacoras.Bitacora(cxms)
-    if request.method == 'POST':
-        if request.form['inicio'] == "":
-            inicio = '00-00-0000'
-        else:
-            inicio = request.form['inicio']
 
-        if request.form['final'] == "":
-            final = '00-00-0000'
-        else:
-            final = request.form['final']
-
-        if request.form['usuario'] == 0:    
-            usuario = 0
-        else:
-            usuario = request.form['usuario']
+    if 'Historial' not in permisos_usr:    # No tiene pemisos asignados
+        return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        inicio = '00-00-0000'
-        final = '00-00-0000'
-        usuario = 0
+        s = bitacoras.Bitacora(cxms)
+        if request.method == 'POST':
+            if request.form['inicio'] == "":
+                inicio = '00-00-0000'
+            else:
+                inicio = request.form['inicio']
 
-    rows = s.get_bitacora_all(inicio, final, usuario)
+            if request.form['final'] == "":
+                final = '00-00-0000'
+            else:
+                final = request.form['final']
 
-    if rows:
-        if permisos_usr:    # tiene pemisos asignados
+            if request.form['usuario'] == 0:    
+                usuario = 0
+            else:
+                usuario = request.form['usuario']
+        else:
+            inicio = '00-00-0000'
+            final = '00-00-0000'
+            usuario = 0
+
+        rows = s.get_bitacora_all(inicio, final, usuario)
+
+        if rows:
             return render_template('bitacora_list.html', bitacoras=rows, usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)  # render a template
         else:
-            return render_template('msg.html', l1='Sin permisos asignados !!')
-    else:
-        print ('Sin bitacora...')
-        return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)
+            print ('Sin registros en Historial...')
+            return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)
 
 
 @app.route('/grupo_list', methods=['GET', 'POST'])

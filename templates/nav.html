@@ -29,29 +29,8 @@
             {% endif %} -->
 
             <li class="nav-item">
-                <a class="nav-link" href="/asientos_list">Asientos Electorales</a>
+                <a class="nav-link" href="/asientos_list">Asientos</a>
             </li>
-
-            <!-- PARA UNIDAD TERRITORIAL -->
-            {% if current_user.is_authenticated %}
-                <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Ord. Territorial
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="/paises_list">Pais</a>
-                        <a class="dropdown-item" href="/deptos_list">Departamento</a>
-                        <a class="dropdown-item" href="/provs_list">Provincia</a>
-                        <a class="dropdown-item" href="/mun_list">Municipio</a>
-                    </div>
-                </div>
-            {% endif %} 
-
-            {% if current_user.is_authenticated and current_user.usuario =='admin' %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/m_usuarios">Usuarios</a>
-                </li>
-            {% endif %} 
 
             {% if current_user.is_authenticated %}
                 <div class="dropdown">
@@ -73,6 +52,7 @@
                 </div>
             {% endif %}
 
+
             {% if current_user.is_authenticated %}
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Act. Jurisdicción</a>
@@ -82,6 +62,30 @@
                     </div>
                 </div>
             {% endif %} 
+
+
+            <!-- Org.Territorial -->
+            {% if current_user.is_authenticated %}
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Org. Territorial
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/paises_list">Pais</a>
+                        <a class="dropdown-item" href="/deptos_list">Departamento</a>
+                        <a class="dropdown-item" href="/provs_list">Provincia</a>
+                        <a class="dropdown-item" href="/mun_list">Municipio</a>
+                    </div>
+                </div>
+            {% endif %} 
+
+            {% if current_user.is_authenticated and current_user.usuario =='admin' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/m_usuarios">Usuarios</a>
+                </li>
+            {% endif %} 
+
+
 
             {% if current_user.is_authenticated %}
             <!--Codigo Grover-Inicio-->
@@ -94,11 +98,10 @@
                 </li>
             {% endif %}
             
-            <!--Codigo Javier-Final-->
 
-            {% if current_user.is_authenticated and current_user.usuario =='admin' %}
+            {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/bitacora_list">Bitacora</a>
+                    <a class="nav-link" href="/bitacora_list">Historial</a>
                 </li>
             {% endif %} 
 
@@ -143,4 +146,5 @@
             {% endif %}
         </ul>
     </div>
+    {{ permisos_usr }}
 </nav>
