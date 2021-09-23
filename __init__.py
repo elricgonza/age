@@ -1325,9 +1325,10 @@ def zonass(idloczona, idzon):
                 #return render_template('asiento.html', error=error, u=u, load_u=True)
                 print('msg-err')
             else:
+                nomdist = request.form['nomdist'].split(':')
                 nextidzona = za.get_next_zon(request.form['idloc'])
                 za.add_zon(request.form['idloc'], nextidzona, request.form['nomzon'], \
-                           request.form['nomdist'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'])     
+                           nomdist[0], request.form['fechaIngreso'][:-7], fa, request.form['usuario'])     
 
             rows = za.get_zon_all(usrdep)
             return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
@@ -1335,7 +1336,8 @@ def zonass(idloczona, idzon):
                                   )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
-            za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], request.form['nomdist'], fa, usr)
+            nomdist = request.form['nomdist'].split(':')
+            za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], nomdist[0], fa, usr)
 
             rows = za.get_zon_all(usrdep)
             return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
@@ -1372,6 +1374,21 @@ def get_distritos_all1():
         return jsonify(0)
 
     cxms2.close()
+
+
+@app.route('/get_circundist', methods=['GET', 'POST'])
+def get_circundist():
+    idloc = request.args.get('idloc')
+    circd = request.args.get('circd')
+    za = zon.Zon(cxms)
+    rows = za.get_circundist(idloc, circd)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
 #========== Final Modulo Zon ============#
 
 #========== Modulo Recintos Casos Especiales ============#

@@ -29,7 +29,7 @@ class Zon:
 
     def get_zon_idloc(self, idloczona, idzon):
         up_zonadist = idloczona, idzon
-        s = "select l.IdLoc, l.NomLoc, z.Zona, z.NomZona, z.DistZona, z.fechaIngreso, z.fechaAct, z.usuario" + \
+        s = "select l.IdLoc, l.NomLoc, z.Zona, z.NomZona, z.DistZona, z.fechaIngreso, z.fechaAct, z.usuario, d.CircunDist" + \
             " from GeografiaElectoral_app.dbo.ZONA z" + \
             " inner join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
             " inner join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" + \
@@ -47,6 +47,7 @@ class Zon:
             self.fechaIngreso = row[5]
             self.fechaAct = row[6]
             self.usuario = row[7]
+            self.circundist = row[8]
             return True
 
     def get_next_zon(self, idloc):
@@ -74,3 +75,13 @@ class Zon:
             print('Zona actualizada')
         except:
             print("Error --UPD-- Zona...")
+
+    def get_circundist(self, idloc, circd):        
+        s = "select CircunDist, NombreRecinto from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional] where IdLoc = %d and CircunDist = %d order by Dist"
+        consulta = idloc, circd
+        self.cur.execute(s, consulta)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
