@@ -4,10 +4,9 @@ App Administración Geo
 Resguardo de imágenes en:
  static/imgbd/asi
  static/imgbd/reci
- static/pdfdoc --test
 
 Resguardo de documentos en:
- static/doc
+ static/pdfdoc
 
 
 using:
