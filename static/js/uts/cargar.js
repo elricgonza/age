@@ -105,8 +105,27 @@ function cargar(valor, data) {
             }, function(datos9){
                 $("#inomdist").append('<option></option>');                
                 $.each(datos9, function(index9, obj9){           
-                    $("#inomdist").append('<option value="' + obj9[1] + '">' + obj9[1] +' - '+ obj9[3] +'('+ 'Cir ' + obj9[2] +')'+'</option>');
+                    $("#inomdist").append('<option value="' + obj9[1] + ':' + obj9[2] + '">' + obj9[1] +' - '+ obj9[3] +'('+ 'Cir ' + obj9[2] +')'+'</option>');
                 });
+            });
+        }else if(data==10){
+            var circundist = document.form.circundist.value;
+            var circundist1 = 0;
+            var idloc = document.getElementById("iidloc").value;
+            var dist = document.getElementById("inomdist").value;
+            var cirs = dist.split(':');
+            var recintos='Los siguientes Recintos, cambiaran de Circuns:\n';
+            $.getJSON("/get_circundist", {
+                idloc: idloc,
+                circd: cirs[1]
+            }, function(datos10){                
+                $.each(datos10, function(index10, obj10){           
+                        recintos=recintos+obj10[1]+'; ';
+                        circundist1 = obj10[0];
+                });
+                if(circundist!=circundist1 && circundist!=''){
+                    alert(recintos);
+                }
             });
         } 
     };
