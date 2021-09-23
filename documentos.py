@@ -115,22 +115,15 @@ class Documentos:
             s = s + " order by fechaAct desc"
             self.cur.execute(s) 
         rows = self.cur.fetchall()
-                
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
 
     def get_tipo_documentos_pdfRN(self, usrdep):
         s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
         s = s + " where dep = 0 order by fechaAct desc"
         self.cur.execute(s) 
         rows = self.cur.fetchall()
+        return rows
                 
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
 
     def upd_doc(self, idA, idRN, idAct, idRspNal, docActF):
         upd_doc2 = (idAct, idRspNal, docActF)
