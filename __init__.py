@@ -579,12 +579,6 @@ def asiento(idloc):
     error = None
     p = ('Asientos - Edición' in permisos_usr)  # t/f
 
-    '''
-    # historico
-    IP_remoto = request.remote_addr
-    hloc_loc2 = historicolocloc2.Historicolocloc2() # -> bdge
-    #
-'''
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
         if usrdep != 0:
@@ -610,7 +604,7 @@ def asiento(idloc):
                               request.form['secloc'], request.form['nomloc'], request.form['poblacionloc'], \
                               request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
                               request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
-                              request.form['etapa'], request.form['obsUbicacion'], request.form['obs'], \
+                              request.form['etapa'], request.form['obsUbicacion'], request.form['obs'].strip(), \
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
                               docActF, urural)
 
@@ -624,7 +618,7 @@ def asiento(idloc):
                           request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
                           request.form['latitud'], request.form['longitud'], \
                           request.form['estado'], '', request.form['etapa'], \
-                          request.form['obsUbicacion'], request.form['obs'], \
+                          request.form['obsUbicacion'], request.form['obs'].strip(), \
                           str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
                           docActF, urural)
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
