@@ -611,7 +611,10 @@ def asiento(idloc):
                 d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
                 rows = a.get_asientos_all(usrdep)
-                return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
+                return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
+                                        puede_editar='Asientos - Edición' in permisos_usr, \
+                                        puede_eliminar='Asientos - Eliminación' in permisos_usr
+                                      ) # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
@@ -624,7 +627,10 @@ def asiento(idloc):
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
             rows = a.get_asientos_all(usrdep)
-            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr)  # render a template
+            return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
+                                    puede_editar='Asientos - Edición' in permisos_usr, \
+                                    puede_eliminar='Asientos - Eliminación' in permisos_usr
+                                  ) # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
             if a.get_asiento_idloc(idloc) == True:
@@ -903,7 +909,9 @@ def recinto(idreci, idlocreci):
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
                 rows = rc.get_recintos_all(usrdep)
-                return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+                return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                        puede_editar='Recintos - Edición' in permisos_usr
+                                      )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             idlocreci = request.form['asiento'].split(':')
@@ -917,7 +925,9 @@ def recinto(idreci, idlocreci):
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rc.get_recintos_all(usrdep)
-            return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+            return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                    puede_editar='Recintos - Edición' in permisos_usr
+                                  )# render a template
     else: # Viene de <asientos_list>
         if idreci != '0':  # EDIT
             if rc.get_recinto_idreci(idreci, idlocreci) == True:

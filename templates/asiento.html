@@ -176,7 +176,11 @@
                       class="btn btn-outline-dark"
                 {% endif %}
                 >
+                {% if load and a.tipolocloc.strip()=="67" %}
+                    <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off" checked="">Uninominal
+                {% else %}
                     <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off">Uninominal
+                {% endif %}
                 </label>
 
                 <label
@@ -186,8 +190,11 @@
                       class="btn btn-outline-dark"
                 {% endif %}
                 >
-
+                {% if load and a.tipolocloc.strip()=="68" %}
+                    <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off" checked="">Especial
+                {% else %}
                     <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off">Especial
+                {% endif %}
                 </label>
 
                 <label 
@@ -197,7 +204,11 @@
                       class="btn btn-outline-dark"
                 {% endif %}
                 >
+                {% if load and a.tipolocloc.strip()=="69" %}
+                    <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off" checked="">Mixto
+                {% else %}
                     <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off">Mixto
+                {% endif %}
                 </label>
                 </div>
             </div>
