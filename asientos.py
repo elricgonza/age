@@ -71,9 +71,7 @@ class Asientos:
             " where a.idloc = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
+        if row:
             self.idloc = row[0]
             self.deploc = row[1]
             self.provloc = row[2]
@@ -111,6 +109,11 @@ class Asientos:
             self.rutaAF = row[31]
             self.urural = row[32]
             return True
+        return row
+
+        #if  row == None:
+        #    return False
+        #else:
     
     def add_asiento(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
@@ -141,21 +144,24 @@ class Asientos:
         except:
             print("Error - actualización de asiento...")
     
-        
+    '''    
     def upd_asiento(self, idloc, nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural):
-        '''
-            NO actualiza datos de jurisdicción - dep, prov, sec
-        '''
 
         asiento = nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural, idloc
+    '''
+
+    def upd_asiento(self, asiento):
+        '''
+            NO actualiza datos de jurisdicción - dep, prov, sec
+        '''
         s = "update GeografiaElectoral_app.dbo.loc" + \
             " set nomloc= %s, poblacionloc= %d, " + \
             " poblacionelecloc= %s, fechacensoloc= %s, tipolocloc= %d, " + \
@@ -170,6 +176,7 @@ class Asientos:
             print('Asiento actualizado')
         except Exception as e:
             print("Error - actualización de Asiento...")
+
 
     def upd_asiento_ex(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \

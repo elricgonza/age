@@ -573,6 +573,9 @@ def asientos_list():
 @app.route('/asiento/<idloc>', methods=['GET', 'POST'])
 @login_required
 def asiento(idloc):
+    '''
+    Adición/Edición de asientos
+    '''
     a = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
 
@@ -617,6 +620,16 @@ def asiento(idloc):
                                       ) # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
+            row_to_upd = \
+                request.form['nomloc'], request.form['poblacionloc'], \
+                request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
+                request.form['latitud'], request.form['longitud'], \
+                request.form['estado'], '', request.form['etapa'], \
+                request.form['obsUbicacion'], request.form['obs'].strip(), \
+                str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
+                docActF, urural, idloc
+
+            '''
             a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
                           request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
                           request.form['latitud'], request.form['longitud'], \
@@ -624,6 +637,9 @@ def asiento(idloc):
                           request.form['obsUbicacion'], request.form['obs'].strip(), \
                           str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
                           docActF, urural)
+            '''
+            a.upd_asiento(row_to_upd)
+
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
             rows = a.get_asientos_all(usrdep)
@@ -633,9 +649,14 @@ def asiento(idloc):
                                   ) # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
-            if a.get_asiento_idloc(idloc) == True:
-                """if a.docAct == None:
-                    a.docAct = """
+            if a.get_asiento_idloc(idloc):
+                row_old = a.nomloc, a.poblacionloc, \
+                        a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
+                        a.latitud, a.longitud, \
+                        a.estado, a.etapa, \
+                        a.obsUbicacion, a.obs, \
+                        a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, ??? 
+
                 if a.fechaIngreso == None:
                     a.fechaIngreso = str(datetime.datetime.now())[:-7]
                 if a.fechaAct == None:
@@ -644,7 +665,6 @@ def asiento(idloc):
                     a.usuario = usr
 
                 return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
-
     # New
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
