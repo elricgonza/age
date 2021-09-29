@@ -669,8 +669,7 @@ def asiento(idloc):
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
-def diff_old_new_asi(old, new):
-    '''
+def diff_old_new_asi(a, row_to_upd):
     row_old = a.nomloc, a.poblacionloc, \
             a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
             a.latitud, a.longitud, \
@@ -678,12 +677,18 @@ def diff_old_new_asi(old, new):
             a.obsUbicacion, a.obs, \
             a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, a.doc_idRN,  \
             a.doc_idAF, a.urural, a.idloc
-    '''
+
+    if (a.nomloc != row_to_upd[0]):
+        print('nom dif')
+        return True
+
+    print('-----nomloc')
+    print(row_to_upd[0])
+
     print('old---')
-    print(old)
-    print(old.nomloc)
+    print(row_old)
     print('new---')
-    print(new)
+    print(row_to_upd)
     return True
 
 
