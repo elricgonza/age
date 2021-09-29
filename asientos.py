@@ -111,9 +111,6 @@ class Asientos:
             return True
         return row
 
-        #if  row == None:
-        #    return False
-        #else:
     
     def add_asiento(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
@@ -144,19 +141,6 @@ class Asientos:
         except:
             print("Error - actualización de asiento...")
     
-    '''    
-    def upd_asiento(self, idloc, nomloc, poblacionloc, \
-                    poblacionelecloc, fechacensoloc, tipolocloc, \
-                    latitud, longitud, \
-                    estado, circunconsulado, etapa, obsUbicacion, \
-                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural):
-
-        asiento = nomloc, poblacionloc, \
-                    poblacionelecloc, fechacensoloc, tipolocloc, \
-                    latitud, longitud, \
-                    estado, circunconsulado, etapa, obsUbicacion, \
-                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural, idloc
-    '''
 
     def upd_asiento(self, asiento):
         '''

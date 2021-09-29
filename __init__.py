@@ -441,16 +441,22 @@ def documento(doc_id):
             else:
                 #flash('Debe cargar solo archivos PDFs')
                 return render_template('documento.html', error=error, d=d, load_d=False, titulo='Registro de Documentos', tdocumentos=tdocu.get_tipo_documentos(usrdep))
-            d.add_documento(request.form['doc'], \
-                        request.form['dep'], \
-                        request.form['cite'], \
-                        ruta, \
-                        request.form['fechadoc'], \
-                        request.form['obs'], \
-                        request.form['fecharegistro'], \
-                        request.form['usuario'], \
-                        request.form['fechaingreso'])
-            return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
+            
+            if d.get_cite(request.form['cite']):
+                d.add_documento(request.form['doc'], \
+                            request.form['dep'], \
+                            request.form['cite'], \
+                            ruta, \
+                            request.form['fechadoc'], \
+                            request.form['obs'], \
+                            request.form['fecharegistro'], \
+                            request.form['usuario'], \
+                            request.form['fechaingreso'])
+
+            return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep),  puede_adicionar='Documentos - Adición' in permisos_usr, \
+                                    puede_editar='Documentos - Edición' in permisos_usr, \
+                                    puede_eliminar='Documentos - Eliminación' in permisos_usr
+                                  )  # render a template
         else: # es EDIT
             f = request.files['archivo']
             if allowed_file(f.filename):
@@ -500,8 +506,14 @@ def documento(doc_id):
                         request.form['usuario'], \
                         fa)
             if usr == 'admin':
-                return render_template('documentos_list.html', documentos=d.get_documentos())
-            return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep), puede_adicionar='Documentos - Adición' in permisos_usr)
+                return render_template('documentos_list.html', documentos=d.get_documentos(),  puede_adicionar='Documentos - Adición' in permisos_usr, \
+                                        puede_editar='Documentos - Edición' in permisos_usr, \
+                                        puede_eliminar='Documentos - Eliminación' in permisos_usr
+                                      )  # render a template
+            return render_template('documentos_list.html', documentos=d.get_documentos_all(usrdep),  puede_adicionar='Documentos - Adición' in permisos_usr, \
+                                    puede_editar='Documentos - Edición' in permisos_usr, \
+                                    puede_eliminar='Documentos - Eliminación' in permisos_usr
+                                  )  # render a template
 
     else: # viene de listado DOCUMENTOS
         if doc_id != 0:  # EDIT
@@ -596,6 +608,7 @@ def asiento(idloc):
             urural = 0
         else:
             urural = request.form['urural']
+
         if idloc == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -620,6 +633,7 @@ def asiento(idloc):
                                       ) # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
+
             row_to_upd = \
                 request.form['nomloc'], request.form['poblacionloc'], \
                 request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
@@ -629,16 +643,9 @@ def asiento(idloc):
                 str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
                 docActF, urural, idloc
 
-            '''
-            a.upd_asiento(idloc, request.form['nomloc'], request.form['poblacionloc'], \
-                          request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
-                          request.form['latitud'], request.form['longitud'], \
-                          request.form['estado'], '', request.form['etapa'], \
-                          request.form['obsUbicacion'], request.form['obs'].strip(), \
-                          str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
-                          docActF, urural)
-            '''
-            a.upd_asiento(row_to_upd)
+            a.get_asiento_idloc(idloc)
+            if diff_old_new_asi(a, row_to_upd):
+                a.upd_asiento(row_to_upd)
 
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
@@ -650,13 +657,6 @@ def asiento(idloc):
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
             if a.get_asiento_idloc(idloc):
-                row_old = a.nomloc, a.poblacionloc, \
-                        a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
-                        a.latitud, a.longitud, \
-                        a.estado, a.etapa, \
-                        a.obsUbicacion, a.obs, \
-                        a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, ??? 
-
                 if a.fechaIngreso == None:
                     a.fechaIngreso = str(datetime.datetime.now())[:-7]
                 if a.fechaAct == None:
@@ -667,6 +667,24 @@ def asiento(idloc):
                 return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+
+
+def diff_old_new_asi(old, new):
+    '''
+    row_old = a.nomloc, a.poblacionloc, \
+            a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
+            a.latitud, a.longitud, \
+            a.estado, a.etapa, \
+            a.obsUbicacion, a.obs, \
+            a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, a.doc_idRN,  \
+            a.doc_idAF, a.urural, a.idloc
+    '''
+    print('old---')
+    print(old)
+    print(old.nomloc)
+    print('new---')
+    print(new)
+    return True
 
 
 @app.route('/exterior_list', methods=['GET', 'POST'])

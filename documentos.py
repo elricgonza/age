@@ -41,9 +41,12 @@ class Documentos:
         new_documento = doc, dep, cite, ruta, fechadoc, obs, fecharegistro, usuario, fechaingreso
         s = "insert into doc (tipoDoc, dep, cite, ruta, fechaDoc, obs, FechaAct, usuario, fechaIngreso) values " + \
             " (%s, %s, %s, %s, %s, %s, %s, %s, %s) "
-        self.cur.execute(s, new_documento)
-        self.cx.commit()
-        print("adicionado...")
+        try:
+            self.cur.execute(s, new_documento)
+            self.cx.commit()
+            print("adicionado...") 
+        except:
+            print("Error - No se Pudo Adicionar...")
 
 
     def upd_documento(self, id, doc, dep, cite, ruta, fechadoc, obs, usuario, fa):        
@@ -170,3 +173,12 @@ class Documentos:
             print('Documento actualizado')
         except:
             print("Error --UPD-- Documento...")
+
+    def get_cite(self, cite):
+        s = "select * from bdge.dbo.doc where cite = %d"
+        self.cur.execute(s, cite)
+        row = self.cur.fetchone()
+        if  row == None:
+            return True
+        else:
+            return False

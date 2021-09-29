@@ -154,9 +154,11 @@
             </div>
             <div class="col-md-2">
                 <label for="fechacensoloc">Fecha Censo:</label>
-                <input type="date" class="form-control" id="ifechacensoloc" title="" placeholder="Introduzca fecha del Censo" name="fechacensoloc" value="2012-01-01" min="2012-01-01" max="2025-01-01" "  
+                <input type="date" class="form-control" id="ifechacensoloc" title="" placeholder="Introduzca fecha del Censo" name="fechacensoloc" min="2012-01-01" max="2025-01-01" "  
                         {% if load %}
                             value="{{ a.fechacensoloc }}"
+                        {% else %}
+                            value="2012-01-01"
                         {% endif %}
                     >
                 <div class="invalid-feedback" id="v_fechacensoloc">Debe introducir una fecha válida.</div>
