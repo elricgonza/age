@@ -670,6 +670,9 @@ def asiento(idloc):
 
 
 def diff_old_new_asi(a, row_to_upd):
+    '''
+    Verif. si existe dif. en registro editado
+    '''
     row_old = a.nomloc, a.poblacionloc, \
             a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
             a.latitud, a.longitud, \
@@ -678,18 +681,60 @@ def diff_old_new_asi(a, row_to_upd):
             a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, a.doc_idRN,  \
             a.doc_idAF, a.urural, a.idloc
 
-    if (a.nomloc != row_to_upd[0]):
-        print('nom dif')
-        return True
-
-    print('-----nomloc')
-    print(row_to_upd[0])
-
     print('old---')
     print(row_old)
-    print('new---')
+    print('new---*')
     print(row_to_upd)
-    return True
+
+    vdif = False
+
+    if a.nomloc != row_to_upd[0]:
+        print('nom dif')
+        vdif = True
+    if a.poblacionloc != int(row_to_upd[1]):
+        print('poblacionloc dif')
+        vdif = True
+    if a.poblacionelecloc != int(row_to_upd[2]):
+        print('poblacionelecloc dif')
+        vdif = True
+    if (a.fechacensoloc == None and row_to_upd[3] != ''):
+        print('fechacensoloc- null')
+        vdif = True
+    if (a.tipolocloc.strip() != row_to_upd[4]):
+        print('tipolocloc- dif')
+        vdif = True
+    if (str(a.latitud) != row_to_upd[5]):
+        print('lat - dif')
+        print(str(a.latitud))
+        vdif = True
+    if (str(a.longitud) != row_to_upd[6]):
+        print('long - dif')
+        vdif = True
+    if (a.estado != int(row_to_upd[7])):
+        print('estado - dif')
+        vdif = True
+    if (a.etapa != row_to_upd[8]):
+        print('estado - dif')
+        vdif = True
+    if (a.obsUbicacion != row_to_upd[9]):
+        print('obsUbicacion dif')
+        vdif = True
+    if (a.obs != row_to_upd[10]):
+        print('obs dif')
+        vdif = True
+
+
+
+    '''
+    if a.fechacensoloc != row_to_upd[3]:
+        print('fechacensoloc dif')
+        print(a.fechacensoloc.year)
+        print(a.fechacensoloc)
+        print(row_to_upd[3])
+        return True
+    '''
+
+    return vdif
 
 
 @app.route('/exterior_list', methods=['GET', 'POST'])
