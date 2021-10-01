@@ -710,29 +710,42 @@ def diff_old_new_asi(a, row_to_upd):
     if (str(a.longitud) != row_to_upd[6]):
         print('long - dif')
         vdif = True
-    if (a.estado != int(row_to_upd[7])):
+    if (str(a.estado) != row_to_upd[7]):
         print('estado - dif')
         vdif = True
-    if (a.etapa != row_to_upd[8]):
-        print('estado - dif')
+    #a.circunConsulado
+    if str(a.etapa) != row_to_upd[9]:
+        print('etapa - dif')
+        print(a.etapa)
+        print(row_to_upd[9])
         vdif = True
-    if (a.obsUbicacion != row_to_upd[9]):
+    if (a.obsUbicacion != row_to_upd[10]):
         print('obsUbicacion dif')
         vdif = True
-    if (a.obs != row_to_upd[10]):
+    if (a.obs != row_to_upd[11]):
         print('obs dif')
         vdif = True
-
-
-
-    '''
-    if a.fechacensoloc != row_to_upd[3]:
-        print('fechacensoloc dif')
-        print(a.fechacensoloc.year)
-        print(a.fechacensoloc)
-        print(row_to_upd[3])
-        return True
-    '''
+    #a.fechaIngreso
+    #a.fechaAct
+    if (a.usuario != row_to_upd[14]):
+        print('usuario dif')
+        vdif = True
+    if (str(a.doc_idA) != row_to_upd[15]):
+        print('doc_idA  dif')
+        vdif = True
+    if ((a.doc_idRN) != row_to_upd[16]):
+        print('doc_idRN dif')
+        print(str(a.doc_idRN))
+        print(row_to_upd[16])
+        vdif = True
+    if ((a.doc_idAF) != row_to_upd[17]):
+        print('doc_idAF dif')
+        print(str(a.doc_idAF))
+        print(row_to_upd[17])
+        vdif = True
+    if (str(a.urural) != row_to_upd[18]):
+        print('urural dif')
+        vdif = True
 
     return vdif
 
