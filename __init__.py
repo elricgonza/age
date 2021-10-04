@@ -646,10 +646,7 @@ def asiento(idloc):
                 str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
                 docActF, urural, idloc
 
-            a.get_asiento_idloc(idloc)
-            if diff_old_new_asi(a, row_to_upd):
-                a.upd_asiento(row_to_upd)
-
+            a.upd_asiento(row_to_upd)
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
 
             rows = a.get_asientos_all(usrdep)

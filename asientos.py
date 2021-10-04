@@ -146,20 +146,111 @@ class Asientos:
         '''
             NO actualiza datos de jurisdicción - dep, prov, sec
         '''
-        s = "update GeografiaElectoral_app.dbo.loc" + \
-            " set nomloc= %s, poblacionloc= %d, " + \
-            " poblacionelecloc= %s, fechacensoloc= %s, tipolocloc= %d, " + \
-            " latitud= %s, longitud= %d, " + \
-            " estado= %d, circunconsulado= %s, " + \
-            " etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
-            " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d, urbanoRural= %d" + \
-            " where idloc = %d"
-        try:
-            self.cur.execute(s, asiento)
-            self.cx.commit()
-            print('Asiento actualizado')
-        except Exception as e:
-            print("Error - actualización de Asiento...")
+
+        if self.diff_old_new_asi(asiento):
+            s = "update GeografiaElectoral_app.dbo.loc" + \
+                " set nomloc= %s, poblacionloc= %d, " + \
+                " poblacionelecloc= %s, fechacensoloc= %s, tipolocloc= %d, " + \
+                " latitud= %s, longitud= %d, " + \
+                " estado= %d, circunconsulado= %s, " + \
+                " etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
+                " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d, urbanoRural= %d" + \
+                " where idloc = %d"
+            try:
+                self.cur.execute(s, asiento)
+                self.cx.commit()
+                print('Asiento actualizado')
+            except Exception as e:
+                print("Error - actualización de Asiento...")
+
+
+    def diff_old_new_asi(self, row_to_upd):
+        '''
+        Verif. si existe dif. en registro editado
+        '''
+        a = self.get_asiento_idloc(row_to_upd[19])  #19 -> idloc
+        print('*************')
+        print(self.nomloc)
+        return True
+
+        '''
+        row_old = a.nomloc, a.poblacionloc, \
+                a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
+                a.latitud, a.longitud, \
+                a.estado, a.etapa, \
+                a.obsUbicacion, a.obs, \
+                a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, a.doc_idRN,  \
+                a.doc_idAF, a.urural, a.idloc
+
+        print('old---')
+        print(row_old)
+        print('new---*')
+        print(row_to_upd)
+        '''
+
+
+        vdif = False
+
+        if self.nomloc != row_to_upd[0]:
+            print('nom dif')
+            vdif = True
+        if self.poblacionloc != int(row_to_upd[1]):
+            print('poblacionloc dif')
+            vdif = True
+        if self.poblacionelecloc != int(row_to_upd[2]):
+            print('poblacionelecloc dif')
+            vdif = True
+        if (self.fechacensoloc == None and row_to_upd[3] != None):
+            print('fechacensoloc- null')
+            vdif = True
+        if (self.tipolocloc.strip() != row_to_upd[4]):
+            print('tipolocloc- dif')
+            vdif = True
+        if (str(self.latitud) != row_to_upd[5]):
+            print('lat - dif')
+            print(str(self.latitud))
+            vdif = True
+        if (str(self.longitud) != row_to_upd[6]):
+            print('long - dif')
+            vdif = True
+        if (str(self.estado) != row_to_upd[7]):
+            print('estado - dif')
+            vdif = True
+        #a.circunConsulado
+        if str(self.etapa) != row_to_upd[9]:
+            print('etapa - dif')
+            print(self.etapa)
+            print(row_to_upd[9])
+            vdif = True
+        if (self.obsUbicacion != row_to_upd[10]):
+            print('obsUbicacion dif')
+            vdif = True
+        if (self.obs != row_to_upd[11]):
+            print('obs dif')
+            vdif = True
+        #a.fechaIngreso
+        #a.fechaAct
+        if (self.usuario != row_to_upd[14]):
+            print('usuario dif')
+            vdif = True
+        if (str(self.doc_idA) != row_to_upd[15]):
+            print('doc_idA  dif')
+            vdif = True
+        if ((self.doc_idRN) != row_to_upd[16]):
+            print('doc_idRN dif')
+            print(str(a.doc_idRN))
+            print(row_to_upd[16])
+            vdif = True
+        if ((self.doc_idAF) != row_to_upd[17]):
+            print('doc_idAF dif')
+            print(str(a.doc_idAF))
+            print(row_to_upd[17])
+            vdif = True
+        if (str(self.urural) != row_to_upd[18]):
+            print('urural dif')
+            vdif = True
+
+        return vdif
 
 
     def upd_asiento_ex(self, idloc, deploc, provloc, \
