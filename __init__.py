@@ -633,10 +633,13 @@ def asiento(idloc):
                                       ) # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
+            fcl = request.form['fechacensoloc']
+            if fcl == '':
+                fcl = None
 
             row_to_upd = \
                 request.form['nomloc'], request.form['poblacionloc'], \
-                request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
+                request.form['poblacionelecloc'], fcl, request.form['tipolocloc'], \
                 request.form['latitud'], request.form['longitud'], \
                 request.form['estado'], '', request.form['etapa'], \
                 request.form['obsUbicacion'], request.form['obs'].strip(), \
@@ -697,7 +700,7 @@ def diff_old_new_asi(a, row_to_upd):
     if a.poblacionelecloc != int(row_to_upd[2]):
         print('poblacionelecloc dif')
         vdif = True
-    if (a.fechacensoloc == None and row_to_upd[3] != ''):
+    if (a.fechacensoloc == None and row_to_upd[3] != None):
         print('fechacensoloc- null')
         vdif = True
     if (a.tipolocloc.strip() != row_to_upd[4]):

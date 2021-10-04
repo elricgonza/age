@@ -129,6 +129,9 @@ class Documentos:
                 
 
     def upd_doc(self, idA, idRN, idAct, idRspNal, docActF):
+        '''
+        Actualiza campo -asignado- para prever eliminación
+        '''
         upd_doc2 = (idAct, idRspNal, docActF)
         s2 = "select * from GeografiaElectoral_app.dbo.loc where doc_idA = %d or doc_idRN = %d or doc_idAF = %d"
         self.cur.execute(s2, upd_doc2)
