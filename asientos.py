@@ -89,6 +89,7 @@ class Asientos:
             self.longitud = row[12]
             self.estado = row[13]
             self.circunconsulado = row[14]
+
             self._departamento = row[15]
             self._provincia = row[16]
             self._municipio = row[17]
@@ -171,22 +172,20 @@ class Asientos:
         a = self.get_asiento_idloc(row_to_upd[19])  #19 -> idloc
         print('*************')
         print(self.nomloc)
-        return True
+        #return True
 
-        '''
-        row_old = a.nomloc, a.poblacionloc, \
-                a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
-                a.latitud, a.longitud, \
-                a.estado, a.etapa, \
-                a.obsUbicacion, a.obs, \
-                a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, a.doc_idRN,  \
-                a.doc_idAF, a.urural, a.idloc
+        row_old = self.nomloc, self.poblacionloc, \
+                self.poblacionelecloc, self.fechacensoloc, self.tipolocloc, \
+                self.latitud, self.longitud, \
+                self.estado, self.etapa, \
+                self.obsUbicacion, self.obs, \
+                self.fechaIngreso, self.fechaAct, self.usuario, self.doc_idA, self.doc_idRN,  \
+                self.doc_idAF, self.urural, self.idloc
 
         print('old---')
         print(row_old)
         print('new---*')
         print(row_to_upd)
-        '''
 
 
         vdif = False
@@ -236,14 +235,14 @@ class Asientos:
         if (str(self.doc_idA) != row_to_upd[15]):
             print('doc_idA  dif')
             vdif = True
-        if ((self.doc_idRN) != row_to_upd[16]):
+        if (self.doc_idRN != int(row_to_upd[16])):
             print('doc_idRN dif')
-            print(str(a.doc_idRN))
+            print(str(self.doc_idRN))
             print(row_to_upd[16])
             vdif = True
         if ((self.doc_idAF) != row_to_upd[17]):
             print('doc_idAF dif')
-            print(str(a.doc_idAF))
+            print(str(self.doc_idAF))
             print(row_to_upd[17])
             vdif = True
         if (str(self.urural) != row_to_upd[18]):
