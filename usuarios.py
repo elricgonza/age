@@ -147,13 +147,11 @@ class Usuarios:
         try:
             self.cur.execute(s, usuario)
             rows = self.cur.fetchall()
-            if self.cur.rowcount == 0:
-                return False
-            else:
-                permisos = []
+            permisos = []
+            if rows:
                 for p in rows:
                     permisos.append(p[0])
-                return permisos
+            return permisos
         except Exception as e:
             print('Error -get_permisos_name-')
             print(e)

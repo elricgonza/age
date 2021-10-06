@@ -170,10 +170,8 @@ class Asientos:
         Verif. si existe dif. en registro editado
         '''
         a = self.get_asiento_idloc(row_to_upd[19])  #19 -> idloc
-        print('*************')
-        print(self.nomloc)
-        #return True
 
+        '''
         row_old = self.nomloc, self.poblacionloc, \
                 self.poblacionelecloc, self.fechacensoloc, self.tipolocloc, \
                 self.latitud, self.longitud, \
@@ -186,7 +184,7 @@ class Asientos:
         print(row_old)
         print('new---*')
         print(row_to_upd)
-
+        '''
 
         vdif = False
 
