@@ -596,8 +596,12 @@ def asiento(idloc):
 
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
-        if usrdep != 0:
-            docRspNal = 0
+
+        if usrdep != 0: 
+            if request.form.get('docRspNal') != None:
+                docRspNal = request.form['docRspNal']
+            else:
+                docRspNal = 0
         if usrdep == 0:
             docRspNal = request.form['docRspNal']
         if request.form.get('docActF') == None:
