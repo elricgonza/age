@@ -517,14 +517,6 @@
                         document.getElementById('itipolocloc3').checked = true;
                         break;
                 }
-                switch('{{a.marcaloc}}'.trim()) {
-                    case '1':
-                        document.getElementById('imarcaloc1').checked = true;
-                        break;
-                    case '2':
-                        document.getElementById('imarcaloc2').checked = true;
-                        break;
-                }
             }
         }, false);
     })();
@@ -555,10 +547,6 @@ function Validation(f) {
         return false;
     }
 
-    if (f.marcaloc.value == '') {
-        alert('Debe específicar - Habilitado/Inhabilitado...');
-        return false;
-    }
     if (parseFloat(f.poblacionelecloc.value) >= parseFloat(f.poblacionloc.value)) {
         alert('\n Error - Población Electoral mayor o igual a Población Total ?? \n\n Por favor verifique ...');
         return false;

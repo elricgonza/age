@@ -605,9 +605,13 @@ def asiento(idloc):
         if usrdep == 0:
             docRspNal = request.form['docRspNal']
         if request.form.get('docActF') == None:
-            docActF = 0
+            if request.form.get('doc_idActF') != None:
+                docActF = request.form['doc_idActF']    
+            else:
+                docActF = 0
         else:
-            docActF = request.form['docActF']    
+            docActF = request.form['docActF']
+
         if request.form.get('urural') == None:
             urural = 0
         else:
