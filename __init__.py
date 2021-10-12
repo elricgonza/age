@@ -343,6 +343,7 @@ def permisos(usuario_id):
 @app.route('/asiento_img/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
 @login_required
 def asiento_img(idloc, nomloc):
+    ''' Gestiona imágenes del asiento '''
 
     i = img.Img(cxms)  # conecta a la BD
     li = loc_img.LocImg(cxms)
@@ -361,24 +362,24 @@ def asiento_img(idloc, nomloc):
             f  = uploaded_files[n]
             if f.filename != '':
                 securef = secure_filename(f.filename)
-                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-
                 name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
-                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
-                resize_save_file(fpath, name_to_save, (1024, 768))
+                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)   # loc_img.ruta
 
                 if li.exist_img(idloc, img_ids[n]):   # si upd img
-                    file_to_del = li.get_name_file_img(idloc, img_ids[n])
+                    file_to_del = li.get_name_file_img(idloc, img_ids[n]) # referencia en bd 
                     os.remove(file_to_del[1:]) # borra arch. de HD
-                    li.del_loc_img(idloc, img_ids[n]) # borra de bd
+                    li.upd_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr) # upd de bd
+                else: # new
+                    li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
 
-                li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
-                os.remove(fpath[1:])   # arch. fuente
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
+                resize_save_file(fpath, name_to_save, (1024, 768))
+
+                os.remove(fpath[1:])   # arch. fuente 
 
         return redirect(url_for('asientos_list'))
-
     else:
         if with_img:  # Edit
             return render_template('asiento_img_upd.html', rows=i.get_imgs(), nomloc=nomloc,
@@ -388,17 +389,7 @@ def asiento_img(idloc, nomloc):
             return render_template('asiento_img.html', rows=i.get_imgs(), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr)
 
-'''
-def resize_save_file(in_file, out_file, size):
-    with open('.' + in_file, 'rb') as fd:
-        image = resizeimage.resize_thumbnail(Image.open(fd), size)
 
-    image.save('.' + os.path.join(app.config['IMG_ASIENTOS'], out_file))
-    image.close()
-    #return(out_file)
-'''
-
-#Codigo Grover-Inicio
 @app.route('/documentos_list', methods=['GET', 'POST'])
 @login_required
 def documentos_list():
@@ -675,87 +666,6 @@ def asiento(idloc):
                 return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
-
-
-def diff_old_new_asi(a, row_to_upd):
-    '''
-    Verif. si existe dif. en registro editado
-    '''
-    row_old = a.nomloc, a.poblacionloc, \
-            a.poblacionelecloc, a.fechacensoloc, a.tipolocloc, \
-            a.latitud, a.longitud, \
-            a.estado, a.etapa, \
-            a.obsUbicacion, a.obs, \
-            a.fechaIngreso, a.fechaAct, a.usuario, a.doc_idA, a.doc_idRN,  \
-            a.doc_idAF, a.urural, a.idloc
-
-    print('old---')
-    print(row_old)
-    print('new---*')
-    print(row_to_upd)
-
-    vdif = False
-
-    if a.nomloc != row_to_upd[0]:
-        print('nom dif')
-        vdif = True
-    if a.poblacionloc != int(row_to_upd[1]):
-        print('poblacionloc dif')
-        vdif = True
-    if a.poblacionelecloc != int(row_to_upd[2]):
-        print('poblacionelecloc dif')
-        vdif = True
-    if (a.fechacensoloc == None and row_to_upd[3] != None):
-        print('fechacensoloc- null')
-        vdif = True
-    if (a.tipolocloc.strip() != row_to_upd[4]):
-        print('tipolocloc- dif')
-        vdif = True
-    if (str(a.latitud) != row_to_upd[5]):
-        print('lat - dif')
-        print(str(a.latitud))
-        vdif = True
-    if (str(a.longitud) != row_to_upd[6]):
-        print('long - dif')
-        vdif = True
-    if (str(a.estado) != row_to_upd[7]):
-        print('estado - dif')
-        vdif = True
-    #a.circunConsulado
-    if str(a.etapa) != row_to_upd[9]:
-        print('etapa - dif')
-        print(a.etapa)
-        print(row_to_upd[9])
-        vdif = True
-    if (a.obsUbicacion != row_to_upd[10]):
-        print('obsUbicacion dif')
-        vdif = True
-    if (a.obs != row_to_upd[11]):
-        print('obs dif')
-        vdif = True
-    #a.fechaIngreso
-    #a.fechaAct
-    if (a.usuario != row_to_upd[14]):
-        print('usuario dif')
-        vdif = True
-    if (str(a.doc_idA) != row_to_upd[15]):
-        print('doc_idA  dif')
-        vdif = True
-    if ((a.doc_idRN) != row_to_upd[16]):
-        print('doc_idRN dif')
-        print(str(a.doc_idRN))
-        print(row_to_upd[16])
-        vdif = True
-    if ((a.doc_idAF) != row_to_upd[17]):
-        print('doc_idAF dif')
-        print(str(a.doc_idAF))
-        print(row_to_upd[17])
-        vdif = True
-    if (str(a.urural) != row_to_upd[18]):
-        print('urural dif')
-        vdif = True
-
-    return vdif
 
 
 @app.route('/exterior_list', methods=['GET', 'POST'])

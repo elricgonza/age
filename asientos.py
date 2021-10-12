@@ -162,6 +162,7 @@ class Asientos:
                 self.cx.commit()
                 print('Asiento actualizado')
             except Exception as e:
+                print(e)
                 print("Error - actualización de Asiento...")
 
 
