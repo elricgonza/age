@@ -29,11 +29,11 @@ class Reciasiento:
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and MarcaLoc=1 order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and MarcaLoc=1 order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
@@ -46,11 +46,11 @@ class Reciasiento:
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and MarcaLoc=1 order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and MarcaLoc=1 order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
