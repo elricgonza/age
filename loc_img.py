@@ -28,6 +28,19 @@ class LocImg:
             print (e)
 
 
+    def upd_loc_img(self, idLoc, imgId, ruta, fechaAct,  usuario):
+        upd_row = fechaAct, usuario, idLoc, imgId 
+        s = "update loc_img set fechaAct = %s, usuario = %s where idLoc = %s and imgId = %s " 
+        try:
+            self.cur.execute(s, upd_row)
+            self.cx.commit()
+            print("upd en loc_img ...")
+
+        except Exception as e:
+            print ('Error upd en -loc_img-')
+            print (e)
+
+
     def exist_img(self, idLoc, imgId):
         s = "select * from loc_img where idLoc= %d and imgId= %d"
         parm = idLoc, imgId

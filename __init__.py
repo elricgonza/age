@@ -360,21 +360,31 @@ def asiento_img(idloc, nomloc):
         for n in range(len(img_ids)):
             f  = uploaded_files[n]
             if f.filename != '':
+                print('----------------------')
+                print(f.filename)
+                print('----------------------')
                 securef = secure_filename(f.filename)
-                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
                 fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-
                 name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2)  + ext
                 fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)
-                resize_save_file(fpath, name_to_save, (1024, 768))
+
+
+                print('==================----------------------')
+                print(arch, ext)
+                print('==================----------------------00')
 
                 if li.exist_img(idloc, img_ids[n]):   # si upd img
-                    file_to_del = li.get_name_file_img(idloc, img_ids[n])
+                    print('in li_exist_img.......')
+                    file_to_del = li.get_name_file_img(idloc, img_ids[n]) # referencia en bd 
                     os.remove(file_to_del[1:]) # borra arch. de HD
-                    li.del_loc_img(idloc, img_ids[n]) # borra de bd
+                    li.upd_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr) # upd de bd
+                else: # new
+                    li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
 
-                li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
+                resize_save_file(fpath, name_to_save, (1024, 768))
+
                 os.remove(fpath[1:])   # arch. fuente
 
         return redirect(url_for('asientos_list'))
