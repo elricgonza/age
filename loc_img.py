@@ -29,8 +29,8 @@ class LocImg:
 
 
     def upd_loc_img(self, idLoc, imgId, ruta, fechaAct,  usuario):
-        upd_row = fechaAct, usuario, idLoc, imgId 
-        s = "update loc_img set fechaAct = %s, usuario = %s where idLoc = %s and imgId = %s " 
+        upd_row = fechaAct, usuario, ruta, idLoc, imgId 
+        s = "update loc_img set fechaAct = %s, usuario = %s, ruta = %s  where idLoc = %s and imgId = %s " 
         try:
             self.cur.execute(s, upd_row)
             self.cx.commit()
