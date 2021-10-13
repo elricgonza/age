@@ -239,7 +239,7 @@ class Asientos:
             print(str(self.doc_idRN))
             print(row_to_upd[16])
             vdif = True
-        if ((self.doc_idAF) != row_to_upd[17]):
+        if ((self.doc_idAF) != int(row_to_upd[17])):
             print('doc_idAF dif')
             print(str(self.doc_idAF))
             print(row_to_upd[17])
