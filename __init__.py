@@ -668,6 +668,26 @@ def asiento(idloc):
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
+@app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])
+@login_required
+def asiento_vs(idloc):
+    j = get_json.GetJson(cxpg)
+
+    #geo_json = j.get_loc(usrdep)
+    gj_reci = j.get_reci(usrdep)
+    gj_asi = j.get_asi(usrdep)
+    gj_mun = j.get_mun(usrdep)
+    gj_prov = j.get_prov(usrdep)
+    gj_cir = j.get_cir(usrdep)
+    return render_template('asiento_vs.html', 
+                            gj_reci=gj_reci, 
+                            gj_asi=gj_asi, 
+                            gj_cir=gj_cir,
+                            gj_mun=gj_mun,
+                            gj_prov=gj_prov)
+
+
+
 @app.route('/exterior_list', methods=['GET', 'POST'])
 @login_required
 def exterior_list():
