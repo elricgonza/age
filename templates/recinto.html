@@ -307,7 +307,7 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name=etapa class="form-control" onchange="carg1(this);">
+                <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);">
                     <option value=70 
                         {% if load  and rc.etapa == 70 %}
                             selected 
@@ -319,21 +319,21 @@
                         {% endif %}
                     >Devuelto</option>
                     {% if usrdep == 0 %}
-                    <option value=72
-                        {% if load  and rc.etapa == 72 %}
-                            selected 
-                        {% endif %}
-                    >Revisión</option>
-                    <option value=73
-                        {% if load  and rc.etapa == 73 %}
-                            selected 
-                        {% endif %}
-                    >Aprobado</option>
-                    <option value=74
-                        {% if load  and rc.etapa == 74 %}
-                            selected 
-                        {% endif %}
-                    >Aprobado con Correpción</option>
+                        <option value=72
+                            {% if load  and rc.etapa == 72 %}
+                                selected 
+                            {% endif %}
+                        >Revisión</option>
+                        <option value=73
+                            {% if load  and rc.etapa == 73 %}
+                                selected 
+                            {% endif %}
+                        >Aprobado</option>
+                        <option value=74
+                            {% if load  and rc.etapa == 74 %}
+                                selected 
+                            {% endif %}
+                        >Aprobado con Correpción</option>
                     {% endif %}
                 </select> 
             </div>
@@ -475,7 +475,7 @@
     function carg1(elemento) {
       d = elemento.value;
       console.log(d);
-      if(d == 5){
+      if(d == 74){
         input.disabled = false;
       }else{
         input.disabled = true;

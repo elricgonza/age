@@ -118,7 +118,7 @@ class Reciespeciales:
         except:
             print("Error - actualización de recinto...")
 
-
+    '''
     def upd_recinto(self, idlocreci, reci, nomreci, zonareci, \
                     maxmesasreci, direccion, latitud, longitud, \
                     estado, tiporecinto, codrue, \
@@ -142,6 +142,78 @@ class Reciespeciales:
             print('Recinto actualizado')
         except Exception as e:
             print("Error - actualización de Recinto...")
+    '''
+
+    def upd_recinto(self, recinto):
+        if self.diff_old_new_reci(recinto):
+            s = "update GeografiaElectoral_app.dbo.RECI" + \
+                " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
+                " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
+                " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
+                " etapa= %s, doc_idA= %s, doc_idAF= %s " + \
+                " where IdLocReci = %s and Reci = %s"
+            try:
+                self.cur.execute(s, recinto)
+                self.cx.commit()
+                print('Recinto actualizado')
+            except Exception as e:
+                print("Error - actualización de Recinto...")
+
+
+    def diff_old_new_reci(self, row_to_upd):
+        rces = self.get_recinto_idreciespecial(row_to_upd[18], row_to_upd[17])  #18 -> idreci, #19 -> idlocreci
+        vdif = False
+        if self.nomreci != row_to_upd[0]:
+            print('nom dif')
+            vdif = True
+        if self.zonareci != int(row_to_upd[1]):
+            print('zonareci dif')
+            vdif = True
+        if self.maxmesasreci != int(row_to_upd[2]):
+            print('maxmesasreci dif')
+            vdif = True
+        if (self.direccion != row_to_upd[3]):
+            print('direccion dif')
+            vdif = True
+        if (str(self.latitud) != row_to_upd[4]):
+            print('latitud dif')
+            vdif = True
+        if (str(self.longitud) != row_to_upd[5]):
+            print('longitud dif')
+            vdif = True
+        if self.estado != int(row_to_upd[6]):
+            print('estado dif')
+            vdif = True
+        if self.tiporecinto != int(row_to_upd[7]):
+            print('tiporecinto dif')
+            vdif = True
+        if self.codrue != row_to_upd[8]:
+            print('codrue dif')
+            vdif = True
+        if self.codrueedif != row_to_upd[9]:
+            print('codrueedit dif')
+            vdif = True
+        if self.depend != int(row_to_upd[10]):
+            print('depend dif')
+            vdif = True
+        if self.cantpisos != row_to_upd[11]:
+            print('cantPisos dif')
+            vdif = True
+        #a.fechaAct
+        if self.usuario != row_to_upd[13]:
+            print('usuario dif')
+            vdif = True
+        if self.etapa != int(row_to_upd[14]):
+            print('etapa dif')
+            vdif = True
+        if self.doc_idA != int(row_to_upd[15]):
+            print('doc_idA dif')
+            vdif = True
+        if self.doc_idAF != int(row_to_upd[16]):
+            print('doc_idAF dif')
+            vdif = True
+        
+        return vdif
 
 
     def get_next_reciespecial(self):

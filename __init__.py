@@ -934,14 +934,17 @@ def recinto(idreci, idlocreci):
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             idlocreci = request.form['asiento'].split(':')
-            rc.upd_recinto(idlocreci[1], idreci, request.form['nomreci'], request.form['zonareci'], \
-                               request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
-                               request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                               ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'], fa, \
-                               usr, request.form['etapa'], request.form['docAct'], docActF)
 
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+            row_to_upd = \
+                request.form['nomreci'], request.form['zonareci'], \
+                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
+                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                ruereci, edireci, depenreci, \
+                request.form['pisosreci'], fa, usr, \
+                request.form['etapa'], request.form['docAct'], docActF, idlocreci[1], idreci    
+
+            rc.upd_recinto(row_to_upd)
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)            
 
             rows = rc.get_recintos_all(usrdep)
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1099,21 +1102,26 @@ def reciespe(idreci, idlocreci):
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
                 rows = rce.get_reciespe_all(usrdep)
-                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr)  # render a template
+                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                        puede_editar='Especiales - Edición' in permisos_usr)  # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             idlocreci = request.form['asiento'].split(':')
-            rce.upd_recinto(idlocreci[1], idreci, request.form['nomreci'], request.form['zonareci'], \
-                               request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
-                               request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                               ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'], fa, \
-                               usr, request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'])
 
+            row_to_upd = \
+                request.form['nomreci'], request.form['zonareci'], \
+                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
+                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                ruereci, edireci, depenreci, \
+                request.form['pisosreci'], fa, usr, \
+                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], idlocreci[1], idreci    
+
+            rce.upd_recinto(row_to_upd)
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rce.get_reciespe_all(usrdep)
-            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr)  # render a template
+            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                    puede_editar='Especiales - Edición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
         if idreci != '0':  # EDIT
             if rce.get_recinto_idreci(idreci, idlocreci) == True:
@@ -1487,21 +1495,27 @@ def reciespeciales(idreci, idlocreci):
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
                 rows = rces.get_reciespeciales_all(usrdep)
-                return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+                return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                        puede_editar='Reci_espe - Edición' in permisos_usr)  # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             idlocreci = request.form['asiento'].split(':')
-            rces.upd_recinto(idlocreci[1], idreci, request.form['nomreci'], request.form['zonareci'], \
-                               request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
-                               request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                               ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'], fa, \
-                               usr, request.form['etapa'], request.form['docAct'], docActF)
+
+            row_to_upd = \
+                request.form['nomreci'], request.form['zonareci'], \
+                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
+                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                ruereci, edireci, depenreci, \
+                request.form['pisosreci'], fa, usr, \
+                request.form['etapa'], request.form['docAct'], docActF, idlocreci[1], idreci    
+
+            rces.upd_recinto(row_to_upd)
 
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rces.get_reciespeciales_all(usrdep)
-            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr)  # render a template
+            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                    puede_editar='Reci_espe - Edición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
         if idreci != '0':  # EDIT
             if rces.get_recinto_idreciespecial(idreci, idlocreci) == True:

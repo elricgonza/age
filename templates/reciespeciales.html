@@ -206,7 +206,7 @@
             </div>
             <div class="col-md-3">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name=estado class="form-control">
+                <select id="iestado" name="estado" class="form-control" required>
                     <option></option>
                     {% for estado in estados %}
                         {% if load and rces.estado==estado[0] %}
@@ -268,31 +268,23 @@
                         {% endif %}
                         >
                         <option></option>                                                          
-                        <option value=1 
-                            {% if load  and rces.depend == 1 %}
-                                    selected
-                                {% elif usrdep == 1 %}
+                        <option value=63 
+                            {% if load  and rces.depend == 63 %}
                                     selected  
                             {% endif %}
                         >Particular</option>
-                        <option value=2
-                            {% if load  and rces.depend == 2 %}
+                        <option value=64
+                            {% if load  and rces.depend == 64 %}
                                     selected
-                                {% elif usrdep == 2 %}
-                                    selected 
                             {% endif %}
                         >Fiscal</option>
-                        <option value=3
-                            {% if load  and rces.depend == 3 %}
-                                    selected
-                                {% elif usrdep == 3 %}
+                        <option value=65
+                            {% if load  and rces.depend == 65 %}
                                     selected 
                             {% endif %}
                         >Convénio</option>
-                        <option value=4 
-                            {% if load  and rces.depend == 4 %}
-                                    selected
-                                {% elif usrdep == 4 %}
+                        <option value=66 
+                            {% if load  and rces.depend == 66 %}
                                     selected 
                             {% endif %}
                         >Otro</option>
@@ -335,32 +327,32 @@
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
                 <select id="ietapa" name=etapa class="form-control" onchange="carg1(this);">
-                    <option value=1 
-                        {% if load  and rces.etapa == 1 %}
+                    <option value=70
+                        {% if load  and rces.etapa == 70 %}
                             selected 
                         {% endif %}
                     >Propuesta</option>
-                    <option value=2 
-                        {% if load  and rces.etapa == 2 %}
+                    <option value=71 
+                        {% if load  and rces.etapa == 71 %}
                             selected 
                         {% endif %}
                     >Devuelto</option>
                     {% if usrdep == 0 %}
-                    <option value=3
-                        {% if load  and rces.etapa == 3 %}
-                            selected 
-                        {% endif %}
-                    >Revisión</option>
-                    <option value=4
-                        {% if load  and rces.etapa == 4 %}
-                            selected 
-                        {% endif %}
-                    >Aprobado</option>
-                    <option value=5
-                        {% if load  and rces.etapa == 5 %}
-                            selected 
-                        {% endif %}
-                    >Aprobado con Correpción</option>
+                        <option value=72
+                            {% if load  and rces.etapa == 72 %}
+                                selected 
+                            {% endif %}
+                        >Revisión</option>
+                        <option value=73
+                            {% if load  and rces.etapa == 73 %}
+                                selected 
+                            {% endif %}
+                        >Aprobado</option>
+                        <option value=74
+                            {% if load  and rces.etapa == 74 %}
+                                selected 
+                            {% endif %}
+                        >Aprobado con Correpción</option>
                     {% endif %}
                 </select> 
             </div>
@@ -503,7 +495,7 @@
     function carg1(elemento) {
       d = elemento.value;
       console.log(d);
-      if(d == 5){
+      if(d == 74){
         input.disabled = false;
       }else{
         input.disabled = true;

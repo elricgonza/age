@@ -25,7 +25,7 @@ class Reciasiento:
         else:
             return rows
 
-    def get_asientos_all1(self, usrdep, dep, prov, secc):        
+    def get_asientos_all1(self, usrdep, dep, prov, secc):
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
@@ -33,7 +33,7 @@ class Reciasiento:
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
