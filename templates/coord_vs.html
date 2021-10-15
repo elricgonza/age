@@ -96,15 +96,6 @@
 <body>
   <div id="map"></div>
 
-  <!--
-  <div id="recipro-wrapper" class="leaflet-bar">
-    <select id="recipro">
-      <option value="Nuevos">Nuevos</option>
-      <option value="Suprimidos">Suprimidos/Suspendidos</option>
-      <option value="Actualizados">Actualizados</option>
-    </select>
-  </div>
-  -->
 
   <!--{{ gj_cir }}-->
 
@@ -113,6 +104,9 @@
 
 
 <script>
+  alert('in coord_vs -- script -- alert x,y --' );
+  alert(latitud);
+
     // Set style function that sets fill color property
     function style(feature) {
         return {
