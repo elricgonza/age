@@ -357,7 +357,7 @@
 
     // Set up map
 
-  var mapCenter = [{{ latitud }}, {{ longitud }}];
+  var mapCenter = [-17.05678, -64.81934];
     var map = L.map('map', {
       defaultExtentControl: true,
       center: mapCenter,
@@ -543,6 +543,14 @@
       }
     );
 
+
+    // remove - clear
+    map.removeLayer(reciLayer);
+    map.removeLayer(munLayer);
+    //if ({{ usrdep }} == 0) {
+      map.addLayer(markersMCG);
+    //}
+    
 
     // add marker - coordenadas
     map.setView( [{{ latitud }}, {{ longitud }}], 11);
