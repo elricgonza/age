@@ -28,10 +28,10 @@ class Recintos:
             " NombreRecinto, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
             " from [bdge].[dbo].[GeoRecintos_all]"
         if usrdep != 0 :
-            s = s + " where TipoCircun = 1 and DEP = %d order by prov, sec"
+            s = s + " where  TipoLocLoc in (67, 69) and DEP = %d order by prov, sec"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where TipoCircun = 1 order by Dep, Prov, Sec"
+            s = s + " where  TipoLocLoc in (67, 69) order by Dep, Prov, Sec"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
