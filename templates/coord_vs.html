@@ -104,8 +104,8 @@
 
 
 <script>
-  alert('in coord_vs -- script -- alert x,y --' );
-  alert(latitud);
+  //alert({{ latitud }});
+
 
     // Set style function that sets fill color property
     function style(feature) {
@@ -154,6 +154,7 @@
       'weight': 2,
       'opacity': 2
     };
+
 
 
     function forEachFeature(feature, layer) {
@@ -358,7 +359,7 @@
 
     // Set up map
 
-    var mapCenter = [-17.05678, -64.81934];
+  var mapCenter = [{{ latitud }}, {{ longitud }}];
     var map = L.map('map', {
       defaultExtentControl: true,
       center: mapCenter,
@@ -371,6 +372,7 @@
 
     // Add defaultExtent
     //L.control.defaultExtent().addTo(map);
+
 
 
     // add others controls 
@@ -542,6 +544,34 @@
         marker.on('click', markerOnClick);
       }
     );
+
+
+    // add marker - coordenadas
+    map.setView( [{{ latitud }}, {{ longitud }}], 11);
+
+    const markerIcon = L.icon({
+        iconSize: [25, 41],
+        iconAnchor: [10, 41],
+        popupAnchor: [2, -40],
+        // specify the path here
+        iconUrl:   "../../static/css/leaflet1.5.1/images/marker-icon.png",
+        shadowUrl: "../../static/css/leaflet1.5.1/images/marker-shadow.png"
+    });
+
+    L.marker([{{ latitud  }}, {{ longitud }}],
+          {
+            title: "Lat.: " + {{ latitud }},
+              opacity: 0.8,
+              icon: markerIcon
+          }
+      ).addTo(map);
+
+    L.circle([{{ latitud }}, {{ longitud }}], {
+              color: 'red',
+              fillColor: '#f03',
+              fillOpacity: 0.06,
+              radius: 500
+      }).addTo(map);
 
 </script>
 

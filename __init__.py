@@ -675,6 +675,9 @@ def asiento_vs(idloc):
     a = asi.Asientos(cxms)
     a.get_asiento_idloc(idloc)    # siempre debiera existir
      
+    print('----------------------------lat')
+    print(a.latitud)
+    print('----------------------------lat>')
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs.html', 
                             gj_reci=j.get_reci(usrdep), 
