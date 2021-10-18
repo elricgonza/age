@@ -104,8 +104,6 @@
 
 
 <script>
-  //alert({{ latitud }});
-
 
     // Set style function that sets fill color property
     function style(feature) {
@@ -560,7 +558,7 @@
 
     L.marker([{{ latitud  }}, {{ longitud }}],
           {
-            title: "Lat.: " + {{ latitud }},
+            title: "Lat.: " + {{ latitud }} +  "  Long.: " + {{ longitud }},
               opacity: 0.8,
               icon: markerIcon
           }

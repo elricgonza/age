@@ -672,12 +672,10 @@ def asiento(idloc):
 @app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])
 @login_required
 def asiento_vs(idloc):
+    ''' Coordenada en visor '''
     a = asi.Asientos(cxms)
     a.get_asiento_idloc(idloc)    # siempre debiera existir
      
-    print('----------------------------lat')
-    print(a.latitud)
-    print('----------------------------lat>')
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs.html', 
                             gj_reci=j.get_reci(usrdep), 
@@ -687,27 +685,6 @@ def asiento_vs(idloc):
                             gj_prov=j.get_prov(usrdep),
                             latitud=a.latitud, 
                             longitud=a.longitud
-                          )
-
-
-def coord_vs(latitud, longitud):
-    ''' Coordenada en visor '''
-    j = get_json.GetJson(cxpg)
-
-    #geo_json = j.get_loc(usrdep)
-    gj_reci = j.get_reci(usrdep)
-    gj_asi = j.get_asi(usrdep)
-    gj_mun = j.get_mun(usrdep)
-    gj_prov = j.get_prov(usrdep)
-    gj_cir = j.get_cir(usrdep)
-    return render_template('coord_vs.html', 
-                            gj_reci=gj_reci, 
-                            gj_asi=gj_asi, 
-                            gj_cir=gj_cir,
-                            gj_mun=gj_mun,
-                            gj_prov=gj_prov,
-                            latitud=latitud, 
-                            longitud=longitud
                           )
 
 
