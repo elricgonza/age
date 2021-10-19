@@ -109,7 +109,6 @@ class Asientos:
             self.doc_idAF = row[30]
             self.rutaAF = row[31]
             self.urural = row[32]
-            return True
         return row
 
     

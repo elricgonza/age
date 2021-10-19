@@ -23,6 +23,7 @@ import tipodocs as tdoc
 import reportesPDF as rpdf
 import exterior as ext
 import recintos as reci
+import recintos as reci_2
 import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
@@ -685,6 +686,30 @@ def asiento_vs(idloc):
                             gj_prov=j.get_prov(usrdep),
                             latitud=a.latitud, 
                             longitud=a.longitud
+                          )
+
+
+@app.route('/recinto_vs/<idloc>/<reci>', methods=['GET', 'POST'])
+@login_required
+def recinto_vs(idloc, reci):
+    ''' Coordenada en visor '''
+    print('------------------------------------<')
+    print(idloc)
+    print(reci)
+    print('------------------------------------>>')
+    r = reci_2.Recintos(cxms)
+    #r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
+    r.get_recinto_idreci(205, 729)    # siempre debiera existir
+     
+    j = get_json.GetJson(cxpg)
+    return render_template('coord_vs.html', 
+                            gj_reci=j.get_reci(usrdep), 
+                            gj_asi=j.get_asi(usrdep), 
+                            gj_cir=j.get_cir(usrdep),
+                            gj_mun=j.get_mun(usrdep),
+                            gj_prov=j.get_prov(usrdep),
+                            latitud=r.latitud, 
+                            longitud=r.longitud
                           )
 
 
