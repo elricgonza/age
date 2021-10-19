@@ -547,10 +547,6 @@
     // remove - clear
     map.removeLayer(reciLayer);
     map.removeLayer(munLayer);
-    //if ({{ usrdep }} == 0) {
-      map.addLayer(markersMCG);
-    //}
-    
 
     // add marker - coordenadas
     map.setView( [{{ latitud }}, {{ longitud }}], 11);
@@ -571,13 +567,6 @@
               icon: markerIcon
           }
       ).addTo(map);
-
-    L.circle([{{ latitud }}, {{ longitud }}], {
-              color: 'red',
-              fillColor: '#f03',
-              fillOpacity: 0.06,
-              radius: 500
-      }).addTo(map);
 
 </script>
 
