@@ -96,15 +96,6 @@
 <body>
   <div id="map"></div>
 
-  <!--
-  <div id="recipro-wrapper" class="leaflet-bar">
-    <select id="recipro">
-      <option value="Nuevos">Nuevos</option>
-      <option value="Suprimidos">Suprimidos/Suspendidos</option>
-      <option value="Actualizados">Actualizados</option>
-    </select>
-  </div>
-  -->
 
   <!--{{ gj_cir }}-->
 
@@ -113,6 +104,7 @@
 
 
 <script>
+
     // Set style function that sets fill color property
     function style(feature) {
         return {
@@ -160,6 +152,7 @@
       'weight': 2,
       'opacity': 2
     };
+
 
 
     function forEachFeature(feature, layer) {
@@ -364,7 +357,7 @@
 
     // Set up map
 
-    var mapCenter = [-17.05678, -64.81934];
+  var mapCenter = [-17.05678, -64.81934];
     var map = L.map('map', {
       defaultExtentControl: true,
       center: mapCenter,
@@ -377,6 +370,7 @@
 
     // Add defaultExtent
     //L.control.defaultExtent().addTo(map);
+
 
 
     // add others controls 
@@ -548,6 +542,30 @@
         marker.on('click', markerOnClick);
       }
     );
+
+    // add marker - coordenadas - parametro
+    map.setView( [{{ latitud }}, {{ longitud }}], 11);
+
+    // remove - clear
+    map.removeLayer(reciLayer);
+    map.removeLayer(munLayer);
+
+    const markerIconParam = L.icon({
+        iconSize: [25, 41],
+        iconAnchor: [10, 41],
+        popupAnchor: [2, -40],
+        // specify the path here
+        iconUrl:   "../../static/css/leaflet1.5.1/images/marker-icon.png",
+        shadowUrl: "../../static/css/leaflet1.5.1/images/marker-shadow.png"
+    });
+
+    L.marker([{{ latitud  }}, {{ longitud }}],
+          {
+            title: "Lat.: " + {{ latitud }} +  "  Long.: " + {{ longitud }},
+              opacity: 0.8,
+              icon: markerIconParam
+          }
+      ).addTo(map);
 
 </script>
 

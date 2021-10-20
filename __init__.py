@@ -674,6 +674,7 @@ def asiento(idloc):
 @login_required
 def asiento_vs(idloc):
     ''' Coordenada en visor '''
+
     a = asi.Asientos(cxms)
     a.get_asiento_idloc(idloc)    # siempre debiera existir
      
@@ -693,10 +694,7 @@ def asiento_vs(idloc):
 @login_required
 def recinto_vs(idloc, reci):
     ''' Coordenada en visor '''
-    print('------------------------------------<')
-    print(idloc)
-    print(reci)
-    print('------------------------------------>>')
+
     r = reci_2.Recintos(cxms)
     r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
      
@@ -908,6 +906,7 @@ def get_municipios_all():
 def recintos_list():
     rc = reci.Recintos(cxms)
     rows = rc.get_recintos_all(usrdep)
+    del rc #adderr
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
