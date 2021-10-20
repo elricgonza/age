@@ -698,8 +698,7 @@ def recinto_vs(idloc, reci):
     print(reci)
     print('------------------------------------>>')
     r = reci_2.Recintos(cxms)
-    #r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
-    r.get_recinto_idreci(205, 729)    # siempre debiera existir
+    r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
      
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs.html', 
