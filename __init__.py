@@ -695,7 +695,14 @@ def asiento_vs(idloc):
 def recinto_vs(idloc, reci):
     ''' Coordenada en visor '''
 
-    r = reci_2.Recintos(cxms)
+    print(type(reci))
+
+    r = reci.Recintos(cxms)
+    
+    print('----------------------------recinto_vs')
+    print(type(r))
+    print('----------------------------recinto_vs')
+
     r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
      
     j = get_json.GetJson(cxpg)
@@ -906,7 +913,10 @@ def get_municipios_all():
 def recintos_list():
     rc = reci.Recintos(cxms)
     rows = rc.get_recintos_all(usrdep)
+    print('----------------------------recintos_list')
+    print(type(rc))
     del rc #adderr
+    print('----------------------------recintos_list')
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
