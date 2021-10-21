@@ -22,8 +22,7 @@ import documentos_pdf as dpdf
 import tipodocs as tdoc
 import reportesPDF as rpdf
 import exterior as ext
-import recintos as reci
-import recintos as reci_2
+import recintos 
 import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
@@ -695,14 +694,7 @@ def asiento_vs(idloc):
 def recinto_vs(idloc, reci):
     ''' Coordenada en visor '''
 
-    print(type(reci))
-
-    r = reci.Recintos(cxms)
-    
-    print('----------------------------recinto_vs')
-    print(type(r))
-    print('----------------------------recinto_vs')
-
+    r = recintos.Recintos(cxms)
     r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
      
     j = get_json.GetJson(cxpg)
@@ -911,12 +903,8 @@ def get_municipios_all():
 @app.route('/recintos_list', methods=['GET', 'POST'])
 @login_required
 def recintos_list():
-    rc = reci.Recintos(cxms)
+    rc = recintos.Recintos(cxms)
     rows = rc.get_recintos_all(usrdep)
-    print('----------------------------recintos_list')
-    print(type(rc))
-    del rc #adderr
-    print('----------------------------recintos_list')
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -932,7 +920,7 @@ def recintos_list():
 @app.route('/recinto/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def recinto(idreci, idlocreci):
-    rc = reci.Recintos(cxms)
+    rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
