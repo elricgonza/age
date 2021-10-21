@@ -53,7 +53,7 @@ class Documentos:
         upd_documento = (doc, dep, cite, ruta, fechadoc, obs, usuario, fa, id)        
         #s = "update doc set tipoDoc = %s, dep = %s, cite = %s, fechaDoc = %s, obs = %s, usuario = %s, fechaIngreso = %s where id = %d"
         s = "update doc " + \
-            " set tipoDoc = %d, dep = %d, cite = %s, ruta = %s, fechaDoc = %s, obs = %s, usuario = %s, fechaIngreso = %s" + \
+            " set tipoDoc = %d, dep = %d, cite = %s, ruta = %s, fechaDoc = %s, obs = %s, usuario = %s, fechaAct = %s" + \
             " where id = %d"
         try:
             self.cur.execute(s, upd_documento)

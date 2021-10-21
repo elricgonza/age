@@ -1510,7 +1510,6 @@ def reciespeciales(idreci, idlocreci):
                 request.form['etapa'], request.form['docAct'], docActF, idlocreci[1], idreci    
 
             rces.upd_recinto(row_to_upd)
-
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
             rows = rces.get_reciespeciales_all(usrdep)
@@ -1669,7 +1668,10 @@ def modificar_indicador():
         cate_id = request.form['categoria']
         subcate_id = request.form['subcategoria']
         obs = request.form['obs']
-        lc.upd_loc_cate(loc_id, cate_id, subcate_id, obs, fechaAct, usr, sec)
+
+        row_to_upd = cate_id, subcate_id, obs, fechaAct, usr, loc_id, sec
+        lc.upd_loc_cate(row_to_upd)
+        #lc.upd_loc_cate(loc_id, cate_id, subcate_id, obs, fechaAct, usr, sec)
         ctgoria = lc.get_loc_cates(loc_id);
         cate = lc.get_categorias_all();
         return render_template('asiento_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asientos - Edición' in permisos_usr)

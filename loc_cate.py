@@ -71,6 +71,19 @@ class LocCate:
             self.sec = row[0]            
             return True
 
+    def get_loc_cates_idloc(self, idloc):
+        s = "select cate_id, subcate_id, obs, usuario from loc_cate where loc_id = %d"
+        self.cur.execute(s, idloc)
+        row = self.cur.fetchone()
+        if  row == None:
+            return False
+        else:
+            self.cate_id = row[0]
+            self.subcate_id = row[1]
+            self.obs = row[2]
+            self.usuario = row[3]
+            return True
+
     def add_loc_cate(self, loc_id, cate_id, subcate_id, obs, fechaAct, usuario, fechaIngreso, nextid):
         new_locCate = loc_id, cate_id, subcate_id, obs, fechaAct, usuario, fechaIngreso, nextid
         s = "insert into loc_cate (loc_id, cate_id, subcate_id, obs, fechaAct, usuario, fechaIngreso, id) values" + \
@@ -82,6 +95,7 @@ class LocCate:
         except:
             flash("Error al insertar Registro", 'alert-warning')            
 
+    '''
     def upd_loc_cate(self, loc_id, cate_id, subcate_id, obs, fechaAct, usuario, sec):        
         upd_locCate = (cate_id, subcate_id, obs, fechaAct, usuario, loc_id, sec)        
         s = "update loc_cate set cate_id = %d, subcate_id = %d, obs = %s, fechaAct = %s, usuario = %s" + \
@@ -92,7 +106,45 @@ class LocCate:
             flash("Se ha Modificado el Registro", 'alert-success')
         except:
             flash("Error al modificar Registro", 'alert-warning')
-       
+    '''
+
+    def upd_loc_cate(self, indicador):
+        if self.diff_old_new_indi(indicador):
+            s = "update loc_cate set cate_id = %d, subcate_id = %d, obs = %s, fechaAct = %s, usuario = %s" + \
+            " where loc_id = %d and id = %d"
+            try:
+                self.cur.execute(s, indicador)
+                self.cx.commit()
+                flash("Se ha Modificado el Registro", 'alert-success')
+            except Exception as e:
+                flash("Error al modificar Registro", 'alert-warning')
+
+
+    def diff_old_new_indi(self, row_to_upd):
+        indi = self.get_loc_cates_idloc(row_to_upd[5])  #5 -> idloc
+
+        vdif = False
+
+        if self.cate_id != int(row_to_upd[0]):
+            print('cate_id dif')
+            print(self.cate_id)
+            print(row_to_upd[0])
+            vdif = True
+        if self.subcate_id != int(row_to_upd[1]):
+            print('subcate_id dif')
+            vdif = True
+        if self.obs != row_to_upd[2]:
+            print('obs dif')
+            print(self.obs)
+            print(row_to_upd[2])
+            vdif = True
+        if (self.usuario != row_to_upd[4]):
+            print('usuario dif')
+            vdif = True
+
+        return vdif
+
+
     # borra registros en base al 'loc_id'
     def del_loc_cate(self, loc_id, sec):
         s = "delete from loc_cate where loc_id = %d and id = %d"

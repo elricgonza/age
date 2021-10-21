@@ -29,11 +29,11 @@ class Reciasiento:
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) and tipocircun = 68 order by AsientoElectoral"
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) and tipocircun = 68 rder by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
@@ -46,11 +46,11 @@ class Reciasiento:
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) and tipocircun in (67, 69) order by AsientoElectoral"
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) and tipocircun in (67, 69) order by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
@@ -63,7 +63,7 @@ class Reciasiento:
     def get_zonas_all(self, usrdep):        
         s = "select l.IdLoc, z.Zona, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z" + \
             " inner join [GeografiaElectoral_app].[dbo].[DIST] d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
-            " inner join [GeografiaElectoral_app].[dbo].[GeoAsientos_Nacional] l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist "
+            " inner join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist "
         if usrdep != 0 :
             s = s + " where l.DepLoc = %d order by z.NomZona"
             self.cur.execute(s, usrdep)
@@ -77,10 +77,13 @@ class Reciasiento:
         else:
             return rows
 
-    def get_zonas_all1(self, usrdep, idloc, circun):        
+    def get_zonas_all1(self, usrdep, idloc, circun):
+        print(usrdep)
+        print(idloc)
+        print(circun)        
         s = "select l.IdLoc, z.Zona, z.NomZona, d.NomDist, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z" + \
             " inner join [GeografiaElectoral_app].[dbo].[DIST] d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
-            " inner join [GeografiaElectoral_app].[dbo].[GeoAsientos_Nacional] l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist "
+            " inner join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist "
         if usrdep != 0 :
             zon = idloc, circun, usrdep
             s = s + " where l.Idloc = %d and (d.CircunDist = %d) and l.DepLoc = %d order by z.NomZona"
