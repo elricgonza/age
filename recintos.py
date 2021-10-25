@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Operaciones recintos
 
 class Recintos:
     idlocreci=0
@@ -23,6 +23,7 @@ class Recintos:
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_recintos_all(self, usrdep):        
         s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
             " NombreRecinto, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
@@ -32,7 +33,7 @@ class Recintos:
             self.cur.execute(s, usrdep)
         else:
             s = s + " where  TipoLocLoc in (67, 69) order by Dep, Prov, Sec"
-            self.cur.execute(s)
+            self.cur.execute(s, usrdep)
 
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
@@ -91,7 +92,6 @@ class Recintos:
             self.rutaA = row[27]
             self.rutaAF = row[28]
             self.nomloc = row[29]
-            return True
         return row
 
 
@@ -257,4 +257,6 @@ class Recintos:
             return rows
 
 
+    def __str__(self):
+        return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
     

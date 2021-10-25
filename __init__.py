@@ -22,7 +22,7 @@ import documentos_pdf as dpdf
 import tipodocs as tdoc
 import reportesPDF as rpdf
 import exterior as ext
-import recintos as reci
+import recintos 
 import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
@@ -556,6 +556,7 @@ def documento_del(doc_id, tipo_d):
         print ('Sin documentos...')
 #Codigo Grover-Final
 
+
 @app.route('/asientos_list', methods=['GET', 'POST'])
 @login_required
 def asientos_list():
@@ -666,6 +667,46 @@ def asiento(idloc):
                 return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+
+
+@app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])
+@login_required
+def asiento_vs(idloc):
+    ''' Coordenada en visor '''
+
+    a = asi.Asientos(cxms)
+    a.get_asiento_idloc(idloc)    # siempre debiera existir
+     
+    j = get_json.GetJson(cxpg)
+    return render_template('coord_vs.html', 
+                            gj_reci=j.get_reci(usrdep), 
+                            gj_asi=j.get_asi(usrdep), 
+                            gj_cir=j.get_cir(usrdep),
+                            gj_mun=j.get_mun(usrdep),
+                            gj_prov=j.get_prov(usrdep),
+                            latitud=a.latitud, 
+                            longitud=a.longitud
+                          )
+
+
+@app.route('/recinto_vs/<idloc>/<reci>', methods=['GET', 'POST'])
+@login_required
+def recinto_vs(idloc, reci):
+    ''' Coordenada en visor '''
+
+    r = recintos.Recintos(cxms)
+    r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
+     
+    j = get_json.GetJson(cxpg)
+    return render_template('coord_vs.html', 
+                            gj_reci=j.get_reci(usrdep), 
+                            gj_asi=j.get_asi(usrdep), 
+                            gj_cir=j.get_cir(usrdep),
+                            gj_mun=j.get_mun(usrdep),
+                            gj_prov=j.get_prov(usrdep),
+                            latitud=r.latitud, 
+                            longitud=r.longitud
+                          )
 
 
 @app.route('/exterior_list', methods=['GET', 'POST'])
@@ -862,7 +903,7 @@ def get_municipios_all():
 @app.route('/recintos_list', methods=['GET', 'POST'])
 @login_required
 def recintos_list():
-    rc = reci.Recintos(cxms)
+    rc = recintos.Recintos(cxms)
     rows = rc.get_recintos_all(usrdep)
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
@@ -879,7 +920,7 @@ def recintos_list():
 @app.route('/recinto/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def recinto(idreci, idlocreci):
-    rc = reci.Recintos(cxms)
+    rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
