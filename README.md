@@ -1,5 +1,5 @@
-App Administración Geo
-======================
+App Administración AppGeo
+=========================
 
 Resguardo de imágenes en:
  static/imgbd/asi
