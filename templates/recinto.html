@@ -90,6 +90,7 @@
             </div>
             <div class="col-md-4">
                 <label for="municipio">Municipio:</label>
+                <input type="hidden" name="muni" id="imuni" value="{{ rc.nomsec }}">
                 <input type="text" class="form-control" id="imunicipio" title="" placeholder="municipio" name="municipio" disabled
                         {% if load %}
                             value="{{ rc.nomsec }}"
@@ -114,8 +115,8 @@
             </div>
             <div class="col-md-3">
                 <label for="asiento">Asientos del Municipio:</label>
-                <input type="hidden" name="reci_idasiento" value="rc.idlocreci">
-                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5)" required>
+                <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rc.idlocreci }}">
+                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5); verifica(this.value)" required>
                     {% for asientoReci in asientoRecis %}
                         {% if rc.deploc==asientoReci[0] and rc.provloc==asientoReci[1] and rc.secloc==asientoReci[2] %}
                             {% if load and rc.idlocreci==asientoReci[3] %}
@@ -295,12 +296,12 @@
             </div>
             <div class="col-md-8">
                 <label for="dirreci">Dirección del Recinto:</label>
-                <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci"  
+                <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci" required  
                         {% if load %}
                             value="{{ rc.direccion }}"
                         {% endif %}
                     >
-                <div class="invalid-feedback">Debe introducir un dato válido.</div>
+                <div class="invalid-feedback">Debe introducir la Dirección.</div>
             </div>
         </div> <!--row-->
         <br>
@@ -427,7 +428,7 @@
                 <button type="button"  onclick="javascript: window.location.href = '/recintos_list';"  class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
             </div>
             <div class="col-md-6">
-                <button type="submit" class="btn btn-outline-success btn-lg btn-block" 
+                <button type="submit" class="btn btn-outline-success btn-lg btn-block" id="iaceptar" 
                     {% if puede_editar %}
                         enabled
                     {% else %}
@@ -449,6 +450,16 @@
 </div> <!--main-->
 
 <script>
+    var aceptar = document.getElementById('iaceptar');
+    var idasiento = document.getElementById('ireci_idasiento')
+    function verifica(elemento){
+        var id = elemento.split(':');
+        if(id[1] != idasiento.value){
+            aceptar.disabled = true;
+        }else{
+            aceptar.disabled = false;
+        }
+    }
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
     var depenreci = document.getElementById('idepenreci');
@@ -536,7 +547,11 @@
             alert('Debe especificar tipo de Recinto...');
             return false;
         }
-
+        if (f.muni.value != f.municipio.value) {
+            alert('Las nuevas coordenadas apuntan otro Municipio...');
+            return false;
+        }
+        
         return true;
     }
 </script>

@@ -20,10 +20,10 @@ class Jurisdiccion:
             " from [bdge].[dbo].[GeoRecintos_all] left join [bdge].[dbo].[actJurisd] on [bdge].[dbo].[GeoRecintos_all].IdLoc=[bdge].[dbo].[actJurisd].idloc2" + \
             " and [bdge].[dbo].[GeoRecintos_all].Reci=[bdge].[dbo].[actJurisd].reci2"
         if usrdep != 0 :
-            s = s + " where [bdge].[dbo].[GeoRecintos_all].TipoCircun = 1 and [bdge].[dbo].[GeoRecintos_all].DEP = %d order by [bdge].[dbo].[GeoRecintos_all].prov, [bdge].[dbo].[GeoRecintos_all].sec"
+            s = s + " where [bdge].[dbo].[GeoRecintos_all].TipoLocLoc in (67, 69) and [bdge].[dbo].[GeoRecintos_all].DEP = %d order by [bdge].[dbo].[GeoRecintos_all].prov, [bdge].[dbo].[GeoRecintos_all].sec"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where [bdge].[dbo].[GeoRecintos_all].TipoCircun = 1 order by [bdge].[dbo].[GeoRecintos_all].Dep, [bdge].[dbo].[GeoRecintos_all].Prov, [bdge].[dbo].[GeoRecintos_all].Sec"
+            s = s + " where [bdge].[dbo].[GeoRecintos_all].TipoLocLoc in (67, 69) order by [bdge].[dbo].[GeoRecintos_all].Dep, [bdge].[dbo].[GeoRecintos_all].Prov, [bdge].[dbo].[GeoRecintos_all].Sec"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()

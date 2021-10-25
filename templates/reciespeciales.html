@@ -103,7 +103,8 @@
             <div class="col-md-4">
                 <label for="municipio">Municipio:</label>
                 <input type="hidden" id="imuni" name="muni">
-                <select id="imunicipio" name="municipio" class="form-control" onchange="cargaresp(this.value, 2)" required>
+                <input type="hidden" name="munici" id="imunici" value="{{ rces.secloc }}">
+                <select id="imunicipio" name="municipio" class="form-control" onchange="cargaresp(this.value, 2); verifica1(this.value)" required>
                     {% for municipio in municipios %}
                         {% if rces.deploc == municipio[0] and rces.provloc == municipio[1]%}
                             {% if load and rces.secloc == municipio[2]%}
@@ -133,8 +134,8 @@
             </div>
             <div class="col-md-3">
                 <label for="asiento">Asientos del Municipio:</label>
-                <input type="hidden" name="reci_idasiento" value="rces.idlocreci">
-                <select id="iasiento" name=asiento class="form-control" onchange="cargar(this.value, 5)" required>
+                <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rces.idlocreci }}">
+                <select id="iasiento" name=asiento class="form-control" onchange="cargar(this.value, 5); verifica(this.value)" required>
                     {% for asientoReci in asientoRecis %}
                         {% if rces.deploc==asientoReci[0] and rces.provloc==asientoReci[1] and rces.secloc==asientoReci[2] %}
                             {% if load and rces.idlocreci==asientoReci[3] %}
@@ -314,12 +315,12 @@
             </div>
             <div class="col-md-8">
                 <label for="dirreci">Dirección del Recinto:</label>
-                <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci"  
+                <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci" required  
                         {% if load %}
                             value="{{ rces.direccion }}"
                         {% endif %}
                     >
-                <div class="invalid-feedback">Debe introducir un dato válido.</div>
+                <div class="invalid-feedback">Debe introducir la Dirección.</div>
             </div>
         </div> <!--row-->
         <br>
@@ -446,7 +447,7 @@
                 <button type="button"  onclick="javascript: window.location.href = '/reciespeciales_list';"  class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
             </div>
             <div class="col-md-6">
-                <button type="submit" class="btn btn-outline-success btn-lg btn-block" 
+                <button type="submit" class="btn btn-outline-success btn-lg btn-block" id="iaceptar" 
                     {% if puede_editar %}
                         enabled
                     {% else %}
@@ -468,6 +469,24 @@
 </div> <!--main-->
 
 <script>
+    var aceptar = document.getElementById('iaceptar');
+    var idasiento = document.getElementById('ireci_idasiento')
+    function verifica(elemento){
+        var id = elemento.split(':');
+        if(id[1] != idasiento.value){
+            aceptar.disabled = true;
+        }else{
+            aceptar.disabled = false;
+        }
+    }
+    var idmuni = document.getElementById('imunici');
+    function verifica1(elemento){
+        if(elemento != idmuni.value){
+            aceptar.disabled = true;
+        }else{
+            aceptar.disabled = false;
+        }    
+    }
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
     var depenreci = document.getElementById('idepenreci');
