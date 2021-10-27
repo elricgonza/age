@@ -2,19 +2,39 @@
 // -ric 
 function getgeoreci(event) {
     var x = event.keyCode;
-    //alert(x)
-    if (x == 27 || x == 9 || 'undefined') {          
-        asientosReci($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+    var idloc = document.getElementById("ireci_idasiento").value;
+    if (x == 27 || x == 9 || 'undefined') {
+        if($('input[name="load"]').val()=='True'){
+            asiento_reci(idloc, $('input[name="circun"]').val());            
+        }else{
+            asientosReci($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+        };             
     };
 } 
 
 function getgeoreci1(event) {
     var x = event.keyCode;
-    //alert(x)
-    if (x == 27 || x == 9 || 'undefined') {          
-        asientosReci1($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+    var idloc = document.getElementById("ireci_idasiento").value;
+    if (x == 27 || x == 9 || 'undefined') {
+        if($('input[name="load"]').val()=='True'){
+            asiento_reci(idloc, $('input[name="circun"]').val());            
+        }else{
+            asientosReci1($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+        };             
     };
 } 
+
+function asiento_reci(idloc, cir) {
+    $('#iasiento').html('');
+    $.getJSON("/get_asiento_one", {
+            idloc: idloc
+        }, function(datos){
+        $("#iasiento").append('<option></option>');
+            $.each(datos, function(index, obj){
+                $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+            });
+        });
+}
 
 function asientosReci(dep, prov, sec, cir) {
     var x = event.keyCode;
@@ -25,7 +45,6 @@ function asientosReci(dep, prov, sec, cir) {
                 provi: $('input[name="provloc"]').val(),
                 secci: $('input[name="secloc"]').val()
             }, function(datos){
-                console.log(datos);
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
                     $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');

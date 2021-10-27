@@ -1043,6 +1043,20 @@ def get_asientos_all2():
                        municipio='INTENTE NUEVAMENTE....')
 
 
+@app.route('/get_asiento_one', methods=['GET', 'POST'])
+def get_asiento_one():
+    idloc = request.args.get('idloc')
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_asiento_one(usrdep, idloc)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(departamento='COORDENADA',
+                       provincia='INCORRECTA !!!',
+                       municipio='INTENTE NUEVAMENTE....')
+
+
 @app.route('/get_zonas_all1', methods=['GET', 'POST'])
 def get_zonas_all1():
     idloc = request.args.get('idloc')
@@ -2654,7 +2668,7 @@ def reciespe_img(idloc, nomloc, idreci):
                     li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
 
                 f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
-                resize_save_file2(fpath, name_to_save, (1024, 768))
+                resize_save_file1(fpath, name_to_save, (1024, 768))
 
                 os.remove(fpath[1:])   # arch. fuente 
         

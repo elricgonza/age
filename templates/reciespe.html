@@ -130,13 +130,20 @@
             <div class="col-md-3">
                 <label for="asiento">Asientos del Municipio:</label>
                 <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rce.idlocreci }}">
-                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5); verifica(this.value)" required>
+                <input type="hidden" name="load" id="iload" value="{{ load }}">
+                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" required>
                     {% for asientoReci in asientoRecis %}
                         {% if rce.deploc==asientoReci[0] and rce.provloc==asientoReci[1] and rce.secloc==asientoReci[2] %}
-                            {% if load and rce.idlocreci==asientoReci[3] %}
-                                    <option value = "{{ rce.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                            {% if load %}
+                                {% if rce.idlocreci==asientoReci[3] %}
+                                        <option value = "{{ rce.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                                {% endif %}
                             {% else %}
-                                    <option value = "{{ rce.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
+                                {% if rce.idlocreci==asientoReci[3] %}
+                                        <option value = "{{ rce.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                                {% else %}
+                                        <option value = "{{ rce.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
+                                {% endif %}
                             {% endif %}
                        {% endif %}                                                     
                     {% endfor %}        
@@ -464,16 +471,6 @@
 </div> <!--main-->
 
 <script>
-    var aceptar = document.getElementById('iaceptar');
-    var idasiento = document.getElementById('ireci_idasiento')
-    function verifica(elemento){
-        var id = elemento.split(':');
-        if(id[1] != idasiento.value){
-            aceptar.disabled = true;
-        }else{
-            aceptar.disabled = false;
-        }
-    }
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
     var depenreci = document.getElementById('idepenreci');

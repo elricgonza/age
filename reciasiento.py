@@ -59,6 +59,22 @@ class Reciasiento:
         else:
             return rows
 
+    def get_asiento_one(self, usrdep, idloc):        
+        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        if usrdep != 0 :
+            asie = idloc, usrdep
+            s = s + " where IdLoc = %d and Dep = %d order by AsientoElectoral"
+            self.cur.execute(s, asie)
+        else:
+            asie = idloc
+            s = s + " where IdLoc = %d order by AsientoElectoral"
+            self.cur.execute(s, asie)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
 
     def get_zonas_all(self, usrdep):        
         s = "select l.IdLoc, z.Zona, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z" + \
