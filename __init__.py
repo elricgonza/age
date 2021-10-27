@@ -1796,7 +1796,9 @@ def homologa_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin Homologas...')
-        return render_template('homologa_list.html', puede_adicionar='Homologa - Adición' in permisos_usr)
+        return render_template('homologa_list.html', puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                puede_editar='Homologa - Edición' in permisos_usr
+                              )  # render a template)
 
 
 @app.route('/a_homologa/<idreci>/<idlocreci>/<inicio>/<final>', methods=['GET', 'POST'])
@@ -1853,7 +1855,9 @@ def a_homologa_m():
                               ahom.latitud2, ahom.longitud2, f_ingreso, f_actual, usr)
 
         rows = ahom.get_homologa_all(usrdep, inicio, final)
-        return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr)  # render a template 
+        return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                puede_editar='Homologa - Edición' in permisos_usr
+                              )  # render a template 
     else: # Viene de <homologa_list>
         return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False, ban=True)
 

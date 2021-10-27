@@ -544,13 +544,14 @@
             alert('Debe especificar tipo de Recinto...');
             return false;
         }
-        if (f.muni.value != f.municipio.value) {
+        if (f.muni.value.trim() != "" && f.muni.value.trim() != f.municipio.value.trim()) {
             alert('Las nuevas coordenadas apuntan otro Municipio...');
             return false;
         }
         
         return true;
     }
+
 </script>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

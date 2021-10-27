@@ -33,7 +33,7 @@ class Reciasiento:
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) and tipocircun = 68 rder by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) and tipocircun = 68 order by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
