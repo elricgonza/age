@@ -20,8 +20,9 @@
                             <label for="idloc">IdLoc:</label>
                             <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required onkeydown="asientoZona(event)" 
                                     {% if load %}
+                                        disabled 
                                         value="{{ z.idloc }}"
-                                      {% else %}
+                                    {% else %}
                                         value="{{ idloc }}"
                                     {% endif %}
                                 >
