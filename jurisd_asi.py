@@ -36,13 +36,13 @@ class Jurisd_asi:
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
             "a.PoblacionLoc, a.PoblacionElecLoc, a.FechaCensoLoc, a.TipoLocLoc, a.fechaBaseLegLoc," + \
             "a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \
-            "b.NomDep as _departamento, c.NomProv as _provincia, d.NomSec as _municipio, e.NombreTipoLocLoc as _tipo_circun," + \
+            "b.NomDep as _departamento, c.NomProv as _provincia, d.NomSec as _municipio, e.descripcion as _tipo_circun," + \
             "a.etapa, a.doc_idA, a.obsUbicacion, a.doc_idRN, a.obs, a.fechaIngreso, a.fechaAct, a.usuario " + \
             "from [GeografiaElectoral_app].[dbo].[LOC] a" + \
             "        left join [GeografiaElectoral_app].[dbo].[DEP] b on a.DepLoc= b.Dep " + \
             "        left join [GeografiaElectoral_app].[dbo].[PROV] c on a.DepLoc= c.DepProv and a.ProvLoc= c.Prov" + \
             "        left join [GeografiaElectoral_app].[dbo].[SEC] d on a.DepLoc= d.DepSec and a.ProvLoc= d.ProvSec and a.SecLoc= d.Sec" + \
-            "        left join [GeografiaElectoral_app].[dbo].[clTipoLocLoc] e on a.TipoLocLoc = e.Tipolocloc" + \
+            "        left join [GeografiaElectoral_app].[dbo].[clasif] e on a.TipoLocLoc = e.idClasif" + \
             " where a.idloc = %d "
 
         self.cur.execute(s, idloc)
@@ -245,7 +245,18 @@ class Jurisd_asi:
             self.cx.commit()
             print('Recinto actualizado')
         except Exception as e:
-            print("Error - actualización de Recinto...")    
+            print("Error - actualización de Recinto...")
+
+    def upd_dist_juriasi(self, idloc, dist, circun):
+        distrito = circun, idloc, dist
+        s = "update GeografiaElectoral_app.dbo.DIST" + \
+            " set CircunDist = %s where IdLocDist = %s and Dist = %s"
+        try:
+            self.cur.execute(s, distrito)
+            self.cx.commit()
+            print('Distrito actualizado')
+        except Exception as e:
+            print("Error - actualización de Distrito...")    
     
     def get_jurisd_asi_idloc_idjurisd(self, idloc):        
         s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.GeoAsientos_Nacional_all" + \

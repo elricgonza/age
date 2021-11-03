@@ -2071,7 +2071,9 @@ def jurisd_asi_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin Asientos...')
-        return render_template('jurisd_asi_list.html', puede_adicionar='Juriss_asi - Adición' in permisos_usr)
+        return render_template('jurisd_asi_list.html', puede_adicionar='Juriss_asi - Adición' in permisos_usr, \
+                                puede_editar='Jurisd_asi - Edición' in permisos_usr
+                              )  # render a template
 
 
 @app.route('/jurisd_asi/<idloc>', methods=['GET', 'POST'])
@@ -2103,6 +2105,7 @@ def jurisd_asi(idloc):
             #Actualiza el asiento y sus recintos
             ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact)
             ja.upd_recinto_juriasi(idloc, ja.zona)
+            ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
         else:
             flash("El Asiento No Tiene Recintos", 'alert-warning')
             dptos=rces.get_depaespeciales_all(usrdep)
@@ -2112,7 +2115,7 @@ def jurisd_asi(idloc):
                 rows = ja.get_circuns_all(usrdep)
                 zonasd = ja.get_zonasd_all(usrdep)
             
-            if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
+            if ja.get_jurisd_asi_idloc_idjurisd(idloc): # Modificar Asiento
                 return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
             else:
                 return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')
@@ -2130,7 +2133,9 @@ def jurisd_asi(idloc):
             return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')    
 
     rows = ja.get_jurisd_asi_all(usrdep)
-    return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
+    return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
+                            puede_editar='Jurisd_asi - Edición' in permisos_usr
+                          )  # render a template
 
 
 @app.route('/jurisd_asi_m/<idloc>', methods=['GET', 'POST'])
@@ -2160,9 +2165,12 @@ def jurisd_asi_m(idloc):
         #Actualiza el asiento y sus recintos
         ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact)
         ja.upd_recinto_juriasi(idloc, ja.zona)
+        ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
 
     rows = ja.get_jurisd_asi_all(usrdep)
-    return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr)  # render a template
+    return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
+                            puede_editar='Jurisd_asi - Edición' in permisos_usr
+                          )  # render a template
 
 
 @app.route('/get_circuns_dps', methods=['GET', 'POST'])
