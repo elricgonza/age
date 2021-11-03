@@ -109,10 +109,10 @@ class Jurisdiccion:
         s = "select distinct IdLoc, AsientoElectoral, Dep, Prov, Sec, CircunDist" + \
         " from [bdge].[dbo].[GeoAsientos_Nacional_Juri_all]"
         if usrdep != 0:
-            s = s + " where Dep = %d order by AsientoElectoral"
+            s = s + " where Dep = %d and estado in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " order by AsientoElectoral"
+            s = s + " where estado in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -140,7 +140,7 @@ class Jurisdiccion:
     def get_asijuri_all(self, dp, pr, mu):
         s = "select distinct IdLoc, AsientoElectoral, Dep, Prov, Sec, CircunDist" + \
             " from [bdge].[dbo].[GeoAsientos_Nacional_Juri_all]" + \
-            " where Dep = %d and Prov = %d and Sec = %d order by AsientoElectoral"
+            " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) order by AsientoElectoral"
         lista = dp, pr, mu    
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
@@ -235,7 +235,7 @@ class Jurisdiccion:
             return True
 
     def get_asiento_idloc2(self, idloc):
-        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion " + \
+        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, tipocircun, TipoCircunscripcion " + \
             "from [bdge].[dbo].[GeoAsientos_Nacional_all] where IdLoc = %d"   
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()

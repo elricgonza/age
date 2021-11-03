@@ -153,6 +153,7 @@
                     </div>
                     <div class="col-lg-2">
                         <label for="provincia" class="col-form-label">Provincia:</label>
+                        <input type="hidden" id="iprovincia2" name="provincia2" value="{{ ja.provloc }}">
                         <select id="iprovincia" name="provincia" class="form-control" onchange="cargarjuri_a(this.value, 1)" required>
                             {% for provincia in provincias %}
                                 {% if ja.deploc == provincia[0] %}
@@ -282,12 +283,18 @@
         }
         function guardar_jurisd_asi(){
             var idloc = $("#iidloc").val();
+            var provincia = $("#iprovincia").val();
+            var provincia2 = $("#iprovincia2").val();
             var secloc = $("#isecloc").val();
             var secloc2 = $("#isecloc2").val();
-            if(secloc2 != secloc){
-                $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");
+            if(provincia2 != provincia){
+                $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");   
             }else{
-                alert('Debe Seleccionar Un Municipio DIFERENTE al cual Asignar el Asiento. !!!');
+                if(secloc2 != secloc){
+                    $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");
+                }else{
+                    alert('Debe Seleccionar Un Municipio DIFERENTE al cual Asignar el Asiento. !!!');
+                }
             }
         }
         function modificar_jurisd_asi(){

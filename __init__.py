@@ -1979,7 +1979,9 @@ def jurisdiccion(reci, idloc):
             ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact)
 
         rows = ju.get_jurisdiccion_all(usrdep)
-        return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
+        return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr, \
+                                puede_editar='Jurisdicción - Edición' in permisos_usr
+                              )# render a template
     else:
         dptos=rces.get_depaespeciales_all(usrdep)
         provincias=rces.get_provespeciales_all(usrdep)
@@ -2019,15 +2021,15 @@ def jurisdiccion_m():
                             ju.tiporecinto2, ju.latitud2, ju.longitud2, f_actual, usr, idjurisd)
 
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
-            print('aqui')
             nextid = ju.get_next_idreci(idloc2, reci)
             ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact)
         else:
-            print('por aqui')
             ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact)
 
         rows = ju.get_jurisdiccion_all(usrdep)
-        return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr)  # render a template
+        return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr, \
+                                puede_editar='Jurisdicción - Edición' in permisos_usr
+                              )# render a template
 
 
 @app.route('/get_asijuri_all', methods=['GET', 'POST'])
