@@ -254,7 +254,7 @@ class Reciespe:
 
 
     def get_naciones(self):
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=5"
+        s = "select idClasif, descripcion, clasifSubGrupo from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=5"
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:

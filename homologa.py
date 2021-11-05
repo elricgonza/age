@@ -19,11 +19,11 @@ class Homologa:
                 " from [bdge].[dbo].[GeoRecintos_Hom_all]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
-                s = s + " where idEstado in (4, 5, 82, 83) and TipoLocLoc in (67, 69) and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
+                s = s + " where idEstado in (4, 5, 82, 83) and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
                 self.cur.execute(s, lista)
             else:
                 lista = inicio, final
-                s = s + " where idEstado in (4, 5, 82, 83) and TipoLocLoc in (67, 69) and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
+                s = s + " where idEstado in (4, 5, 82, 83)  and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
                 self.cur.execute(s, lista)
 
             rows = self.cur.fetchall()
@@ -37,11 +37,11 @@ class Homologa:
             " from [bdge].[dbo].[GeoRecintos_Hom_all]"    
         if usrdep != 0 :
             lista = usrdep, inicio, final
-            s = s + " where TipoLocLoc in (67, 69) and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
+            s = s + " where  DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
             self.cur.execute(s, lista)
         else:
             lista = inicio, final
-            s = s + " where TipoLocLoc in (67, 69) and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
+            s = s + " where Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
             self.cur.execute(s, lista)
 
         rows = self.cur.fetchall()
