@@ -155,6 +155,34 @@ class GetJson:
         return geo_json
 
 
+    def get_reci_mts(self, plat, plong, pmts):
+        s = '''
+        SELECT jsonb_build_object(
+            'crs',      '{ type: name, properties: { name: urn:ogc:def:crs:OGC:1.3:CRS84 } }',
+            'name',     'trian',
+            'type',     'FeatureCollection',
+            'features', jsonb_agg(features.feature)
+        )
+        FROM (
+          SELECT jsonb_build_object(
+            'type',       'Feature',
+            'geometry',   ST_AsGeoJSON(geom)::jsonb,
+            'properties', to_jsonb(inputs) - 'id' - 'geom'
+          ) AS feature
+          FROM (SELECT recinto,  
+                dist, geom
+        '''
+        ss = f'FROM f_get_points_mts_reci({plat}, {plong}, {pmts}) '
+        
+        sss = s + ss +  ' ) inputs) features;'
+
+        self.cur.execute(sss)
+
+        geo_json = self.cur.fetchone()
+        geo_json = geo_json[0]
+        return geo_json
+
+
     def get_asi(self, dep):
         s = '''
         SELECT jsonb_build_object(
