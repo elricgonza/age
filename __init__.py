@@ -178,6 +178,16 @@ def get_geo():
                        municipio='INTENTE NUEVAMENTE....')
 
 
+@app.route('/get_json_ptos', methods=['GET', 'POST'])
+def get_json_ptos():
+    lat = request.args.get('latitud', 0, type=float)
+    long = request.args.get('longitud', 0, type=float)
+
+    j = get_json.GetJson(cxpg)    
+    return(j.get_reci_mts(lat, long, 5000))
+#ppp
+
+
 @app.route('/vs/<dep>', methods=['GET', 'POST'])
 def vs(dep):
     j = get_json.GetJson(cxpg)
@@ -1219,6 +1229,7 @@ def get_geo_esp():
                        sec='---',
                        municipio='PUEBLO INDIGENA NO EXISTE',
                        nrocircun='NO EXISTE....')
+
 
 @app.route('/get_pueblos_all', methods=['GET', 'POST'])
 def get_pueblos_all():

@@ -233,3 +233,20 @@ function buildMap(lat,lon)  {
             radius: 500
         }).addTo(map);
 } //buildMap
+
+
+function buildMapCoord(lat,lon)  {
+
+  $.getJSON('/get_json_ptos', {
+      latitud: $('input[name="latitud"]').val(),
+      longitud: $('input[name="longitud"]').val()
+  }, function(data) {
+      document.getElementById("ideploc").setAttribute("value", data.dep)
+      document.getElementById("idepartamento").setAttribute("value", data.departamento)
+      document.getElementById("iprovloc").setAttribute("value", data.prov)
+      document.getElementById("iprovincia").setAttribute("value", data.provincia)
+      document.getElementById("isecloc").setAttribute("value", data.sec)
+      document.getElementById("imunicipio").setAttribute("value", data.municipio)
+      document.getElementById("icircun").setAttribute("value", data.nrocircun)
+  });
+}
