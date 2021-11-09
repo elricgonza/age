@@ -14,10 +14,12 @@ class Zonas:
         s = "select d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[DIST] d " + \
             "left join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist "
         if usrdep != 0 :
-            s = s + " where l.DepLoc = %d and d.Dist>0 order by d.IdLocDist, d.Dist"
+            #s = s + " where l.DepLoc = %d and d.Dist>0 order by d.IdLocDist, d.Dist"
+            s = s + " where l.DepLoc = %d order by d.IdLocDist, d.Dist"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where d.Dist>0 order by d.IdLocDist, d.Dist"
+            #s = s + " where d.Dist>0 order by d.IdLocDist, d.Dist"
+            s = s + " order by d.IdLocDist, d.Dist"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()

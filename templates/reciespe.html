@@ -110,6 +110,7 @@
             <div class="col-md-2">
                 <label for="pueblo">Pueblos Indigenas:</label>
                 <select id="ipueblo" name="pueblo" class="form-control" required>
+                    <option></option>
                     {% for nacion in naciones %}
                         {% if rce.deploc == nacion[2] %}
                             {% if load and rce.nacionId==nacion[0] %}

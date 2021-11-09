@@ -815,11 +815,12 @@ def get_geo_all():
 def reportes():
     r = rep.Reportes(cxms)
     if 'Reportes - Consulta' in permisos_usr:
-        return render_template('reportes.html', load_r=False, puede_consultar='Reportes - Consulta' in permisos_usr)
+        return render_template('reportes.html', load_r=False, estados=r.get_estados(), etapas=r.get_etapas(), circuns=r.get_tipocircun(), 
+                                puede_consultar='Reportes - Consulta' in permisos_usr)
     else:
         return render_template('msg.html', l1='Sin permisos asignados !!')
 
-
+'''
 @app.route('/reportespdf', methods=['GET', 'POST'])
 def reportespdf():
     new = 2
@@ -873,7 +874,7 @@ def reportespdf():
             return ('PDF Generado')
         else:
             return ('PDF Generado')
-
+'''
 
 @app.route('/get_provincias_all', methods=['GET', 'POST'])
 def get_provincia_all():
@@ -1275,7 +1276,7 @@ def zonas(idloc, iddist, ban):
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
 
-        if iddist == '0':  # es NEW
+        if iddist == '0' and idloc == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
                 #return render_template('asiento.html', error=error, u=u, load_u=True)
@@ -1290,14 +1291,18 @@ def zonas(idloc, iddist, ban):
                     return render_template('zonare.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
                 else:
                     rows = z.get_zonas_all(usrdep)
-                    return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
+                    return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                            puede_editar='Zonas - Edición' in permisos_usr
+                                          )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
-            z.upd_dist(request.form['idloc'], iddist, request.form['nrodist'], request.form['nomdist'], fa, usr)
+            z.upd_dist(request.form['idloc1'], iddist, request.form['nrodist'], request.form['nomdist'], fa, usr)
 
             rows = z.get_zonas_all(usrdep)
-            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr)  # render a template
-    else: # Viene de <asientos_list>
+            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                    puede_editar='Zonas - Edición' in permisos_usr
+                                  )# render a template
+    else: # Viene de <zonas_list>
         if iddist != '0' or idloc !='0':  # EDIT
             if z.get_zonadist_idloc(idloc, iddist) == True:
                 """if a.docAct == None:

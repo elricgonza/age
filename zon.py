@@ -12,8 +12,8 @@ class Zon:
 
     def get_zon_all(self, usrdep):        
         s = "select l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona from GeografiaElectoral_app.dbo.ZONA z" + \
-            " inner join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
-            " inner join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" 
+            " left join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
+            " left join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" 
         if usrdep != 0 :
             s = s + " where l.DepLoc = %d order by l.IdLoc, l.NomLoc"
             self.cur.execute(s, usrdep)
@@ -31,8 +31,8 @@ class Zon:
         up_zonadist = idloczona, idzon
         s = "select l.IdLoc, l.NomLoc, z.Zona, z.NomZona, z.DistZona, z.fechaIngreso, z.fechaAct, z.usuario, d.CircunDist" + \
             " from GeografiaElectoral_app.dbo.ZONA z" + \
-            " inner join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
-            " inner join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" + \
+            " left join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
+            " left join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" + \
             " where z.IdLocZona= %d and z.Zona= %d"
         self.cur.execute(s, up_zonadist)
         row = self.cur.fetchone()
