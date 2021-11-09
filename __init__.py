@@ -185,7 +185,6 @@ def get_json_ptos():
 
     j = get_json.GetJson(cxpg)    
     return(j.get_reci_mts(lat, long, 5000))
-#ppp
 
 
 @app.route('/vs/<dep>', methods=['GET', 'POST'])
