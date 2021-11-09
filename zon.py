@@ -15,10 +15,10 @@ class Zon:
             " left join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
             " left join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" 
         if usrdep != 0 :
-            s = s + " where l.DepLoc = %d order by l.IdLoc, l.NomLoc"
+            s = s + " where l.estado in (16, 17, 75, 76) and l.DepLoc = %d order by l.IdLoc, l.NomLoc"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " order by l.IdLoc, l.NomLoc"
+            s = s + " where l.estado in (16, 17, 75, 76) order by l.IdLoc, l.NomLoc"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()

@@ -246,7 +246,7 @@
             <div class="col-md-2">
                 <label for="ruereci">Cod. RUE:</label>
                 <input type="text" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci"  required pattern="^ *\d[\d ]*$"
-                        {% if load and rces.codrue != '0' %}
+                        {% if load and rces.codrue != '0' and rces.tiporecinto == 7 %}
                             enabled value="{{ rces.codrue }}"
                          {% else %}
                             disabled   
@@ -257,7 +257,7 @@
             <div class="col-md-2">
                 <label for="edireci">Cod. Edificio:</label>
                 <input type="text" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"  required pattern="^ *\d[\d ]*$"
-                        {% if load and rces.codrueedif != '0' %}
+                        {% if load and rces.codrueedif != '0' and rces.tiporecinto == 7 %}
                             enabled value="{{ rces.codrueedif }}"
                          {% else %}
                             disabled
@@ -269,7 +269,7 @@
                 <label for="depenreci">Tipo de Dependencia:</label>
                 <input type="hidden" name="reci_iddepen" value="">                          
                 <select id="idepenreci" name=depenreci class="form-control" required
-                        {% if load and rces.codrueedif != '0' %}
+                        {% if load and rces.codrueedif != '0' and rces.tiporecinto == 7 %}
                                 enabled
                          {% else %}
                                 disabled
