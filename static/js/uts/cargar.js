@@ -10,8 +10,9 @@ function cargar(valor, data) {
                 var i=1;
                 $("#iprovincia").append('<option></option>');
                 $.each(datos, function(index, obj){
+                    console.log(valor);
+                    console.log(obj[0]);
                     if(valor==obj[0]){
-                        console.log(obj[0]+', '+obj[2]);
                         $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');    
                         i++;
                     }
@@ -91,7 +92,6 @@ function cargar(valor, data) {
             $.getJSON("/get_pueblos_all", {
                 dep: dep
             }, function(datos8){
-                console.log(datos8);
                 $("#ipueblo").append('<option></option>');                
                 $.each(datos8, function(index8, obj8){           
                     $("#ipueblo").append('<option value="' + obj8[0] + '">' + obj8[1] + '</option>');
@@ -121,9 +121,8 @@ function cargar(valor, data) {
             }, function(datos10){                
                 $.each(datos10, function(index10, obj10){           
                         recintos=recintos+obj10[1]+'; ';
-                        circundist1 = obj10[0];
                 });
-                if(circundist!=circundist1 && circundist!=''){
+                if(circundist!=cirs[2] && circundist!=''){
                     alert(recintos);
                 }
             });
