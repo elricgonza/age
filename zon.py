@@ -11,14 +11,15 @@ class Zon:
         self.cur = cx.cursor()
 
     def get_zon_all(self, usrdep):        
-        s = "select l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona from GeografiaElectoral_app.dbo.ZONA z" + \
-            " left join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
-            " left join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" 
+        s = "select l.IdLoc, r.Reci, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona from [GeografiaElectoral_app].[dbo].[RECI] r" + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
+            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
+            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist"
         if usrdep != 0 :
-            s = s + " where l.estado in (16, 17, 75, 76) and l.DepLoc = %d order by l.IdLoc, l.NomLoc"
+            s = s + " where r.estado in (1, 2, 79, 80) and l.DepLoc = %d order by l.IdLoc, l.NomLoc"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where l.estado in (16, 17, 75, 76) order by l.IdLoc, l.NomLoc"
+            s = s + " where r.estado in (1, 2, 79, 80) order by l.IdLoc, l.NomLoc"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -30,9 +31,10 @@ class Zon:
     def get_zon_idloc(self, idloczona, idzon):
         up_zonadist = idloczona, idzon
         s = "select l.IdLoc, l.NomLoc, z.Zona, z.NomZona, z.DistZona, z.fechaIngreso, z.fechaAct, z.usuario, d.CircunDist" + \
-            " from GeografiaElectoral_app.dbo.ZONA z" + \
-            " left join GeografiaElectoral_app.dbo.DIST d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
-            " left join GeografiaElectoral_app.dbo.LOC l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist" + \
+            " from [GeografiaElectoral_app].[dbo].[RECI] r" + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
+            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
+            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist" + \
             " where z.IdLocZona= %d and z.Zona= %d"
         self.cur.execute(s, up_zonadist)
         row = self.cur.fetchone()
@@ -77,7 +79,8 @@ class Zon:
             print("Error --UPD-- Zona...")
 
     def get_circundist(self, idloc, circd):        
-        s = "select CircunDist, NombreRecinto from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional] where IdLoc = %d and CircunDist = %d order by Dist"
+        s = "select CircunDist, NombreRecinto from [bdge].[dbo].[GeoRecintos_all] where idEstado in (1, 2, 79, 80) and IdLoc = %d" + \
+            " and CircunDist = %d order by Dist"
         consulta = idloc, circd
         self.cur.execute(s, consulta)
         rows = self.cur.fetchall()

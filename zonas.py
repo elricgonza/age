@@ -10,16 +10,19 @@ class Zonas:
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_zonas_all(self, usrdep):        
-        s = "select d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[DIST] d " + \
-            "left join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist "
+        s = "select d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[RECI] r" + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
+            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
+            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist"
         if usrdep != 0 :
             #s = s + " where l.DepLoc = %d and d.Dist>0 order by d.IdLocDist, d.Dist"
-            s = s + " where l.estado in (16, 17, 75, 76) and l.DepLoc = %d order by d.IdLocDist, d.Dist"
+            s = s + " where r.estado in (1, 2, 79, 80) and l.DepLoc = %d order by d.IdLocDist, d.Dist"
             self.cur.execute(s, usrdep)
         else:
             #s = s + " where d.Dist>0 order by d.IdLocDist, d.Dist"
-            s = s + " where l.estado in (16, 17, 75, 76) order by d.IdLocDist, d.Dist"
+            s = s + " where r.estado in (1, 2, 79, 80) order by d.IdLocDist, d.Dist"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
