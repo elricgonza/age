@@ -101,7 +101,7 @@ function getgeo(event) {
                 document.getElementById("icircun").setAttribute("value", data.nrocircun)
             });
           
-        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
+        buildMapCoord($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
 } //getgeo
 
@@ -241,12 +241,12 @@ function buildMapCoord(lat,lon)  {
       latitud: $('input[name="latitud"]').val(),
       longitud: $('input[name="longitud"]').val()
   }, function(data) {
-      document.getElementById("ideploc").setAttribute("value", data.dep)
-      document.getElementById("idepartamento").setAttribute("value", data.departamento)
-      document.getElementById("iprovloc").setAttribute("value", data.prov)
-      document.getElementById("iprovincia").setAttribute("value", data.provincia)
-      document.getElementById("isecloc").setAttribute("value", data.sec)
-      document.getElementById("imunicipio").setAttribute("value", data.municipio)
-      document.getElementById("icircun").setAttribute("value", data.nrocircun)
+      document.getElementById("ideploc").setAttribute("value", 'dd')
+      document.getElementById("idepartamento").setAttribute("value", data.gj_ptos)
+      document.getElementById("iprovloc").setAttribute("value", 'pp')
+      document.getElementById("iprovincia").setAttribute("value", 'ddpp')
+      document.getElementById("isecloc").setAttribute("value", 'ss')
+      document.getElementById("imunicipio").setAttribute("value", 'ddss')
+      document.getElementById("icircun").setAttribute("value", 'cc')
   });
 }
