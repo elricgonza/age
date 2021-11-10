@@ -184,8 +184,9 @@ def get_json_ptos():
     long = request.args.get('longitud', 0, type=float)
 
     j = get_json.GetJson(cxpg)    
-    ptos = j.get_reci_mts(lat, long, 5000)
-    return {'gj_ptos' : 'hola'}
+    gj_ptos = j.get_reci_mts(lat, long, 650)
+    print(gj_ptos)
+    return {'gj_ptos' : gj_ptos}
 
 
 @app.route('/vs/<dep>', methods=['GET', 'POST'])

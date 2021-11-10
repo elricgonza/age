@@ -241,6 +241,7 @@ function buildMapCoord(lat,lon)  {
       latitud: $('input[name="latitud"]').val(),
       longitud: $('input[name="longitud"]').val()
   }, function(data) {
+    /*
       document.getElementById("ideploc").setAttribute("value", 'dd')
       document.getElementById("idepartamento").setAttribute("value", data.gj_ptos)
       document.getElementById("iprovloc").setAttribute("value", 'pp')
@@ -248,5 +249,7 @@ function buildMapCoord(lat,lon)  {
       document.getElementById("isecloc").setAttribute("value", 'ss')
       document.getElementById("imunicipio").setAttribute("value", 'ddss')
       document.getElementById("icircun").setAttribute("value", 'cc')
+    */
+    alert(data.gj_ptos[1]);
   });
 }
