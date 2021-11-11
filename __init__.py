@@ -194,17 +194,12 @@ def vs(dep):
     j = get_json.GetJson(cxpg)
 
     #geo_json = j.get_loc(dep)
-    gj_reci = j.get_reci(dep)
-    gj_asi = j.get_asi(dep)
-    gj_mun = j.get_mun(dep)
-    gj_prov = j.get_prov(dep)
-    gj_cir = j.get_cir(dep)
     return render_template('vs.html', 
-                            gj_reci=gj_reci, 
-                            gj_asi=gj_asi, 
-                            gj_cir=gj_cir,
-                            gj_mun=gj_mun,
-                            gj_prov=gj_prov)
+                            gj_reci=j.get_reci(dep),
+                            gj_asi=j.get_asi(dep), 
+                            gj_cir=j.get_cir(dep),
+                            gj_mun=j.get_mun(dep),
+                            gj_prov=j.get_prov(dep))
 
 
 @app.route('/')
@@ -935,6 +930,7 @@ def recinto(idreci, idlocreci):
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
@@ -1015,11 +1011,17 @@ def recinto(idreci, idlocreci):
                     rc.usuario = usr
 
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                                       gj_cir=j.get_cir(usrdep),
+                                       gj_mun=j.get_mun(usrdep),
+                                       gj_prov=j.get_prov(usrdep))
 
     # New
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                           gj_cir=j.get_cir(usrdep),
+                           gj_mun=j.get_mun(usrdep),
+                           gj_prov=j.get_prov(usrdep))
 
 
 @app.route('/get_asientos_all1', methods=['GET', 'POST'])
