@@ -1,3 +1,4 @@
+// ---------------------------------------------------------was  viewmap.js
     // Set style function that sets fill color property
     function style(feature) {
         return {
@@ -184,7 +185,7 @@ function viewMap() {
     });
     */
 
-    var munLayer = L.geoJson( {{ gj_mun | safe }}, {onEachFeature: forEachFeatureMun, style: style});
+    var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
     var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
     var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
 
