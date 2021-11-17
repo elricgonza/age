@@ -65,11 +65,14 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
 
     // Set up map
 
-    var mapCenter = [-17.05678, -64.81934];
+    lat = $('input[name="latitud"]').val();
+    long = $('input[name="longitud"]').val();
+
+    var mapCenter = [lat, long];
     var map = L.map('map', {
       defaultExtentControl: true,
       center: mapCenter,
-      zoom: 6,
+      zoom: 16,
       layers: [mapboxStreets] // only add one!
     });
 
@@ -197,6 +200,10 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, aimingRectOptions : rect1, shadowRectOptions: rect2}).addTo(map);
 
 
+    // remove - clear
+    map.removeLayer(munLayer);
+
+
     // add marker & popup with coord
     var marker = L.marker([0,0]);
 
@@ -229,11 +236,8 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       }
     );
 
-  alert('rarooo1..');
-
 }
 
-//--------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------was  viewmap.js
     // Set style function that sets fill color property
