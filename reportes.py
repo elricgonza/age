@@ -11,39 +11,22 @@ class Reportes:
         self.cx = cx
         self.cur = cx.cursor()
 
+    def get_rep_asientos_all(self, usrdep):        
+        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
+            " AsientoElectoral as Asiento, tipoCircunscripcion, DEP, PROV, SEC, estado, etapa, urbanorural" + \
+            " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        if usrdep != 0 :
+            s = s + " where DEP = %d order by prov, sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by DEP, PROV, SEC"
+            self.cur.execute(s)
 
-    def get_paises_all(self, usrdep):
-            s = "select IdPais, NomPais from [GeografiaElectoral_app].[dbo].[PAIS]"
-            if usrdep != 0 :
-                s = s + " where IdPais = %d order by IdPais"
-                self.cur.execute(s, usrdep)
-            else:
-                s = s + " where IdPais != 32 order by IdPais"
-                self.cur.execute(s)
-
-            rows = self.cur.fetchall()
-            print(rows)
-            if self.cur.rowcount == 0:
-                return False
-            else:
-                return rows
-
-    def get_departamentos_all(self, usrdep):
-            s = "select Dep, NomDep, IdPais from [GeografiaElectoral_app].[dbo].[DEP]"
-            if usrdep != 0 :
-                s = s + " where Dep = %d order by Dep"
-                self.cur.execute(s, usrdep)
-            else:
-                s = s + " order by Dep"
-                self.cur.execute(s)
-
-            rows = self.cur.fetchall()
-            print(rows)
-            if self.cur.rowcount == 0:
-                return False
-            else:
-                return rows
-
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
 
     def get_provincias_all(self, usrdep):
         s = "select DepProv, Prov, NomProv from [GeografiaElectoral_app].[dbo].[PROV]"
@@ -77,5 +60,31 @@ class Reportes:
         else:
             return rows
 
+    def get_estados(self):
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=3"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_etapas(self):
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_tipocircun(self):
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=7"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
 
 

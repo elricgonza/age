@@ -815,7 +815,7 @@ def get_geo_all():
 def reportes():
     r = rep.Reportes(cxms)
     if 'Reportes - Consulta' in permisos_usr:
-        return render_template('reportes.html', load_r=False, estados=r.get_estados(), etapas=r.get_etapas(), circuns=r.get_tipocircun(), 
+        return render_template('reportes.html', load_r=False, asientos=r.get_rep_asientos_all(usrdep), estados=r.get_estados(), etapas=r.get_etapas(), circuns=r.get_tipocircun(), 
                                 puede_consultar='Reportes - Consulta' in permisos_usr)
     else:
         return render_template('msg.html', l1='Sin permisos asignados !!')
@@ -1880,9 +1880,11 @@ def homologacion_list():
         inicio = '00-00-0000'
         final = '00-00-0000'
     rows = ahomo.get_homologacion_all(usrdep, inicio, final)
+    rowj = ahomo.get_homojurisd_all(usrdep, inicio, final)
     if rows:
         if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
+            return render_template('homologacion_list.html', homologaciones=rows, homojurisds=rowj, load=True, ban=True, \
+                                    inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -1895,6 +1897,14 @@ def homologacion_list():
 def homologacion(idhomo, inicio, final):
     ahomo = homo.Homologacion(cxms)
     ahomo.get_homologacion_idhom(idhomo);
+    return render_template('homologacion.html', ahomo=ahomo, inicio=inicio, final=final, load=True, ban=True)
+
+
+@app.route('/homojurisd/<idhomo>/<inicio>/<final>', methods=['GET', 'POST'])
+@login_required
+def homojurisd(idhomo, inicio, final):
+    ahomo = homo.Homologacion(cxms)
+    ahomo.get_homojurisd_idhom(idhomo);
     return render_template('homologacion.html', ahomo=ahomo, inicio=inicio, final=final, load=True, ban=True)
 
 

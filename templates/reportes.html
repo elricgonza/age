@@ -3,141 +3,326 @@
 {% block content %}
 
 {% block js_css %}
-    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrMTfBa9NXyO3izpTE1hrR96YGxmMin4g"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/buildmap_rep.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
+    
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    Datatables  -->
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>  
+    
+    searchPanes -->
+    <!--<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.0.1/css/searchPanes.dataTables.min.css">
+    select -->
+    <!--<link href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+            
+    Datatables-->
+    <!--<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>  
+
+    searchPanes   -->
+    <!--<script src="https://cdn.datatables.net/searchpanes/1.0.1/js/dataTables.searchPanes.min.js"></script>
+    select -->
+    <!--<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>-->    
+
+    <!--Nuevo-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.4.0/css/searchPanes.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">        
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/1.4.0/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+
+    <style type="text/css">
+        table th{
+            background-color: #17a2b8;
+            color: white;
+        }
+        input[type="text"]{
+            width: 100px;
+        }
+    </style>
 {% endblock %}
 <div class="container">
-    <h2 class="text-center text-blue pt-3">Reportes</h2>
-    <form id="form1" method="POST" action="{{ url_for('reportespdf') }}" target="_blank">
-        <div class="form-row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <label for="">.</label>
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoall(event)" >Visualizar imágen Satelital</button>
-            </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+            <h5>--- Reportes ---</h5>
         </div>
-        <div class="my-content">
-            <div class="container">
-                <div class="form-row">
-                    <div class="col-md-4">
+        <div class="col-xs-6 col-md-4">
+        </div>
+    </div>
+    <div class="row">
+        <ul class="nav-tabs nav nav-justified">
+            <li class="nav-item">                
+                <a href="#asientos" class="nav-link" data-toggle="tab">Asientos</a>                
+            </li>
+            <li class="nav-item">
+                <a href="#recintos" class="nav-link" data-toggle="tab">Recintos</a>
+            </li>
+            <li class="nav-item">
+                <a href="#homologacion" class="nav-link" data-toggle="tab">Homologaciones</a>
+            </li>
+            <li class="nav-item">
+                <a href="#jurisdiccion" class="nav-link" data-toggle="tab">Jurisdicciones</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content container">
+        <div class="tab-pane" id="asientos">            
+            <form id="formreportes" method="POST" action="">
+                <div class="my-content">
+                    <div class="container">                        
                         <div class="row">
-                            <div class="col-sm-12 col-sm-offset-3 myform-cont">
-                                <div class="myform-top">
-                                    <div class="myform-top-left">
-                                        <h3>Asiento Electoral.</h3>
-                                        <p>Busquedas Nacionales:</p>
-                                    </div>
-                                    <div class="myform-top-right">
-                                        <i class="fa fa-search-plus" aria-hidden="true"></i>
-                                    </div>
-                                    <!--<script>var i=console.log(funcion());</script>-->
-                                    <div class="myreport-bottom-left">
-                                        <a href="javascript:void();" onclick="document.getElementById('form1').submit();"><i class="fas fa-file-pdf" style="font-size: 35px;"></i></a>
-                                    </div>
-                                </div>
-                                <div class="myform-bottom">
-                                    <form role="form" action="" method="post" id="limpiar_formulario">
-                                        <div class="form-group">  
-                                        <label for="dpto">Por Departamento:</label>                                          
-                                            <select id="idpto" name="dpto" class="form-control" onchange="cargar(this.value, 0)">
-                                                <option></option>                                                          
-                                                <option value=1>Chuquisaca</option>
-                                                <option value=2>La Paz</option>
-                                                <option value=3>Cochabamba</option>
-                                                <option value=4>Oruro</option>
-                                                <option value=5>Potosí</option>
-                                                <option value=6>Tarija</option>
-                                                <option value=7>Santa Cruz</option>
-                                                <option value=8>Bení</option>
-                                                <option value=9>Pando</option>                                            
-                                            </select>                                             
-                                            <div class="invalid-feedback">Debe Seleccionar un Departamento...</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="provincia">Por Provincia:</label>
-                                            <select id="iprovincia" name="provincia" class="form-control" onchange="cargar(this.value, 1)">         
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="municipio">Por Municipio:</label>
-                                            <select id="imunicipio" name="municipio" class="form-control"> 
-                                            </select>
-                                        </div>                                        
-                                        <label for="docAct">Por Tipo de Circunscripción:</label>
-                                        <div class="form-group">                                            
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="checkbox" name="cir1" id="icir1" value="1">
-                                              <label class="form-check-label" for="cir1">Uninominal</label> 
-                                            </div> 
-                                            <div class="form-check form-check-inline"> 
-                                              <input class="form-check-input" type="checkbox" name="cir2" id="icir2" value="2">
-                                              <label class="form-check-label" for="cir2">Especial</label>
-                                            </div> 
-                                            <div class="form-check form-check-inline"> 
-                                              <input class="form-check-input" type="checkbox" name="cir3" id="icir3" value="3">
-                                              <label class="form-check-label" for="cir3">Mixto</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="estado">Por Estado:</label>
-                                            <select id="iestado" name="estado" class="form-control">
-                                                <option></option>
-                                                <option value=1>Habilitado TED</option>
-                                                <option value=2>Rehabilitado TED</option>
-                                                <option value=3>Suspendido TED</option>
-                                                <option value=4>Suprimido TED</option>
-                                                <option value=101>Habilitado TSE</option>
-                                                <option value=102>Rehabilitado TSE</option>
-                                                <option value=103>Suspendido TSE</option>
-                                                <option value=104>Suprimido TSE</option>                                                
-                                            </select>
-                                        </div>
-                                        <label for="docAct">Por rango de Fechas:</label>
-                                        <div class="input-group">
-                                          <input name="inicio" id="iinicio" type="date" class="form-control">
-                                          <span class="input-group-addon">-</span>
-                                          <input name="final" id="ifinal" type="date" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="localidad">Por Asiento:</label>
-                                            <input type="text" name="localidad" placeholder="Nombre del Asiento..." class="form-control" id="ilocalidad">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="mybtn" onclick="getgeoall(event)">Buscar</button>
-                                            <button type="button" class="btn btn-secondary" type="reset" data-dismiss="modal" id="btnBorrar">Limpiar</button>
-                                        </div>
-                                    </form>
-                                </div>
+                            <div class="table-responsive">
+                                <table id="id_dt" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr style="font-size: 13px;">
+                                           <th>IdLoc</th>
+                                           <th>Departamento</th>
+                                           <th>Provincia</th>
+                                           <th>Municipio</th>
+                                           <th>Asiento</th>
+                                           <th>Tipo Cir.</th>
+                                           <th>Estado</th>
+                                           <th>Etapa</th>
+                                           <th>UrbRur</th>                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>    
+                                        {% for asiento in asientos %}
+                                            <tr style="font-size: 13px;">
+                                                <td>{{ asiento[0] }}</td>
+                                                <td>{{ asiento[1] }}</td>
+                                                <td>{{ asiento[2] }}</td>
+                                                <td>{{ asiento[3] }}</td>
+                                                <td>{{ asiento[4] }}</td>
+                                                <td>{{ asiento[5] }}</td>
+                                                <td>{{ asiento[9] }}</td>
+                                                <td>{{ asiento[10] }}</td>
+                                                <td>{{ asiento[11] }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-8">
-                        <div id="map" style="position:relative; width:100%; height:780px; background: rgba(0, 0, 0, 0.10);"></div>
-                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
-    <script>
-       $("#btnBorrar").click(function(event) {
-           $("#limpiar_formulario")[0].reset();
-       });
-    </script>
-    {% if error %}
+        <script>
+            /*$(document).ready(function(){
+                $('#id_dt').DataTable({
+                    searchPanes:{
+                        cascadePanes:true,
+                        layout: 'columns-6',
+                        dtOpts:{
+                            dom:'tp',
+                            paging:'true',
+                            pagingType:'simple',
+                            searching:true
+                        }
+                    },
+                    dom:'Pfrtip',
+                    columnDefs:[{
+                        searchPanes:{
+                            show:false
+                        },
+                        targets:[0, 2]
+                    }
+                    ]
+                });
+            });*/
+            /*$(document).ready(function(){
+                $('#id_dt').DataTable({
+                    dom: "Bfrtip",
+                    buttons:{
+                        dom:{
+                            button:{
+                                className: 'btn'
+                            }
+                        },
+                        buttons:[
+                            {
+                                extend: "excel",
+                                text: 'Exportar a Excel',
+                                className: 'btn btn-outline-success',
+                                excelStyles:{
+                                    template: 'header_blue'
+                                }
+                            }
+                        ]
+                    }
+                });
+            });*/
+
+            $(document).ready(function() {
+                $('#example').DataTable( {
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                columns: [ 0, ':visible' ]
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2, 5 ]
+                            }
+                        },
+                        'colvis'
+                    ]
+                } );
+            } );
+
+            $(document).ready(function() {
+                $('#id_dt').DataTable({
+                    searchPanes:{
+                        cascadePanes:true,
+                        layout: 'columns-6',
+                        dtOpts:{
+                            dom:'tp',
+                            paging:'true',
+                            pagingType:'simple',
+                            searching:true
+                        }
+                    },
+                    dom: 'PBfrtip',
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                columns: [ 0, ':visible' ]
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2, 5 ]
+                            }
+                        },
+                        'colvis'
+                    ],
+                    columnDefs:[{
+                        searchPanes:{
+                            show:false
+                        },
+                        targets:[0, 2]
+                    }
+                    ]
+                });
+            });
+            /*$(document).ready(function(){
+                var table = $('#id_dt').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true
+                });
+                //creamos una fila en el head de la tabla y lo colocamos para cada columna
+                $('#id_dt thead tr').clone(true).appendTo('#id_dt thead');
+                $('#id_dt thead tr:eq(1) th').each(function(i){
+                    var title = $(this).text(); //es el nombre de la columna
+                    $(this).html('<input type="text" placeholder="Buscar..."/>');
+
+                    $('input', this).on('keyup change', function(){
+                        if(table.column(i).search()!== this.value){
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+                });
+            });*/
+
+            
+        </script>
+        <div class="tab-pane" id="recintos">
+            <br>
+            <h1>Recintos</h1>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+        <div class="tab-pane" id="homologacion">
+            <br>
+            <h1>Homologaciones</h1>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+        <div class="tab-pane" id="jurisdiccion">
+            <br>
+            <h1>Jurisdicciones</h1>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+    </div>
     <br>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" onclick="pasa_jurisd_asi();" class="btn btn-outline-danger btn-md btn-block">Volver</button>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    {% if error %}
     <div class="alert alert-danger alert-dismissible fade show">
         <strong>Error!</strong> {{ error }} 
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
     {% endif %}
 </div> <!--main-->
-
 {% endblock %}
 
