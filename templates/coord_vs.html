@@ -544,12 +544,13 @@
     );
 
 
-    // add marker - coordenadas - parametro
-    map.setView( [{{ latitud }}, {{ longitud }}], 11);
-
     // remove - clear
     map.removeLayer(reciLayer);
     map.removeLayer(munLayer);
+
+
+    // add marker - coordenadas - parametro
+    map.setView( [{{ latitud }}, {{ longitud }}], 11);
 
     const markerIconParam = L.icon({
         iconSize: [25, 41],

@@ -236,6 +236,26 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       }
     );
 
+
+
+    // add marker - coordenadas - parametro
+    const markerIconParam = L.icon({
+        iconSize: [25, 41],
+        iconAnchor: [10, 41],
+        popupAnchor: [2, -40],
+        // specify the path here
+        iconUrl:   "../../static/css/leaflet1.5.1/images/marker-icon.png",
+        shadowUrl: "../../static/css/leaflet1.5.1/images/marker-shadow.png"
+    });
+
+    L.marker([lat, long],
+          {
+            title: "Lat.: " + lat +  "  Long.: " + long,
+              opacity: 0.8,
+              icon: markerIconParam
+          }
+      ).addTo(map);
+
 }
 
 
