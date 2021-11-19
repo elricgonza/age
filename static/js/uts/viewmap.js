@@ -98,7 +98,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     //----- Add the Street View buttons in the bottom left corner -----
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
     var iconStreet = L.icon({
-        iconUrl: '../static/iconos/icons8-street-view-52.png',
+        iconUrl: '../../static/iconos/icons8-street-view-52.png',
         iconSize: [52, 52]
         })
     var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet});
@@ -111,7 +111,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
             y otros Habilitado. Ubique posición y presione click en opciones  \
             (ubicado en la parte inferior/izquierda) ');
 
-    L.easyButton('<img src="../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
+    L.easyButton('<img src="../../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
       if (sw_marker_gsv == 0) {
          sv = L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
          gsvPopup.setLatLng(map.getCenter()).openOn(map);
@@ -124,7 +124,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
          gsvPopup.removeFrom(map);
          sw_marker_gsv = 0;
          }
-      },'Habilitar/Inhabilitar Google Street View (GSV)').addTo(map);
+      },'Habilitar/Inhabilitar Google Street View (GSV)2').addTo(map);
     // end Street View - easyButton
 
 
