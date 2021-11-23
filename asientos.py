@@ -253,20 +253,20 @@ class Asientos:
     def upd_asiento_ex(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, tipolocloc, \
-                    marcaloc, latitud, longitud, \
+                    latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal):
         
         asiento = deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, tipolocloc, \
-                    marcaloc, latitud, longitud, \
+                    latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, idloc
         s = "update GeografiaElectoral_app.dbo.loc" + \
             " set deploc= %d, provloc= %d, secloc= %d, nomloc= %s, poblacionloc= %d, " + \
             " poblacionelecloc= %s, tipolocloc= %d, " + \
-            " marcaloc= %d, latitud= %s, longitud= %d, " + \
+            " latitud= %s, longitud= %d, " + \
             " estado= %d, circunconsulado= %s, " + \
             " etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
             " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d" + \

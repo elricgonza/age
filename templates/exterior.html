@@ -147,31 +147,7 @@
 
         <br>
         <div class="row">
-            <div class="col-md-3">
-                <label>Habilitado/Inhabilitado</label>
-                <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                    <label 
-                            {% if load  and a.marcaloc == "1" %}
-                                class="btn btn-outline-dark active"
-                            {% else %}
-                                class="btn btn-outline-dark"
-                            {% endif %}
-                    >
-                        <input type="radio" value=1 name="marcaloc" id="imarcaloc1" autocomplete="off">Habilitado
-                    </label>
-                    <label
-                            {% if load  and a.marcaloc == "2" %}
-                                class="btn btn-outline-dark active"
-                            {% else %}
-                                class="btn btn-outline-dark"
-                            {% endif %}
-                    >
-                        <input type="radio" value=2 name="marcaloc" id="imarcaloc2" autocomplete="off">Inhabilitado
-                    </label>
-                </div>
-            </div>
-            <div class="col-md-3">
-                
+            <div class="col-md-6">                
             </div>
             <div class="col-md-6">
                 <label for="iestado">Estado</label>

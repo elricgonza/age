@@ -14,23 +14,21 @@
                 <a class="nav-link" href="/">Inicio</a>
             </li>
 
-             <!-- {% if current_user.is_authenticated %}
+            {% if current_user.is_authenticated %}
                 <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle=" dropdown" aria-haspopup="true" aria-expanded="false">Asientos
-                        </a>
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Asientos</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="/asientos_list">Asientos Electorales</a> 
-                        {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
-                            <a class="dropdown-item" href="/exterior_list"
-                            <a class="dropdown-item>Asientos Exterior</a> 
-                            Actualizar JuridicciónHomoogación</a>  {% endif %}
+                         <a class="dropdown-item" href="/asientos_list">Asientos Electorales</a>
+                         {% if current_user.is_authenticated and current_user.usuario =='unacional' %}
+                            <a class="dropdown-item" href="/exterior_list">Asientos Exterior</a>
+                         {% endif %}
                     </div>
                 </div>
-            {% endif %} -->
+            {% endif %}
 
-            <li class="nav-item">
+            <!--<li class="nav-item">
                 <a class="nav-link" href="/asientos_list">Asientos</a>
-            </li>
+            </li>-->
 
             {% if current_user.is_authenticated %}
                 <div class="dropdown">

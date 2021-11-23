@@ -716,7 +716,8 @@ def exterior_list():
     rows = ex.get_exterior_all(usrdep)
     if rows:
         if permisos_usr:    # tiene pemisos asignados
-            return render_template('exterior_list.html', exteriors=rows, puede_adicionar='Exterior - Adición' in permisos_usr)  # render a template
+            return render_template('exterior_list.html', exteriors=rows, puede_adicionar='Exterior - Adición' in permisos_usr, \
+                                    puede_editar='Exterior - Edición' in permisos_usr)  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
@@ -742,10 +743,10 @@ def exterior(idloc):
                 print('msg-err')
             else:
                 nextid = a.get_next_idloc()
-                a.add_asiento(nextid, request.form['dpto'], request.form['provincia'], \
+                ex.add_exterior(nextid, request.form['dpto'], request.form['provincia'], \
                               request.form['municipio'], request.form['nomloc'], 0, \
                               request.form['poblacionelecloc'], '2007-01-01', 0, \
-                              request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
+                              request.form['latitud'], request.form['longitud'], \
                               request.form['estado'], request.form['cirConsulado'], request.form['etapa'], \
                               request.form['obsUbicacion'], request.form['obs'], request.form['fechaIngreso'][:-7], \
                               fa, request.form['usuario'], 0, request.form['docRspNal'], 0)
@@ -753,13 +754,14 @@ def exterior(idloc):
                 d.upd_doc(0, request.form['docRspNal'], 0, request.form['doc_idRspNal'], 0)
 
                 rows = ex.get_exterior_all(usrdep)
-                return render_template('exterior_list.html', exteriors=rows, puede_adicionar='Exterior - Adición' in permisos_usr)  # render a template
+                return render_template('exterior_list.html', exteriors=rows, puede_adicionar='Exterior - Adición' in permisos_usr, \
+                                        puede_editar='Exterior - Edición' in permisos_usr)  # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
             a.upd_asiento_ex(idloc, request.form['dpto'], request.form['provincia'], \
                               request.form['municipio'], request.form['nomloc'], 0, \
                               request.form['poblacionelecloc'], 0, \
-                              request.form['marcaloc'], request.form['latitud'], request.form['longitud'], \
+                              request.form['latitud'], request.form['longitud'], \
                               request.form['estado'], request.form['cirConsulado'], request.form['etapa'], \
                               request.form['obsUbicacion'], request.form['obs'], \
                               str(request.form['fechaIngreso']), fa, usr, 0, request.form['docRspNal'])
@@ -767,19 +769,19 @@ def exterior(idloc):
             d.upd_doc(0, 0, 0, request.form['doc_idRspNal'], 0)
 
             rows = ex.get_exterior_all(usrdep)
-            return render_template('exterior_list.html', exteriors=rows, puede_adicionar='Exterior - Adición' in permisos_usr)  # render a template
+            return render_template('exterior_list.html', exteriors=rows, puede_adicionar='Exterior - Adición' in permisos_usr, \
+                                    puede_editar='Exterior - Edición' in permisos_usr)  # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
-            if a.get_asiento_idloc(idloc) == True:
-
-                if a.fechaIngreso == None:
-                    a.fechaIngreso = str(datetime.datetime.now())[:-7]
-                if a.fechaAct == None:
+            if ex.get_exterior_idloc(idloc):
+                if ex.fechaIngreso == None:
+                    ex.fechaIngreso = str(datetime.datetime.now())[:-7]
+                if ex.fechaAct == None:
                     a.fechaAct = str(datetime.datetime.now())[:-7]
-                if a.usuario == None:
-                    a.usuario = usr
+                if ex.usuario == None:
+                    ex.usuario = usr
 
-                return render_template('exterior.html', error=error, a=a, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep),
+                return render_template('exterior.html', error=error, a=ex, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep),
                                        dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep),
                                        municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
@@ -815,8 +817,10 @@ def get_geo_all():
 def reportes():
     r = rep.Reportes(cxms)
     if 'Reportes - Consulta' in permisos_usr:
-        return render_template('reportes.html', load_r=False, asientos=r.get_rep_asientos_all(usrdep), estados=r.get_estados(), etapas=r.get_etapas(), circuns=r.get_tipocircun(), 
-                                puede_consultar='Reportes - Consulta' in permisos_usr)
+        return render_template('reportes.html', asientos=r.get_rep_asientos_all(usrdep), recintos=r.get_rep_recintos_all(usrdep), 
+                                homologaciones=r.get_rep_homologacion_all(usrdep), homojurisds=r.get_rep_homojurisd_all(usrdep),
+                                jurisdicciones=r.get_rep_jurisdiccion_all(usrdep), transacciones=r.get_rep_logtransaccion_all(usrdep), 
+                                exteriores=r.get_rep_exterior_all(), puede_consultar='Reportes - Consulta' in permisos_usr)
     else:
         return render_template('msg.html', l1='Sin permisos asignados !!')
 
