@@ -207,6 +207,14 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     // add marker & popup with coord
     var marker = L.marker([0,0]);
 
+    function markerOnClick(e)
+    {
+      var coord = e.latlng.toString().split(',');
+      var lat = coord[0].split('(');
+      var lng = coord[1].split(')');
+      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
+    }
+
     map.on('contextmenu',
       function mapContextmenuListen(e) {
         var pos = e.latlng;
@@ -397,11 +405,4 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     }
 
 
-    function markerOnClick(e)
-    {
-      var coord = e.latlng.toString().split(',');
-      var lat = coord[0].split('(');
-      var lng = coord[1].split(')');
-      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
-    }
 

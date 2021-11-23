@@ -511,7 +511,7 @@
       var coord = e.latlng.toString().split(',');
       var lat = coord[0].split('(');
       var lng = coord[1].split(')');
-      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
+      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud:: ' + lng[0]);
     }
 
     map.on('contextmenu',
