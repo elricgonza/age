@@ -79,23 +79,42 @@
                     </thead>
                     <tbody>
                         {% for homologacion in homologaciones %}
-                        <tr style="font-size: 14px;">
-                            <td>{{ homologacion[1] }}</td>
-                            <td>{{ homologacion[2] }}</td>
-                            <td>{{ homologacion[3] }}</td>
-                            <td>{{ homologacion[4] }}</td>
-                            <td>{{ homologacion[5] }}</td>
-                            <td>{{ homologacion[6] }}</td>
-                            <td>{{ homologacion[7] }}</td>
-                            <td>{{ homologacion[8] }}</td>
-                            <td style="text-align: center; font-size: 20px;">
-                                {% if puede_consultar %}
-                                    <a href={{ url_for( 'homologacion', idhomo=homologacion[0], inicio=inicio, final=final) }}><i class="fas fa-search-plus"></i></a>
-                                {% else %}
-                                    <i class="fas fa-search-plus" style="color: grey"></i>
-                                {% endif%}
-                            </td>
-                        </tr>
+                            <tr style="font-size: 14px;">
+                                <td>{{ homologacion[1] }}</td>
+                                <td>{{ homologacion[2] }}</td>
+                                <td>{{ homologacion[3] }}</td>
+                                <td>{{ homologacion[4] }}</td>
+                                <td>{{ homologacion[5] }}</td>
+                                <td>{{ homologacion[6] }}</td>
+                                <td>{{ homologacion[7] }}</td>
+                                <td>{{ homologacion[8] }}</td>
+                                <td style="text-align: center; font-size: 20px;">
+                                    {% if puede_consultar %}
+                                        <a href={{ url_for( 'homologacion', idhomo=homologacion[0], inicio=inicio, final=final) }}><i class="fas fa-search-plus"></i></a>
+                                    {% else %}
+                                        <i class="fas fa-search-plus" style="color: grey"></i>
+                                    {% endif%}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        {% for homojurisd in homojurisds %}
+                            <tr style="font-size: 14px;">
+                                <td>{{ homojurisd[1] }}</td>
+                                <td>{{ homojurisd[2] }}</td>
+                                <td>{{ homojurisd[3] }}</td>
+                                <td>{{ homojurisd[4] }}</td>
+                                <td>{{ homojurisd[5] }}</td>
+                                <td>{{ homojurisd[6] }}</td>
+                                <td>{{ homojurisd[7] }}</td>
+                                <td>{{ homojurisd[8] }}</td>
+                                <td style="text-align: center; font-size: 20px;">
+                                    {% if puede_consultar %}
+                                        (j)<a href={{ url_for( 'homojurisd', idhomo=homojurisd[0], inicio=inicio, final=final) }}><i class="fas fa-search-plus"></i></a>
+                                    {% else %}
+                                        <i class="fas fa-search-plus" style="color: grey"></i>
+                                    {% endif%}
+                                </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
