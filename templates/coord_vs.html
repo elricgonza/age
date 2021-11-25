@@ -357,11 +357,12 @@
 
     // Set up map
 
-  var mapCenter = [-17.05678, -64.81934];
+  //var mapCenter = [-17.05678, -64.81934];
+    var mapCenter = [{{ latitud  }}, {{ longitud }}];
     var map = L.map('map', {
       defaultExtentControl: true,
       center: mapCenter,
-      zoom: 6,
+      zoom: 19,
       layers: [mapboxStreets] // only add one!
     });
 
