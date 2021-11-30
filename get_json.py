@@ -133,7 +133,7 @@ class GetJson:
             'geometry',   ST_AsGeoJSON(geom)::jsonb,
             'properties', to_jsonb(inputs) - 'id' - 'geom'
           ) AS feature
-          FROM (SELECT recinto,  
+          FROM (SELECT recinto, asiento, 
                 idloc::varchar(255) || '-' || reci::varchar(255) as idlocreci,
                 departamento || '-' || provincia || '-' || municipio as dpm,
                 cod_dep::varchar(255) || '-' || cod_prov::varchar(255) || '-' || cod_mun::varchar(255) as cod,
