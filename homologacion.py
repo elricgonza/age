@@ -15,8 +15,9 @@ class Homologacion:
         if inicio == "00-00-0000" and final == "00-00-0000":
             return False
         else:           
-            s = "Select id, idLoc, reci, nomDep as Departamento, nomLoc, nomReci," + \
-                " idloc2, reci2, nomReci2" + \
+            s = "Select id, dep, prov, sec, idLoc, dist, zona, reci, nomDep, nomProv, nomSec, nomLoc, nomDist, nomZona, nomReci," + \
+                " direccion, circun, tipoCircun, idTipoRecinto, tipoRecinto, dep2, prov2, sec2, idLoc2, dist2, zona2, reci2, nomDep2," + \
+                " nomProv2, nomSec2, nomLoc2, nomDist2, nomZona2, nomReci2, direccion2, circun2, tipoCircun2, idTipoRecinto2, tipoRecinto2" + \
                 " from [bdge].[dbo].[hom]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
@@ -37,8 +38,9 @@ class Homologacion:
         if inicio == "00-00-0000" and final == "00-00-0000":
             return False
         else:           
-            s = "Select id, idLoc, reci, nomDep as Departamento, nomLoc, nomReci," + \
-                " idloc2, reci2, nomReci2" + \
+            s = "Select id, dep, prov, sec, idLoc, dist, zona, reci, nomDep, nomProv, nomSec, nomLoc, nomDist, nomZona, nomReci," + \
+                " direccion, circun, tipoCircun, idTipoRecinto, tipoRecinto, dep2, prov2, sec2, idLoc2, dist2, zona2, reci2, nomDep2," + \
+                " nomProv2, nomSec2, nomLoc2, nomDist2, nomZona2, nomReci2, direccion2, circun2, tipoCircun2, idTipoRecinto2, tipoRecinto2" + \
                 " from [bdge].[dbo].[actJurisd]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
@@ -164,9 +166,21 @@ class Homologacion:
             return True
 
     def get_hom_all(self, idhom):
-        s = "select h.id, h.idLoc, h.reci, h.nomDep, h.nomLoc, h.nomReci, h.latitud, h.longitud, h.idLoc2, h.reci2, h.nomDep2, h.nomLoc2, h.nomReci2," + \
-            " h.latitud2, h.longitud2" + \
+        s = "select h.id, h.idLoc, h.reci, h.nomDep, h.nomLoc, h.nomReci, h.latitud, h.longitud, h.idLoc2, h.reci2, h.nomDep2," + \
+            " h.nomLoc2, h.nomReci2, h.latitud2, h.longitud2" + \
             " from [bdge].[dbo].[hom] h inner join [GeografiaElectoral_app].[dbo].[RECI] r on h.idLoc=r.IdLocReci and (h.reci=r.Reci or h.reci2=r.Reci)" + \
+            " where h.id = %d"
+        self.cur.execute(s, idhom)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_homjurisd_all(self, idhom):
+        s = "select h.id, h.idLoc, h.reci, h.nomDep, h.nomLoc, h.nomReci, h.latitud, h.longitud, h.idLoc2, h.reci2, h.nomDep2," + \
+            " h.nomLoc2, h.nomReci2, h.latitud2, h.longitud2" + \
+            " from [bdge].[dbo].[actJurisd] h inner join [GeografiaElectoral_app].[dbo].[RECI] r on h.idLoc2=r.IdLocReci and (h.reci=r.Reci or h.reci2=r.Reci)" + \
             " where h.id = %d"
         self.cur.execute(s, idhom)
         rows = self.cur.fetchall()

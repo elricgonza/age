@@ -65,6 +65,13 @@
         input[type="text"]{
             width: 100px;
         }
+        .nav-tabs{
+            background-color: #e4e4e4;
+            border-radius: 5px;
+        }
+        .nav-item{
+            border-radius: 5px;
+        }
     </style>
 {% endblock %}
 <div class="container">
@@ -81,11 +88,14 @@
             <li class="nav-item active">                
                 <a href="#asientos" class="nav-link" data-toggle="tab">Asientos</a>                
             </li>
-            <li class="nav-item">                
-                <a href="#exterior" class="nav-link" data-toggle="tab">Asi_Exterior</a>                
-            </li>
             <li class="nav-item">
                 <a href="#recintos" class="nav-link" data-toggle="tab">Recintos</a>
+            </li>
+            <li class="nav-item">                
+                <a href="#ext_asie" class="nav-link" data-toggle="tab">Asie_Exterior</a>                
+            </li>
+            <li class="nav-item">                
+                <a href="#ext_reci" class="nav-link" data-toggle="tab">Reci_Exterior</a>                
             </li>
             <li class="nav-item">
                 <a href="#homologacion" class="nav-link" data-toggle="tab">Homologaciones</a>
@@ -147,48 +157,6 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane" id="exterior">            
-            <div class="container">                        
-                <div class="row">
-                    <div class="table-responsive">
-                        <table id="id_dtext" class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr style="font-size: 13px;">
-                                   <th>IdLoc</th>
-                                   <th>Pais</th>
-                                   <th>D</th>
-                                   <th>Depto</th>
-                                   <th>P</th>
-                                   <th>Provincia</th>
-                                   <th>M</th>
-                                   <th>Municipio</th>
-                                   <th>Asiento</th>
-                                   <th>Estado</th>                                   
-                                   <th>PobElec</th>                           
-                                </tr>
-                            </thead>
-                            <tbody>    
-                                {% for exterior in exteriores %}
-                                    <tr style="font-size: 13px;">
-                                        <td>{{ exterior[0] }}</td>
-                                        <td>{{ exterior[1] }}</td>
-                                        <td>{{ exterior[2] }}</td>
-                                        <td>{{ exterior[3] }}</td>
-                                        <td>{{ exterior[4] }}</td>
-                                        <td>{{ exterior[5] }}</td>
-                                        <td>{{ exterior[6] }}</td>
-                                        <td>{{ exterior[7] }}</td>
-                                        <td>{{ exterior[8] }}</td>
-                                        <td>{{ exterior[9] }}</td>
-                                        <td>{{ exterior[10] }}</td>                                        
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="tab-pane" id="recintos">
             <div class="container">                        
                 <div class="row">
@@ -205,10 +173,16 @@
                                     <th>M</th>
                                     <th>Municipio</th>
                                     <th>Recinto</th>
+                                    <th>NomDist</th>
+                                    <th>NomZona</th>
+                                    <th>Cir</th>
                                     <th>Circun</th>
                                     <th>Estado</th>
                                     <th>Mesas</th>
                                     <th>AmbDisp</th>
+                                    <th>Dir</th>
+                                    <th>Lat</th>
+                                    <th>Lon</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -227,6 +201,100 @@
                                         <td>{{ recinto[10] }}</td>
                                         <td>{{ recinto[11] }}</td>
                                         <td>{{ recinto[12] }}</td>
+                                        <td>{{ recinto[13] }}</td>
+                                        <td>{{ recinto[14] }}</td>
+                                        <td>{{ recinto[15] }}</td>
+                                        <td>{{ recinto[16] }}</td>
+                                        <td>{{ recinto[17] }}</td>
+                                        <td>{{ recinto[18] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="ext_asie">            
+            <div class="container">                        
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="id_dtexta" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                   <th>IdLoc</th>
+                                   <th>Pais</th>
+                                   <th>D</th>
+                                   <th>Depto</th>
+                                   <th>P</th>
+                                   <th>Provincia</th>
+                                   <th>M</th>
+                                   <th>Municipio</th>
+                                   <th>Asiento</th>
+                                   <th>Estado</th>                                   
+                                   <th>PobElec</th>                           
+                                </tr>
+                            </thead>
+                            <tbody>    
+                                {% for extasiento in extasientos %}
+                                    <tr style="font-size: 13px;">
+                                        <td>{{ extasiento[0] }}</td>
+                                        <td>{{ extasiento[1] }}</td>
+                                        <td>{{ extasiento[2] }}</td>
+                                        <td>{{ extasiento[3] }}</td>
+                                        <td>{{ extasiento[4] }}</td>
+                                        <td>{{ extasiento[5] }}</td>
+                                        <td>{{ extasiento[6] }}</td>
+                                        <td>{{ extasiento[7] }}</td>
+                                        <td>{{ extasiento[8] }}</td>
+                                        <td>{{ extasiento[9] }}</td>
+                                        <td>{{ extasiento[10] }}</td>                                        
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="ext_reci">            
+            <div class="container">                        
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="id_dtextr" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                   <th>Pais</th>
+                                   <th>D</th>
+                                   <th>Depto</th>
+                                   <th>P</th>
+                                   <th>Provincia</th>
+                                   <th>M</th>
+                                   <th>Municipio</th>
+                                   <th>IdLoc</th>
+                                   <th>Asiento</th>
+                                   <th>Reci</th>
+                                   <th>NomReci</th>
+                                   <th>Estado</th>                                   
+                                   <th>PobElec</th>                           
+                                </tr>
+                            </thead>
+                            <tbody>    
+                                {% for extrecinto in extrecintos %}
+                                    <tr style="font-size: 13px;">
+                                        <td>{{ extrecinto[0] }}</td>
+                                        <td>{{ extrecinto[1] }}</td>
+                                        <td>{{ extrecinto[2] }}</td>
+                                        <td>{{ extrecinto[3] }}</td>
+                                        <td>{{ extrecinto[4] }}</td>
+                                        <td>{{ extrecinto[5] }}</td>
+                                        <td>{{ extrecinto[6] }}</td>
+                                        <td>{{ extrecinto[7] }}</td>
+                                        <td>{{ extrecinto[8] }}</td>
+                                        <td>{{ extrecinto[9] }}</td>
+                                        <td>{{ extrecinto[10] }}</td>
+                                        <td>{{ extrecinto[11] }}</td>
+                                        <td>{{ extrecinto[12] }}</td>                                        
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -335,6 +403,7 @@
                                     <th>Acción</th>
                                     <th>Tabla</th>
                                     <th>IdLoc</th>
+                                    <th>Asiento</th>
                                     <th>Campo</th>
                                     <th>ValorOriginal</th>
                                     <th>ValorNuevo</th>
@@ -356,7 +425,8 @@
                                         <td>{{ transaccion[8] }}</td>
                                         <td>{{ transaccion[9] }}</td>
                                         <td>{{ transaccion[10] }}</td>
-                                        <td>{{ transaccion[11] }}</td>                                        
+                                        <td>{{ transaccion[11] }}</td>
+                                        <td>{{ transaccion[12] }}</td>                                        
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -398,82 +468,7 @@
                     searchPanes:{
                         show:false
                     },
-                    targets:[0, 1, 3, 4, 5, 10, 12, 13]
-                }
-                ],
-                dom: 'PBfrtip',
-                buttons: [
-                    {
-                        extend: 'copyHtml5',
-                        exportOptions: {
-                            columns: [ 0, ':visible' ]
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        exportOptions: {
-                            columns: ':visible',
-                            stripHtml: true
-                        },
-                        pageSize: 'LETTER',
-                        customize: function(doc, config) {
-                          var tableNode;
-                          for (i = 0; i < doc.content.length; ++i) {
-                            if(doc.content[i].table !== undefined){
-                              tableNode = doc.content[i];
-                              break;
-                            }
-                          }
-         
-                          var rowIndex = 0;
-                          var tableColumnCount = tableNode.table.body[rowIndex].length;
-                           
-                          if(tableColumnCount > 5){
-                            doc.pageOrientation = 'landscape';
-                          }
-                        }
-                    },
-                    'colvis'
-                ]
-            });
-
-            $('#id_dtext').DataTable({
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json',
-                    searchPanes: {
-                        "clearMessage": "Borrar todo",
-                        "collapse": {
-                            "0": "Paneles de búsqueda",
-                            "_": "Paneles de búsqueda (%d)"
-                        },
-                        "count": "{total}",
-                        "countFiltered": "{shown} ({total})",
-                        "emptyPanes": "Sin paneles de búsqueda",
-                        "loadMessage": "Cargando paneles de búsqueda",
-                        "title": "Filtros Activos - %d"
-                    }
-                },
-                searchPanes:{
-                    cascadePanes:true,
-                    layout: 'columns-5',
-                    dtOpts:{
-                        dom:'tp',
-                        paging:'true',
-                        pagingType:'simple',
-                        searching:true
-                    }
-                },
-                columnDefs:[{
-                    searchPanes:{
-                        show:false
-                    },
-                    targets:[0, 2, 4, 5, 6, 8]
+                    targets:[0, 1, 3, 4, 5, 10]
                 }
                 ],
                 dom: 'PBfrtip',
@@ -536,7 +531,157 @@
                     searchPanes:{
                         show:false
                     },
-                    targets:[0, 1, 2, 4, 6, 8]
+                    targets:[0, 1, 2, 4, 5, 6, 8, 14, 15, 16, 17, 18]
+                }
+                ],
+                dom: 'PBfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0, ':visible' ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible',
+                            stripHtml: true
+                        },
+                        pageSize: 'LETTER',
+                        customize: function(doc, config) {
+                          var tableNode;
+                          for (i = 0; i < doc.content.length; ++i) {
+                            if(doc.content[i].table !== undefined){
+                              tableNode = doc.content[i];
+                              break;
+                            }
+                          }
+         
+                          var rowIndex = 0;
+                          var tableColumnCount = tableNode.table.body[rowIndex].length;
+                           
+                          if(tableColumnCount > 5){
+                            doc.pageOrientation = 'landscape';
+                          }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+
+            $('#id_dtexta').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json',
+                    searchPanes: {
+                        "clearMessage": "Borrar todo",
+                        "collapse": {
+                            "0": "Paneles de búsqueda",
+                            "_": "Paneles de búsqueda (%d)"
+                        },
+                        "count": "{total}",
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Sin paneles de búsqueda",
+                        "loadMessage": "Cargando paneles de búsqueda",
+                        "title": "Filtros Activos - %d"
+                    }
+                },
+                searchPanes:{
+                    cascadePanes:true,
+                    layout: 'columns-5',
+                    dtOpts:{
+                        dom:'tp',
+                        paging:'true',
+                        pagingType:'simple',
+                        searching:true
+                    }
+                },
+                columnDefs:[{
+                    searchPanes:{
+                        show:false
+                    },
+                    targets:[0, 2, 4, 6, 8, 10]
+                }
+                ],
+                dom: 'PBfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0, ':visible' ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible',
+                            stripHtml: true
+                        },
+                        pageSize: 'LETTER',
+                        customize: function(doc, config) {
+                          var tableNode;
+                          for (i = 0; i < doc.content.length; ++i) {
+                            if(doc.content[i].table !== undefined){
+                              tableNode = doc.content[i];
+                              break;
+                            }
+                          }
+         
+                          var rowIndex = 0;
+                          var tableColumnCount = tableNode.table.body[rowIndex].length;
+                           
+                          if(tableColumnCount > 5){
+                            doc.pageOrientation = 'landscape';
+                          }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+
+            $('#id_dtextr').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json',
+                    searchPanes: {
+                        "clearMessage": "Borrar todo",
+                        "collapse": {
+                            "0": "Paneles de búsqueda",
+                            "_": "Paneles de búsqueda (%d)"
+                        },
+                        "count": "{total}",
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Sin paneles de búsqueda",
+                        "loadMessage": "Cargando paneles de búsqueda",
+                        "title": "Filtros Activos - %d"
+                    }
+                },
+                searchPanes:{
+                    cascadePanes:true,
+                    layout: 'columns-5',
+                    dtOpts:{
+                        dom:'tp',
+                        paging:'true',
+                        pagingType:'simple',
+                        searching:true
+                    }
+                },
+                columnDefs:[{
+                    searchPanes:{
+                        show:false
+                    },
+                    targets:[1, 3, 5, 7, 8, 9, 10, 12]
                 }
                 ],
                 dom: 'PBfrtip',
@@ -725,7 +870,7 @@
                     searchPanes:{
                         show:false
                     },
-                    targets:[0, 2, 6, 7, 8, 9]
+                    targets:[0, 2, 6, 8, 9, 10]
                 }
                 ],
                 dom: 'PBfrtip',

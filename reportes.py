@@ -30,7 +30,8 @@ class Reportes:
 
     def get_rep_recintos_all(self, usrdep):        
         s = "Select IdLocReci, Reci, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NombreMunicipio as Municipio," + \
-            " NombreRecinto, TipoCircunscripcion, Estado, MaxMesasReci, ambientesDisp" + \
+            " NombreRecinto, NomDist, NomZona, CircunDist, TipoCircunscripcion, Estado, MaxMesasReci, ambientesDisp, Direccion," + \
+            " latitud, longitud" + \
             " from [bdge].[dbo].[GeoRecintos_all]"
         if usrdep != 0 :
             s = s + " where DEP = %d order by prov, sec"
@@ -104,7 +105,7 @@ class Reportes:
                 " when bdge.dbo.logTransacciones.TipoTrn='D' then 'Delete'" + \
                 " else bdge.dbo.logTransacciones.TipoTrn end as Accion, bdge.dbo.logTransacciones.Tabla," + \
                 " substring(bdge.dbo.logTransacciones.PK,PATINDEX('%=%',bdge.dbo.logTransacciones.PK)+1,PATINDEX('%>%',bdge.dbo.logTransacciones.PK)-PATINDEX('%=%',bdge.dbo.logTransacciones.PK)-1) as idLoc," + \
-                " bdge.dbo.logTransacciones.Campo, bdge.dbo.logTransacciones.ValorOriginal, bdge.dbo.logTransacciones.ValorNuevo," + \
+                " GeografiaElectoral_app.dbo.LOC.NomLoc as Asiento, bdge.dbo.logTransacciones.Campo, bdge.dbo.logTransacciones.ValorOriginal, bdge.dbo.logTransacciones.ValorNuevo," + \
                 " Convert(CHAR(10),bdge.dbo.logTransacciones.FechaTrn,23) as Fecha, bdge.dbo.logTransacciones.Usuario" + \
             " from GeografiaElectoral_app.dbo.DEP" + \
             " LEFT JOIN GeografiaElectoral_app.dbo.PROV ON GeografiaElectoral_app.dbo.DEP.Dep = GeografiaElectoral_app.dbo.PROV.DepProv" + \
@@ -193,10 +194,22 @@ class Reportes:
         else:
             return rows
 
-    def get_rep_exterior_all(self):        
-        s = "select IdLoc, NomPais, Dep, NomDep, Prov, NomProv, Sec, NomSec, NomLoc, Estado, pobElec" + \
+    def get_rep_ext_asie_all(self):        
+        s = "select IdLoc, NomPais, Dep, NomDep, Prov, NomProv, Sec, NomSec, NomLoc, estado, pobElec" + \
         " from [bdge].[dbo].[GeoAsientos_Exterior_all]" + \
         " order by IdPais, Dep, Prov, Sec, IdLoc"
+        self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_rep_ext_reci_all(self):        
+        s = "select NomPais, Dep, NomDep, Prov, NomProv, Sec, NomSec, IdLoc, NomLoc, Reci, NombreRecinto, estado, pobElec" + \
+        " from [bdge].[dbo].[GeoRecintos_Exterior_all]" + \
+        " order by IdPais, Dep, Prov, Sec, IdLoc, Reci"
         self.cur.execute(s)
 
         rows = self.cur.fetchall()

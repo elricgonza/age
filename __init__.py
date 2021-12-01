@@ -820,7 +820,8 @@ def reportes():
         return render_template('reportes.html', asientos=r.get_rep_asientos_all(usrdep), recintos=r.get_rep_recintos_all(usrdep), 
                                 homologaciones=r.get_rep_homologacion_all(usrdep), homojurisds=r.get_rep_homojurisd_all(usrdep),
                                 jurisdicciones=r.get_rep_jurisdiccion_all(usrdep), transacciones=r.get_rep_logtransaccion_all(usrdep), 
-                                exteriores=r.get_rep_exterior_all(), puede_consultar='Reportes - Consulta' in permisos_usr)
+                                extasientos=r.get_rep_ext_asie_all(), extrecintos=r.get_rep_ext_reci_all(), 
+                                puede_consultar='Reportes - Consulta' in permisos_usr)
     else:
         return render_template('msg.html', l1='Sin permisos asignados !!')
 
@@ -1909,7 +1910,7 @@ def homologacion(idhomo, inicio, final):
 def homojurisd(idhomo, inicio, final):
     ahomo = homo.Homologacion(cxms)
     ahomo.get_homojurisd_idhom(idhomo);
-    return render_template('homologacion.html', ahomo=ahomo, inicio=inicio, final=final, load=True, ban=True)
+    return render_template('homojurisd.html', ahomo=ahomo, inicio=inicio, final=final, load=True, ban=True)
 
 
 @app.route('/get_hom_all', methods=['GET', 'POST'])
@@ -1917,6 +1918,18 @@ def get_hom_all():
     ahomo = homo.Homologacion(cxms)
     idhom = request.args.get('idhom')
     rows = ahomo.get_hom_all(idhom)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+
+@app.route('/get_homjurisd_all', methods=['GET', 'POST'])
+def get_homjurisd_all():
+    ahomo = homo.Homologacion(cxms)
+    idhom = request.args.get('idhom')
+    rows = ahomo.get_homjurisd_all(idhom)
+    print(rows)
     if rows:
         return jsonify(rows)
     else:
