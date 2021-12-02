@@ -73,7 +73,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       defaultExtentControl: true,
       center: mapCenter,
       zoom: 16,
-      layers: [mapboxStreets] // only add one!
+      layers: [mbSat] // only add one!
     });
 
     //Add layer control
