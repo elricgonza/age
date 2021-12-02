@@ -825,61 +825,6 @@ def reportes():
     else:
         return render_template('msg.html', l1='Sin permisos asignados !!')
 
-'''
-@app.route('/reportespdf', methods=['GET', 'POST'])
-def reportespdf():
-    new = 2
-    rp = rpdf.ReportesPDF(cxms)
-    if request.method == 'POST':
-        if request.form.get('cir1') == None:
-            cir1 = request.form.get('cir1', 0)
-        else:
-            cir1 = request.form['cir1']
-
-        if request.form.get('cir2') == None:
-            cir2 = request.form.get('cir2', 0)
-        else:
-            cir2 = request.form['cir2']
-
-        if request.form.get('cir3') == None:
-            cir3 = request.form.get('cir3', 0)
-        else:
-            cir3 = request.form['cir3']
-
-        if request.form.get('provincia') == None:
-            provincia = ''
-        else:
-            provincia = request.form['provincia']
-
-        if request.form.get('municipio') == None:
-            municipio = ''
-        else:
-            municipio = request.form['municipio']
-
-        if request.form['estado'] == "":
-            estado = ''
-        else:
-            estado = request.form['estado']
-
-        if request.form['inicio'] == "":
-            inicio = ''
-        else:
-            inicio = request.form['inicio']
-
-        if request.form['final'] == "":
-            final = ''
-        else:
-            final = request.form['final']
-
-        rows = rp.reporte_consulta(usrdep, request.form['dpto'], provincia, municipio,
-                                   cir1, cir2, cir3, estado, inicio, final)
-        if rows:
-            #url = "file:///var/www/flasks/age/reporte.pdf"
-            webbrowser.open(app.config['MODULO_REPORTES'], new=new)
-            return ('PDF Generado')
-        else:
-            return ('PDF Generado')
-'''
 
 @app.route('/get_provincias_all', methods=['GET', 'POST'])
 def get_provincia_all():
