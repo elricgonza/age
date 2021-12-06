@@ -27,7 +27,7 @@
 
                     <div class="col-md-6">
                         <label for="Grupos">SUBGRUPO:</label>
-                        <input type="text" class="form-control" id="isubgrupo" placeholder="Introduzca SubGrupo del Clasificador" name="subgrupo" required {% if load %} value="{{ s.clasifSubGrupo }}" {% endif %}>
+                        <input type="text" class="form-control" id="isubgrupo" placeholder="Introduzca SubGrupo del Clasificador" name="subgrupo" required {% if load %} value="{{ s.clasifSubGrupo }}" {% else %} value="0"  {% endif %}>
                         <div class="invalid-feedback">Por favor ingrese datos.</div>
                     </div>
 

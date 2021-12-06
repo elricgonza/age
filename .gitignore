@@ -6,6 +6,7 @@ __pycache__/
 #add
 static/imgbd/
 static/pdfdoc/
+*.swn
 *.swp
 *.swo
 .*.swp
