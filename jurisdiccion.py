@@ -138,9 +138,9 @@ class Jurisdiccion:
             return rows
 
     def get_asijuri_all(self, dp, pr, mu):
-        s = "select distinct IdLoc, AsientoElectoral, Dep, Prov, Sec, CircunDist" + \
-            " from [bdge].[dbo].[GeoAsientos_Nacional_Juri_all]" + \
-            " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) order by AsientoElectoral"
+        s = "select distinct IdLoc, AsientoElectoral, Dep, Prov, Sec" + \
+            " from [bdge].[dbo].[GeoAsientos_Nacional_all]" + \
+            " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
         lista = dp, pr, mu    
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
