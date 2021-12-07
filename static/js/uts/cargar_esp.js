@@ -156,17 +156,17 @@ function cargarjuri_a(valor, data) {
             var dp = document.getElementById("idepartamento").value;
             var pr = document.getElementById("iprovincia").value;
             var mu = document.getElementById("imunicipio").value;
-            var ci = valor;
+            var id_loc = document.getElementById("iidloc").value;
             $('#izonade').html('');
             $.getJSON("/get_zonas_dps", {
                 dp: dp,
                 pr: pr,
                 mu: mu,
-                ci: ci
+                id_loc: id_loc
             }, function(datos1){
                 $("#izonade").append('<option></option>');                
                 $.each(datos1, function(index1, obj1){                 
-                    $("#izonade").append('<option value="'+obj1[1]+'">'+obj1[2]+'(Circun: '+obj1[3]+')'+'</option>');  
+                    $("#izonade").append('<option value="'+obj1[1]+'">'+obj1[2]+'</option>');  
                 });
             });
         } 

@@ -2173,8 +2173,8 @@ def get_zonas_dps():
     dp = request.args.get('dp')
     pr = request.args.get('pr')
     mu = request.args.get('mu')
-    ci = request.args.get('ci')
-    rows = ja.get_zonas_dps(dp, pr, mu, ci)
+    id_loc = request.args.get('id_loc')
+    rows = ja.get_zonas_dps(dp, pr, mu, id_loc)
     if rows:
         return jsonify(rows)
     else:

@@ -103,7 +103,8 @@ class Jurisd_asi:
         s = "select a.DepLoc, a.ProvLoc, a.SecLoc, d.CircunDist from GeografiaElectoral_app.dbo.LOC a " + \
             "inner join GeografiaElectoral_app.dbo.ZONA z on a.IdLoc=z.IdLocZona " + \
             "inner join GeografiaElectoral_app.dbo.DIST d on a.IdLoc=d.IdLocDist and z.IdLocZona=d.IdLocDist and z.DistZona=d.Dist " + \
-            "where a.DepLoc=%d and a.ProvLoc=%d and a.SecLoc=%d group by a.DepLoc, a.ProvLoc, a.SecLoc, d.CircunDist order by d.CircunDist"
+            "where a.DepLoc=%d and a.ProvLoc=%d and a.SecLoc=%d and a.estado in (16, 17, 75, 76) " + \
+            "group by a.DepLoc, a.ProvLoc, a.SecLoc, d.CircunDist order by d.CircunDist"
         lista = dp, pr, mu    
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
@@ -112,13 +113,14 @@ class Jurisd_asi:
         else:
             return rows
 
-    def get_zonas_dps(self, dp, pr, mu, ci):  
+    def get_zonas_dps(self, dp, pr, mu, id_loc):
+        print(id_loc)  
         s = "select d.Dist, z.Zona, z.NomZona, d.CircunDist from GeografiaElectoral_app.dbo.DIST d " + \
             "inner join GeografiaElectoral_app.dbo.ZONA z on d.Dist=z.DistZona " + \
             "inner join GeografiaElectoral_app.dbo.LOC a on d.IdLocDist=a.IdLoc and z.IdLocZona=a.IdLoc " + \
-            "where d.IdLocDist=z.IdLocZona and d.CircunDist=%d and a.DepLoc=%d and a.ProvLoc=%d and a.SecLoc=%d " + \
+            "where d.IdLocDist=z.IdLocZona and a.idLoc=%d and a.estado in (16, 17, 75, 76) " + \
             "group by d.Dist, z.Zona, z.NomZona, d.CircunDist order by z.NomZona"
-        lista = ci, dp, pr, mu    
+        lista = id_loc    
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
