@@ -1951,9 +1951,9 @@ def jurisdiccion(reci, idloc):
 
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
             nextid = ju.get_next_idreci(idloc2, reci)
-            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact)
+            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact, usr)
         else:
-            ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact)
+            ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact, usr)
 
         rows = ju.get_jurisdiccion_all(usrdep)
         return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr, \
@@ -1999,9 +1999,9 @@ def jurisdiccion_m():
 
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
             nextid = ju.get_next_idreci(idloc2, reci)
-            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact)
+            ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact, usr)
         else:
-            ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact)
+            ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact, usr)
 
         rows = ju.get_jurisdiccion_all(usrdep)
         return render_template('jurisdiccion_list.html', jurisdicciones=rows, puede_adicionar='Jurisdicción - Adición' in permisos_usr, \
@@ -2039,7 +2039,7 @@ def get_zondist_all():
 @app.route('/jurisd_asi_list', methods=['GET', 'POST'])
 @login_required
 def jurisd_asi_list():
-    ja = jua.Jurisd_asi(cxms)
+    ja = jua.JurisdAsi(cxms)
     rows = ja.get_jurisd_asi_all(usrdep)
     if rows:
         if 'Jurisd_asi - Consulta' in permisos_usr:    # tiene pemisos asignados
@@ -2058,7 +2058,7 @@ def jurisd_asi_list():
 @app.route('/jurisd_asi/<idloc>', methods=['GET', 'POST'])
 @login_required
 def jurisd_asi(idloc):
-    ja = jua.Jurisd_asi(cxms)
+    ja = jua.JurisdAsi(cxms)
     rces = recies.Reciespeciales(cxms)
     d = docu.Documentos(cxms)
     error = None
@@ -2082,9 +2082,13 @@ def jurisd_asi(idloc):
         if ja.add_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
                                    ja.nomzona, ja.circun, f_ingreso, f_actual, usr, idocact):
             #Actualiza el asiento y sus recintos
-            ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact)
+            ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact, usr)
             ja.upd_recinto_juriasi(idloc, ja.zona)
-            ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
+            ja.verifica_circun(idloc)
+            if ja.circun_a != ja.circun:
+                ja.upd_dist_juriasi_usr(idloc, ja.dist, ja.circun, usr)
+            else:
+                ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
         else:
             flash("El Asiento No Tiene Recintos", 'alert-warning')
             dptos=rces.get_depaespeciales_all(usrdep)
@@ -2120,7 +2124,7 @@ def jurisd_asi(idloc):
 @app.route('/jurisd_asi_m/<idloc>', methods=['GET', 'POST'])
 @login_required
 def jurisd_asi_m(idloc):
-    ja = jua.Jurisd_asi(cxms)
+    ja = jua.JurisdAsi(cxms)
     rces = recies.Reciespeciales(cxms)
     error = None
     
@@ -2142,9 +2146,13 @@ def jurisd_asi_m(idloc):
         ja.upd_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
                             ja.nomzona, ja.circun, f_actual, usr, idocact)
         #Actualiza el asiento y sus recintos
-        ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact)
+        ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact, usr)
         ja.upd_recinto_juriasi(idloc, ja.zona)
-        ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
+        ja.verifica_circun(idloc)
+        if ja.circun_a != ja.circun:
+            ja.upd_dist_juriasi_usr(idloc, ja.dist, ja.circun, usr)
+        else:
+            ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
 
     rows = ja.get_jurisd_asi_all(usrdep)
     return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
@@ -2155,7 +2163,7 @@ def jurisd_asi_m(idloc):
 @app.route('/get_circuns_dps', methods=['GET', 'POST'])
 @login_required
 def get_circuns_dps():
-    ja = jua.Jurisd_asi(cxms)
+    ja = jua.JurisdAsi(cxms)
     dp = request.args.get('dp')
     pr = request.args.get('pr')
     mu = request.args.get('mu')
@@ -2169,7 +2177,7 @@ def get_circuns_dps():
 @app.route('/get_zonas_dps', methods=['GET', 'POST'])
 @login_required
 def get_zonas_dps():
-    ja = jua.Jurisd_asi(cxms)
+    ja = jua.JurisdAsi(cxms)
     dp = request.args.get('dp')
     pr = request.args.get('pr')
     mu = request.args.get('mu')

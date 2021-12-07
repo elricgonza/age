@@ -83,15 +83,12 @@ function cargarjuri(valor, data) {
             }, function(datos1){
                 $("#iasie").append('<option></option>');                
                 $.each(datos1, function(index1, obj1){                 
-                    $("#iasie").append('<option value="'+obj1[0]+':'+obj1[5]+'">'+obj1[1]+'(Circun: '+obj1[5]+')'+'</option>');  
+                    $("#iasie").append('<option value="'+obj1[0]+'">'+obj1[1]+'</option>');  
                 });
             });
         }else if(data==3){
-            var ia = document.getElementById("iasie").value;
-            var cir = ia.split(':');
-            document.getElementById('iidloc1').value = cir[0];
-            document.getElementById("icircun1").value=cir[1];
-            var as = cir[0];
+            var as = document.getElementById("iasie").value;
+            document.getElementById('iidloc1').value = as;
             $('#izonad').html('');
             $.getJSON("/get_zondist_all", {
                 as: as

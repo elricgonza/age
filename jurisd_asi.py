@@ -1,6 +1,6 @@
 # Operaciones asientos
 
-class Jurisd_asi:
+class JurisdAsi:
     idlocreci=0
     reci=0
     nomreci=''
@@ -114,7 +114,6 @@ class Jurisd_asi:
             return rows
 
     def get_zonas_dps(self, dp, pr, mu, id_loc):
-        print(id_loc)  
         s = "select d.Dist, z.Zona, z.NomZona, d.CircunDist from GeografiaElectoral_app.dbo.DIST d " + \
             "inner join GeografiaElectoral_app.dbo.ZONA z on d.Dist=z.DistZona " + \
             "inner join GeografiaElectoral_app.dbo.LOC a on d.IdLocDist=a.IdLoc and z.IdLocZona=a.IdLoc " + \
@@ -182,7 +181,7 @@ class Jurisd_asi:
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona," + \
             " NombreRecinto, Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud, doc_idA, doc_idAF" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where IdLocReci = %d"
+            " where IdLocReci = %d and idEstado in (1, 2, 79, 80)"
         self.cur.execute(s, idloc)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
@@ -227,10 +226,10 @@ class Jurisd_asi:
 
             return True
 
-    def upd_asiento_juriasi(self, idloc, dep, prov, sec, idocact):
-        asiento = dep, prov, sec, idocact, idloc
+    def upd_asiento_juriasi(self, idloc, dep, prov, sec, idocact, usr):
+        asiento = dep, prov, sec, idocact, usr, idloc
         s = "update GeografiaElectoral_app.dbo.LOC" + \
-            " set DepLoc= %s, ProvLoc=%s, SecLoc = %s, doc_idA = %s where IdLoc = %s"
+            " set DepLoc= %s, ProvLoc=%s, SecLoc = %s, doc_idA = %s, usuario = %s where IdLoc = %s"
         try:
             self.cur.execute(s, asiento)
             self.cx.commit()
@@ -253,6 +252,17 @@ class Jurisd_asi:
         distrito = circun, idloc, dist
         s = "update GeografiaElectoral_app.dbo.DIST" + \
             " set CircunDist = %s where IdLocDist = %s and Dist = %s"
+        try:
+            self.cur.execute(s, distrito)
+            self.cx.commit()
+            print('Distrito actualizado')
+        except Exception as e:
+            print("Error - actualización de Distrito...")
+
+    def upd_dist_juriasi_usr(self, idloc, dist, circun, usr):
+        distrito = circun, usr, idloc, dist
+        s = "update GeografiaElectoral_app.dbo.DIST" + \
+            " set CircunDist = %s, usuario = %s where IdLocDist = %s and Dist = %s"
         try:
             self.cur.execute(s, distrito)
             self.cx.commit()
@@ -290,3 +300,13 @@ class Jurisd_asi:
             return False
         else:
             return rows
+
+    def verifica_circun(self, idloc):        
+        s = "select GeografiaElectoral_app.dbo.DIST.CircunDist from GeografiaElectoral_app.dbo.DIST where GeografiaElectoral_app.dbo.DIST.IdLocDist = %d"    
+        self.cur.execute(s, idloc)
+        row = self.cur.fetchone()
+        if  row == None:
+            return False
+        else:
+            self.circun_a = row[0]
+            return True

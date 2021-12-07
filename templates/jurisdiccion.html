@@ -231,14 +231,6 @@
                     <div class="col-lg-1">
                     </div>
                     <div class="col-lg-1">
-                        <div class="form-group">
-                            <label for="circun1" class="col-form-label">Circun:</label>
-                            <input type="text" class="form-control" id="icircun1" title="" name="circun1" style="text-align:right;" readonly 
-                                    {% if load %}
-                                        value="{{ ju.circundist }}"
-                                    {% endif %}
-                                >
-                        </div>
                     </div>
                     <div class="col-lg-1">
                         <div class="form-group">
@@ -257,9 +249,9 @@
                                 {% for asiento in asientos %}
                                     {% if ju.deploc==asiento[2] and ju.provloc==asiento[3] and ju.secloc==asiento[4] %}
                                         {% if load and ju.idloc==asiento[0] %}
-                                            <option value = "{{ asiento[0]~':'~asiento[5] }}" selected>{{ asiento[1]~'(Circun: '~asiento[5]~')' }}</option>
+                                            <option value = "{{ asiento[0] }}" selected>{{ asiento[1] }}</option>
                                         {% else %}
-                                            <option value = "{{ asiento[0]~':'~asiento[5] }}">{{ asiento[1]~'(Circun: '~asiento[5]~')' }}</option>
+                                            <option value = "{{ asiento[0] }}">{{ asiento[1] }}</option>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}

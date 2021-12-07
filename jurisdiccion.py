@@ -106,13 +106,13 @@ class Jurisdiccion:
             return True
     
     def get_asientos_all(self, usrdep):        
-        s = "select distinct IdLoc, AsientoElectoral, Dep, Prov, Sec, CircunDist" + \
-        " from [bdge].[dbo].[GeoAsientos_Nacional_Juri_all]"
+        s = "select IdLoc, AsientoElectoral, Dep, Prov, Sec" + \
+        " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0:
-            s = s + " where Dep = %d and estado in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where estado in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where idclasif in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -121,14 +121,14 @@ class Jurisdiccion:
         else:
             return rows
 
-    def get_zonasd_all(self, usrdep):        
+    def get_zonasd_all(self, usrdep):
         s = "Select d.Dist, z.Zona, z.NomZona, d.CircunDist, a.IdLoc from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
             "[GeografiaElectoral_app].[dbo].[DIST] d, [GeografiaElectoral_app].[dbo].[LOC] a"
         if usrdep != 0:
-            s = s + " where z.DistZona=d.Dist and a.IdLoc=z.IdLocZona and a.IdLoc=d.IdLocDist and a.DepLoc = %d order by z.NomZona"
+            s = s + " where z.DistZona=d.Dist and a.IdLoc=z.IdLocZona and a.IdLoc=d.IdLocDist and a.DepLoc = %d order by d.CircunDist, z.NomZona"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where z.DistZona=d.Dist and a.IdLoc=z.IdLocZona and a.IdLoc=d.IdLocDist order by z.NomZona"
+            s = s + " where z.DistZona=d.Dist and a.IdLoc=z.IdLocZona and a.IdLoc=d.IdLocDist order by d.CircunDist, z.NomZona"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -150,8 +150,8 @@ class Jurisdiccion:
             return rows
 
     def get_zondist_all(self, idloc):
-        s = "Select d.Dist, z.Zona,z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
-            "[GeografiaElectoral_app].[dbo].[DIST] d where z.DistZona=d.Dist and z.IdLocZona = %d and d.IdLocDist= %d"
+        s = "Select d.Dist, z.Zona, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
+            "[GeografiaElectoral_app].[dbo].[DIST] d where z.DistZona=d.Dist and z.IdLocZona = %d and d.IdLocDist= %d order by d.CircunDist, z.NomZona"
         lista = idloc, idloc    
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
@@ -318,10 +318,10 @@ class Jurisdiccion:
         except Exception as e:
             print("Error - actualización de Jurisdiccion...")
 
-    def upd_recinto_jurireci(self, idlocreci, reci, reci2, idloc2, zonareci, idocact):
-        recinto = idloc2, zonareci, reci2, idocact, idlocreci, reci
+    def upd_recinto_jurireci(self, idlocreci, reci, reci2, idloc2, zonareci, idocact, usr):
+        recinto = idloc2, zonareci, reci2, idocact, usr, idlocreci, reci
         s = "update GeografiaElectoral_app.dbo.reci" + \
-            " set IdLocReci= %s, ZonaReci= %s, Reci=%s, doc_idA=%s where IdLocReci = %s and Reci = %s"
+            " set IdLocReci= %s, ZonaReci= %s, Reci=%s, doc_idA=%s, usuario=%s where IdLocReci = %s and Reci = %s"
         try:
             self.cur.execute(s, recinto)
             self.cx.commit()
@@ -329,10 +329,10 @@ class Jurisdiccion:
         except Exception as e:
             print("Error - actualización de Recinto...")
 
-    def upd_recinto_juri(self, idlocreci, reci, idloc2, zonareci, idocact):
-        recinto = idloc2, zonareci, idocact, idlocreci, reci
+    def upd_recinto_juri(self, idlocreci, reci, idloc2, zonareci, idocact, usr):
+        recinto = idloc2, zonareci, idocact, usr, idlocreci, reci
         s = "update GeografiaElectoral_app.dbo.reci" + \
-            " set IdLocReci= %s, ZonaReci= %s, doc_idA=%s where IdLocReci = %s and Reci = %s"
+            " set IdLocReci= %s, ZonaReci= %s, doc_idA=%s, usuario=%s where IdLocReci = %s and Reci = %s"
         try:
             self.cur.execute(s, recinto)
             self.cx.commit()
