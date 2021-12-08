@@ -170,6 +170,8 @@
 
     function forEachFeatureReci(feature, layer) {
       var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + '<b><big>' + feature.properties.recinto + '</big></b>' +
+            "</br><b><span style='color:blue'>----------------------------------------------------</b></span>" + 
+            "</br><b><span style='color:blue'>Asiento: </span>" + feature.properties.asiento + 
             "</br><b><span style='color:blue'>Idloc/Reci: </b></span>"+ feature.properties.idlocreci + 
             "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
             "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
@@ -188,7 +190,8 @@
 
 
     function forEachFeatureAsi(feature, layer) {
-        var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + feature.properties.asiento +
+      var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + '<b><big>' + feature.properties.asiento + '</big></b>' +
+            "</br><b><span style='color:blue'>----------------------------------------------------</b></span>" + 
             "</br><b><span style='color:blue'>Idloc: </b></span>"+ feature.properties.idloc + 
             "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
             "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
@@ -198,8 +201,8 @@
         layer.bindPopup(popupContent);
 
         layer.on("click", function (e) { 
-            reciLayer.setStyle(style); //resets layer colors
-            reciLayer.setStyle(highlight);  //highlights selected.
+            asiLayer.setStyle(style); //resets layer colors
+            asiLayer.setStyle(highlight);  //highlights selected.
         }); 
     }
 
@@ -265,7 +268,7 @@
 
     // reciLayer
     var iconReci = L.icon({
-      iconUrl: '../static/iconos/icons8-map-pin-40.png',
+      iconUrl: '../../static/iconos/icons8-map-pin-40.png',
       iconSize: [35, 35]
     });
 
@@ -281,7 +284,7 @@
 
     // asiLayer
     var iconAsi = L.icon({
-      iconUrl: '../static/iconos/icons8-map-pin-40-red.png',
+      iconUrl: '../../static/iconos/icons8-map-pin-40-red.png',
       iconSize: [35, 35]
     });
 
@@ -357,11 +360,12 @@
 
     // Set up map
 
-  var mapCenter = [-17.05678, -64.81934];
+  //var mapCenter = [-17.05678, -64.81934];
+    var mapCenter = [{{ latitud  }}, {{ longitud }}];
     var map = L.map('map', {
       defaultExtentControl: true,
       center: mapCenter,
-      zoom: 6,
+      zoom: 18,
       layers: [mapboxStreets] // only add one!
     });
 
@@ -388,7 +392,7 @@
     //----- Add the Street View buttons in the bottom left corner -----
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
     var iconStreet = L.icon({
-        iconUrl: '../static/iconos/icons8-street-view-52.png',
+        iconUrl: '../../static/iconos/icons8-street-view-52.png',
         iconSize: [52, 52]
         })
     var marker_gsv = L.marker(map.getCenter(), {icon:iconStreet});
@@ -401,7 +405,7 @@
             y otros Habilitado. Ubique posición y presione click en opciones  \
             (ubicado en la parte inferior/izquierda) ');
 
-    L.easyButton('<img src="../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
+    L.easyButton('<img src="../../static/iconos/icons8-street-view-26.png" style="width:23px">', function(btn, map){
       if (sw_marker_gsv == 0) {
          sv = L.streetView({ position: 'bottomleft', mapillaryId: 'RC1ZRTBfaVlhWmJmUGVqRk5CYnAxQTpmMGE3OTU0MzM0MTljZTA4' }).addTo(map);
          gsvPopup.setLatLng(map.getCenter()).openOn(map);
@@ -511,7 +515,7 @@
       var coord = e.latlng.toString().split(',');
       var lat = coord[0].split('(');
       var lng = coord[1].split(')');
-      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud: ' + lng[0]);
+      marker.bindPopup('Latitud:: ' + lat[1] + '  Longitud:: ' + lng[0]);
     }
 
     map.on('contextmenu',
@@ -544,12 +548,13 @@
     );
 
 
-    // add marker - coordenadas - parametro
-    map.setView( [{{ latitud }}, {{ longitud }}], 11);
-
     // remove - clear
     map.removeLayer(reciLayer);
     map.removeLayer(munLayer);
+
+
+    // add marker - coordenadas - parametro
+    map.setView( [{{ latitud }}, {{ longitud }}], 11);
 
     const markerIconParam = L.icon({
         iconSize: [25, 41],
