@@ -16,7 +16,7 @@ def get_db_ms():
         print("cnx mssql ok -bdge-")
         return cx
     except:
-        print("Error en conexión... -bdge-")
+        print("Error en conexión... --bdge--")
 
 
 def get_db_pg():
