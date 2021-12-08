@@ -72,17 +72,6 @@ function getgeoesp(event) {
     };
 } //getgeo
 
-/*function circun(valor){
-    $.getJSON("/get_circun", {
-            valor: valor
-        }, function(datos){                
-            $.each(datos, function(index, obj){
-                if(obj[0]==valor){
-                    return obj[1];
-                }           
-            });
-    });
-}*/
 
 function getgeo(event) {
     var x = event.keyCode;

@@ -267,36 +267,23 @@
             </div>
             <div class="col-md-4">
                 <label for="depenreci">Tipo de Dependencia:</label>
-                <input type="hidden" name="reci_iddepen" value="">                          
-                <select id="idepenreci" name=depenreci class="form-control" required
-                        {% if load and rces.codrueedif != '0' and rces.tiporecinto == 7 %}
-                                enabled
-                         {% else %}
-                                disabled
-                        {% endif %}
-                        >
-                        <option></option>                                                          
-                        <option value=63 
-                            {% if load  and rces.depend == 63 %}
-                                    selected  
-                            {% endif %}
-                        >Particular</option>
-                        <option value=64
-                            {% if load  and rces.depend == 64 %}
-                                    selected
-                            {% endif %}
-                        >Fiscal</option>
-                        <option value=65
-                            {% if load  and rces.depend == 65 %}
-                                    selected 
-                            {% endif %}
-                        >Convénio</option>
-                        <option value=66 
-                            {% if load  and rces.depend == 66 %}
-                                    selected 
-                            {% endif %}
-                        >Otro</option>
-                </select>
+                <input type="hidden" name="reci_iddepen" value="">
+                <select id="idepenreci" name="depenreci" class="form-control" required
+                    {% if load and rces.codrueedif != '0' and rces.tiporecinto == 7 %}
+                            enabled
+                     {% else %}
+                            disabled
+                    {% endif %}
+                    >
+                    <option></option>
+                    {% for dependencia in dependencias %}
+                        {% if load and rces.depend==dependencia[0] %}
+                                <option value = "{{ dependencia[0] }}" selected>{{ dependencia[1] }}</option>
+                        {% else %}
+                                <option value = "{{ dependencia[0] }}">{{ dependencia[1] }}</option>
+                        {% endif %}                                                                
+                    {% endfor %}
+                </select>                          
                 <div class="invalid-feedback">Debe Seleccionar un Tipo de Dependencia...</div>
             </div>
         </div> <!--row-->

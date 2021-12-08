@@ -151,63 +151,36 @@
             </div>
             <div class="col-md-6">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name=estado class="form-control">
-                    <option value=79 
-                        {% if load  and a.estado == 79 %}
-                            selected 
-                        {% endif %}
-                    >                                                
-                    Habilitado TSE</option>
-                    <option value=80
-                        {% if load  and a.estado == 80 %}
-                            selected 
-                        {% endif %}
-                    >Rehabilitado TSE</option>
-                    <option value=82
-                        {% if load  and a.estado == 82 %}
-                            selected 
-                        {% endif %}
-                    >Suspendido TSE</option>
-                    <option value=83
-                        {% if load  and a.estado == 83 %}
-                            selected 
-                        {% endif %}
-                    >Suprimido TSE</option>
+                <select id="iestado" name="estado" class="form-control">            
+                    {% for estado in estados %}
+                        {% if estado[0] >= 75 and estado[0] <= 78 %}
+                            {% if load and a.estado == estado[0] %}
+                                    <option value = "{{ estado[0] }}" selected>{{ estado[1] }}</option>
+                            {% else %}
+                                    <option value = "{{ estado[0] }}">{{ estado[1] }}</option>
+                            {% endif %}
+                        {% endif %}                                                              
+                    {% endfor %}
                 </select> 
             </div>
         </div> <!--row-->
-        
 
         <h5 class="text-left text-blue pt-5" >Información Complementaria:</h5>
         <br>
 
-
         <div class="row">
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name=etapa class="form-control">
-                    <option value=1 
-                        {% if load  and a.etapa == 1 %}
-                            selected 
-                        {% endif %}
-                    >Propuesta</option>
-                    <option value=2 
-                        {% if load  and a.etapa == 2 %}
-                            selected 
-                        {% endif %}
-                    >Devuelto</option>
-                    {% if usrdep == 0 %}
-                    <option value=3
-                        {% if load  and a.etapa == 3 %}
-                            selected 
-                        {% endif %}
-                    >Revisión</option>
-                    <option value=4
-                        {% if load  and a.etapa == 4 %}
-                            selected 
-                        {% endif %}
-                    >Aprobado</option>
-                    {% endif %}
+                <select id="ietapa" name="etapa" class="form-control">              
+                    {% for etapa in etapas %}
+                        {% if etapa[0] >= 72 and etapa[0]<=73 %}
+                            {% if load and a.etapa == etapa[0] %}
+                                    <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
+                            {% else %}
+                                    <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
+                            {% endif %}
+                        {% endif %}                                         
+                    {% endfor %}
                 </select> 
             </div>
             <div class="col-md-5">

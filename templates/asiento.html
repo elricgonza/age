@@ -154,7 +154,7 @@
             </div>
             <div class="col-md-2">
                 <label for="fechacensoloc">Fecha Censo:</label>
-                <input type="date" class="form-control" id="ifechacensoloc" title="" placeholder="Introduzca fecha del Censo" name="fechacensoloc" min="2012-01-01" max="2025-01-01" "  
+                <input type="date" class="form-control" id="ifechacensoloc" title="" placeholder="Introduzca fecha del Censo" name="fechacensoloc" min="2012-01-01" max="2025-01-01"
                         {% if load %}
                             value="{{ a.fechacensoloc }}"
                         {% else %}
@@ -216,93 +216,55 @@
             </div>
             <div class="col-md-8">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name="estado" class="form-control" required>
+                <select id="iestado" name="estado" class="form-control" required>                          
                     <option></option>
-                    <option value=16 
-                        {% if load  and a.estado == 16 %}
-                            selected 
-                        {% endif %}
-                    >Habilitado TED</option>
-                    <option value=17
-                        {% if load  and a.estado == 17 %}
-                            selected 
-                        {% endif %}
-                    >Rehabilitado TED</option>
-                    <option value=18
-                        {% if load  and a.estado == 18 %}
-                            selected 
-                        {% endif %}
-                    >Suspendido TED</option>
-                    <option value=19
-                        {% if load  and a.estado == 19 %}
-                            selected 
-                        {% endif %}
-                    >Suprimido TED</option>
-                    {% if usrdep == 0 %}
-                        <option value=75 
-                            {% if load  and a.estado == 75 %}
-                                selected 
+                    {% for estado in estados %}
+                        {% if usrdep == 0 %}
+                            {% if load and a.estado == estado[0] %}
+                                    <option value = "{{ estado[0] }}" selected>{{ estado[1] }}</option>
+                            {% else %}
+                                    <option value = "{{ estado[0] }}">{{ estado[1] }}</option>
                             {% endif %}
-                        >                                                 
-                        Habilitado TSE</option>
-                        <option value=76
-                            {% if load  and a.estado == 76 %}
-                                selected 
-                            {% endif %}
-                        >Rehabilitado TSE</option>
-                        <option value=77
-                            {% if load  and a.estado == 77 %}
-                                selected 
-                            {% endif %}
-                        >Suspendido TSE</option>
-                        <option value=78
-                            {% if load  and a.estado == 78 %}
-                                selected 
-                            {% endif %}
-                        >Suprimido TSE</option>
-                    {% endif %}
+                        {% else %}
+                            {% if estado[0] >= 16 and estado[0]<=19 %}
+                                {% if load and a.estado == estado[0] %}
+                                        <option value = "{{ estado[0] }}" selected>{{ estado[1] }}</option>
+                                {% else %}
+                                        <option value = "{{ estado[0] }}">{{ estado[1] }}</option>
+                                {% endif %}
+                            {% endif %}        
+                        {% endif %}                                                      
+                    {% endfor %}
                 </select>
                 <div class="invalid-feedback">Debe Seleccionar un Estado...</div> 
             </div>
         </div> <!--row-->
         
-
         <h5 class="text-left text-blue pt-5" >Información Complementaria:</h5>
         <br>
-
 
         <div class="row">
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name=etapa class="form-control" onchange="carg(this);">
-                    <option value=70 
-                        {% if load  and a.etapa == 70 %}
-                            selected 
-                        {% endif %}
-                    >Propuesta</option>
-                    <option value=71 
-                        {% if load  and a.etapa == 71 %}
-                            selected 
-                        {% endif %}
-                    >Devuelto</option>
-                    {% if usrdep == 0 %}
-                        <option value=72
-                            {% if load  and a.etapa == 72 %}
-                                selected 
+                <select id="ietapa" name="etapa" class="form-control" onchange="carg(this);">              
+                    {% for etapa in etapas %}
+                        {% if usrdep == 0 %}
+                            {% if load and a.etapa == etapa[0] %}
+                                    <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
+                            {% else %}
+                                    <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
                             {% endif %}
-                        >Revisión</option>
-                        <option value=73
-                            {% if load  and a.etapa == 73 %}
-                                selected 
-                            {% endif %}
-                        >Aprobado</option>
-                        <option value=74
-                            {% if load  and a.etapa == 74 %}
-                                selected 
-                            {% endif %}
-                        >Aprobado con Corrección</option>
-                    {% endif %}
-                </select> 
+                        {% else %}
+                            {% if etapa[0] >= 70 and etapa[0]<=71 %}
+                                {% if load and a.etapa == etapa[0] %}
+                                        <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
+                                {% else %}
+                                        <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
+                                {% endif %}
+                            {% endif %}        
+                        {% endif %}                                                      
+                    {% endfor %}
+                </select>                 
             </div>
             <div class="col-md-5">
                 <label for="docAct">Documento Actualización:</label>

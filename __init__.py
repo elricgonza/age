@@ -670,9 +670,9 @@ def asiento(idloc):
                 if a.usuario == None:
                     a.usuario = usr
 
-                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
 @app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])
@@ -788,10 +788,10 @@ def exterior(idloc):
                     ex.usuario = usr
 
                 return render_template('exterior.html', error=error, a=ex, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep),
-                                       dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep),
-                                       municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+                                       dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep), estados=a.get_estados(),
+                                       etapas=a.get_etapas(), municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
-    return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+    return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), estados=a.get_estados(), etapas=a.get_etapas(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 ''' dup c/ obtenido de rep - resultado idem
 @app.route('/get_departamentos_all', methods=['GET', 'POST'])
@@ -962,14 +962,14 @@ def recinto(idreci, idlocreci):
                     rc.usuario = usr
 
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas(), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
                                        gj_cir=j.get_cir(usrdep),
                                        gj_mun=j.get_mun(usrdep),
                                        gj_prov=j.get_prov(usrdep))
 
     # New
-    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), trecintos=rc.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(), trecintos=rc.get_tiporecintos(), 
+                            dependencias=rc.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                            gj_cir=j.get_cir(usrdep),
                            gj_mun=j.get_mun(usrdep),
                            gj_prov=j.get_prov(usrdep))
@@ -1154,11 +1154,11 @@ def reciespe(idreci, idlocreci):
                     rce.usuario = usr
 
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
+                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), trecintos=rce.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
 
     # New
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                           dependencias=rce.get_dependencias(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
 @app.route('/get_geo_esp', methods=['GET', 'POST'])
@@ -1552,12 +1552,12 @@ def reciespeciales(idreci, idlocreci):
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                       dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep))
+                                       dependencias=rces.get_dependencias(), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep))
 
     # New
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
-                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                            dependencias=rces.get_dependencias(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
 def get_provespeciales_all():

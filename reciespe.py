@@ -261,3 +261,13 @@ class Reciespe:
             return False
         else:
             return rows
+
+
+    def get_dependencias(self):
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=6"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
