@@ -321,34 +321,24 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name=etapa class="form-control" onchange="carg1(this);">
-                    <option value=70
-                        {% if load  and rces.etapa == 70 %}
-                            selected 
-                        {% endif %}
-                    >Propuesta</option>
-                    <option value=71 
-                        {% if load  and rces.etapa == 71 %}
-                            selected 
-                        {% endif %}
-                    >Devuelto</option>
-                    {% if usrdep == 0 %}
-                        <option value=72
-                            {% if load  and rces.etapa == 72 %}
-                                selected 
+                <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);">              
+                    {% for etapa in etapas %}
+                        {% if usrdep == 0 %}
+                            {% if load and rces.etapa == etapa[0] %}
+                                    <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
+                            {% else %}
+                                    <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
                             {% endif %}
-                        >Revisión</option>
-                        <option value=73
-                            {% if load  and rces.etapa == 73 %}
-                                selected 
-                            {% endif %}
-                        >Aprobado</option>
-                        <option value=74
-                            {% if load  and rces.etapa == 74 %}
-                                selected 
-                            {% endif %}
-                        >Aprobado con Correpción</option>
-                    {% endif %}
+                        {% else %}
+                            {% if etapa[0] >= 70 and etapa[0]<=71 %}
+                                {% if load and rc.etapa == etapa[0] %}
+                                        <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
+                                {% else %}
+                                        <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
+                                {% endif %}
+                            {% endif %}        
+                        {% endif %}                                                      
+                    {% endfor %}
                 </select> 
             </div>
             <div class="col-md-5">

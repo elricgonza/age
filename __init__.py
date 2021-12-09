@@ -1154,11 +1154,12 @@ def reciespe(idreci, idlocreci):
                     rce.usuario = usr
 
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), trecintos=rce.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
+                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), trecintos=rce.get_tiporecintos(), 
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
 
     # New
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           dependencias=rce.get_dependencias(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
 @app.route('/get_geo_esp', methods=['GET', 'POST'])
@@ -1552,12 +1553,13 @@ def reciespeciales(idreci, idlocreci):
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                       dependencias=rces.get_dependencias(), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep))
+                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
+                                       municipios=rces.get_muniespeciales_all(usrdep))
 
     # New
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
-                            dependencias=rces.get_dependencias(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
 def get_provespeciales_all():
