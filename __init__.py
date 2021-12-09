@@ -2641,11 +2641,11 @@ def recinto_img(idloc, nomloc, idreci):
 
     else:
         if with_img:  # Edit
-            return render_template('recinto_img_upd.html', rows=i.get_descripcion(9), nomloc=nomloc,
+            return render_template('recinto_img_upd.html', rows=i.get_descripcion(14), nomloc=nomloc,
                                 puede_editar='Recintos - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('recinto_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
+            return render_template('recinto_img.html', rows=i.get_descripcion(14), nomloc=nomloc,
                                 puede_editar='Recintos - Edición' in permisos_usr)
 
 
@@ -2690,11 +2690,11 @@ def reciespe_img(idloc, nomloc, idreci):
 
     else:
         if with_img:  # Edit
-            return render_template('reciespe_img_upd.html', rows=i.get_descripcion(9), nomloc=nomloc,
+            return render_template('reciespe_img_upd.html', rows=i.get_descripcion(14), nomloc=nomloc,
                                 puede_editar='Especiales - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('reciespe_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
+            return render_template('reciespe_img.html', rows=i.get_descripcion(14), nomloc=nomloc,
                                 puede_editar='Especiales - Edición' in permisos_usr)
 
 
@@ -2739,11 +2739,11 @@ def reciespeciales_img(idloc, nomloc, idreci):
 
     else:
         if with_img:  # Edit
-            return render_template('reciespeciales_img_upd.html', rows=i.get_descripcion(9), nomloc=nomloc,
+            return render_template('reciespeciales_img_upd.html', rows=i.get_descripcion(14), nomloc=nomloc,
                                 puede_editar='Reci_espe - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('reciespeciales_img.html', rows=i.get_descripcion(9), nomloc=nomloc,
+            return render_template('reciespeciales_img.html', rows=i.get_descripcion(14), nomloc=nomloc,
                                 puede_editar='Reci_espe - Edición' in permisos_usr)
 
 
