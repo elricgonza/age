@@ -588,6 +588,7 @@ def asiento(idloc):
     '''
     a = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Asientos - Edición' in permisos_usr)  # t/f
@@ -670,9 +671,17 @@ def asiento(idloc):
                 if a.usuario == None:
                     a.usuario = usr
 
-                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), 
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                                       gj_cir=j.get_cir(usrdep),
+                                       gj_mun=j.get_mun(usrdep),
+                                       gj_prov=j.get_prov(usrdep))
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), 
+                           tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                           gj_cir=j.get_cir(usrdep),
+                           gj_mun=j.get_mun(usrdep),
+                           gj_prov=j.get_prov(usrdep))
 
 
 @app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])
@@ -949,7 +958,7 @@ def recinto(idreci, idlocreci):
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
                                     puede_editar='Recintos - Edición' in permisos_usr
                                   )# render a template
-    else: # Viene de <asientos_list>
+    else: # Viene de <recintos_list>
         if idreci != '0':  # EDIT
             if rc.get_recinto_idreci(idreci, idlocreci):
                 """if a.docAct == None:
