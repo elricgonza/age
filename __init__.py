@@ -588,7 +588,7 @@ def asiento(idloc):
     '''
     a = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
-    j = get_json.GetJson(cxpg)
+
     error = None
     p = ('Asientos - Edición' in permisos_usr)  # t/f
 
@@ -1957,17 +1957,23 @@ def jurisdiccion(reci, idloc):
         ju.get_zonadist_idloc2(idloc2, idzona)
         ju.get_asiento_idloc2(idloc2)
         ju.get_jurisdiccion_idlocreci_destino(idloc, reci)
-        ju.add_jurisdiccion(ju.dep, ju.prov, ju.sec, ju.idloc, ju.dist, ju.zona, ju.reci, ju.departamento, ju.provincia, ju.municipio, \
-                            ju.asiento, ju.nomdist, ju.nomzona, ju.recinto, ju.direccion, ju.circun, ju.idtipocircun, ju.tipocircun, \
-                            ju.idtiporecinto, ju.tiporecinto, ju.latitud, ju.longitud, idocact, ju.doc1, ju.dep2, ju.prov2, ju.sec2, \
-                            idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, \
-                            ju.nomzona2, ju.recinto2, ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
-                            ju.tiporecinto2, ju.latitud2, ju.longitud2, f_ingreso, f_actual, usr)
 
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
-            nextid = ju.get_next_idreci(idloc2, reci)
+            nextid = ju.get_next_idreci(idloc2)
+            ju.add_jurisdiccion(ju.dep, ju.prov, ju.sec, ju.idloc, ju.dist, ju.zona, ju.reci, ju.departamento, ju.provincia, ju.municipio, \
+                                ju.asiento, ju.nomdist, ju.nomzona, ju.recinto, ju.direccion, ju.circun, ju.idtipocircun, ju.tipocircun, \
+                                ju.idtiporecinto, ju.tiporecinto, ju.latitud, ju.longitud, idocact, ju.doc1, ju.dep2, ju.prov2, ju.sec2, \
+                                idloc2, ju.dist2, ju.zona2, nextid, ju.departamento2, ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, \
+                                ju.nomzona2, ju.recinto2, ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
+                                ju.tiporecinto2, ju.latitud2, ju.longitud2, f_ingreso, f_actual, usr)
             ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact, usr)
         else:
+            ju.add_jurisdiccion(ju.dep, ju.prov, ju.sec, ju.idloc, ju.dist, ju.zona, ju.reci, ju.departamento, ju.provincia, ju.municipio, \
+                                ju.asiento, ju.nomdist, ju.nomzona, ju.recinto, ju.direccion, ju.circun, ju.idtipocircun, ju.tipocircun, \
+                                ju.idtiporecinto, ju.tiporecinto, ju.latitud, ju.longitud, idocact, ju.doc1, ju.dep2, ju.prov2, ju.sec2, \
+                                idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, \
+                                ju.nomzona2, ju.recinto2, ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
+                                ju.tiporecinto2, ju.latitud2, ju.longitud2, f_ingreso, f_actual, usr)
             ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact, usr)
 
         rows = ju.get_jurisdiccion_all(usrdep)
@@ -2007,15 +2013,19 @@ def jurisdiccion_m():
         ju.get_zonadist_idloc2(idloc2, idzona)
         ju.get_asiento_idloc2(idloc2)
         ju.get_jurisdiccion_idlocreci_destino(idloc, reci)
-        ju.upd_jurisdiccion(idocact, ju.dep2, ju.prov2, ju.sec2, idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, \
-                            ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, ju.nomzona2, ju.recinto2, \
-                            ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
-                            ju.tiporecinto2, ju.latitud2, ju.longitud2, f_actual, usr, idjurisd)
 
         if idloc != idloc2 and ju.get_verifica_dupli(idloc2, reci):
-            nextid = ju.get_next_idreci(idloc2, reci)
+            nextid = ju.get_next_idreci(idloc2)
+            ju.upd_jurisdiccion(idocact, ju.dep2, ju.prov2, ju.sec2, idloc2, ju.dist2, ju.zona2, nextid, ju.departamento2, \
+                                ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, ju.nomzona2, ju.recinto2, \
+                                ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
+                                ju.tiporecinto2, ju.latitud2, ju.longitud2, f_actual, usr, idjurisd)
             ju.upd_recinto_jurireci(idloc, reci, nextid, idloc2, idzona, idocact, usr)
         else:
+            ju.upd_jurisdiccion(idocact, ju.dep2, ju.prov2, ju.sec2, idloc2, ju.dist2, ju.zona2, reci2, ju.departamento2, \
+                                ju.provincia2, ju.municipio2, ju.asiento2, ju.nomdist2, ju.nomzona2, ju.recinto2, \
+                                ju.direccion2, ju.circun2, ju.idtipocircun2, ju.tipocircun2, ju.idtiporecinto2, \
+                                ju.tiporecinto2, ju.latitud2, ju.longitud2, f_actual, usr, idjurisd)
             ju.upd_recinto_juri(idloc, reci, idloc2, idzona, idocact, usr)
 
         rows = ju.get_jurisdiccion_all(usrdep)

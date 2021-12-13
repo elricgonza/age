@@ -12,18 +12,14 @@ class Jurisdiccion:
         self.cur = cx.cursor()
 
     def get_jurisdiccion_all(self, usrdep):        
-        s = "Select [bdge].[dbo].[GeoRecintos_all].IdLocReci, [bdge].[dbo].[GeoRecintos_all].Reci, [bdge].[dbo].[GeoRecintos_all].NomDep" + \
-            " as Departamento, [bdge].[dbo].[GeoRecintos_all].NomProv as Provincia, [bdge].[dbo].[GeoRecintos_all].NombreMunicipio as Municipio," + \
-            " [bdge].[dbo].[GeoRecintos_all].NombreRecinto, [bdge].[dbo].[GeoRecintos_all].TipoCircunscripcion, [bdge].[dbo].[GeoRecintos_all].DEP," + \
-            " [bdge].[dbo].[GeoRecintos_all].PROV, [bdge].[dbo].[GeoRecintos_all].SEC," + \
-            " [bdge].[dbo].[GeoRecintos_all].Estado, [bdge].[dbo].[actJurisd].idloc2, [bdge].[dbo].[actJurisd].reci2" + \
-            " from [bdge].[dbo].[GeoRecintos_all] left join [bdge].[dbo].[actJurisd] on [bdge].[dbo].[GeoRecintos_all].IdLoc=[bdge].[dbo].[actJurisd].idloc2" + \
-            " and [bdge].[dbo].[GeoRecintos_all].Reci=[bdge].[dbo].[actJurisd].reci2"
-        if usrdep != 0 :
-            s = s + " where [bdge].[dbo].[GeoRecintos_all].TipoLocLoc in (67, 69) and [bdge].[dbo].[GeoRecintos_all].DEP = %d order by [bdge].[dbo].[GeoRecintos_all].prov, [bdge].[dbo].[GeoRecintos_all].sec"
+        s = "Select gr.IdLocReci, gr.Reci, gr.NomDep as Departamento, gr.NomProv as Provincia, gr.NombreMunicipio as Municipio," + \
+            " gr.NombreRecinto, gr.TipoCircunscripcion, gr.DEP, gr.PROV, gr.SEC, gr.Estado, aj.idloc2, aj.reci2" + \
+            " from bdge.dbo.GeoRecintos_all gr left join bdge.dbo.actJurisd aj on gr.IdLoc=aj.idloc2 and gr.Reci=aj.reci2"
+        if usrdep != 0: 
+            s = s + " where gr.TipoLocLoc in (67, 69) and gr.DEP = %d order by gr.prov, gr.sec"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where [bdge].[dbo].[GeoRecintos_all].TipoLocLoc in (67, 69) order by [bdge].[dbo].[GeoRecintos_all].Dep, [bdge].[dbo].[GeoRecintos_all].Prov, [bdge].[dbo].[GeoRecintos_all].Sec"
+            s = s + " where gr.TipoLocLoc in (67, 69) order by gr.Dep, gr.Prov, gr.Sec"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -178,7 +174,7 @@ class Jurisdiccion:
         if self.cur.rowcount == 0:
             return False
         else:
-            return rows
+            return True
 
     def get_jurisdiccion_idlocreci_origen(self, idloc, reci):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona," + \
@@ -340,8 +336,8 @@ class Jurisdiccion:
         except Exception as e:
             print("Error - actualización de Recinto...")
 
-    def get_next_idreci(self, idloc, reci):
-        lista = idloc, reci
-        self.cur.execute("select max(Reci) + 1 from GeografiaElectoral_app.dbo.RECI where IdLocReci=%d and Reci=%d", lista)
+    def get_next_idreci(self, idloc):
+        lista = idloc
+        self.cur.execute("select max(Reci) + 1 from GeografiaElectoral_app.dbo.RECI where IdLocReci=%d", lista)
         row = self.cur.fetchone()
         return row[0]
