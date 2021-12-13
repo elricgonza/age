@@ -1085,6 +1085,7 @@ def reciespe(idreci, idlocreci):
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Especiales - Edición' in permisos_usr)  # t/f
@@ -1150,7 +1151,7 @@ def reciespe(idreci, idlocreci):
             rows = rce.get_reciespe_all(usrdep)
             return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
                                     puede_editar='Especiales - Edición' in permisos_usr)  # render a template
-    else: # Viene de <asientos_list>
+    else: # Viene de <recintos_list>
         if idreci != '0':  # EDIT
             if rce.get_recinto_idreci(idreci, idlocreci) == True:
                 """if a.docAct == None:
@@ -1164,11 +1165,16 @@ def reciespe(idreci, idlocreci):
 
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), trecintos=rce.get_tiporecintos(), 
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
-
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones(), 
+                                       gj_cir=j.get_cir(usrdep),
+                                       gj_mun=j.get_mun(usrdep),
+                                       gj_prov=j.get_prov(usrdep))
     # New
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                           gj_cir=j.get_cir(usrdep),
+                           gj_mun=j.get_mun(usrdep),
+                           gj_prov=j.get_prov(usrdep))
 
 
 @app.route('/get_geo_esp', methods=['GET', 'POST'])
