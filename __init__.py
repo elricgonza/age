@@ -588,7 +588,7 @@ def asiento(idloc):
     '''
     a = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
-
+    j = get_json.GetJson(cxpg)
     error = None
     p = ('Asientos - Edición' in permisos_usr)  # t/f
 
