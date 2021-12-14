@@ -1489,6 +1489,7 @@ def reciespeciales(idreci, idlocreci):
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
@@ -1569,12 +1570,18 @@ def reciespeciales(idreci, idlocreci):
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                                        dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
-                                       municipios=rces.get_muniespeciales_all(usrdep))
+                                       municipios=rces.get_muniespeciales_all(usrdep),
+                                       gj_cir=j.get_cir(2),
+                                       gj_mun=j.get_mun(2),
+                                       gj_prov=j.get_prov(2))
 
     # New
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
-                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                            gj_cir=j.get_cir(2),
+                            gj_mun=j.get_mun(2),
+                            gj_prov=j.get_prov(2))
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
 def get_provespeciales_all():

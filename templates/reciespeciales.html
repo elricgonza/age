@@ -2,10 +2,9 @@
 
 {% block content %}
 
+{% include "geo_libs.html" %}
 {% block js_css %}
-    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='js/uts/viewmap.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/buildmap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
@@ -39,7 +38,8 @@
             </div>
             <div class="col-md-4">
                 <label for="">.</label>
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoespecial(event)" >Visualizar imágen Satelital</button>
+                <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoespecial(event)" >Visualizar imágen Satelital</button>-->
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="viewMap({{gj_mun}}, {{gj_prov}}, {{gj_cir}})" >Visualizar imágen Satelital+</button>
             </div>
         </div>
         <br>
