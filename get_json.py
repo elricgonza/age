@@ -42,7 +42,7 @@ class GetJson:
             provincia, cod_dep, geom FROM provincias
             '''
         
-        if (dep == '0'):
+        if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
             ss = f'WHERE cod_dep= {dep} '
@@ -74,7 +74,7 @@ class GetJson:
             municipio, cod_dep, geom FROM municipios
             '''
         
-        if (dep == '0'):
+        if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
             ss = f'WHERE cod_dep= {dep} '
@@ -106,7 +106,7 @@ class GetJson:
           FROM (SELECT circun, cod_dep, geom FROM circun
             '''
 
-        if (dep == '0'):
+        if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
             ss = f'WHERE cod_dep= {dep} '
@@ -142,7 +142,7 @@ class GetJson:
                 FROM recintos
         '''
         
-        if (dep == '0'):
+        if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
             ss = f'WHERE cod_dep= {dep} '
@@ -178,7 +178,7 @@ class GetJson:
                 FROM asientos
         '''
         
-        if (dep == '0'):
+        if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
             ss = f'WHERE cod_dep= {dep} '
@@ -209,7 +209,7 @@ class GetJson:
           FROM (SELECT id, nom_localidad, geom FROM g_localidad
                 '''
         
-        if (dep == '0'):
+        if (dep == 0):
             print('dep IGUAL A  0')
             sss = s + ' ) inputs) features;'
         else:
