@@ -193,6 +193,7 @@ def get_json_ptos():
 def vs(dep):
     j = get_json.GetJson(cxpg)
 
+    dep=int(dep)
     #geo_json = j.get_loc(dep)
     return render_template('vs.html', 
                             gj_reci=j.get_reci(dep),
