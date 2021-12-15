@@ -146,7 +146,6 @@ class Exterior:
                 self.cur.execute(s)
 
             rows = self.cur.fetchall()
-            print(rows)
             if self.cur.rowcount == 0:
                 return False
             else:
@@ -162,7 +161,6 @@ class Exterior:
                 self.cur.execute(s)
 
             rows = self.cur.fetchall()
-            print(rows)
             if self.cur.rowcount == 0:
                 return False
             else:
@@ -175,7 +173,6 @@ class Exterior:
             self.cur.execute(s, usrdep)
         else:
             s = s + " order by DepProv"
-            print(s)
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -191,7 +188,6 @@ class Exterior:
             self.cur.execute(s, usrdep)
         else:
             s = s + " order by DepSec"
-            print(s)
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
