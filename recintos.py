@@ -6,6 +6,7 @@ class Recintos:
     nomreci=''
     zonareci=0
     maxmesasreci=0
+    ambientes=0
     direccion=''
     latitud=0
     longitud=0
@@ -47,7 +48,7 @@ class Recintos:
             "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
             "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
-            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc " + \
+            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -92,6 +93,7 @@ class Recintos:
             self.rutaA = row[27]
             self.rutaAF = row[28]
             self.nomloc = row[29]
+            self.ambientes = row[30]
         return row
 
 
@@ -99,18 +101,18 @@ class Recintos:
                     maxmesasreci, direccion, latitud, longitud, \
                     estado, tiporecinto, codrue, \
                     codrueedif, depend, \
-                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF):
+                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, ambientes):
 
         new_recinto = idlocreci, reci, nomreci, '', '', zonareci, \
             maxmesasreci, direccion, latitud, longitud, \
             estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, '0'
+            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, '0', ambientes
 
         s = "insert into [GeografiaElectoral_app].[dbo].[RECI] (IdLocReci, Reci, NomReci, SupReci, ApoyoReci, " + \
             " ZonaReci, MaxMesasReci, Direccion, latitud, " + \
             " longitud, estado, tipoRecinto, codRue, codRueEdif, " + \
-            " depend, cantPisos, fechaIngreso, fechaAct, usuario, etapa, doc_idA, doc_idAF, nacionId) VALUES " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            " depend, cantPisos, fechaIngreso, fechaAct, usuario, etapa, doc_idA, doc_idAF, nacionId, ambientesDisp) VALUES " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_recinto)
             self.cx.commit()
@@ -149,7 +151,7 @@ class Recintos:
                 " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
                 " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
                 " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
-                " etapa= %s, doc_idA= %s, doc_idAF= %s " + \
+                " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s " + \
                 " where IdLocReci = %s and Reci = %s"
             try:
                 self.cur.execute(s, recinto)
@@ -160,7 +162,7 @@ class Recintos:
 
 
     def diff_old_new_reci(self, row_to_upd):
-        rc = self.get_recinto_idreci(row_to_upd[18], row_to_upd[17])  #18 -> idreci, #19 -> idlocreci
+        rc = self.get_recinto_idreci(row_to_upd[19], row_to_upd[18])  #18 -> idreci, #19 -> idlocreci
         vdif = False
         if self.nomreci != row_to_upd[0]:
             print('nom dif')
@@ -210,6 +212,9 @@ class Recintos:
             vdif = True
         if self.doc_idAF != int(row_to_upd[16]):
             print('doc_idAF dif')
+            vdif = True
+        if self.ambientes != int(row_to_upd[17]):
+            print('ambientesDisp dif')
             vdif = True
         
         return vdif

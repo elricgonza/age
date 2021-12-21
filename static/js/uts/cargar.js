@@ -10,8 +10,8 @@ function cargar(valor, data) {
                 var i=1;
                 $("#iprovincia").append('<option></option>');
                 $.each(datos, function(index, obj){
-                    console.log(valor);
-                    console.log(obj[0]);
+                    //console.log(valor);
+                    //console.log(obj[0]);
                     if(valor==obj[0]){
                         $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');    
                         i++;

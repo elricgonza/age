@@ -280,6 +280,15 @@
                 <div class="invalid-feedback">Debe introducir un dato válido.</div>
             </div>
             <div class="col-md-2">
+                <label for="ambientes">Ambientes(disp.):</label> 
+                <input type="text" class="form-control" id="iambientes" title="" placeholder="Max." name="ambientes"  required pattern="^ *\d[\d ]*$"  onkeypress="return validacionMax(event)"
+                        {% if load %}
+                            value="{{ rc.ambientes }}"
+                        {% endif %}
+                    >
+                <div class="invalid-feedback" id="v_poblacionloc">Debe introducir un dato válido.</div>
+            </div>
+            <div class="col-md-2">
                 <label for="mesasreci">Mesa(max.):</label> 
                 <input type="text" class="form-control" id="imesasreci" title="" placeholder="Max." name="mesasreci"  required pattern="^ *\d[\d ]*$"  onkeypress="return validacionMax(event)"
                         {% if load %}
@@ -288,7 +297,7 @@
                     >
                 <div class="invalid-feedback" id="v_poblacionloc">Debe introducir un dato válido.</div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <label for="dirreci">Dirección del Recinto:</label>
                 <input type="text" class="form-control" id="idirreci" title="" placeholder="Introduzca descripción de ubicación" name="dirreci" required  
                         {% if load %}

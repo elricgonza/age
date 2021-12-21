@@ -63,6 +63,8 @@ app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
 app.config['SUBIR_PDF'] = '/static/pdfdoc'
 app.config['REPORTE_PDF'] = 'file:///var/www/flasks/age/reporteh.pdf'
 app.config['MODULO_REPORTES'] = 'file:///var/www/flasks/age/reporte.pdf'
+app.config['HELP_DOC'] = 'file:///var/www/flasks/age/static/helpdoc/_build/html/index.html'
+#app.config['HELP_DOC'] = '/static/helpdoc/_build/html/index.html'
 ALLOWED_EXTENSIONS = set(['pdf'])
 
 BCRYPT_LOG_ROUNDS = 15
@@ -933,7 +935,7 @@ def recinto(idreci, idlocreci):
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
-                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF)
+                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'])
 
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
@@ -951,8 +953,8 @@ def recinto(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, idlocreci[1], idreci    
-
+                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], idlocreci[1], idreci    
+    
             rc.upd_recinto(row_to_upd)
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)            
 
@@ -1128,7 +1130,7 @@ def reciespe(idreci, idlocreci):
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
-                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'])
+                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'])
 
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
@@ -1145,7 +1147,7 @@ def reciespe(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], idlocreci[1], idreci    
+                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], idlocreci[1], idreci    
 
             rce.upd_recinto(row_to_upd)
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
@@ -1532,7 +1534,7 @@ def reciespeciales(idreci, idlocreci):
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
-                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF)
+                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'])
 
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
 
@@ -1549,7 +1551,7 @@ def reciespeciales(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, idlocreci[1], idreci    
+                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], idlocreci[1], idreci    
 
             rces.upd_recinto(row_to_upd)
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
@@ -1640,6 +1642,17 @@ def get_muniespeciales_all1():
                        municipio='INTENTE NUEVAMENTE....')
 
 #========== Final Modulo Recintos Casos Especiales ============#
+
+#========== Inicio Modulo Manuales ============#
+
+@app.route('/help_doc', methods=['GET', 'POST'])
+def help_doc():
+    new = 2
+    print('------')
+    webbrowser.open(app.config['HELP_DOC'], new=new)
+    return render_template('home.html')
+
+#========== Final Modulo Manuales ============#
 
 @app.route('/about')
 def about():
