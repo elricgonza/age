@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container">
-    <h4 class="text-center text-blue pt-3" >Actualización de Password</h4>
+    <h3 class="text-center text-blue pt-5" >Actualización de Contraseña</h3>
     <br>
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-6">
@@ -11,20 +11,20 @@
 
                 <form action="" class="needs-validation" novalidate method='POST'>
                     <div class="form-group">
-                        <label for="pwd">Password Anterior:</label>
-                        <input type="password" class="form-control" id="pwdold" title="" placeholder="Introduzca password anterior" name="pwdold" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
+                        <label for="pwd">Contraseña Anterior:</label>
+                        <input type="password" class="form-control" id="pwdold" title="" placeholder="Introduzca contraseña anterior" name="pwdold" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
                         <div class="invalid-feedback">Debe contener al menos un número, una letra minúscula, una mayúscula y al menos 8 caracteres.</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="pwd">Password Nuevo:</label>
-                        <input type="password" class="form-control" id="pwdnew" title="" placeholder="Introduzca nuevo password" name="pwdnew" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
+                        <label for="pwd">Contraseña Nueva:</label>
+                        <input type="password" class="form-control" id="pwdnew" title="" placeholder="Introduzca nueva contraseña" name="pwdnew" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
                         <div class="invalid-feedback">Debe contener al menos un número, una letra minúscula, una mayúscula y al menos 8 caracteres.</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="pwd">Confirme Nuevo Password:</label>
-                        <input type="password" class="form-control" id="pwdnew2" title="" placeholder="Confirme password nuevo" name="pwdnew2" required oninput="validapswd2(this)">                                                                                                                                                            
+                        <label for="pwd">Confirme Nueva Contraseña:</label>
+                        <input type="password" class="form-control" id="pwdnew2" title="" placeholder="Confirme contraseña nueva" name="pwdnew2" required oninput="validapswd2(this)">                                                                                                                                                            
                         <div class="invalid-feedback" id="v_pswd2">Error en confirmación...</div>
                     </div>
 

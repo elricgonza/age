@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container">
-    <h4 class="text-center text-blue pt-3" >Registro de Usuarios</h4>
+    <h3 class="text-center text-blue pt-5" >Registro de Usuarios</h5>
 
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-6">
@@ -122,12 +122,12 @@
                     {% if not load_u %}
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
-                            <label for="pwd">Password:</label>
-                            <input type="password" class="form-control" id="pswd" title="" placeholder="Introduzca password" name="pswd" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
+                            <label for="pwd">Contraseña:</label>
+                            <input type="password" class="form-control" id="pswd" title="" placeholder="Introduzca contraseña" name="pswd" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">                                                                                                                                                            
                             <div class="invalid-feedback">Debe contener al menos un número, una letra minúscula, una mayúscula y al menos 8 caracteres.</div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="pswd2">Confirme Password:</label>
+                            <label for="pswd2">Confirme Contraseña:</label>
                             <input type="password" class="form-control" title= "" id="pswd2" placeholder="Confirmación" name="pswd2" required oninput="validapswd2(this)"> 
                             <div class="invalid-feedback" id="v_pswd2">Error en confirmación.</div>
                         </div>
