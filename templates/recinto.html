@@ -281,7 +281,7 @@
             </div>
             <div class="col-md-2">
                 <label for="ambientes">Ambientes(disp.):</label> 
-                <input type="text" class="form-control" id="iambientes" title="" placeholder="Max." name="ambientes"  required pattern="^ *\d[\d ]*$"  onkeypress="return validacionMax(event)"
+                <input type="text" class="form-control" id="iambientes" title="" placeholder="Max." name="ambientes"  required pattern="^ *\d[\d ]*$"  onkeypress="return validacionMax1(event)"
                         {% if load %}
                             value="{{ rc.ambientes }}"
                         {% endif %}
@@ -504,6 +504,18 @@
       var key = event.which || event.keyCode;
       /* Observamos el resultado que generará la tecla */
       var max = parseInt(form.mesasreci.value + String.fromCharCode(key)
+      );
+      /* Si no está dentro de lo esperado cancelamos la pulsación */
+      if (isNaN(max) === true || max < 1 || max > 300) {
+        return false;
+      }
+      return true;
+    }
+
+    function validacionMax1(event) {
+      var key = event.which || event.keyCode;
+      /* Observamos el resultado que generará la tecla */
+      var max = parseInt(form.ambientes.value + String.fromCharCode(key)
       );
       /* Si no está dentro de lo esperado cancelamos la pulsación */
       if (isNaN(max) === true || max < 1 || max > 300) {
