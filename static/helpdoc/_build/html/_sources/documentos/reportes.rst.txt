@@ -1,0 +1,77 @@
+8. Reportes
+***********
+
+a. Usuario Nacional
+===================
+
+El presente usuario tendrá activo las opciones:
+
+•   Reportes
+
+Opción Reportes 
+---------------
+
+A través de esta opción se podrá realizar reportes de:
+
+•   Asientos
+•   Recintos
+•   Asientos Exterior
+•   Recintos Exterior
+•   Homologaciones
+•   Jurisdicciones
+•   LogTransacciones.
+
+..  image:: ./image/Reportes.PNG
+    :width: 100%
+    :alt: 'Pantalla Reportes'
+    :align: left
+
+**Procedimiento para la Generación de Reportes:**
+
+**Paso 1:** Para la generación de reportes se deberá seleccionar la pestaña sobre la cual se desea generar el reporte (Asientos, Recintos, Asie_Ext, Reci_Ext, etc).
+
+**Paso 2:** Una vez seleccionada la pestaña (u opción), el formulario presenta el siguiente detalle, 
+
+..  image:: ./image/Reportes1.PNG
+    :width: 100%
+    :alt: 'Pantalla Reportes'
+    :align: left
+
+**Opción Pestañas de Modulo,** A través de esta opción se podrá elegir el modulo sobre el cual generar el reporte.
+
+**Opción Filtro de Consulta,** Dependiendo del módulo al cual se ingrese, se muestra filtros de consulta en función al módulo, donde la cantidad de filtros varía en función del módulo.
+
+**Opción Formato de reporte,** Permite generar reportes en formato Excel, PDF y formato Texto.
+
+**Opción Mostrar u ocultar columnas,** A través de esta opción se podrá ocultar o mostrar columnas del reporte.
+
+**Minimizar Filtros,** A través de esta opción se podrá minimizar los filtros de búsqueda.
+
+**Maximizar Filtros,** A través de esta opción se podrá maximizar los filtros de búsqueda.
+
+**Refrescar Filtros,** A través de esta opción se borrara los filtros de búsqueda y pondrá los filtros de búsqueda por defecto.
+
+**Panel de Búsqueda,** A través de esta opción se podrá realizar búsqueda en función de los parámetros de búsqueda establecidas en las columnas del reporte.
+
+b. Usuario Departamental
+========================
+
+El presente usuario tendrá activo las opciones:
+
+•   Reportes
+
+•   Opción Reportes, a través de esta opción se podrá realizar reportes de:
+•   Asientos
+•   Recintos
+•   Asientos Exterior
+•   Recintos Exterior
+•   Homologaciones
+•   Jurisdicciones
+•   LogTransacciones.
+
+..  image:: ./image/Reportes2.PNG
+    :width: 100%
+    :alt: 'Pantalla Reportes'
+    :align: left
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.

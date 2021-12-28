@@ -1,0 +1,177 @@
+5. Opción Act. Jurisdicción
+***************************
+
+a. Usuario Nacional
+===================
+
+El presente usuario tendrá activo las opciones:
+
+•	Asientos
+•	Recintos
+
+..  image:: ./image/Jurisdiccion.PNG
+    :width: 100%
+    :alt: 'Pantalla de Jurisdiccion'
+    :align: left
+
+Opción Asientos
+---------------
+
+A través de esta opción, se podrá realizar la actualización de jurisdicciones de los diferentes asientos, este proceso consiste en cambiar de jurisdicción ya sea del departamento, provincia y/o municipio.
+
+El cambio de jurisdicción de un asiento afecta a todos los recintos que contiene cada asiento.
+
+..  image:: ./image/JurisdiccionAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla Jurisdiccion de Asientos'
+    :align: left  
+
+Trasladar Jurisdicción
+++++++++++++++++++++++++
+
+A través de opción podrá realizar la actualización de jurisdicción.
+
+**Procedimiento para Realizar la Actualización de Jurisdicción:**
+
+**Paso 1:** Para realizar la actualización de jurisdiccion, se debe presionar el botón ``Trasladar``, esto le llevara al siguiente formulario,
+
+..  image:: ./image/JurisdiccionAsientoTrasladar.PNG
+    :width: 100%
+    :alt: 'Pantalla Trasladar Jurisdiccion de Asientos'
+    :align: left
+
+**Paso 2:** En el presente formulario, se desplegara el asiento y la jurisdicción al cual se le desea llevar esto a través de la elección del departamento, provincia y/o municipio, en base a estos parámetros se genera automáticamente el campo “Circuns”, las zonas que pertenecen a esa circunscripción.
+
+**Paso 3:** También se debe seleccionar el doc. Con el cual se realizó la actualización del asiento, una vez llenado todos los campos se debe presionar en el botón ``Asignar``, esto registrara la actualización de la jurisdicción realizada.
+
+**Nota.-** Cabe mencionar, que solo se puede realizar la actualización de jurisdicción en asientos que tengan al menos un recinto, caso contrario no será posible.
+
+Modificar Jurisdicción del Asiento
+++++++++++++++++++++++++++++++++++
+
+A través de opción podrá modificar la actualización de la jurisdicción.
+
+**Procedimiento para la Modificación la Actualización de la Jurisdicción:**
+
+**Paso 1:** Para realizar la modificación de una actualización de jurisdicción se debe presionar en el botón ``Modificar``, en el asiento a modificar la jurisdicción.
+
+**Paso 3:** Esto le desplegara en siguiente formulario,
+
+..  image:: ./image/JurisdiccionAsientoModificar.PNG
+    :width: 100%
+    :alt: 'Pantalla Modificar Jurisdiccion de Asientos'
+    :align: left 
+
+**Paso 4:** En el presente formulario se deberá realizar la modificación en los diferentes campos una vez realizado los cambios, se debe presionar en el boton ``Modificar``, para confirmar la modificación, caso contrario si no se desea realizar la modificación se deberá presionar el boton ``Volver``, para cancelar la modificación.
+
+Opción Recintos
+---------------
+
+A través de esta opción, se podrá realizar la actualización de jurisdicciones de los diferentes recitos, este proceso consiste en cambiar de jurisdicción ya sea del departamento, provincia y/o municipio.
+
+..  image:: ./image/JurisdiccionRecinto.PNG
+    :width: 100%
+    :alt: 'Pantalla Jurisdiccion de Recintos'
+    :align: left
+
+Trasladar Jurisdicción
++++++++++++++++++++++++++
+
+A través de opción podrá realizar la actualización de jurisdicción. 
+
+**Procedimiento para Realizar la Actualización de Jurisdicción:**
+
+**Paso 1:** Para realizar la actualización de jurisdicción, se debe presionar el botón ``Trasladar``, esto le llevara al siguiente formulario,
+
+..  image:: ./image/JurisdiccionRecintoTrasladar.PNG
+    :width: 100%
+    :alt: 'Pantalla Trasladar Jurisdiccion de Recintos'
+    :align: left
+
+**Paso 2:** En el presente formulario, se desplegara el recinto y la jurisdicción al cual se le desea llevar esto a través de la elección del departamento, provincia y/o municipio, en base a estos parámetros se genera automáticamente la lista de asientos que pertenecen a ese departamento, provincia y/o municipio.
+
+**Paso 3:** Una vez seleccionado el asiento automáticamente se generaran las pertenecientes a dicho asiento, y por ultimo también se debe seleccionar el doc. Con el cual se realizó la actualización del recinto, una vez llenado todos los campos se debe presionar en el botón ``Asignar``, esto registrara la actualización de la jurisdicción realizada.
+
+Modificar Jurisdicción del Recinto
+++++++++++++++++++++++++++++++++++
+
+A través de opción podrá modificar la actualización de la jurisdicción.
+
+**Procedimiento para la Modificación la Actualización de la Jurisdicción:**
+
+**Paso 1:** Para realizar la modificación de una actualización de jurisdicción se debe presionar en el botón ``Modificar``, en el recinto a modificar la jurisdicción.
+
+**Paso 2:** Esto le desplegara en siguiente formulario,
+
+..  image:: ./image/JurisdiccionRecintoModificar.PNG
+    :width: 100%
+    :alt: 'Pantalla Modificar Jurisdiccion de Recintos'
+    :align: left 
+
+**Paso 3:** En el presente formulario se deberá realizar la modificación en los diferentes campos una vez realizado los cambios, se debe presionar en el boton ``Modificar``, para confirmar la modificación, caso contrario si no se desea realizar la modificación se deberá presionar el boton ``Volver``, para cancelar la modificación.
+
+b. Usuario Departamental
+========================
+
+El presente usuario tendrá activo las opciones:
+
+•	Asientos
+•	Recintos
+
+..  image:: ./image/JurisdiccionDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla Jurisdiccion de Recintos'
+    :align: left
+
+Opción Asientos
+---------------
+
+A través de esta opción, se podrá realizar la actualización de jurisdicciones de los diferentes asientos que corresponden al departamento con el cual se logeo el usuario TED, este proceso consiste en cambiar de jurisdicción ya sea de la provincia y/o municipio.
+
+El cambio de jurisdicción de un asiento afecta a todos los recintos que contiene cada asiento.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.
+
+Opción Recintos
+---------------
+ 
+A través de esta opción, se podrá realizar la actualización de jurisdicciones de los diferentes recitos que corresponden al departamento con el cual se logeo el usuario TED, este proceso consiste en cambiar de jurisdicción ya sea de la provincia y/o municipio.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

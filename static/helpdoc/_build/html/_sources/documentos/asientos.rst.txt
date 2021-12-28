@@ -1,0 +1,410 @@
+3. Opción Asientos
+******************
+
+a. Usuario Nacional
+===================
+
+El presente usuario tendrá activo las opciones:
+   
+•	Asientos Electorales
+•	Asientos Exterior
+
+..	image::	./image/Asientos.PNG
+    :width: 100%
+    :alt: 'Pantalla de Bienvenida'
+    :align: left
+
+Opción Asientos Electorales
+---------------------------
+
+A través de esta opción, se podrá adicionar, modificar, buscar asientos; a los asientos a su vez se les podrá agregar imágenes e indicadores, que permitan establecer la ubicación exacta del asiento.
+
+..	image::	./image/AsientosElectorales.PNG
+    :width: 100%
+    :alt: 'Pantalla de Asientos Electorales'
+    :align: left
+
+Adicionar nuevo Asiento
++++++++++++++++++++++++
+
+A través de opción podrá registrar un nuevo Asiento.
+
+**Procedimiento para el Registro de un Nuevo Asiento:**
+
+**Paso 1:**	Para el registro de un nuevo asiento, deberá primero llenar los campos de Latitud y Longitud (ejemplo: Latitud: -16.044027  Longitud: -68.68502), una vez digitado los datos, la aplicación automáticamente generara, en base a las coordenadas los datos del Departamento, Provincia y el Municipio.
+
+**Paso 2:**	A partir de la generación de los datos del Departamento, Provincia y Municipio, podrá presionar el botón ``Visualizar Imágen Satelital``, para visualizar la imagen satelital del punto con las coordenadas Latitud y Longitud registradas.
+
+**Paso 3:**	Establecido el punto en la imagen satelital, se debe proceder a completar los datos de los campos restantes.
+
+**Paso 4:**	Llenado los datos del asiento a adicionar se debe proceder a presionar el botón , para el registro del nuevo 
+asiento.	
+
+..	image::	./image/AdicionAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adicion de Asiento'
+    :align: left
+
+Modificar (Editar) Asiento
+++++++++++++++++++++++++++
+
+A través de opción podrá modificar un Asiento.
+
+**Procedimiento para la Modificación de un Asiento:**
+
+**Paso 1:** Para modificar un asiento, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de edición del asiento.
+
+**Paso 2:** Dentro del formulario de edición del asiento, en primera instancia no le despliega la imagen satelital, para desplegar aquello deberá presiona en el botón ``Visualizar Imagen Satelital``, esto le desplegara el punto (coordenadas latitud y longitud), donde se encuentra el asiento.
+
+**Paso 3:** Una vez realizado los cambios a los diferentes datos del asiento se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos del asiento.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de edición del asiento.
+
+..	image::	./image/ModificacionAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla de Modificacion de Asiento'
+    :align: left
+
+Busqueda de Asiento(s)
+++++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de un Asiento:**
+
+**Paso 1:** Para realizar la búsqueda de un determinado asiento ó asientos deberá hacer click en el visor de búsqueda ``Buscar``.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..	image::	./image/BusquedaAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla de Busqueda de Asiento'
+    :align: left
+
+Adición de Imágenes en el Asiento
++++++++++++++++++++++++++++++++++
+
+A través de esta opción se podrá adicionar imágenes (fotos), al asiento que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el asiento.
+
+**Procedimiento para la Adición de Imágenes a un Asiento:**
+
+**Paso 1:** Para realizar la adición de una imagen a un asiento deberá presionar en el icono ``Imagén``, el cual le llevara al formulario de adición de imágenes.
+
+..	image::	./image/AdicionImagenAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adicion de Imagen de Asiento'
+    :align: left
+
+**Paso 2:** Una vez dentro de la adición de imágenes, para adicionar una imagen deberá presionar en el link ``Adicionar Imagén``.
+
+**Paso 3:** Este le habilitara la opciones que le permitirán elegir la posición (Imagen), archivo a seleccionar (Examinar).
+
+..	image::	./image/AdicionImagenAsiento1.png
+    :width: 100%
+    :alt: 'Pantalla de Adición de Imágen de Asiento'
+    :align: left
+
+**Paso 4:** Una vez elegida las opciones de Imagen, Examinar, se deberá guardar el registro presionando el botón ``Aceptar``, para adicionar la imagen al asiento, de esta manera se podrán adicionar una o varias imágenes al asiento.
+
+Modificación de Imágenes en el Asiento
+++++++++++++++++++++++++++++++++++++++
+
+A través de esta opción se podrá modificar imágenes (fotos) del asiento.
+
+**Procedimiento para la Modificación de Imágenes a un Asiento:**
+
+**Paso 1:** Para realizar la modificación de una imagen de un asiento deberá presionar en el icono ``Imágen``, el cual le llevara al formulario de modificación de imágenes.
+
+**Paso 2:** Una vez dentro de la modificación de imágenes se podrá modificar tanto la Imagen, Examinar.
+
+..	image::	./image/ModificacionImagenAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla de Modificacion de Imagen de Asiento'
+    :align: left
+
+**Paso 3:** Una vez realizado los cambios a la imagen se deberá presionar el botón ``Aceptar``, para guardar todos los cambios realizados.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en la imagen del asiento.
+
+Adición de Indicadores al Asiento
++++++++++++++++++++++++++++++++++
+
+A través de esta opción se podrá adicionar indicadores, al asiento que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el asiento.
+
+**Procedimiento para la Adición de Indicadores a un Asiento:**
+
+**Paso 1:** Para realizar la adición de un indicador a un asiento deberá presionar en el icono ``Indicador``, el cual le llevara al formulario de adición de indicadores.
+
+..	image::	./image/AdicionIndicadoresAsiento.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adicion de Indicadores de Asiento'
+    :align: left
+
+**Paso 2:** Una vez dentro de la adición de indicadores, para adicionar un indicador deberá presionar en el link ``Adicionar Indicador``.
+
+**Paso 3:** Este le desplegara el formulario de registro de indicador, donde podrá seleccionar los datos de Categoría, Subcategorías y llenar el campo de Observaciones.
+
+..	image::	./image/AdicionIndicadoresAsiento1.png
+    :width: 50%
+    :alt: 'Pantalla de Adicion de Indicadores de Asiento'
+    :align: center
+
+**Paso 4:** Una vez llenado los datos de las Categorías, Subcategorías y Observaciones, presionar en el botón ``Insertar``, para registrar el indicador al asiento, como resultado del registro del indicador le mostrara el siguiente resultado.
+
+..	image::	./image/AdicionIndicadoresAsiento2.png
+    :width: 80%
+    :alt: 'Pantalla de Adicion de Indicadores de Asiento'
+    :align: center
+
+**Paso 5:** A través de este formulario se podrá realizar la ``Edición`` y ``Eliminación``  del indicador registrado, como se muestra en las siguientes imágenes.
+
+..	image::	./image/EditarIndicadoresAsiento.png
+    :width: 50%
+    :alt: 'Pantalla de Edicion de Indicadores de Asiento'
+    :align: center
+
+..	image::	./image/EliminarIndicadoresAsiento.png
+    :width: 50%
+    :alt: 'Pantalla de Eliminacion de Indicadores de Asiento'
+    :align: center
+
+**Paso 6:** Una vez registrado, modificado o eliminado el indicador al asiento se debe presionar en el botón ``Volver``.
+
+Opción Asientos Exterior
+------------------------
+
+A través de esta opción, se podrá adicionar, modificar, buscar asientos del exterior.
+
+..	image::	./image/AsientosExterior.PNG
+    :width: 100%
+    :alt: 'Pantalla de Asiento del Exterior'
+    :align: left
+
+Adicionar nuevo Asiento Exterior
+++++++++++++++++++++++++++++++++
+
+A través de opción podrá registrar un nuevo Asiento.
+
+**Procedimiento para el Registro de un Nuevo Asiento:**
+
+**Paso 1:** Para el registro de un nuevo asiento, deberá primero llenar los campos de Latitud y Longitud (ejemplo: Latitud: -16.044027  Longitud: -68.68502).
+
+**Paso 2:** Una vez digitada las coordenadas de latitud y longitud podrá presionar el botón ``Visualizar Imagen Satelital``, para visualizar la imagen del punto a través de una imagen satelital.
+
+**Paso 3:** A diferencia de la opción de “Asientos Electorales”, se deberá seleccionar el campo País, el cual automáticamente generara las provincias del país (denominado 1er Nivel, en asientos del exterior), de la misma manera se deberá seleccionar el campo 1er Nivel, el cual automáticamente generara los municipios de la provincia (denominado 2do Nivel), y por ultimo deberá seleccionar el campo 2do Nivel, el cual generara las comunidades del municipio (denominado 3er Nivel).
+
+**Paso 4:** Llenado los datos de Pais, 1er Nivel, 2do Nivel y 3er Nivel, se debe proceder a completar los datos de los campos restantes.
+
+**Paso 5:** Llenado los datos del asiento exterior a adicionar se debe proceder a presionar el botón ``Aceptar``, para el registro del nuevo asiento del exterior.
+
+..	image::	./image/AdicionExterior.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adición Asiento del Exterior'
+    :align: left
+
+Modificar (Editar) Asiento Exterior
++++++++++++++++++++++++++++++++++++
+
+A través de opción podrá modificar un Asiento del Exterior.
+
+**Procedimiento para la Modificación de un Asiento Exterior:**
+
+**Paso 1:** Para modificar un asiento del exterior, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de edición del asiento.
+
+**Paso 2:** Dentro del formulario de edición del asiento, en primera instancia no le despliega la imagen satelital, para desplegar aquello deberá presiona en el botón ``Visualizar Imagen Satelital``, esto le desplegara el punto (coordenadas latitud y longitud), donde se encuentra el asiento del exterior.
+
+**Paso 3:** Una vez realizado los cambios a los diferentes datos del asiento se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos del asiento.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de edición del asiento del exterior.
+
+..	image::	./image/ModificacionExterior.PNG
+    :width: 100%
+    :alt: 'Pantalla de Modificación Asiento del Exterior'
+    :align: left
+
+Busqueda de Asiento(s) del Exterior
++++++++++++++++++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de un Asiento Exterior:**
+
+
+**Paso 1:** Para realizar la búsqueda de un determinado asiento u asientos deberá hacer click en el visor de búsqueda ``Buscar``.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..	image::	./image/BusquedaExterior.PNG
+    :width: 100%
+    :alt: 'Pantalla de Busqueda Asiento del Exterior'
+    :align: left
+
+b. Usuario Departamental
+========================
+
+El presente usuario tendrá activo la opción:
+
+•	Asientos Electorales
+
+..	image::	./image/Exterior.PNG
+    :width: 100%
+    :alt: 'Pantalla de Asiento Electoral Departamental'
+    :align: left
+
+Opción Asientos Electorales 
+---------------------------
+
+A través de esta opción, se podrá adicionar, modificar, buscar asientos solo del usuario del departamento por el cual ingreso al sistema; a los asientos a su vez se les podrá agregar imágenes e indicadores, que permitan establecer la ubicación exacta del asiento.
+
+..	image::	./image/AsientosElectoralesDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Asiento Electoral Departamental'
+    :align: left
+
+Adicionar nuevo Asiento Departamental
++++++++++++++++++++++++++++++++++++++
+
+A través de opción podrá registrar un nuevo Asiento.
+
+**Procedimiento para el Registro de un Nuevo Asiento:**
+
+**Paso 1:** Para el registro de un nuevo asiento, deberá primero llenar los campos de Latitud y Longitud (ejemplo: Latitud: -16.044027  Longitud: -68.68502) esta latitud y longitud deberán pertenecer al departamento del usuario logeado, una vez digitado los datos, la aplicación automáticamente generara, en base a las coordenadas los datos del Departamento, Provincia y el Municipio.
+
+**Paso 2:** A partir de la generación de los datos del Departamento, Provincia y Municipio, podrá presionar el botón ``Visualizar Imagen Satelital``, para visualizar la imagen satelital del punto con las coordenadas Latitud y Longitud registradas.
+
+**Paso 3:** Establecido el punto en la imagen satelital, se debe proceder a completar los datos de los campos restantes.
+
+**Paso 4:** Llenado los datos del asiento a adicionar se debe proceder a presionar el botón ``Aceptar``, para el registro del nuevo 
+Asiento departamental.
+
+**Nota.-** Cabe hacer notar que en determinados campos a llenar como usuario departamental solo se desplegaran los datos que solo le competen al usuario departamental (TED) y no así todos los datos.
+
+..	image::	./image/AdicionAsientoDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adicion Asiento Electoral Departamental'
+    :align: left
+
+Modificar (Editar) Asiento Departamental
+++++++++++++++++++++++++++++++++++++++++
+
+A través de opción podrá modificar un Asiento.
+
+**Procedimiento para la Modificación de un Asiento:**
+
+**Paso 1:** Para modificar un asiento, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de edición del asiento.
+
+**Paso 2:** Dentro del formulario de edición del asiento, en primera instancia no le despliega la imagen satelital, para desplegar aquello deberá presiona en el botón ``Visualizar Imagen Satelital``, esto le desplegara el punto (coordenadas latitud y longitud), donde se encuentra el asiento.
+
+**Paso 3:** Una vez realizado los cambios a los diferentes datos del asiento se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos del asiento.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de edición del asiento departamental.
+
+..	image::	./image/ModificacionAsientoDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Modificacion Asiento Electoral Departamental'
+    :align: left
+
+Buscar de Asiento(s) Departamental
+++++++++++++++++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva como usuario departamental, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de un Asiento:**
+
+**Paso 1:** Para realizar la búsqueda de un determinado asiento u asientos deberá hacer click en el visor de búsqueda.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..	image::	./image/BusquedaAsientoDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Busqueda Asiento Electoral Departamental'
+    :align: left
+
+Adición de Imágenes en el Asiento Departamental
++++++++++++++++++++++++++++++++++++++++++++++++
+
+A través de esta opción se podrá adicionar imágenes (fotos), al asiento que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el asiento.
+
+**Procedimiento para la Adición de Imágenes a un Asiento:**
+
+**Paso 1:** Para realizar la adición de una imagen a un asiento deberá presionar en el icono ``Imagen``, el cual le llevara al formulario de adición de imágenes.
+
+..	image::	./image/AdicionImagenAsientoDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adicion de Imagen Asiento Electoral Departamental'
+    :align: left
+
+**Paso 2:** Una vez dentro de la adición de imágenes, para adicionar una imagen deberá presionar en el link ``Adicionar Imagen``.
+
+**Paso 3:** Este le habilitara la opciones que le permitirán elegir la posición (Imagen), archivo a seleccionar (Examinar).
+
+..	image::	./image/AdicionImagenAsiento1.png
+    :width: 100%
+    :alt: 'Pantalla de Adicion de Imagen de Asiento'
+    :align: left
+
+**Paso 4:** Una vez elegida las opciones de Imagen, Examinar, se deberá guardar el registro presionando el botón ``Aceptar``, para adicionar la imagen al asiento, de esta manera se podrán adicionar una o varias imágenes al asiento.
+
+Modificación de Imágenes en el Asiento
+++++++++++++++++++++++++++++++++++++++
+
+A través de esta opción se podrá modificar imágenes (fotos) del asiento.
+
+**Procedimiento para la Modificación de Imágenes a un Asiento:**
+
+**Paso 1:** Para realizar la modificación de una imagen de un asiento deberá presionar en el icono ``Imagen``, el cual le llevara al formulario de modificación de imágenes.
+
+**Paso 2:** Una vez dentro de la modificación de imágenes se podrá modificar tanto la Imagen, Examinar.
+
+..	image::	./image/ModificacionImagenAsientoDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Modificacion de Imagen de Asiento'
+    :align: left
+
+**Paso 3:** Una vez realizado los cambios a la imagen se deberá presionar el botón ``Aceptar``, para guardar todos los cambios realizados.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en la imagen del asiento.
+
+Adición de Indicadores al Asiento Departamental
++++++++++++++++++++++++++++++++++++++++++++++++
+
+A través de esta opción se podrá adicionar indicadores, al asiento que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el asiento.
+
+**Procedimiento para la Adición de Indicadores a un Asiento:**
+
+**Paso 1:** Para realizar la adición de un indicador a un asiento deberá presionar en el icono ``Indicador``, el cual le llevara al formulario de adición de indicadores.
+
+..	image::	./image/AdicionIndicadoresAsientoDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla de Adicion de Indicadores de Asiento'
+    :align: left
+
+**Paso 2:** Una vez dentro de la adición de indicadores, para adicionar un indicador deberá presionar en el link ``Adicionar Indicador``.
+
+**Paso 3:** Este le desplegara el formulario de registro de indicador, donde podrá seleccionar los datos de Categoría, Subcategorías y llenar el campo de Observaciones.
+
+..	image::	./image/AdicionIndicadoresAsiento1.png
+    :width: 50%
+    :alt: 'Pantalla de Adicion de Indicadores de Asiento'
+    :align: center
+
+**Paso 4:** Una vez llenado los datos de las Categorías, Subcategorías y Observaciones, presionar en el botón ``Insertar``, para registrar el indicador al asiento, como resultado del registro del indicador le mostrara el siguiente resultado.
+
+..	image::	./image/AdicionIndicadoresAsiento2.png
+    :width: 80%
+    :alt: 'Pantalla de Adicion de Indicadores de Asiento'
+    :align: center
+
+**Paso 5:** A través de este formulario se podrá realizar la ``Edición`` y ``Eliminación``  del indicador registrado, como se muestra en las siguientes imágenes.
+
+..	image::	./image/EditarIndicadoresAsiento.png
+    :width: 50%
+    :alt: 'Pantalla de Edicion de Indicadores de Asiento'
+    :align: center
+
+..	image::	./image/EliminarIndicadoresAsiento.png
+    :width: 50%
+    :alt: 'Pantalla de Eliminacion de Indicadores de Asiento'
+    :align: center
+
+**Paso 6:** Una vez registrado, modificado o eliminado el indicador al asiento departamental se debe presionar en el botón ``Volver``.

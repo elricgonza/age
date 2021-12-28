@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6. Org. Territorial &mdash; documentación de Manual SIGE - 0.1</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="7. Documentos" href="documento.html" />
+    <link rel="prev" title="5. Opción Act. Jurisdicción" href="jurisdiccion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Manual SIGE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenido:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ingreso.html">1. Pantalla de Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ingreso.html#pantalla-de-bienvenida">2. Pantalla de Bienvenida</a></li>
+<li class="toctree-l1"><a class="reference internal" href="asientos.html">3. Opción Asientos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recintos.html">4. Opción Recintos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jurisdiccion.html">5. Opción Act. Jurisdicción</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Org. Territorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-usuario-nacional">a. Usuario Nacional</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-pais">Opción País</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-pais">Adicionar nuevo País</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-pais">Modificar País</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-pais-es">Búsqueda de País(es)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-departamento">Opción Departamento</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-departamento">Adicionar nuevo Departamento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-departamento">Modificar Departamento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-departamento-s">Búsqueda de Departamento(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-provincia">Opción Provincia</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nueva-provincia">Adicionar nueva Provincia</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-provincia">Modificar Provincia</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-provincia-s">Búsqueda de Provincia(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-municipio">Opción Municipio</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-municipio">Adicionar nuevo Municipio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-municipio">Modificar Municipio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-municipio-s">Búsqueda de Municipio(s)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#b-usuario-departamental">b. Usuario Departamental</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Opción País</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Opción Departamento</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Opción Provincia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Opción Municipio</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documento.html">7. Documentos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reportes.html">8. Reportes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="historial.html">9. Historial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clasificadores.html">10. Clasificadores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuario.html">11. Usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="salir.html">12. Salir</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Manual SIGE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>6. Org. Territorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentos/territorial.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-territorial">
+<h1>6. Org. Territorial<a class="headerlink" href="#org-territorial" title="Enlazar permanentemente con este título"></a></h1>
+<section id="a-usuario-nacional">
+<h2>a. Usuario Nacional<a class="headerlink" href="#a-usuario-nacional" title="Enlazar permanentemente con este título"></a></h2>
+<p>El presente usuario tendrá activo las opciones:</p>
+<ul class="simple">
+<li><p>País</p></li>
+<li><p>Departamento</p></li>
+<li><p>Provincia</p></li>
+<li><p>Municipio</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/Territorial.PNG"><img alt="'Pantalla Territorial'" class="align-left" src="../_images/Territorial.PNG" style="width: 100%;" /></a>
+<section id="opcion-pais">
+<h3>Opción País<a class="headerlink" href="#opcion-pais" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar países en base a ciertos parámetros establecidos por el TSE.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialPais.PNG"><img alt="'Pantalla Territorial Pais'" class="align-left" src="../_images/TerritorialPais.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-pais">
+<h4>Adicionar nuevo País<a class="headerlink" href="#adicionar-nuevo-pais" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo País.</p>
+<p><strong>Procedimiento para el Registro de un Nuevo País:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo país, debe llenar todos los campos.</p>
+<p><strong>Paso 2:</strong> Una vez registrado todos los datos se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para registrar el nuevo país.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialPaisAdicionar.PNG"><img alt="'Pantalla Adicionar Pais'" class="align-left" src="../_images/TerritorialPaisAdicionar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-pais">
+<h4>Modificar País<a class="headerlink" href="#modificar-pais" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un País.</p>
+<p><strong>Procedimiento para la Modificación de un País:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un país, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de modificación del país.</p>
+<p><strong>Paso 2:</strong> Una vez realizado los cambios a los datos del país se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del país.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de modificación del País.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialPaisModificar.PNG"><img alt="'Pantalla Modificar Pais'" class="align-left" src="../_images/TerritorialPaisModificar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-pais-es">
+<h4>Búsqueda de País(es)<a class="headerlink" href="#busqueda-de-pais-es" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un País:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de una determinado país ó paises deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialPaisBuscar.PNG"><img alt="'Pantalla Busqueda Pais'" class="align-left" src="../_images/TerritorialPaisBuscar.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="opcion-departamento">
+<h3>Opción Departamento<a class="headerlink" href="#opcion-departamento" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar departamentos en base a ciertos parámetros establecidos por el TSE.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialDepartamento.PNG"><img alt="'Pantalla Departamento'" class="align-left" src="../_images/TerritorialDepartamento.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-departamento">
+<h4>Adicionar nuevo Departamento<a class="headerlink" href="#adicionar-nuevo-departamento" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo Departamento.</p>
+<p><strong>Procedimiento para el Registro de un Departamento:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo departamento, debe seleccionar el país para el cual se generara el departamento, luego llenar todos los campos.</p>
+<p><strong>Paso 2:</strong> Una vez registrado todos los datos se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para registrar el nuevo departamento.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialDepartamentoAdicionar.PNG"><img alt="'Pantalla Adicionar Departamento'" class="align-left" src="../_images/TerritorialDepartamentoAdicionar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-departamento">
+<h4>Modificar Departamento<a class="headerlink" href="#modificar-departamento" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un Departamento.</p>
+<p><strong>Procedimiento para la Modificación de un Departamento:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un departamento, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de modificación del departamento.</p>
+<p><strong>Paso 2:</strong> Una vez realizado los cambios a los datos del departamento se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del departamento.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de modificación del Departamento.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialDepartamentoModificar.PNG"><img alt="'Pantalla Modificar Departamento'" class="align-left" src="../_images/TerritorialDepartamentoModificar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-departamento-s">
+<h4>Búsqueda de Departamento(s)<a class="headerlink" href="#busqueda-de-departamento-s" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un Departamento:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de un determinado departamento ó departamentos deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialDepartamentoBuscar.PNG"><img alt="'Pantalla Buscar Departamento'" class="align-left" src="../_images/TerritorialDepartamentoBuscar.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="opcion-provincia">
+<h3>Opción Provincia<a class="headerlink" href="#opcion-provincia" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar provincias en base a ciertos parámetros establecidos por el TSE.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialProvincia.PNG"><img alt="'Pantalla Provincia'" class="align-left" src="../_images/TerritorialProvincia.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nueva-provincia">
+<h4>Adicionar nueva Provincia<a class="headerlink" href="#adicionar-nueva-provincia" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar una nueva Provincia.</p>
+<p><strong>Procedimiento para el Registro de una Provincia:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de una nueva provincia, debe seleccionar el país, departamento para el cual se generara la provincia, luego llenar todos los campos.</p>
+<p><strong>Paso 2:</strong> Una vez registrado todos los datos se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para registrar la nueva provincia.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialProvinciaAdicionar.PNG"><img alt="'Pantalla Adicionar Provincia'" class="align-left" src="../_images/TerritorialProvinciaAdicionar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-provincia">
+<h4>Modificar Provincia<a class="headerlink" href="#modificar-provincia" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar una Provincia.</p>
+<p><strong>Procedimiento para la Modificación de una Provincia:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar una provincia, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de modificación de la provincia.</p>
+<p><strong>Paso 2:</strong> Una vez realizado los cambios a los datos de la provincia se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos de la provincia.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de modificación de la Provincia.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialProvinciaModificar.PNG"><img alt="'Pantalla Modificar Provincia'" class="align-left" src="../_images/TerritorialProvinciaModificar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-provincia-s">
+<h4>Búsqueda de Provincia(s)<a class="headerlink" href="#busqueda-de-provincia-s" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de una Provincia:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de una determinada provincia ó provincias deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialProvinciaBuscar.PNG"><img alt="'Pantalla Busqueda Provincia'" class="align-left" src="../_images/TerritorialProvinciaBuscar.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="opcion-municipio">
+<h3>Opción Municipio<a class="headerlink" href="#opcion-municipio" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar municipios en base a ciertos parámetros establecidos por el TSE.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialMunicipio.PNG"><img alt="'Pantalla Municipio'" class="align-left" src="../_images/TerritorialMunicipio.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-municipio">
+<h4>Adicionar nuevo Municipio<a class="headerlink" href="#adicionar-nuevo-municipio" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo Municipio.</p>
+<p><strong>Procedimiento para el Registro de un Municipio:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo municipio, debe seleccionar el país, departamento, provincia, para el cual se generara el municipio, luego llenar todos los campos.</p>
+<p><strong>Paso 2:</strong> Una vez registrado todos los datos se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para registrar el nuevo municipio.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialMunicipioAdicionar.PNG"><img alt="'Pantalla Adicion de Municipio'" class="align-left" src="../_images/TerritorialMunicipioAdicionar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-municipio">
+<h4>Modificar Municipio<a class="headerlink" href="#modificar-municipio" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un Municipio.</p>
+<p><strong>Procedimiento para la Modificación de una Provincia:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un municipio, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de modificación del municipio.</p>
+<p><strong>Paso 2:</strong> Una vez realizado los cambios a los datos del municipio, se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del municipio.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de modificación del Municipio.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialMunicipioModificar.PNG"><img alt="'Pantalla Modificacion de Municipio'" class="align-left" src="../_images/TerritorialMunicipioModificar.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-municipio-s">
+<h4>Búsqueda de Municipio(s)<a class="headerlink" href="#busqueda-de-municipio-s" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un Municpio:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de un determinado municipio ó municipios deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/TerritorialMunicipioBuscar.PNG"><img alt="'Pantalla Busqueda de Municipio'" class="align-left" src="../_images/TerritorialMunicipioBuscar.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+</section>
+<section id="b-usuario-departamental">
+<h2>b. Usuario Departamental<a class="headerlink" href="#b-usuario-departamental" title="Enlazar permanentemente con este título"></a></h2>
+<p>El presente usuario tendrá activo las opciones:</p>
+<ul class="simple">
+<li><p>País</p></li>
+<li><p>Departamento</p></li>
+<li><p>Provincia</p></li>
+<li><p>Municipio</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/TerritorialDpto.PNG"><img alt="'Pantalla Territorial'" class="align-left" src="../_images/TerritorialDpto.PNG" style="width: 100%;" /></a>
+<section id="id1">
+<h3>Opción País<a class="headerlink" href="#id1" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar países en base a ciertos parámetros establecidos por el TSE.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id2">
+<h3>Opción Departamento<a class="headerlink" href="#id2" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar departamentos en base a ciertos parámetros establecidos por el TSE.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id3">
+<h3>Opción Provincia<a class="headerlink" href="#id3" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar provincias en base a ciertos parámetros establecidos por el TSE.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id4">
+<h3>Opción Municipio<a class="headerlink" href="#id4" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá registrar municipios en base a ciertos parámetros establecidos por el TSE.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="jurisdiccion.html" class="btn btn-neutral float-left" title="5. Opción Act. Jurisdicción" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="documento.html" class="btn btn-neutral float-right" title="7. Documentos" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2021, OEP-UGLE.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

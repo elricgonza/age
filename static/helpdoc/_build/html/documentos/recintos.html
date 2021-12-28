@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. Opción Recintos &mdash; documentación de Manual SIGE - 0.1</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="5. Opción Act. Jurisdicción" href="jurisdiccion.html" />
+    <link rel="prev" title="3. Opción Asientos" href="asientos.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Manual SIGE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenido:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ingreso.html">1. Pantalla de Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ingreso.html#pantalla-de-bienvenida">2. Pantalla de Bienvenida</a></li>
+<li class="toctree-l1"><a class="reference internal" href="asientos.html">3. Opción Asientos</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Opción Recintos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-usuario-nacional">a.  Usuario Nacional</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-uninominales">Opción Uninominales</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-recinto">Adicionar nuevo Recinto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-editar-recinto">Modificar (Editar) Recinto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-recinto-s">Búsqueda de Recinto(s)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adicion-de-imagenes-en-el-recinto">Adición de Imágenes en el Recinto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificacion-de-imagenes-en-el-recinto">Modificaćión de Imágenes en el Recinto</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-especiales-indigenas">Opción Especiales (Indígenas)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-recinto-especial">Adicionar nuevo Recinto Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-editar-recinto-especial">Modificar (Editar) Recinto Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-recinto-s-especial">Búsqueda de Recinto(s) Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adicion-de-imagenes-en-el-recinto-especial">Adición de Imágenes en el Recinto Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificacion-de-imagenes-en-el-recinto-especial">Modificación de Imágenes en el Recinto Especial</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-casos-especiales">Opción Casos Especiales</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-recinto-caso-especial">Adicionar nuevo Recinto Caso Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-editar-recinto-caso-especial">Modificar (Editar) Recinto Caso Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-recinto-s-caso-especial">Búsqueda de Recinto(s) Caso Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adicion-de-imagenes-en-el-recinto-caso-especial">Adición de Imágenes en el Recinto Caso Especial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificacion-de-imagenes-en-el-recinto-caso-especial">Modificación de Imágenes en el Recinto Caso Especial</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-distritos">Opción Distritos</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nuevo-distrito">Adicionar nuevo Distrito</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-distrito">Modificar Distrito</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-distrito-s">Búsqueda de Distrito(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-zonas">Opción Zonas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adicionar-nueva-zona">Adicionar nueva Zona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-zona">Modificar Zona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#busqueda-de-zona-s">Búsqueda de Zona(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-asignar-homologacion">Opción Asignar Homologación</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#asignar-homologacion">Asignar Homologación</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modificar-homologacion">Modificar Homologación</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-listar-homologacion">Opción Listar Homologación</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#listar-homologacion">Listar Homologación</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reporte-excel">Reporte EXCEL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opcion-visor-de-recintos-asientos">Opción Visor de Recintos/Asientos</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#b-usuario-departamental">b. Usuario Departamental</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Opción Uninominales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Opción Especiales (Indígenas)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Opción Distritos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Opción Zonas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Opción Asignar Homologación</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Opción Listar Homologación</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Opción Visor de Recintos/Asientos</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jurisdiccion.html">5. Opción Act. Jurisdicción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="territorial.html">6. Org. Territorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documento.html">7. Documentos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reportes.html">8. Reportes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="historial.html">9. Historial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clasificadores.html">10. Clasificadores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuario.html">11. Usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="salir.html">12. Salir</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Manual SIGE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>4. Opción Recintos</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentos/recintos.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="opcion-recintos">
+<h1>4. Opción Recintos<a class="headerlink" href="#opcion-recintos" title="Enlazar permanentemente con este título"></a></h1>
+<section id="a-usuario-nacional">
+<h2>a.  Usuario Nacional<a class="headerlink" href="#a-usuario-nacional" title="Enlazar permanentemente con este título"></a></h2>
+<p>El presente usuario tendrá activo las opciones:
+•   Uninominales
+•   Especiales (Indígenas)
+•   Casos Especiales
+•   Distritos
+•   Zonas
+•   Asignar Homologación
+•   Listar Homologación
+•   Visor Recintos/Asientos</p>
+<a class="reference internal image-reference" href="../_images/Recintos.PNG"><img alt="'Pantalla de Recintos'" class="align-left" src="../_images/Recintos.PNG" style="width: 100%;" /></a>
+<section id="opcion-uninominales">
+<h3>Opción Uninominales<a class="headerlink" href="#opcion-uninominales" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar recintos; a los recintos a su vez se les podrá agregar imágenes, que permitan establecer la ubicación exacta del recinto.</p>
+<a class="reference internal image-reference" href="../_images/RecintosElectorales.PNG"><img alt="'Pantalla de Recintos'" class="align-left" src="../_images/RecintosElectorales.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-recinto">
+<h4>Adicionar nuevo Recinto<a class="headerlink" href="#adicionar-nuevo-recinto" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo Recinto.</p>
+<p><strong>Procedimiento para el Registro de un Nuevo Recinto:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo recinto, deberá primero llenar los campos de Latitud y Longitud (ejemplo: Latitud: -16.044027  Longitud: -68.68502), una vez digitado los datos, la aplicación automáticamente generara, en base a las coordenadas los datos del Departamento, Provincia y el Municipio.</p>
+<p><strong>Paso 2:</strong> A partir de la generación de los datos del Departamento, Provincia y Municipio, podrá presionar el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imágen</span> <span class="pre">Satelital</span></code>, para visualizar la imagen satelital del punto con las coordenadas Latitud y Longitud registradas.</p>
+<p><strong>Paso 3:</strong> Establecido el punto en la imagen satelital, se debe proceder a completar los datos de los campos restantes.</p>
+<p><strong>Paso 4:</strong> Se debe presionar el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Asientos/Zonas</span></code>, para desplegar los asientos que existen en ese departamento, provincia y municipio, se debe seleccionar el asiento al cual asignar el recinto.</p>
+<p><strong>Paso 5:</strong> Una vez seleccionado el asiento, automáticamente se generaran las zonas de ese asiento, sino existiera la zona en dicho asiento se deberá adicionar la zona a través del botón <code class="docutils literal notranslate"><span class="pre">Registrar</span></code>.</p>
+<p><strong>Paso 6:</strong> Una vez presionado el botón <code class="docutils literal notranslate"><span class="pre">Registrar</span></code>, se desplegara el siguiente formulario donde se podrá registrar la nueva zona.</p>
+<a class="reference internal image-reference" href="../_images/zonadistrito.PNG"><img alt="'Pantalla de Zonas'" class="align-center" src="../_images/zonadistrito.PNG" style="width: 50%;" /></a>
+<p><strong>Paso 7:</strong> Para el llenado de la zona, se presionar el botón <code class="docutils literal notranslate"><span class="pre">Refresh</span></code>, para actualizar la lista de distritos, sino existiera el distrito se deberá adicionar un nuevo distrito a través del botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Distrito</span></code>.</p>
+<p><strong>Paso 8:</strong> Una vez presionado el botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Distrito</span></code>, se desplegara el siguiente formulario,</p>
+<a class="reference internal image-reference" href="../_images/distrito.PNG"><img alt="'Pantalla de Registro Distrito'" class="align-center" src="../_images/distrito.PNG" style="width: 50%;" /></a>
+<p>A través de este formulario de podrá registrar el nuevo distrito, registrando el campo “Nombre de Distrito”,  para guardar el distrito se presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, una vez registrado en nuevo distrito, se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cerrar</span></code>, para cerrar el formulario de registro de distritos.</p>
+<p><strong>Paso 9:</strong> Una vez cerrado el formulario de registro de distrito, volverá al formulario de “Registro de Zonas y Distritos”, donde deberá de presionar nuevamente en botón <code class="docutils literal notranslate"><span class="pre">Refresh</span></code>, para actualizar la nueva lista de distritos.</p>
+<p><strong>Paso 10:</strong> Una vez llenado los datos de la nueva zona y el distrito al que pertenece se deberán registrar la nueva zona a través del boton <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>.</p>
+<p><strong>Paso 11:</strong> Una vez registrada la zona se cerrara automáticamente el formulario de “Registro de Zonas y Distritos”, una vez cerrado el formulario, se deberá nuevamente presionar el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Asientos/Zonas</span></code>, seleccionar nuevamente el asiento que tendrá actualizada la lista de las zonas registradas anteriormente.</p>
+<p><strong>Paso 12:</strong> Llenado los datos del recinto a adicionar se debe proceder a presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para el registro del nuevo
+recinto.</p>
+<a class="reference internal image-reference" href="../_images/AdicionRecinto.PNG"><img alt="'Pantalla de Adicion de Recintos'" class="align-left" src="../_images/AdicionRecinto.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-editar-recinto">
+<h4>Modificar (Editar) Recinto<a class="headerlink" href="#modificar-editar-recinto" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un Recinto.</p>
+<p><strong>Procedimiento para la Modificación de un Recinto:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un recinto, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de edición del recinto.</p>
+<p><strong>Paso 2:</strong> Dentro del formulario de edición del recinto, en primera instancia no le despliega la imagen satelital, para desplegar aquello deberá presiona en el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imagen</span> <span class="pre">Satelital</span></code>, esto le desplegara el punto (coordenadas latitud y longitud), donde se encuentra el recinto.</p>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a los diferentes datos del recinto se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del recinto.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de edición del recinto.</p>
+<a class="reference internal image-reference" href="../_images/ModificacionRecinto.PNG"><img alt="'Pantalla de Modificacion de Recintos'" class="align-left" src="../_images/ModificacionRecinto.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-recinto-s">
+<h4>Búsqueda de Recinto(s)<a class="headerlink" href="#busqueda-de-recinto-s" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un Recinto:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de un determinado recinto u recintos deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/BusquedaRecinto.PNG"><img alt="'Pantalla de Busqueda de Recintos'" class="align-left" src="../_images/BusquedaRecinto.PNG" style="width: 100%;" /></a>
+</section>
+<section id="adicion-de-imagenes-en-el-recinto">
+<h4>Adición de Imágenes en el Recinto<a class="headerlink" href="#adicion-de-imagenes-en-el-recinto" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de esta opción se podrá adicionar imágenes (fotos), al recinto que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el recinto.</p>
+<p><strong>Procedimiento para la Adición de Imágenes a un Recinto:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la adición de una imagen a un recinto deberá presionar en el icono <code class="docutils literal notranslate"><span class="pre">Imagen</span></code>, el cual le llevara al formulario de adición de imágenes.</p>
+<a class="reference internal image-reference" href="../_images/ImagenRecinto.PNG"><img alt="'Pantalla de Imagen de Recintos'" class="align-left" src="../_images/ImagenRecinto.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> Una vez dentro de la adición de imágenes, para adicionar una imagen deberá presionar en el link <code class="docutils literal notranslate"><span class="pre">Adición</span> <span class="pre">Imagen</span></code>.</p>
+<p><strong>Paso 3:</strong> Este le habilitara la opciones que le permitirán elegir la posición (Imagen), archivo a seleccionar (Examinar).</p>
+<a class="reference internal image-reference" href="../_images/ImagenRecinto1.PNG"><img alt="'Pantalla de Imagen de Recintos'" class="align-left" src="../_images/ImagenRecinto1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 4:</strong> Una vez elegida las opciones de Imagen, Examinar, se deberá guardar el registro presionando el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para adicionar la imagen al recinto, de esta manera se podrán adicionar una o varias imágenes al recinto.</p>
+</section>
+<section id="modificacion-de-imagenes-en-el-recinto">
+<h4>Modificaćión de Imágenes en el Recinto<a class="headerlink" href="#modificacion-de-imagenes-en-el-recinto" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de esta opción se podrá modificar imágenes (fotos), al recinto que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el recinto.</p>
+<p><strong>Procedimiento para la Modificación de Imágenes a un Recinto:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la modificación de una imagen de un recinto deberá presionar en el icono <code class="docutils literal notranslate"><span class="pre">Imagen</span></code>, el cual le llevara al formulario de modificación de imágenes.</p>
+<p><strong>Paso 2:</strong> Una vez dentro de la modificación de imágenes se podrá modificar tanto la Imagen, Examinar.</p>
+<a class="reference internal image-reference" href="../_images/EdicionImagenRecinto.PNG"><img alt="'Pantalla de Edicion Imagen de Recintos'" class="align-left" src="../_images/EdicionImagenRecinto.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a la imagen se deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para guardar todos los cambios realizados.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en la imagen del recinto.</p>
+</section>
+</section>
+<section id="opcion-especiales-indigenas">
+<h3>Opción Especiales (Indígenas)<a class="headerlink" href="#opcion-especiales-indigenas" title="Enlazar permanentemente con este título"></a></h3>
+<p>a través de esta opción, se podrá adicionar, modificar, buscar recintos especiales; a los recintos especiales a su vez se les podrá agregar imágenes, que permitan establecer la ubicación exacta del asiento.</p>
+<a class="reference internal image-reference" href="../_images/RecintoEspecial.PNG"><img alt="'Pantalla de Recintos Especiales'" class="align-left" src="../_images/RecintoEspecial.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-recinto-especial">
+<h4>Adicionar nuevo Recinto Especial<a class="headerlink" href="#adicionar-nuevo-recinto-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo Recinto Especial.</p>
+<p><strong>Procedimiento para el Registro de un Nuevo Recinto Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo recinto especial, deberá primero llenar los campos de Latitud y Longitud (ejemplo: Latitud: -16.044027  Longitud: -68.68502), una vez digitado los datos, la aplicación automáticamente generara, en base a las coordenadas los datos del Departamento, Provincia y/o el Municipio.</p>
+<p><strong>Paso 2:</strong> A partir de la generación de los datos del Departamento, Provincia y Municipio, podrá presionar el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imagen</span> <span class="pre">Satelital</span></code>, para visualizar la imagen satelital del punto con las coordenadas Latitud y Longitud registradas.</p>
+<p><strong>Paso 3:</strong> Establecido el punto en la imagen satelital, se debe proceder a completar los datos de los campos restantes.</p>
+<p><strong>Paso 4:</strong> Se debe llenar el campo de “Pueblos Indígenas”, para ello se presionar en el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Pueblos</span> <span class="pre">Indig.</span></code>, este desplegara una lista de todos los pueblos indígenas que corresponde al departamento, provincia y/o municipio.</p>
+<p><strong>Paso 5:</strong> Una vez llenado el campo “Pueblos Indígenas”, se debe presionar el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Asientos/Zonas</span></code>, para desplegar los asientos que existen en ese departamento, provincia y/o municipio, se debe seleccionar el asiento al cual asignar el recinto especial.</p>
+<p><strong>Paso 6:</strong> Una vez seleccionado el asiento, automáticamente se generaran las zonas de ese asiento, sino existiera la zona en dicho asiento se deberá adicionar la zona a través del botón <code class="docutils literal notranslate"><span class="pre">Registrar</span></code>.</p>
+<p><strong>Paso 7:</strong> Una vez presionado el botón <code class="docutils literal notranslate"><span class="pre">Registrar</span></code>, se desplegara el siguiente formulario donde se podrá registrar la nueva zona.</p>
+<a class="reference internal image-reference" href="../_images/zonadistrito.PNG"><img alt="'Pantalla de Zonas'" class="align-center" src="../_images/zonadistrito.PNG" style="width: 50%;" /></a>
+<p><strong>Paso 8:</strong> Para el llenado de la zona, se presionar el botón <code class="docutils literal notranslate"><span class="pre">Refresh</span></code>, para actualizar la lista de distritos, sino existiera el distrito se deberá adicionar un nuevo distrito a través del botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Distrito</span></code>.</p>
+<p><strong>Paso 9:</strong> Una vez presionado el botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Distrito</span></code>, se desplegara el siguiente formulario,</p>
+<a class="reference internal image-reference" href="../_images/distrito.PNG"><img alt="'Pantalla de Registro Distrito'" class="align-center" src="../_images/distrito.PNG" style="width: 50%;" /></a>
+<p>A través de este formulario de podrá registrar el nuevo distrito, registrando el campo “Nombre de Distrito”,  para guardar el distrito se presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, una vez registrado en nuevo distrito, se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cerrar</span></code>, para cerrar el formulario de registro de distritos.</p>
+<p><strong>Paso 10:</strong> Una vez cerrado el formulario de registro de distrito, volverá al formulario de “Registro de Zonas y Distritos”, donde deberá de presionar nuevamente en botón <code class="docutils literal notranslate"><span class="pre">Refresh</span></code>, para actualizar la nueva lista de distritos.</p>
+<p><strong>Paso 11:</strong> Una vez llenado los datos de la nueva zona y el distrito al que pertenece se deberán registrar la nueva zona a través del boton <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>.</p>
+<p><strong>Paso 12:</strong> Una vez registrada la zona se cerrara automáticamente el formulario de “Registro de Zonas y Distritos”, una vez cerrado el formulario, se deberá nuevamente presionar el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Asientos/Zonas</span></code>, seleccionar nuevamente el asiento que tendrá actualizada la lista de las zonas registradas anteriormente.</p>
+<p><strong>Paso 13:</strong> Llenado los datos del recinto especial a adicionar se debe proceder a presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para el registro del nuevo recinto especial.</p>
+<a class="reference internal image-reference" href="../_images/AdicionRecintoEspecial.PNG"><img alt="'Pantalla de Adicion Recintos Especiales'" class="align-left" src="../_images/AdicionRecintoEspecial.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-editar-recinto-especial">
+<h4>Modificar (Editar) Recinto Especial<a class="headerlink" href="#modificar-editar-recinto-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un Recinto Especial.</p>
+<p><strong>Procedimiento para la Modificación de un Recinto Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un recinto especial, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de edición del recinto especial.</p>
+<p><strong>Paso 2:</strong> Dentro del formulario de edición del recinto especial, en primera instancia no le despliega la imagen satelital, para desplegar aquello deberá presiona en el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imagen</span> <span class="pre">Satelital</span></code>, esto le desplegara el punto (coordenadas latitud y longitud), donde se encuentra el recinto especial.</p>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a los diferentes datos del recinto especial se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del recinto especial.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de edición del recinto especial.</p>
+<a class="reference internal image-reference" href="../_images/ModificarRecintoEspecial.PNG"><img alt="'Pantalla de Modificacion Recintos Especiales'" class="align-left" src="../_images/ModificarRecintoEspecial.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-recinto-s-especial">
+<h4>Búsqueda de Recinto(s) Especial<a class="headerlink" href="#busqueda-de-recinto-s-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un Recinto Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de un determinado recinto especial ó recintos especiales deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/BuscarRecintoEspecial.PNG"><img alt="'Pantalla de Busqueda Recintos Especiales'" class="align-left" src="../_images/BuscarRecintoEspecial.PNG" style="width: 100%;" /></a>
+</section>
+<section id="adicion-de-imagenes-en-el-recinto-especial">
+<h4>Adición de Imágenes en el Recinto Especial<a class="headerlink" href="#adicion-de-imagenes-en-el-recinto-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de esta opción se podrá adicionar imágenes (fotos), al recinto especial que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el recinto especial.</p>
+<p><strong>Procedimiento para la Adición de Imágenes a un Recinto Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la adición de una imagen a un recinto especial deberá presionar en el icono <code class="docutils literal notranslate"><span class="pre">Imagen</span></code>, el cual le llevara al formulario de adición de imágenes.</p>
+<a class="reference internal image-reference" href="../_images/AdicionImagenRecintoEspecial.PNG"><img alt="'Pantalla de Adicion Imagen Recintos Especiales'" class="align-left" src="../_images/AdicionImagenRecintoEspecial.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> Una vez dentro de la adición de imágenes, para adicionar una imagen deberá presionar en el link <code class="docutils literal notranslate"><span class="pre">Adicionar</span> <span class="pre">Imagen</span></code>.</p>
+<p><strong>Paso 3:</strong> Este le habilitara la opciones que le permitirán elegir la posición (Imagen), archivo a seleccionar (Examinar).</p>
+<a class="reference internal image-reference" href="../_images/AdicionImagenRecintoEspecial1.PNG"><img alt="'Pantalla de Adicion Imagen Recintos Especiales'" class="align-left" src="../_images/AdicionImagenRecintoEspecial1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 4:</strong> Una vez elegida las opciones de Imagen, Examinar, se deberá guardar el registro presionando el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para adicionar la imagen al recinto especial, de esta manera se podrán adicionar una o varias imágenes al recinto especial.</p>
+</section>
+<section id="modificacion-de-imagenes-en-el-recinto-especial">
+<h4>Modificación de Imágenes en el Recinto Especial<a class="headerlink" href="#modificacion-de-imagenes-en-el-recinto-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de esta opción se podrá modificar imágenes (fotos), del recinto especial que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el recinto especial.</p>
+<p><strong>Procedimiento para la Modificación de Imágenes a un Recinto Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la modificación de una imagen de un recinto especial deberá presionar en el icono <code class="docutils literal notranslate"><span class="pre">Imagen</span></code>, el cual le llevara al formulario de modificación de imágenes.</p>
+<p><strong>Paso 2:</strong> Una vez dentro de la modificación de imágenes se podrá modificar tanto la Imagen, Examinar.</p>
+<a class="reference internal image-reference" href="../_images/ModificarImagenRecintoEspecial.PNG"><img alt="'Pantalla de Modificar Imagen Recintos Especiales'" class="align-left" src="../_images/ModificarImagenRecintoEspecial.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a la imagen se deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para guardar todos los cambios realizados.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en la imagen del recinto especial.</p>
+</section>
+</section>
+<section id="opcion-casos-especiales">
+<h3>Opción Casos Especiales<a class="headerlink" href="#opcion-casos-especiales" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar recintos casos especiales; a los recintos especiales a su vez se les podrá agregar imágenes, que permitan establecer la ubicación exacta del asiento.</p>
+<a class="reference internal image-reference" href="../_images/RecintoCasoEspecial.PNG"><img alt="'Pantalla de Recintos Casos Especiales'" class="align-left" src="../_images/RecintoCasoEspecial.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-recinto-caso-especial">
+<h4>Adicionar nuevo Recinto Caso Especial<a class="headerlink" href="#adicionar-nuevo-recinto-caso-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo Recinto Caso Especial.</p>
+<p><strong>Procedimiento para el Registro de un Nuevo Recinto Caso Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo recinto caso especial, deberá primero llenar los campos de Latitud y Longitud (ejemplo: Latitud: -16.044027  Longitud: -68.68502), una vez digitado los datos, la aplicación automáticamente generara, en base a las coordenadas los datos del Departamento, Provincia y/o el Municipio.</p>
+<p><strong>Paso 2:</strong> A partir de la generación de los datos del Departamento, Provincia y/o Municipio, podrá presionar el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imagen</span> <span class="pre">Satelital</span></code>, para visualizar la imagen satelital del punto con las coordenadas Latitud y Longitud registradas.</p>
+<p><strong>Paso 3:</strong> Establecido el punto en la imagen satelital, se debe proceder a completar los datos de los campos restantes.</p>
+<p><strong>Paso 4:</strong> Se debe presionar el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Asientos/Zonas</span></code>, para desplegar los asientos casos especiales que existen en ese departamento, provincia y/o municipio, se debe seleccionar el asiento al cual asignar el recinto caso especial.</p>
+<p><strong>Paso 5:</strong> Una vez seleccionado el asiento, automáticamente se generaran las zonas de ese asiento, sino existiera la zona en dicho asiento se deberá adicionar la zona a través del botón <code class="docutils literal notranslate"><span class="pre">Registrar</span></code>.</p>
+<p><strong>Paso 6:</strong> Una vez presionado el botón <code class="docutils literal notranslate"><span class="pre">Registrar</span></code>, se desplegara el siguiente formulario donde se podrá registrar la nueva zona.</p>
+<a class="reference internal image-reference" href="../_images/zonadistrito.PNG"><img alt="'Pantalla de Zonas'" class="align-center" src="../_images/zonadistrito.PNG" style="width: 50%;" /></a>
+<p><strong>Paso 7:</strong> Para el llenado de la zona, se presionar el botón <code class="docutils literal notranslate"><span class="pre">Refresh</span></code>, para actualizar la lista de distritos, sino existiera el distrito se deberá adicionar un nuevo distrito a través del botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Distrito</span></code>.</p>
+<p><strong>Paso 8:</strong> Una vez presionado el botón <code class="docutils literal notranslate"><span class="pre">Nuevo</span> <span class="pre">Distrito</span></code>, se desplegara el siguiente formulario,</p>
+<a class="reference internal image-reference" href="../_images/distrito.PNG"><img alt="'Pantalla de Registro Distrito'" class="align-center" src="../_images/distrito.PNG" style="width: 50%;" /></a>
+<p>A través de este formulario de podrá registrar el nuevo distrito, registrando el campo “Nombre de Distrito”,  para guardar el distrito se presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, una vez registrado en nuevo distrito, se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cerrar</span></code>, para cerrar el formulario de registro de distritos.</p>
+<p><strong>Paso 9:</strong> Una vez cerrado el formulario de registro de distrito, volverá al formulario de “Registro de Zonas y Distritos”, donde deberá de presionar nuevamente en botón <code class="docutils literal notranslate"><span class="pre">Refresh</span></code>, para actualizar la nueva lista de distritos.</p>
+<p><strong>Paso 10:</strong> Una vez llenado los datos de la nueva zona y el distrito al que pertenece se deberán registrar la nueva zona a través del boton <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>.</p>
+<p><strong>Paso 11:</strong> Una vez registrada la zona se cerrara automáticamente el formulario de “Registro de Zonas y Distritos”, una vez cerrado el formulario, se deberá nuevamente presionar el botón <code class="docutils literal notranslate"><span class="pre">Ver</span> <span class="pre">Asientos/Zonas</span></code>, seleccionar nuevamente el asiento que tendrá actualizada la lista de las zonas registradas anteriormente.</p>
+<p><strong>Paso 12:</strong> Llenado los datos del recinto a adicionar se debe proceder a presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para el registro del nuevo
+Recinto caso especial.</p>
+<a class="reference internal image-reference" href="../_images/AdicionRecintoCasoEspecial.PNG"><img alt="'Pantalla de Adicion de Recintos Casos Especiales'" class="align-left" src="../_images/AdicionRecintoCasoEspecial.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-editar-recinto-caso-especial">
+<h4>Modificar (Editar) Recinto Caso Especial<a class="headerlink" href="#modificar-editar-recinto-caso-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un Recinto Caso Especial.</p>
+<p><strong>Procedimiento para la Modificación de un Recinto Caso Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un recinto caso especial, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de edición del recinto caso especial.</p>
+<p><strong>Paso 2:</strong> Dentro del formulario de edición del recinto caso especial, en primera instancia no le despliega la imagen satelital, para desplegar aquello deberá presiona en el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imagen</span> <span class="pre">Satelital</span></code>, esto le desplegara el punto (coordenadas latitud y longitud), donde se encuentra el recinto caso especial.</p>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a los diferentes datos del recinto caso especial se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del recinto caso especial.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de edición del recinto caso especial.</p>
+<a class="reference internal image-reference" href="../_images/ModificarRecintoCasoEspecial.PNG"><img alt="'Pantalla de Adicion de Recintos Casos Especiales'" class="align-left" src="../_images/ModificarRecintoCasoEspecial.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-recinto-s-caso-especial">
+<h4>Búsqueda de Recinto(s) Caso Especial<a class="headerlink" href="#busqueda-de-recinto-s-caso-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un Recinto Caso Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de un determinado recinto caso especial ó recintos casos especiales deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/BuscarRecintoCasoEspecial.PNG"><img alt="'Pantalla de Busqueda de Recintos Casos Especiales'" class="align-left" src="../_images/BuscarRecintoCasoEspecial.PNG" style="width: 100%;" /></a>
+</section>
+<section id="adicion-de-imagenes-en-el-recinto-caso-especial">
+<h4>Adición de Imágenes en el Recinto Caso Especial<a class="headerlink" href="#adicion-de-imagenes-en-el-recinto-caso-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de esta opción se podrá adicionar imágenes (fotos), al recinto caso especial que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el recinto caso especial.</p>
+<p><strong>Procedimiento para la Adición de Imágenes a un Recinto Caso Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la adición de una imagen a un recinto caso especial deberá presionar en el icono <code class="docutils literal notranslate"><span class="pre">Imagen</span></code>, el cual le llevara al formulario de adición de imágenes.</p>
+<a class="reference internal image-reference" href="../_images/AdicionImagenRecintoCasoEspecial.PNG"><img alt="'Pantalla de Adicion de Imagen Recintos Casos Especiales'" class="align-left" src="../_images/AdicionImagenRecintoCasoEspecial.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> Una vez dentro de la adición de imágenes, para adicionar una imagen deberá presionar en el link <code class="docutils literal notranslate"><span class="pre">Adicionar</span> <span class="pre">Imagen</span></code>.</p>
+<p><strong>Paso 3:</strong> Este le habilitara la opciones que le permitirán elegir la posición (Imagen), archivo a seleccionar (Examinar).</p>
+<a class="reference internal image-reference" href="../_images/AdicionImagenRecintoCasoEspecial1.PNG"><img alt="'Pantalla de Adicion de Imagen Recintos Casos Especiales'" class="align-left" src="../_images/AdicionImagenRecintoCasoEspecial1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 4:</strong> Una vez elegida las opciones de Imagen, Examinar, se deberá guardar el registro presionando el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para adicionar la imagen al recinto caso especial, de esta manera se podrán adicionar una o varias imágenes al recinto caso especial.</p>
+</section>
+<section id="modificacion-de-imagenes-en-el-recinto-caso-especial">
+<h4>Modificación de Imágenes en el Recinto Caso Especial<a class="headerlink" href="#modificacion-de-imagenes-en-el-recinto-caso-especial" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de esta opción se podrá modificar imágenes (fotos), al recinto caso especial que permitan establecer la ubicación, panorámica, calles, plazas en la que se encuentra el recinto caso especial.</p>
+<p><strong>Procedimiento para la Modificación de Imágenes a un Recinto Caso Especial:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la modificación de una imagen de un recinto caso especial deberá presionar en el icono <code class="docutils literal notranslate"><span class="pre">Imagen</span></code>, el cual le llevara al formulario de modificación de imágenes.</p>
+<p><strong>Paso 2:</strong> Una vez dentro de la modificación de imágenes se podrá modificar tanto la Imagen, Examinar.</p>
+<a class="reference internal image-reference" href="../_images/ModificarImagenRecintoCasoEspecial.PNG"><img alt="'Pantalla de Modificacion de Imagen Recintos Casos Especiales'" class="align-left" src="../_images/ModificarImagenRecintoCasoEspecial.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a la imagen se deberá presionar el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para guardar todos los cambios realizados.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en la imagen del recinto caso especial.</p>
+</section>
+</section>
+<section id="opcion-distritos">
+<h3>Opción Distritos<a class="headerlink" href="#opcion-distritos" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar distritos.</p>
+<a class="reference internal image-reference" href="../_images/Distritos.PNG"><img alt="'Pantalla de Distritos'" class="align-left" src="../_images/Distritos.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nuevo-distrito">
+<h4>Adicionar nuevo Distrito<a class="headerlink" href="#adicionar-nuevo-distrito" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar un nuevo Distrito.</p>
+<p><strong>Procedimiento para el Registro de un Nuevo Distrito:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de un nuevo distrito, deberá saber el código del IdLoc (código del asiento), al cual asociar el nuevo distrito, se debe escribir el código en el campo IdLoc, luego se debe presionar la tecla “TAB” ó “Tabulador”, este automáticamente generara el nombre del asiento asociado a ese código.</p>
+<p><strong>Paso 2:</strong> También para llenar el campo “Circun”, se debe conocer la o las circunscripciones a las que pertenece el asiento, conocido el número de circunscripción se debe llenar los campos “Circun” y “Nombre de Distrito”.</p>
+<p><strong>Paso3:</strong> Una vez registrado todos los datos se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para registrar el nuevo distrito.</p>
+<a class="reference internal image-reference" href="../_images/AdicionarDistrito.PNG"><img alt="'Pantalla de Adicion de Distritos'" class="align-left" src="../_images/AdicionarDistrito.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-distrito">
+<h4>Modificar Distrito<a class="headerlink" href="#modificar-distrito" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar un Distrito.</p>
+<p><strong>Procedimiento para la Modificación de un Distrito:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un recinto caso especial, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de modificación del Distrito.</p>
+<p><strong>Paso 2:</strong> Dentro del formulario de modificación del distrito, por integridad de datos, solo se podrá modificar los campos “Circun” y “Nombre del Distrito” .</p>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a los datos del distrito se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos del distrito.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de modificación del Distrito.</p>
+<a class="reference internal image-reference" href="../_images/ModificacionDistrito.PNG"><img alt="'Pantalla de Modificacion de Distritos'" class="align-left" src="../_images/ModificacionDistrito.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-distrito-s">
+<h4>Búsqueda de Distrito(s)<a class="headerlink" href="#busqueda-de-distrito-s" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de un Distrito:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de un determinado distrito ó distritos deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/BusquedaDistrito.PNG"><img alt="'Pantalla de Busqueda de Distritos'" class="align-left" src="../_images/BusquedaDistrito.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="opcion-zonas">
+<h3>Opción Zonas<a class="headerlink" href="#opcion-zonas" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar zonas.</p>
+<a class="reference internal image-reference" href="../_images/Zonas.PNG"><img alt="'Pantalla de Zonas'" class="align-left" src="../_images/Zonas.PNG" style="width: 100%;" /></a>
+<section id="adicionar-nueva-zona">
+<h4>Adicionar nueva Zona<a class="headerlink" href="#adicionar-nueva-zona" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá registrar una nueva Zona.</p>
+<p><strong>Procedimiento para el Registro de una Nueva Zona:</strong></p>
+<p><strong>Paso 1:</strong> Para el registro de una nueva zona, deberá saber el código del IdLoc (código del asiento), al cual asociar la nueva zona, se debe escribir el código en el campo IdLoc, luego se debe presionar la tecla “TAB” ó “Tabulador”, este automáticamente generara el nombre del asiento asociado a ese código.</p>
+<p><strong>Paso 2:</strong> En función al codigo IdLoc, se generar automáticamente los distritos pertenecientes al asiento.</p>
+<p><strong>Paso 3:</strong> Una vez seleccionado el campo “Nombre de Distrito”, se deberá llenar el campo “Nombre de la Zona”.</p>
+<p><strong>Paso 4:</strong> Una vez registrado todos los datos se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, para registrar la nueva zona.</p>
+<a class="reference internal image-reference" href="../_images/AdicionarZona.PNG"><img alt="'Pantalla Adicionar Zonas'" class="align-left" src="../_images/AdicionarZona.PNG" style="width: 100%;" /></a>
+</section>
+<section id="modificar-zona">
+<h4>Modificar Zona<a class="headerlink" href="#modificar-zona" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar una Zona.</p>
+<p><strong>Procedimiento para la Modificación de una Zona:</strong></p>
+<p><strong>Paso 1:</strong> Para modificar un recinto caso especial, deberá hacer click en el icono <code class="docutils literal notranslate"><span class="pre">Editar</span></code>, el cual le llevara al formulario de modificación de la Zona.</p>
+<p><strong>Paso 2:</strong> Dentro del formulario de modificación de la zona, por integridad de datos, solo se podrá modificar los campos “Nombre del Distrito” y “Nombre de la Zona”.</p>
+<p><strong>Paso 3:</strong> Una vez realizado los cambios a los datos de la zona se procederá a  aceptar los cambios a través del botón <code class="docutils literal notranslate"><span class="pre">Aceptar</span></code>, el cual le permitirá guardar los cambios realizados en los datos de la zona.</p>
+<p><strong>Nota.-</strong> Si no requiere que se modifiquen los datos se deberá presionar en el botón <code class="docutils literal notranslate"><span class="pre">Cancelar</span></code>, para eliminar cualquier cambio realizado en el formulario de modificación de la Zona.</p>
+<a class="reference internal image-reference" href="../_images/ModificacionZona.PNG"><img alt="'Pantalla Modificar Zonas'" class="align-left" src="../_images/ModificacionZona.PNG" style="width: 100%;" /></a>
+</section>
+<section id="busqueda-de-zona-s">
+<h4>Búsqueda de Zona(s)<a class="headerlink" href="#busqueda-de-zona-s" title="Enlazar permanentemente con este título"></a></h4>
+<p>Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.</p>
+<p><strong>Procedimiento para la Búsqueda de una Zona:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la búsqueda de una determinada zona ó zonas deberá hacer click en el visor de búsqueda <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>.</p>
+<p><strong>Paso 2:</strong> A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/BusquedaZona.PNG"><img alt="'Pantalla Busqueda de Zonas'" class="align-left" src="../_images/BusquedaZona.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="opcion-asignar-homologacion">
+<h3>Opción Asignar Homologación<a class="headerlink" href="#opcion-asignar-homologacion" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá realizar la homologación de recintos cuyo campo “Estado” se encuentre en “Suprimido o Suspendido TED”, “Suprimido o Suspendido TSE”.</p>
+<section id="asignar-homologacion">
+<h4>Asignar Homologación<a class="headerlink" href="#asignar-homologacion" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá realizar la homologación de recintos.</p>
+<a class="reference internal image-reference" href="../_images/AsignarHomologacion.PNG"><img alt="'Pantalla Asignar Homologacion'" class="align-left" src="../_images/AsignarHomologacion.PNG" style="width: 100%;" /></a>
+<p><strong>Procedimiento para Realizar la Homologación:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la homologación, debe introducir la fecha de inicio y la fecha final, a continuación presionar el botón <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>, esto le mostrara el listado de todos los recintos homologados ó a ser homologados, que están en el periodo de búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/AsignarHomologacion1.PNG"><img alt="'Pantalla Asignar Homologacion'" class="align-left" src="../_images/AsignarHomologacion1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> De la lista desplegada se debe presionar en la columna “Acción” el botón <code class="docutils literal notranslate"><span class="pre">Asignar</span></code>, este le llevara al siguiente formulario,</p>
+<a class="reference internal image-reference" href="../_images/AsignarHomologacion2.PNG"><img alt="'Pantalla Asignar Homologacion'" class="align-left" src="../_images/AsignarHomologacion2.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 3:</strong> En el presente formulario se desplegara el recinto a ser homologado y el/los recinto(s) al cual homologar que pertenecen a un determinado asiento.</p>
+<p><strong>Paso 4:</strong> Se debe seleccionar el recinto al cual se desea homologar a través del botón <code class="docutils literal notranslate"><span class="pre">Asignar</span></code>, una vez seleccionado el recinto se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Asignar</span></code>, esto registrara la homologación realizada.</p>
+</section>
+<section id="modificar-homologacion">
+<h4>Modificar Homologación<a class="headerlink" href="#modificar-homologacion" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá modificar la asignación de una homologación.</p>
+<p><strong>Procedimiento para la Modificación de una Homologación:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar la modificación de una homologación, se debe introducir la fecha de inicio y la fecha final, a continuación presionar el botón <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>, esto le mostrara el listado de todos los recintos homologados ó a ser homologados, que están en el periodo de búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/ModificarHomologacion.PNG"><img alt="'Pantalla Modificar Homologacion'" class="align-left" src="../_images/ModificarHomologacion.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> Una vez desplegado el listado de los recintos homologado ó a ser homologados que están en el periodo de búsqueda, se debe presionar en el boton <code class="docutils literal notranslate"><span class="pre">Modificar</span></code>, en el recinto a modificar la homologación.</p>
+<p><strong>Paso 3:</strong> Esto le desplegara en siguiente formulario,</p>
+<a class="reference internal image-reference" href="../_images/ModificarHomologacion1.PNG"><img alt="'Pantalla Modificar Homologacion'" class="align-left" src="../_images/ModificarHomologacion1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 4:</strong> En el presente formulario se deberá seleccionar el nuevo recinto al cual se debe realizar la modificación, una vez seleccionado el nuevo recinto se debe presionar en el boton <code class="docutils literal notranslate"><span class="pre">Asignar</span></code>, para confirmar la modificación, caso contrario si no se desea realizar la modificación se deberá presionar el boton <code class="docutils literal notranslate"><span class="pre">Volver</span></code>, para no aceptar la modificación.</p>
+<p><strong>Nota.-</strong> Cabe mencionar, que solo se puede realizar la homologación de recintos en asientos que tengan más de un (1) recinto, caso contrario no será posible.</p>
+</section>
+</section>
+<section id="opcion-listar-homologacion">
+<h3>Opción Listar Homologación<a class="headerlink" href="#opcion-listar-homologacion" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá listar todas las homologaciones realizadas en un determinado periodo, se considera también homologaciones a los cambios de jurisdicción realizadas a los recintos.</p>
+<p>A partir del listado de homologaciones se genera reportes en formato Excel.</p>
+<a class="reference internal image-reference" href="../_images/ListarHomologacion.PNG"><img alt="'Pantalla Listar Homologacion'" class="align-left" src="../_images/ListarHomologacion.PNG" style="width: 100%;" /></a>
+<section id="listar-homologacion">
+<h4>Listar Homologación<a class="headerlink" href="#listar-homologacion" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá realizar el listado de homologaciones.</p>
+<p><strong>Procedimiento para Realizar el Listado de Homologaciones:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar el listado de homologaciones, debe introducir la fecha de inicio y la fecha final, a continuación presionar el botón <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>, esto le mostrara el listado de todas las homologaciones, que están en el periodo de búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/ListarHomologacion1.PNG"><img alt="'Pantalla Listar Homologacion'" class="align-left" src="../_images/ListarHomologacion1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> De la lista desplegada se debe presionar en la columna “Acción” el botón <code class="docutils literal notranslate"><span class="pre">Busqueda</span></code>, este le llevara al siguiente formulario,</p>
+<a class="reference internal image-reference" href="../_images/ListarHomologacion2.PNG"><img alt="'Pantalla Listar Homologacion'" class="align-left" src="../_images/ListarHomologacion2.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 3:</strong> En el presente formulario se despliega los datos del Recinto Homologado Origen y el Recinto Destino, al principio no se despliega la imagen georeferenciada, para lograr aquello se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Visualizar</span> <span class="pre">Imagen</span> <span class="pre">Satelital</span></code>.</p>
+<p><strong>Paso 4:</strong> Para abandonar el presente formulario se debe presionar en el botón <code class="docutils literal notranslate"><span class="pre">Volver</span></code>.</p>
+</section>
+<section id="reporte-excel">
+<h4>Reporte EXCEL<a class="headerlink" href="#reporte-excel" title="Enlazar permanentemente con este título"></a></h4>
+<p>A través de opción podrá generar reportes en Excel, a partir del periodo de búsqueda.</p>
+<p><strong>Procedimiento para generar Reportes en EXCEL:</strong></p>
+<p><strong>Paso 1:</strong> Para realizar el reporte en Excel, se debe introducir la fecha de inicio y la fecha final, a continuación presionar el botón <code class="docutils literal notranslate"><span class="pre">Buscar</span></code>, esto le mostrara el listado de todas las homologaciones, que están en el periodo de búsqueda.</p>
+<a class="reference internal image-reference" href="../_images/ListarHomologacion1.PNG"><img alt="'Pantalla Listar Homologacion'" class="align-left" src="../_images/ListarHomologacion1.PNG" style="width: 100%;" /></a>
+<p><strong>Paso 2:</strong> Una vez desplegado el listado de las homologaciones que están en el periodo de búsqueda, se debe presionar en el boton <code class="docutils literal notranslate"><span class="pre">Exportar</span> <span class="pre">a</span> <span class="pre">Excel</span></code>.</p>
+<p><strong>Paso 3:</strong> Esto le generara un archivo en formato EXCEL,</p>
+<a class="reference internal image-reference" href="../_images/ReporteExcel.PNG"><img alt="'Pantalla Reporte Excel'" class="align-left" src="../_images/ReporteExcel.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="opcion-visor-de-recintos-asientos">
+<h3>Opción Visor de Recintos/Asientos<a class="headerlink" href="#opcion-visor-de-recintos-asientos" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá visualizar Asientos y Recintos de manera Geo Referenciada.</p>
+<a class="reference internal image-reference" href="../_images/ReporteGeoreferenciado.PNG"><img alt="'Pantalla Reporte Excel'" class="align-left" src="../_images/ReporteGeoreferenciado.PNG" style="width: 100%;" /></a>
+</section>
+</section>
+<section id="b-usuario-departamental">
+<h2>b. Usuario Departamental<a class="headerlink" href="#b-usuario-departamental" title="Enlazar permanentemente con este título"></a></h2>
+<p>El presente usuario tendrá activo las opciones:</p>
+<a class="reference internal image-reference" href="../_images/RecintosDpto.PNG"><img alt="'Pantalla Reporte Excel'" class="align-left" src="../_images/RecintosDpto.PNG" style="width: 100%;" /></a>
+<ul class="simple">
+<li><p>Uninominales</p></li>
+<li><p>Especiales (Indígenas)</p></li>
+<li><p>Distritos</p></li>
+<li><p>Zonas</p></li>
+<li><p>Asignar Homologación</p></li>
+<li><p>Listar Homologación</p></li>
+<li><p>Visor Recintos/Asientos</p></li>
+</ul>
+<section id="id1">
+<h3>Opción Uninominales<a class="headerlink" href="#id1" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar recintos del departamento con el cual se logeo el usuario TED; a los recintos a su vez se les podrá agregar imágenes, que permitan establecer la ubicación exacta del asiento.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id2">
+<h3>Opción Especiales (Indígenas)<a class="headerlink" href="#id2" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar recintos especiales del departamento con el cual se logeo el usuario TED; a los recintos especiales a su vez se les podrá agregar imágenes, que permitan establecer la ubicación exacta del asiento.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id3">
+<h3>Opción Distritos<a class="headerlink" href="#id3" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar distritos del departamento con el cual se logeo el usuario TED.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id4">
+<h3>Opción Zonas<a class="headerlink" href="#id4" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá adicionar, modificar, buscar zonas del departamento con el cual se logeo el usuario TED.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id5">
+<h3>Opción Asignar Homologación<a class="headerlink" href="#id5" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá realizar la homologación de recintos cuyo campo “Estado” se encuentre en “Suprimido o Suspendido TED”.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id6">
+<h3>Opción Listar Homologación<a class="headerlink" href="#id6" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá listar todas las homologaciones realizadas en un determinado periodo del departamento con el cual se logeo el usuario TED, se considera también homologaciones a los cambios de jurisdicción realizadas a los recintos.</p>
+<p>A partir del listado de homologaciones se genera reportes en formato Excel.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+<section id="id7">
+<h3>Opción Visor de Recintos/Asientos<a class="headerlink" href="#id7" title="Enlazar permanentemente con este título"></a></h3>
+<p>A través de esta opción, se podrá visualizar Asientos y Recintos de manera Geo Referenciada del departamento con el cual se logeo el usuario TED.</p>
+<p><strong>Nota.-</strong> Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="asientos.html" class="btn btn-neutral float-left" title="3. Opción Asientos" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="jurisdiccion.html" class="btn btn-neutral float-right" title="5. Opción Act. Jurisdicción" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2021, OEP-UGLE.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

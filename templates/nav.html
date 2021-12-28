@@ -108,6 +108,7 @@
                     <a class="nav-link" href="/grupo_list">Clasificadores</a>
                 </li>
             {% endif %}
+
             {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="/help_doc">Ayuda</a>
@@ -124,7 +125,7 @@
                         <i>Usuario: {{ current_user.nombre }}  {{ current_user.apellidos }}</i>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/change_pwd">Cambio de Contraseña</a>
+                        <a class="dropdown-item" href="/change_pwd">Cambio de Password</a>
                         <a class="dropdown-item" href={{ url_for( 'registro', usuario_id=usrid) }}>Actualiza Usuario</a>
                     </div>
                 </div>

@@ -1,0 +1,300 @@
+6. Org. Territorial
+*******************
+
+a. Usuario Nacional
+===================
+
+El presente usuario tendrá activo las opciones:
+
+•   País
+•   Departamento
+•   Provincia
+•   Municipio
+
+..  image:: ./image/Territorial.PNG
+    :width: 100%
+    :alt: 'Pantalla Territorial'
+    :align: left
+
+Opción País
+-----------
+
+A través de esta opción, se podrá registrar países en base a ciertos parámetros establecidos por el TSE.
+
+..  image:: ./image/TerritorialPais.PNG
+    :width: 100%
+    :alt: 'Pantalla Territorial Pais'
+    :align: left
+
+Adicionar nuevo País
+++++++++++++++++++++
+
+A través de opción podrá registrar un nuevo País.
+
+**Procedimiento para el Registro de un Nuevo País:**
+
+**Paso 1:** Para el registro de un nuevo país, debe llenar todos los campos.
+
+**Paso 2:** Una vez registrado todos los datos se debe presionar en el botón ``Aceptar``, para registrar el nuevo país.
+
+..  image:: ./image/TerritorialPaisAdicionar.PNG
+    :width: 100%
+    :alt: 'Pantalla Adicionar Pais'
+    :align: left
+ 
+Modificar País
+++++++++++++++
+
+A través de opción podrá modificar un País.
+
+**Procedimiento para la Modificación de un País:**
+
+**Paso 1:** Para modificar un país, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de modificación del país.
+
+**Paso 2:** Una vez realizado los cambios a los datos del país se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos del país.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de modificación del País.
+
+..  image:: ./image/TerritorialPaisModificar.PNG
+    :width: 100%
+    :alt: 'Pantalla Modificar Pais'
+    :align: left
+
+Búsqueda de País(es)
+++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de un País:**
+
+**Paso 1:** Para realizar la búsqueda de una determinado país ó paises deberá hacer click en el visor de búsqueda ``Buscar``.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..  image:: ./image/TerritorialPaisBuscar.PNG
+    :width: 100%
+    :alt: 'Pantalla Busqueda Pais'
+    :align: left
+
+Opción Departamento 
+-------------------
+
+A través de esta opción, se podrá registrar departamentos en base a ciertos parámetros establecidos por el TSE.
+
+..  image:: ./image/TerritorialDepartamento.PNG
+    :width: 100%
+    :alt: 'Pantalla Departamento'
+    :align: left
+
+Adicionar nuevo Departamento
+++++++++++++++++++++++++++++
+
+A través de opción podrá registrar un nuevo Departamento.
+
+**Procedimiento para el Registro de un Departamento:**
+
+**Paso 1:** Para el registro de un nuevo departamento, debe seleccionar el país para el cual se generara el departamento, luego llenar todos los campos.
+
+**Paso 2:** Una vez registrado todos los datos se debe presionar en el botón ``Aceptar``, para registrar el nuevo departamento.
+
+..  image:: ./image/TerritorialDepartamentoAdicionar.PNG
+    :width: 100%
+    :alt: 'Pantalla Adicionar Departamento'
+    :align: left
+ 
+Modificar Departamento
+++++++++++++++++++++++
+
+A través de opción podrá modificar un Departamento.
+
+**Procedimiento para la Modificación de un Departamento:**
+
+**Paso 1:** Para modificar un departamento, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de modificación del departamento.
+
+**Paso 2:** Una vez realizado los cambios a los datos del departamento se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos del departamento.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de modificación del Departamento.
+
+..  image:: ./image/TerritorialDepartamentoModificar.PNG
+    :width: 100%
+    :alt: 'Pantalla Modificar Departamento'
+    :align: left
+
+Búsqueda de Departamento(s)
++++++++++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de un Departamento:**
+
+**Paso 1:** Para realizar la búsqueda de un determinado departamento ó departamentos deberá hacer click en el visor de búsqueda ``Buscar``.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..  image:: ./image/TerritorialDepartamentoBuscar.PNG
+    :width: 100%
+    :alt: 'Pantalla Buscar Departamento'
+    :align: left
+
+Opción Provincia
+----------------
+
+A través de esta opción, se podrá registrar provincias en base a ciertos parámetros establecidos por el TSE.
+
+..  image:: ./image/TerritorialProvincia.PNG
+    :width: 100%
+    :alt: 'Pantalla Provincia'
+    :align: left
+
+Adicionar nueva Provincia
++++++++++++++++++++++++++
+
+A través de opción podrá registrar una nueva Provincia. 
+
+**Procedimiento para el Registro de una Provincia:**
+
+**Paso 1:** Para el registro de una nueva provincia, debe seleccionar el país, departamento para el cual se generara la provincia, luego llenar todos los campos.
+
+**Paso 2:** Una vez registrado todos los datos se debe presionar en el botón ``Aceptar``, para registrar la nueva provincia.
+
+..  image:: ./image/TerritorialProvinciaAdicionar.PNG
+    :width: 100%
+    :alt: 'Pantalla Adicionar Provincia'
+    :align: left
+
+Modificar Provincia
++++++++++++++++++++
+
+A través de opción podrá modificar una Provincia.
+
+**Procedimiento para la Modificación de una Provincia:**
+
+**Paso 1:** Para modificar una provincia, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de modificación de la provincia.
+
+**Paso 2:** Una vez realizado los cambios a los datos de la provincia se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos de la provincia.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de modificación de la Provincia.
+
+..  image:: ./image/TerritorialProvinciaModificar.PNG
+    :width: 100%
+    :alt: 'Pantalla Modificar Provincia'
+    :align: left
+
+Búsqueda de Provincia(s)
+++++++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de una Provincia:**
+
+**Paso 1:** Para realizar la búsqueda de una determinada provincia ó provincias deberá hacer click en el visor de búsqueda ``Buscar``.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..  image:: ./image/TerritorialProvinciaBuscar.PNG
+    :width: 100%
+    :alt: 'Pantalla Busqueda Provincia'
+    :align: left
+
+Opción Municipio
+-----------------
+
+A través de esta opción, se podrá registrar municipios en base a ciertos parámetros establecidos por el TSE.
+
+..  image:: ./image/TerritorialMunicipio.PNG
+    :width: 100%
+    :alt: 'Pantalla Municipio'
+    :align: left
+
+Adicionar nuevo Municipio
++++++++++++++++++++++++++
+
+A través de opción podrá registrar un nuevo Municipio. 
+
+**Procedimiento para el Registro de un Municipio:**
+
+**Paso 1:** Para el registro de un nuevo municipio, debe seleccionar el país, departamento, provincia, para el cual se generara el municipio, luego llenar todos los campos.
+
+**Paso 2:** Una vez registrado todos los datos se debe presionar en el botón ``Aceptar``, para registrar el nuevo municipio.
+
+..  image:: ./image/TerritorialMunicipioAdicionar.PNG
+    :width: 100%
+    :alt: 'Pantalla Adicion de Municipio'
+    :align: left
+
+Modificar Municipio
++++++++++++++++++++
+
+A través de opción podrá modificar un Municipio.
+
+**Procedimiento para la Modificación de una Provincia:**
+
+**Paso 1:** Para modificar un municipio, deberá hacer click en el icono ``Editar``, el cual le llevara al formulario de modificación del municipio.
+
+**Paso 2:** Una vez realizado los cambios a los datos del municipio, se procederá a  aceptar los cambios a través del botón ``Aceptar``, el cual le permitirá guardar los cambios realizados en los datos del municipio.
+
+**Nota.-** Si no requiere que se modifiquen los datos se deberá presionar en el botón ``Cancelar``, para eliminar cualquier cambio realizado en el formulario de modificación del Municipio.
+
+..  image:: ./image/TerritorialMunicipioModificar.PNG
+    :width: 100%
+    :alt: 'Pantalla Modificacion de Municipio'
+    :align: left
+
+Búsqueda de Municipio(s)
+++++++++++++++++++++++++
+
+Esta opción le permitirá realizar búsqueda de manera selectiva, es decir la búsqueda se podrá realizar por cualquiera de las columnas desplegadas.
+
+**Procedimiento para la Búsqueda de un Municpio:**
+
+**Paso 1:** Para realizar la búsqueda de un determinado municipio ó municipios deberá hacer click en el visor de búsqueda ``Buscar``.
+
+**Paso 2:** A través de este visor de búsqueda se podrá digitar en él,  el parámetro por el cual se realizara la búsqueda.
+
+..  image:: ./image/TerritorialMunicipioBuscar.PNG
+    :width: 100%
+    :alt: 'Pantalla Busqueda de Municipio'
+    :align: left
+
+b. Usuario Departamental
+========================
+
+El presente usuario tendrá activo las opciones:
+
+•   País
+•   Departamento
+•   Provincia
+•   Municipio
+
+..  image:: ./image/TerritorialDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla Territorial'
+    :align: left
+
+Opción País
+-----------
+
+A través de esta opción, se podrá registrar países en base a ciertos parámetros establecidos por el TSE.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.
+
+Opción Departamento
+-------------------
+
+A través de esta opción, se podrá registrar departamentos en base a ciertos parámetros establecidos por el TSE.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.
+
+Opción Provincia
+----------------
+
+A través de esta opción, se podrá registrar provincias en base a ciertos parámetros establecidos por el TSE.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.
+
+Opción Municipio
+----------------
+
+A través de esta opción, se podrá registrar municipios en base a ciertos parámetros establecidos por el TSE.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.

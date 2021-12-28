@@ -61,10 +61,9 @@ app.config['PATH_APP'] = '/var/www/flasks/age/'
 app.config['IMG_ASIENTOS'] = '/static/imgbd/asi'
 app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
 app.config['SUBIR_PDF'] = '/static/pdfdoc'
-app.config['REPORTE_PDF'] = 'file:///var/www/flasks/age/reporteh.pdf'
-app.config['MODULO_REPORTES'] = 'file:///var/www/flasks/age/reporte.pdf'
-app.config['HELP_DOC'] = 'file:///var/www/flasks/age/static/helpdoc/_build/html/index.html'
-#app.config['HELP_DOC'] = '/static/helpdoc/_build/html/index.html'
+#app.config['REPORTE_PDF'] = 'file:///var/www/flasks/age/reporteh.pdf'
+#app.config['MODULO_REPORTES'] = 'file:///var/www/flasks/age/reporte.pdf'
+app.config['HELP_DOC'] = 'static/helpdoc/_build/html/index.html'
 ALLOWED_EXTENSIONS = set(['pdf'])
 
 BCRYPT_LOG_ROUNDS = 15
@@ -1646,10 +1645,13 @@ def get_muniespeciales_all1():
 #========== Inicio Modulo Manuales ============#
 
 @app.route('/help_doc', methods=['GET', 'POST'])
-def help_doc():
+def held_doc():
     new = 2
-    print('------')
-    webbrowser.open(app.config['HELP_DOC'], new=new)
+    script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+    rel_path = app.config['HELP_DOC']
+    abs_file_path = os.path.join(script_dir, rel_path)
+
+    webbrowser.open(abs_file_path, new=new)
     return render_template('home.html')
 
 #========== Final Modulo Manuales ============#

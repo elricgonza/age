@@ -1,0 +1,49 @@
+10. Clasificadores
+******************
+
+a. Usuario Nacional
+===================
+
+El presente usuario tendrá activo las opciones:
+
+•	Clasificadores
+
+Opción Clasificadores 
+---------------------
+
+A través de esta opción se podrá visualizar todos los grupos y los subgrupos que manejan el sistema en función a los diferentes parámetros y/o valores.
+
+..  image:: ./image/Clasificadores.PNG
+    :width: 100%
+    :alt: 'Pantalla Clasificador'
+    :align: left
+
+Clasificadores
+++++++++++++++
+
+A través de opción podrá visualizar el clasificador. 
+
+**Procedimiento para visualizar el Clasificador:**
+
+**Paso 1:** Para visualizar el clasificador, deberá presionar el botón ``Clasificar``, una vez presionado el botón se desplegara el siguiente formulario,
+
+..  image:: ./image/Clasificadores1.PNG
+    :width: 100%
+    :alt: 'Pantalla Clasificador'
+    :align: left
+
+el presente formulario muestra el listado inextenso de las opciones que pertenecen al grupo seleccionado.
+
+b. Usuario Departamental
+========================
+
+El presente usuario tendrá activo las opciones:
+
+•	Clasificadores
+
+Opción Clasificadores
+---------------------
+
+A través de esta opción se podrá visualizar todos los grupos y los subgrupos que manejan el sistema en función a los diferentes parámetros y/o valores.
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.

@@ -1,0 +1,23 @@
+.. Manual SIGE documentation master file, created by
+   sphinx-quickstart on Mon Dec 20 11:38:33 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Bienvenido al Manual del Usuario
+================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contenido:
+
+   documentos/ingreso
+   documentos/asientos
+   documentos/recintos
+   documentos/jurisdiccion
+   documentos/territorial
+   documentos/documento
+   documentos/reportes
+   documentos/historial
+   documentos/clasificadores
+   documentos/usuario
+   documentos/salir

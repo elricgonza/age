@@ -1,0 +1,52 @@
+9. Historial
+************
+
+a. Usuario Nacional
+===================
+
+El presente usuario tendrá activo las opciones:
+
+•	Historial
+
+Opción Historial
+----------------
+
+A través de esta opción se podrá visualizar todas acciones realizadas por los diferentes usuarios que hacen uso del sistema (ejemplo: registro, edición, eliminación, consulta, etc).
+
+..  image:: ./image/Historial.PNG
+    :width: 100%
+    :alt: 'Pantalla Historial'
+    :align: left
+
+Historial
++++++++++
+
+A través de opción podrá visualizar el historial. 
+
+**Procedimiento para visualizar el Historial:**
+
+**Paso 1:** Para visualizar el historial, debe introducir la fecha de inicio y la fecha final, usuario a continuación presionar el botón ``Buscar``, esto le mostrara el historial, que están en el periodo de búsqueda y usuario.
+
+..  image:: ./image/Historial1.PNG
+    :width: 100%
+    :alt: 'Pantalla Historial'
+    :align: left
+
+b. Usuario Departamental
+========================
+
+El presente usuario tendrá activo las opciones:
+
+•	Historial
+
+Opción Historial
+----------------
+
+A través de esta opción se podrá visualizar todas acciones realizadas por los diferentes usuarios departamentales que hacen uso del sistema (ejemplo: registro, edición, eliminación, consulta, etc).
+
+..  image:: ./image/HistorialDpto.PNG
+    :width: 100%
+    :alt: 'Pantalla Historial'
+    :align: left
+
+**Nota.-** Todas las operaciones que se realizan en la presente opción son similares al del usuario TSE, solo que estas acciones están orientadas a los permisos asignados a los usuarios TED.

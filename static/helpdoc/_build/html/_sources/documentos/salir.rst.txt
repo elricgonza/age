@@ -1,0 +1,4 @@
+12. Salir
+*********
+
+A través de esta opción se podrá salir del sistema.
