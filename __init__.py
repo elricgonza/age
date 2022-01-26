@@ -1642,19 +1642,9 @@ def get_muniespeciales_all1():
 
 #========== Final Modulo Recintos Casos Especiales ============#
 
-#========== Inicio Modulo Manuales ============#
-
 @app.route('/help_doc', methods=['GET', 'POST'])
-def held_doc():
-    new = 2
-    script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
-    rel_path = app.config['HELP_DOC']
-    abs_file_path = os.path.join(script_dir, rel_path)
-
-    webbrowser.open(abs_file_path, new=new)
-    return render_template('home.html')
-
-#========== Final Modulo Manuales ============#
+def help_doc():
+    return redirect('static/helpdoc/_build/html/index.html')
 
 @app.route('/about')
 def about():
