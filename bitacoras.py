@@ -26,20 +26,20 @@ class Bitacora:
                 return False
             else:
                 lista = usuario
-                s = "select t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+                s = "select top 3000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
                     " t.Client_IP from bdge.dbo.logTransacciones t" + \
                     " left join bdge.dbo.usuarios u on t.Usuario=u.usuario" + \
                     " where u.id = %d order by t.FechaTrn desc"
         else:
             if usuario == 0:
                 lista = inicio, final
-                s = "select t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+                s = "select top 3000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
                     " t.Client_IP from bdge.dbo.logTransacciones t" + \
                     " left join bdge.dbo.usuarios u on t.Usuario=u.usuario" + \
                     " where Convert(char(10), t.FechaTrn,23) between %d and %d order by t.FechaTrn desc"
             else:
                 lista = inicio, final, usuario
-                s = "select t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+                s = "select top 3000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
                     " t.Client_IP from bdge.dbo.logTransacciones t" + \
                     " left join bdge.dbo.usuarios u on t.Usuario=u.usuario" + \
                     " where Convert(char(10), t.FechaTrn,23) between %d and %d and u.id = %d order by t.FechaTrn desc"
