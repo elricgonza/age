@@ -98,7 +98,7 @@ class Reportes:
             return rows
 
     def get_rep_logtransaccion_all(self, usrdep):              
-        s = "select top(500) GeografiaElectoral_app.dbo.DEP.Dep, GeografiaElectoral_app.dbo.DEP.NomDep as Departamento," + \
+        s = "select top(3000) GeografiaElectoral_app.dbo.DEP.Dep, GeografiaElectoral_app.dbo.DEP.NomDep as Departamento," + \
             " GeografiaElectoral_app.dbo.SEC.Sec, GeografiaElectoral_app.dbo.SEC.NomSec as Municipio," + \
             " case when bdge.dbo.logTransacciones.TipoTrn='U' then 'Update'" + \
                 " when bdge.dbo.logTransacciones.TipoTrn='I' then 'Insert'" + \
@@ -116,11 +116,11 @@ class Reportes:
             " LEFT JOIN bdge.dbo.logTransacciones ON substring(bdge.dbo.logTransacciones.PK,PATINDEX('%=%',bdge.dbo.logTransacciones.PK)+1,PATINDEX('%>%',bdge.dbo.logTransacciones.PK)-PATINDEX('%=%',bdge.dbo.logTransacciones.PK)-1)=GeografiaElectoral_app.dbo.LOC.idLoc"
         if usrdep != 0 :
             #s = s + " where GeografiaElectoral_app.dbo.DEP.Dep = %d order by GeografiaElectoral_app.dbo.PROV.prov, GeografiaElectoral_app.dbo.SEC.sec"
-            s = s + " where GeografiaElectoral_app.dbo.DEP.Dep = %d"
+            s = s + " where GeografiaElectoral_app.dbo.DEP.Dep = %d order by bdge.dbo.logTransacciones.FechaTrn desc"
             self.cur.execute(s, usrdep)
         else:
             #s = s + " order by GeografiaElectoral_app.dbo.DEP.Dep, GeografiaElectoral_app.dbo.PROV.Prov, GeografiaElectoral_app.dbo.SEC.Sec"
-            s = s + " order by bdge.dbo.logTransacciones.Tabla"
+            s = s + " order by bdge.dbo.logTransacciones.FechaTrn desc"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
