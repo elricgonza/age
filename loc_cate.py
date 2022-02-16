@@ -95,19 +95,6 @@ class LocCate:
         except:
             flash("Error al insertar Registro", 'alert-warning')            
 
-    '''
-    def upd_loc_cate(self, loc_id, cate_id, subcate_id, obs, fechaAct, usuario, sec):        
-        upd_locCate = (cate_id, subcate_id, obs, fechaAct, usuario, loc_id, sec)        
-        s = "update loc_cate set cate_id = %d, subcate_id = %d, obs = %s, fechaAct = %s, usuario = %s" + \
-            " where loc_id = %d and id = %d"
-        try:
-            self.cur.execute(s, upd_locCate)
-            self.cx.commit()
-            flash("Se ha Modificado el Registro", 'alert-success')
-        except:
-            flash("Error al modificar Registro", 'alert-warning')
-    '''
-
     def upd_loc_cate(self, indicador):
         if self.diff_old_new_indi(indicador):
             s = "update loc_cate set cate_id = %d, subcate_id = %d, obs = %s, fechaAct = %s, usuario = %s" + \

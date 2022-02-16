@@ -20,31 +20,48 @@ class Bitacora:
         self.cx = cx
         self.cur = cx.cursor()
     
-    def get_bitacora_all(self, inicio, final, usuario):
+    def get_bitacora_all(self, inicio, final, usuario): 
         if inicio == "00-00-0000" and final == "00-00-0000":
             if usuario == 0:
                 return False
             else:
                 lista = usuario
-                s = "select top 3000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+                s = "select t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
                     " t.Client_IP from bdge.dbo.logTransacciones t" + \
                     " left join bdge.dbo.usuarios u on t.Usuario=u.usuario" + \
                     " where u.id = %d order by t.FechaTrn desc"
         else:
             if usuario == 0:
                 lista = inicio, final
-                s = "select top 3000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+                s = "select t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
                     " t.Client_IP from bdge.dbo.logTransacciones t" + \
                     " left join bdge.dbo.usuarios u on t.Usuario=u.usuario" + \
                     " where Convert(char(10), t.FechaTrn,23) between %d and %d order by t.FechaTrn desc"
             else:
                 lista = inicio, final, usuario
-                s = "select top 3000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+                s = "select t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
                     " t.Client_IP from bdge.dbo.logTransacciones t" + \
                     " left join bdge.dbo.usuarios u on t.Usuario=u.usuario" + \
                     " where Convert(char(10), t.FechaTrn,23) between %d and %d and u.id = %d order by t.FechaTrn desc"
 
         self.cur.execute(s, lista)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_bitacora_1000(self, usrdep):        
+        s = "select top 1000 t.TipoTrn, t.Tabla, t.PK, t.Campo, t.ValorOriginal, t.ValorNuevo, t.FechaTrn, t.Usuario, t.AppName, t.HostName," + \
+            " t.Client_IP from bdge.dbo.logTransacciones t" + \
+            " left join bdge.dbo.usuarios u on t.Usuario=u.usuario"
+        if usrdep != 0 :
+            s = s + " where u.dep = %d order by t.FechaTrn desc"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by t.FechaTrn desc"
+            self.cur.execute(s)
+
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False

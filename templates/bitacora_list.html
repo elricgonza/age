@@ -50,36 +50,6 @@
                     </div>
                 </div>
                 <br>
-                <!--<div class="row">
-                    <div class="col-md-1">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="float-right" for="departamento">Departamento.:</label>
-                    </div>
-                    <div class="col-md-3">                                
-                        <select id="idepartamento" name="departamento" class="form-control" required>
-                            <option></option>
-                            {% if load and dp == 0 %}
-                                <option value="0" selected>Nacional</option>
-                            {% else %}
-                                <option value="0">Nacional</option>
-                                {% for dpto in dptos %}
-                                    {% if load and dp == dpto[0] %}                                
-                                            <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
-                                    {% else %}
-                                            <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </select> 
-                        <div class="invalid-feedback">Debe Seleccionar un Departamento...</div>
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary" onclick="busqueda()">Buscar</button>
-                    </div>
-                </div>-->
                 <div class="row">
                     <div class="col-md-1">
                     </div>
@@ -87,7 +57,7 @@
                         <label class="float-right" for="usuario">Usuario.:</label>
                     </div>
                     <div class="col-md-3">                                
-                        <select id="iusuario" name="usuario" class="form-control" required>
+                        <select id="iusuario" name="usuario" class="form-control">
                             <option></option>
                             {% for usuar in usuarios %}
                                 {% if load and usuario == usuar[0]~'' %}                                
@@ -101,8 +71,12 @@
                     </div>
                     <div class="col-md-4">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <button type="submit" class="btn btn-primary" onclick="busqueda()">Buscar</button>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="hidden" id="ilimpiar" name="limpiar">
+                        <button type="submit" class="btn btn-primary" onclick="limpiare('limpiando')">Limpiar</button>
                     </div>
                 </div>
             </form>
@@ -175,7 +149,11 @@
                 function busqueda(){
                     $("#iinicio").val();
                     $("#ifinal").val();
-                    $("#idepartamento").val();
+                    $("#iusuario").val();
+                    $('#formbusqueda').attr('action', '/bitacora_list');    
+                }
+                function limpiare(v){
+                    $("#ilimpiar").val(v);
                     $('#formbusqueda').attr('action', '/bitacora_list');    
                 }
                 $(document).ready(function() {
@@ -191,7 +169,7 @@
                             "url": "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
                         },
                         "order": [
-                            [0, "desc"]
+                            [6, "desc"]
                         ],
                         "initComplete": function() {
                             this.api().columns().every(function() {

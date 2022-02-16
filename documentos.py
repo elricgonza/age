@@ -38,7 +38,7 @@ class Documentos:
             return rows
 
     def add_documento(self, doc, dep, cite, ruta, fechadoc, obs, fecharegistro, usuario, fechaingreso):
-        new_documento = doc, dep, cite, ruta, fechadoc, obs, fecharegistro, usuario, fechaingreso
+        new_documento = doc, dep, cite, ruta, fechadoc, obs.strip(), fecharegistro, usuario, fechaingreso
         s = "insert into doc (tipoDoc, dep, cite, ruta, fechaDoc, obs, FechaAct, usuario, fechaIngreso) values " + \
             " (%s, %s, %s, %s, %s, %s, %s, %s, %s) "
         try:
@@ -50,7 +50,7 @@ class Documentos:
 
 
     def upd_documento(self, id, doc, dep, cite, ruta, fechadoc, obs, usuario, fa):        
-        upd_documento = (doc, dep, cite, ruta, fechadoc, obs, usuario, fa, id)        
+        upd_documento = (doc, dep, cite, ruta, fechadoc, obs.strip(), usuario, fa, id)        
         #s = "update doc set tipoDoc = %s, dep = %s, cite = %s, fechaDoc = %s, obs = %s, usuario = %s, fechaIngreso = %s where id = %d"
         s = "update doc " + \
             " set tipoDoc = %d, dep = %d, cite = %s, ruta = %s, fechaDoc = %s, obs = %s, usuario = %s, fechaAct = %s" + \
@@ -126,7 +126,35 @@ class Documentos:
         self.cur.execute(s) 
         rows = self.cur.fetchall()
         return rows
-                
+    
+    def diff_old_new_doc(self, row_to_upd):
+        '''
+        Verif. si existe dif. en registro editado
+        '''
+        a = self.get_documento_id(row_to_upd[0])  #19 -> idloc
+
+        vdif = False
+
+        if self.tipoDoc != int(row_to_upd[1]):
+            print('tipoDoc dif')
+            vdif = True
+        if self.dep != int(row_to_upd[2]):
+            print('dep dif')
+            vdif = True
+        if self.cite != row_to_upd[3]:
+            print('cite dif')
+            vdif = True
+        if (self.fechaDoc == None and row_to_upd[4] != None):
+            print('fechaDoc - null')
+            vdif = True
+        if (self.obs.strip() != row_to_upd[5].strip()):
+            print('obs dif')
+            vdif = True
+        if (self.usuario != row_to_upd[6]):
+            print('usuario dif')
+            vdif = True
+
+        return vdif
 
     def upd_doc(self, idA, idRN, idAct, idRspNal, docActF):
         '''

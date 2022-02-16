@@ -494,16 +494,38 @@ def documento(doc_id):
                     if fichero.name == name_to_save1:
                             os.rename(ejemplo_dir + fichero.name, ejemplo_dir + name_to_save)
 
+            row_to_upd = \
+                doc_id, \
+                request.form['doc'], \
+                request.form['dep'], \
+                request.form['cite'], \
+                request.form['fechadoc'], \
+                request.form['obs'], \
+                request.form['usuario']
+
             fa = str(datetime.datetime.now())[:-7]
-            d.upd_documento(doc_id, \
-                        request.form['doc'], \
-                        request.form['dep'], \
-                        request.form['cite'], \
-                        ruta, \
-                        request.form['fechadoc'], \
-                        request.form['obs'], \
-                        request.form['usuario'], \
-                        fa)
+            if f.filename != '':
+                d.upd_documento(doc_id, \
+                            request.form['doc'], \
+                            request.form['dep'], \
+                            request.form['cite'], \
+                            ruta, \
+                            request.form['fechadoc'], \
+                            request.form['obs'], \
+                            request.form['usuario'], \
+                            fa)
+            else:
+                if d.diff_old_new_doc(row_to_upd):
+                    d.upd_documento(doc_id, \
+                                request.form['doc'], \
+                                request.form['dep'], \
+                                request.form['cite'], \
+                                ruta, \
+                                request.form['fechadoc'], \
+                                request.form['obs'], \
+                                request.form['usuario'], \
+                                fa)
+
             if usr == 'admin':
                 return render_template('documentos_list.html', documentos=d.get_documentos(),  puede_adicionar='Documentos - Adición' in permisos_usr, \
                                         puede_editar='Documentos - Edición' in permisos_usr, \
@@ -2480,32 +2502,49 @@ def bitacora_list():
     else:
         s = bitacoras.Bitacora(cxms)
         if request.method == 'POST':
-            if request.form['inicio'] == "":
+            if request.form['limpiar'] == 'limpiando':
                 inicio = '00-00-0000'
-            else:
-                inicio = request.form['inicio']
-
-            if request.form['final'] == "":
                 final = '00-00-0000'
-            else:
-                final = request.form['final']
-
-            if request.form['usuario'] == 0:    
                 usuario = 0
+                rows = s.get_bitacora_1000(usrdep)
+                if rows:
+                    return render_template('bitacora_list.html', bitacoras=rows, usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario)  # render a template
+                else:
+                    print ('Sin registros en Historial...')
+                    return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario)
             else:
-                usuario = request.form['usuario']
+                if request.form['inicio'] == "":
+                    inicio = '00-00-0000'
+                else:
+                    inicio = request.form['inicio']
+
+                if request.form['final'] == "":
+                    final = '00-00-0000'
+                else:
+                    final = request.form['final']
+
+                if request.form['usuario'] == '':    
+                    usuario = 0
+                else:
+                    usuario = request.form['usuario']
+
+                rows = s.get_bitacora_all(inicio, final, usuario)
+
+                if rows:
+                    return render_template('bitacora_list.html', bitacoras=rows, usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario)  # render a template
+                else:
+                    print ('Sin registros en Historial...')
+                    return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario)
         else:
             inicio = '00-00-0000'
             final = '00-00-0000'
             usuario = 0
-
-        rows = s.get_bitacora_all(inicio, final, usuario)
-
-        if rows:
-            return render_template('bitacora_list.html', bitacoras=rows, usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)  # render a template
-        else:
-            print ('Sin registros en Historial...')
-            return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)
+            rows = s.get_bitacora_1000(usrdep)
+            if rows:
+                return render_template('bitacora_list.html', bitacoras=rows, usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)  # render a template
+            else:
+                print ('Sin registros en Historial...')
+                return render_template('bitacora_list.html', usuarios=s.get_usuarios(), load=True, inicio=inicio, final=final, usuario=usuario, puede_adicionar='Bitacoras - Adición' in permisos_usr)
 
 
 @app.route('/grupo_list', methods=['GET', 'POST'])
