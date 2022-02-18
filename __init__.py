@@ -415,6 +415,7 @@ def documentos_list():
         print ('Sin Documentos...')
         return render_template('documentos_list.html', puede_adicionar='Documentos - Adición' in permisos_usr)
 
+
 @app.route('/documento/<doc_id>', methods=['GET', 'POST'])
 def documento(doc_id):
     d = docu.Documentos(cxms)
