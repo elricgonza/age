@@ -22,7 +22,7 @@ function getgeoreci1(event) {
             asientosReci1($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
         };             
     };
-} 
+}
 
 function asiento_reci(idloc, cir) {
     $('#iasiento').html('');
@@ -65,6 +65,28 @@ function asientosReci1(dep, prov, sec, cir) {
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
                     $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                });
+            });
+    };
+}
+
+function asientosReci_ext(event) {
+    var x = event.keyCode;
+    var pais = document.getElementById("ipais").value;
+    var dpto = document.getElementById("idpto").value;
+    var provi = document.getElementById("iprovincia").value;
+    var secci = document.getElementById("imunicipio").value;
+    if (x == 27 || x == 9 || 'undefined') {
+        $('#iasiento').html('');
+        $.getJSON("/get_asientos_all3", {
+                pais: pais,
+                dpto: dpto,
+                provi: provi,
+                secci: secci
+            }, function(datos){
+            $("#iasiento").append('<option></option>');
+                $.each(datos, function(index, obj){
+                    $("#iasiento").append('<option value="'+obj[4] + '">' + obj[5] + '</option>');
                 });
             });
     };

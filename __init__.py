@@ -22,6 +22,7 @@ import documentos_pdf as dpdf
 import tipodocs as tdoc
 import reportesPDF as rpdf
 import exterior as ext
+import exteriorreci as extr
 import recintos 
 import reciespe as recie
 import reciespeciales as recies
@@ -828,18 +829,6 @@ def exterior(idloc):
     # New
     return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), estados=a.get_estados(), etapas=a.get_etapas(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
-''' dup c/ obtenido de rep - resultado idem
-@app.route('/get_departamentos_all', methods=['GET', 'POST'])
-def get_departamentos_all():
-    ex = ext.Exterior(cxms)
-    rows = ex.get_departamentos_all(usrdep)
-    if rows:
-        return jsonify(rows)
-    else:
-        return jsonify(departamento='NO',
-                       provincia='EXISTE !!!',
-                       municipio='DEPARTAMENTO....')
-'''
 
 @app.route('/get_geo_all', methods=['GET', 'POST'])
 def get_geo_all():
@@ -1042,6 +1031,23 @@ def get_asientos_all2():
                        municipio='INTENTE NUEVAMENTE....')
 
 
+@app.route('/get_asientos_all3', methods=['GET', 'POST'])
+def get_asientos_all3():
+    pa = request.args.get('pais')
+    dp = request.args.get('dpto')
+    pro = request.args.get('provi')
+    se = request.args.get('secci')
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_asientos_all3(usrdep, pa, dp, pro, se)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(departamento='COORDENADA',
+                       provincia='INCORRECTA !!!',
+                       municipio='INTENTE NUEVAMENTE....')
+
+
 @app.route('/get_asiento_one', methods=['GET', 'POST'])
 def get_asiento_one():
     idloc = request.args.get('idloc')
@@ -1071,6 +1077,20 @@ def get_zonas_all1():
     cxms2.close()
 
 
+@app.route('/get_zonas_all2', methods=['GET', 'POST'])
+def get_zonas_all2():
+    idloc = request.args.get('idloc')
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_zonas_all2(usrdep, idloc)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
 @app.route('/get_distritos_all', methods=['GET', 'POST'])
 def get_distritos_all():
     circun = request.args.get('circun')
@@ -1078,6 +1098,20 @@ def get_distritos_all():
     cxms2 = dbcn.get_db_ms()
     rca = recia.Reciasiento(cxms2)
     rows = rca.get_distritos_all(circun, idlocreci)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
+@app.route('/get_distritos_all2', methods=['GET', 'POST'])
+def get_distritos_all2():
+    idlocreci = request.args.get('idlocreci')
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_distritos_all2(idlocreci)
     if rows:
         return jsonify(rows)
     else:
@@ -1239,18 +1273,6 @@ def get_pueblos_all():
 
     cxms2.close()
 
-"""@app.route('/get_circun', methods=['GET', 'POST'])
-def get_circun():
-    valor = request.args.get('valor')
-    cxms2 = dbcn.get_db_ms()
-    rca = recia.Reciasiento(cxms2)
-    rows = rca.get_circun(valor)
-    if rows:
-        return jsonify(rows)
-    else:
-        return jsonify(0)
-
-    cxms2.close()"""
 
 #========== Modulo Zonas y Distritos ============#
 
@@ -1288,12 +1310,19 @@ def zonas(idloc, iddist, ban):
                 print('msg-err')
             else:
                 nextiddist = z.get_next_dist(request.form['idloc'])
-
-                z.add_dist(request.form['idloc'], nextiddist, request.form['nrodist'], request.form['nomdist'], \
-                           request.form['fechaIngreso'][:-7], fa, request.form['usuario'])
+                if ban == '2':
+                    z.add_dist(request.form['idloc'], nextiddist, '0', request.form['nomdist'], \
+                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'])
+                else:
+                    z.add_dist(request.form['idloc'], nextiddist, request.form['nrodist'], request.form['nomdist'], \
+                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'])
+                    
                 if ban == '1':
                     #flash('Registro grabado !!! CORRECTAMENTE !!!')
                     return render_template('zonare.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
+                elif ban == '2':
+                    #flash('Registro grabado !!! CORRECTAMENTE !!!')
+                    return render_template('zonareext.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
                 else:
                     rows = z.get_zonas_all(usrdep)
                     return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zonas - Adición' in permisos_usr, \
@@ -1371,6 +1400,33 @@ def zonasre():
             print('Otra Cosa')
         else:
             return render_template('zonare.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
+
+
+@app.route('/zonasre_ext', methods=['GET', 'POST'])
+@login_required
+def zonasre_ext():
+    z = zo.Zonas(cxms)
+    ban = 0
+    error = None
+    p = ('Recintos - Edición' in permisos_usr)  # t/f
+
+    if request.method == 'POST':
+        if request.form.get('idlocreci1') == None:
+            idloc = request.form.get('idlocreci1', 0)
+        else:
+            idloc = request.form['idlocreci1']    
+        if request.form.get('nomloc') == None:
+            nomloc = request.form.get('nomloc', 0)
+        else:
+            nomloc = request.form['nomloc']
+        if request.form.get('nrodist1') == None:
+            nrodist = request.form.get('nrodist1', 0)
+        else:
+            nrodist = request.form['nrodist1']
+        if ban != 0:
+            print('Otra Cosa')
+        else:
+            return render_template('zonareext.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos del Exterior', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
 
 
 @app.route('/asientoz', methods=['GET', 'POST'])
@@ -1665,6 +1721,115 @@ def get_muniespeciales_all1():
 
 #========== Final Modulo Recintos Casos Especiales ============#
 
+#========== Inicio Modulo Recintos Exterior ============#
+
+@app.route('/exterior_reci_list', methods=['GET', 'POST'])
+@login_required
+def exterior_reci_list():
+    exr = extr.Exteriorr(cxms)
+    rows = exr.get_exterior_reci_all(usrdep)
+    if rows:
+        if permisos_usr:    # tiene pemisos asignados
+            return render_template('exteriorreci_list.html', exteriorrecis=rows, puede_adicionar='Exterior_reci - Adición' in permisos_usr, \
+                                    puede_editar='Exterior_reci - Edición' in permisos_usr)  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin recintos del exterior...')
+
+
+@app.route('/exterior_reci/<idreci>/<idlocreci>', methods=['GET', 'POST'])
+@login_required
+def exterior_reci(idreci, idlocreci):
+    exr = extr.Exteriorr(cxms)
+    z = zo.Zonas(cxms)
+    d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)  # jsons para mapa
+
+    error = None
+    p = ('Exterior_reci - Edición' in permisos_usr)  # t/f
+
+    if request.method == 'POST':
+        fa = request.form['fechaAct'][:-7]
+        """Valida si el campo docActF esta desactivado"""
+        if request.form.get('docActF') == None:
+            docActF = 0
+        else:
+            docActF = request.form['docActF']
+        """Valida si el campo depenreci esta desactivado"""
+        if request.form.get('depenreci') == None:
+            depenreci = 0
+        else:
+            depenreci = request.form['depenreci']
+
+        if idreci == '0':  # es NEW
+            if False:   # valida si neces POST
+                #error = "El usuario: " + request.form['uname']  + " ya existe...!"
+                #return render_template('asiento.html', error=error, u=u, load_u=True)
+                print('msg-err')
+            else:
+                nextid = exr.get_next_reciext()
+                idlocreci = request.form['asiento']
+                exr.add_recinto_ext(idlocreci, nextid, request.form['nomreci'], request.form['zonareci'], \
+                                    0, request.form['dirreci'], request.form['latitud'], \
+                                    request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                                    0, 0, depenreci, \
+                                    request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
+                                    request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'])
+
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+
+                rows = exr.get_exterior_reci_all(usrdep)
+                return render_template('exteriorreci_list.html', exteriorrecis=rows, puede_adicionar='Exterior_reci - Adición' in permisos_usr, \
+                                        puede_editar='Exterior_reci - Edición' in permisos_usr
+                                      )# render a template
+        else: # Es Edit
+            fa = str(datetime.datetime.now())[:-7]
+            idlocreci = request.form['asiento']
+
+            row_to_upd = \
+                request.form['nomreci'], request.form['zonareci'], \
+                0, request.form['dirreci'], request.form['latitud'], \
+                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                0, 0, depenreci, \
+                request.form['pisosreci'], fa, usr, \
+                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], idlocreci, idreci    
+    
+            exr.upd_recinto_ext(row_to_upd)
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)            
+
+            rows = exr.get_exterior_reci_all(usrdep)
+            return render_template('exteriorreci_list.html', exteriorrecis=rows, puede_adicionar='Exterior_reci - Adición' in permisos_usr, \
+                                    puede_editar='Exterior_reci - Edición' in permisos_usr
+                                  )# render a template
+    else: # Viene de <recintos_list>
+        if idreci != '0':  # EDIT
+            if exr.get_exteriorreci_idreci(idreci, idlocreci):
+                """if a.docAct == None:
+                    a.docAct = """
+                if exr.fechaIngreso == None:
+                    exr.fechaIngreso = str(datetime.datetime.now())[:-7]
+                if exr.fechaAct == None:
+                    exr.fechaAct = str(datetime.datetime.now())[:-7]
+                if exr.usuario == None:
+                    exr.usuario = usr
+
+                return render_template('exteriorreci.html', error=error, exr=exr, load=True, puede_editar=p, asientoRecis=exr.get_asiexterior_all(usrdep), zonasRecis=exr.get_zonexterior_all(usrdep),
+                                       estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), dependencias=exr.get_dependencias(), trecintos=exr.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                                       gj_cir=j.get_cir(usrdep),
+                                       gj_mun=j.get_mun(usrdep),
+                                       gj_prov=j.get_prov(usrdep), paises=exr.get_paises_all(usrdep), dptos=exr.get_departamentos_all(usrdep), provincias=exr.get_provincias_all(usrdep),
+                                       municipios=exr.get_municipios_all(usrdep))
+
+    # New
+    return render_template('exteriorreci.html', error=error, exr=exr, load=False, puede_editar=p, estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), trecintos=exr.get_tiporecintos(), 
+                           paises=exr.get_paises_all(usrdep), dependencias=exr.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                           gj_cir=j.get_cir(usrdep),
+                           gj_mun=j.get_mun(usrdep),
+                           gj_prov=j.get_prov(usrdep))
+
+#========== Final Modulo Recintos Exterior ============#
+
 @app.route('/help_doc', methods=['GET', 'POST'])
 def help_doc():
     return redirect('static/helpdoc/_build/html/index.html')
@@ -1899,14 +2064,27 @@ def homologacion_list():
     rows = ahomo.get_homologacion_all(usrdep, inicio, final)
     rowj = ahomo.get_homojurisd_all(usrdep, inicio, final)
     if rows:
-        if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('homologacion_list.html', homologaciones=rows, homojurisds=rowj, load=True, ban=True, \
-                                    inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
+        if rowj:
+            if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
+                return render_template('homologacion_list.html', homologaciones=rows, homojurisds=rowj, load=True, ban=True, \
+                                        inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
+            else:
+                return render_template('msg.html', l1='Sin permisos asignados !!')
         else:
-            return render_template('msg.html', l1='Sin permisos asignados !!')
+            if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
+                return render_template('homologacion_list.html', homologaciones=rows, load=True, ban=True, \
+                                        inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
+            else:
+                return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print ('Sin Homologacion...')
-        return render_template('homologacion_list.html', puede_consultar='Homologa - Consulta' in permisos_usr)
+        if rowj:
+            if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
+                return render_template('homologacion_list.html', homojurisds=rowj, load=True, ban=True, \
+                                        inicio=inicio, final=final, puede_consultar='Homologa - Consulta' in permisos_usr)  # render a template
+            else:
+                return render_template('msg.html', l1='Sin permisos asignados !!')
+        else:
+            return render_template('homologacion_list.html', puede_consultar='Homologa - Consulta' in permisos_usr)
 
 
 @app.route('/homologacion/<idhomo>/<inicio>/<final>', methods=['GET', 'POST'])

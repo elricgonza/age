@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}
+    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
+{% endblock %}
+<div class="container">
+    <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
+    <br>    
+    <div id="login-row" class="row justify-content-center align-items-center">
+        {% with messages = get_flashed_messages(with_categories=false) %}
+          {% if messages %}        
+            {% for message in messages %}         
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+            {% endfor %}        
+          {% endif %}
+        {% endwith %}
+        <div id="login-column" class="col-md-8">
+            <div id="login-box" class="col-md-12">
+                <form action="{{ url_for('zonas', idloc = 0, iddist = 0, ban = 2) }}" class="needs-validation" novalidate method="POST">                
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="idloc">IdLoc:</label>
+                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
+                                    {% if load %}
+                                        value="{{ z.idloc }}"
+                                      {% else %}
+                                        value="{{ idloc }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
+                        </div>
+                        <div class="col-md-9">
+                            <label for="nomloc">Nombre Asiento:</label>
+                            <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
+                                    {% if load %}
+                                        value="{{ z.nomloc }}"
+                                    {% else %}
+                                        value="{{ nomloc }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
+                        </div>
+                    </div> <!--row-->
+                    <h5 class="text-left text-blue pt-5" >Datos del Distrito:</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="nomdist">Nombre del Distrito:</label>
+                            <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required
+                                {% if load %}
+                                    value="{{ z.nomdist }}"        
+                                {% endif %}
+                            >
+                            <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="fechaIngreso">Fecha y Hora de Registro:</label>
+                            <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
+                                    {% if load_d %}
+                                        value=""
+                                    {% else %}
+                                        value="{{ idatetime }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechaAct">Fecha y Hora Actual:</label>
+                            <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                                    {% if load_d %}
+                                        value=""
+                                    {% else %}
+                                        value="{{ idatetime }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback" id="v_fechaAct">Debe introducir una fecha válida.</div>
+                        </div>                        
+                        <div class="col-md-4">
+                            <label for="usuario">Usuario Logueado:</label>
+                            <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                                    {% if load_d %}
+                                        value=""
+                                    {% else %}
+                                        value="{{ usuario }}"
+                                    {% endif %}
+                                >
+                            <div class="invalid-feedback">Debe introducir un nombre válido.</div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <button type="button"
+                            {% if load_d %}  
+                                    onclick="javascript: window.close();"
+                                {% else %}
+                                    onclick="javascript: window.close();"
+                            {% endif %}      
+                            class="btn btn-outline-danger btn-md btn-block">
+                            {% if load_d %}
+                                    Cerrar
+                                {% else %}
+                                    Cancelar
+                            {% endif %}        
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button type="submit" class="btn btn-outline-success btn-md btn-block"
+                            {% if load_d %}
+                                disabled
+                            {% else %}
+                                enabled
+                            {% endif %}
+                            >Aceptar</button>
+                        </div>
+                    </div> <!--row-->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    $('.custom-file-input').on('change', function() { 
+          let fileName = $(this).val().split('\\').pop(); 
+          $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+    });    
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+</script>
+
+{% endblock %}

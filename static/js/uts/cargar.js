@@ -126,6 +126,31 @@ function cargar(valor, data) {
                     alert(recintos);
                 }
             });
+        }else if(data==11){
+            var idloc = document.getElementById('iasiento').value;
+            document.getElementById('iidloc').value = idloc;
+            document.getElementById('iidlocreci').value = idloc;
+            document.getElementById('iidlocreci1').value = idloc;
+            $('#izonareci').html('');
+            $.getJSON("/get_zonas_all2", {
+                idloc: idloc
+            }, function(datos11){
+                $("#izonareci").append('<option></option>');                
+                $.each(datos11, function(index11, obj11){       
+                    $("#izonareci").append('<option value="' + obj11[1] + '">' + obj11[2] +' - '+ obj11[3] +'</option>');
+                });
+            });
+        }else if(data==12){
+            var idlocreci = document.getElementById("iidlocreci").value;
+            $('#inomdist').html('');
+            $.getJSON("/get_distritos_all2", {
+                idlocreci: idlocreci
+            }, function(datos12){
+                $("#inomdist").append('<option></option>');                
+                $.each(datos12, function(index12, obj12){           
+                    $("#inomdist").append('<option value="' + obj12[1] + '">' + obj12[1] +' - '+ obj12[2] +'</option>');
+                });
+            });
         } 
     };
 } 
