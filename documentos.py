@@ -126,6 +126,13 @@ class Documentos:
         self.cur.execute(s) 
         rows = self.cur.fetchall()
         return rows
+
+    def get_tipo_documentos_pdfRNExt(self, usrdep):
+        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
+        s = s + " where dep = 0 order by fechaAct desc"
+        self.cur.execute(s) 
+        rows = self.cur.fetchall()
+        return rows
     
     def diff_old_new_doc(self, row_to_upd):
         '''

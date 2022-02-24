@@ -731,6 +731,24 @@ def asiento_vs(idloc):
                           )
 
 
+@app.route('/asiento_vs_ext/<idloc>', methods=['GET', 'POST'])
+@login_required
+def asiento_vs_ext(idloc):
+    ''' Coordenada en visor '''
+
+    a = asi.Asientos(cxms)
+    a.get_asiento_idloc(idloc)    # siempre debiera existir
+     
+    j = get_json.GetJson(cxpg)
+
+    return render_template('coord_vs_ext.html', 
+                            gj_reci=j.get_reci_ext(10), 
+                            gj_asi=j.get_asi_ext(10), 
+                            latitud=a.latitud, 
+                            longitud=a.longitud
+                          )
+
+
 @app.route('/recinto_vs/<idloc>/<reci>', methods=['GET', 'POST'])
 @login_required
 def recinto_vs(idloc, reci):
@@ -746,6 +764,23 @@ def recinto_vs(idloc, reci):
                             gj_cir=j.get_cir(usrdep),
                             gj_mun=j.get_mun(usrdep),
                             gj_prov=j.get_prov(usrdep),
+                            latitud=r.latitud, 
+                            longitud=r.longitud
+                          )
+
+
+@app.route('/recinto_vs_ext/<idloc>/<reci>', methods=['GET', 'POST'])
+@login_required
+def recinto_vs_ext(idloc, reci):
+    ''' Coordenada en visor '''
+
+    r = recintos.Recintos(cxms)
+    r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
+     
+    j = get_json.GetJson(cxpg)
+    return render_template('coord_vs_ext.html', 
+                            gj_reci=j.get_reci(usrdep), 
+                            gj_asi=j.get_asi(usrdep), 
                             latitud=r.latitud, 
                             longitud=r.longitud
                           )
@@ -772,6 +807,7 @@ def exterior(idloc):
     ex = ext.Exterior(cxms)
     a = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)
 
     error = None
     p = ('Exterior - Edición' in permisos_usr)  # t/f
@@ -825,9 +861,16 @@ def exterior(idloc):
 
                 return render_template('exterior.html', error=error, a=ex, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep),
                                        dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep), estados=a.get_estados(),
-                                       etapas=a.get_etapas(), municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+                                       etapas=a.get_etapas(), municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                                       gj_cir=j.get_cir(9),
+                                       gj_mun=j.get_mun(9),
+                                       gj_prov=j.get_prov(9))
     # New
-    return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), estados=a.get_estados(), etapas=a.get_etapas(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+    return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), estados=a.get_estados(), etapas=a.get_etapas(), 
+                            tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                            gj_cir=j.get_cir(9),
+                            gj_mun=j.get_mun(9),
+                            gj_prov=j.get_prov(9))
 
 
 @app.route('/get_geo_all', methods=['GET', 'POST'])
@@ -1815,18 +1858,18 @@ def exterior_reci(idreci, idlocreci):
                     exr.usuario = usr
 
                 return render_template('exteriorreci.html', error=error, exr=exr, load=True, puede_editar=p, asientoRecis=exr.get_asiexterior_all(usrdep), zonasRecis=exr.get_zonexterior_all(usrdep),
-                                       estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), dependencias=exr.get_dependencias(), trecintos=exr.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
-                                       gj_cir=j.get_cir(usrdep),
-                                       gj_mun=j.get_mun(usrdep),
-                                       gj_prov=j.get_prov(usrdep), paises=exr.get_paises_all(usrdep), dptos=exr.get_departamentos_all(usrdep), provincias=exr.get_provincias_all(usrdep),
+                                       estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), dependencias=exr.get_dependencias(), trecintos=exr.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfRNExt(usrdep), 
+                                       gj_cir=j.get_cir(9),
+                                       gj_mun=j.get_mun(9),
+                                       gj_prov=j.get_prov(9), paises=exr.get_paises_all(usrdep), dptos=exr.get_departamentos_all(usrdep), provincias=exr.get_provincias_all(usrdep),
                                        municipios=exr.get_municipios_all(usrdep))
 
     # New
     return render_template('exteriorreci.html', error=error, exr=exr, load=False, puede_editar=p, estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), trecintos=exr.get_tiporecintos(), 
-                           paises=exr.get_paises_all(usrdep), dependencias=exr.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                           gj_cir=j.get_cir(usrdep),
-                           gj_mun=j.get_mun(usrdep),
-                           gj_prov=j.get_prov(usrdep))
+                           paises=exr.get_paises_all(usrdep), dependencias=exr.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfRNExt(usrdep),
+                           gj_cir=j.get_cir(9),
+                           gj_mun=j.get_mun(9),
+                           gj_prov=j.get_prov(9))
 
 #========== Final Modulo Recintos Exterior ============#
 

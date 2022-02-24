@@ -36,9 +36,9 @@
                         <tr>
                            <th>IdLoc</th>
                            <th>Pais</th>
-                           <th>Departamento</th>
-                           <th>Provincia</th>
-                           <th>Municipio</th>
+                           <th>1er Nivel</th>
+                           <th>2do Nivel</th>
+                           <th>3er Nivel</th>
                            <th>Asiento</th>
                            <th>Estado</th>
                            <th>Editar</th>
@@ -53,7 +53,7 @@
                         <td>{{ exterior[2] }}</td>
                         <td>{{ exterior[3] }}</td>
                         <td>{{ exterior[4] }}</td>
-                        <td>{{ exterior[5] }}</td>
+                        <td><a href={{ url_for( 'asiento_vs', idloc=exterior[0]) }} target="_blank">{{ exterior[5] }}</a></td>
                         <td>{{ exterior[6] }}</td>
                         <td>
                             <a href={{ url_for('exterior', idloc=exterior[0]) }}><span class="fas fa-edit"></span></a>                
