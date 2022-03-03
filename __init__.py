@@ -2546,6 +2546,7 @@ def paisesABC(pais_id):
     # New
     return render_template('paisesABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Pais', puede_editar=p)
 
+
 @app.route('/deptos_list', methods=['GET', 'POST'])
 @login_required
 def deptos_list():
@@ -2574,16 +2575,15 @@ def deptosABC(dep_id):
                 print('msg-err')
             else:
                 nextid = s.get_next_iddep()
-                s.add_depto(nextid, request.form['nomDep'], request.form['diputados'], request.form['diputadosUninominales'], request.form['pais'], request.form['descNivelId'],
-                           str(request.form['fechaIngreso'])[:-8],
-                           fa, usr)
+                s.add_depto(nextid, request.form['nomDep'], request.form['diputados'], request.form['diputadosUninominales'], request.form['pais'], request.form['descNivelId'], \
+                            request.form['fechaIngreso'][:-7], fa, usr)
 
                 rows = s.get_deptos_all(usrdep)
-                return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr)  # render a template
+                return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr, puede_editar=p)  # render a template
         else: # Es Edit
             s.upd_depto(dep_id, request.form['nomDep'], request.form['diputados'], request.form['diputadosUninominales'], request.form['pais'], request.form['descNivelId'], fa, usr)
             rows = s.get_deptos_all(usrdep)
-            return render_template('deptos_list.html', deptos=rows, puede_editar='Departamentos - Edicion' in permisos_usr)  # render a template
+            return render_template('deptos_list.html', deptos=rows, puede_adicionar='Departamentos - Adición' in permisos_usr, puede_editar=p)  # render a template
     else: # Viene de <asientos_list>
         if dep_id != '0':  # EDIT
             if s.get_depto_iddep(dep_id) == True:
@@ -2591,9 +2591,22 @@ def deptosABC(dep_id):
                     s.fechaAct = str(datetime.datetime.now())[:-7]
                 if s.usuario == None:
                     s.usuario = usr
-                return render_template('deptosABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Departamentos', tpaises=s.get_combo_paises(usrdep), tdescNivel=s.get_combo_descNivel(usrdep),puede_editar=p)
+                return render_template('deptosABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Departamentos', tpaises=s.get_combo_paises(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep),puede_editar=p)
     # New
-    return render_template('deptosABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Departamento', tpaises=s.get_combo_paises(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
+    return render_template('deptosABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Departamento', tpaises=s.get_combo_paises(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
+
+
+@app.route('/get_desc_nivel_all', methods=['GET', 'POST'])
+@login_required
+def get_desc_nivel_all():
+    s = deptoss.Departamento(cxms)
+    sgrupo = request.args.get('sgrupo')
+    rows = s.get_desc_nivel_all(sgrupo)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
 
 @app.route('/provs_list', methods=['GET', 'POST'])
 @login_required
@@ -2631,11 +2644,11 @@ def provsABC(dep_id, prov_id):
                            fa, usr)
 
                 rows = s.get_provs_all(usrdep)
-                return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr)  # render a template
+                return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr, puede_editar=p)  # render a template
         else: # Es Edit
             s.upd_prov(dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
             rows = s.get_provs_all(usrdep)
-            return render_template('provs_list.html', listaProvincias=rows, puede_editar='Prov incias - Edicion' in permisos_usr)  # render a template
+            return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr, puede_editar=p)  # render a template
     else: # Viene de <asientos_list>
         if dep_id != '0' and prov_id != '0':  # EDIT
             if s.get_provs_id(dep_id, prov_id) == True:
@@ -2644,9 +2657,22 @@ def provsABC(dep_id, prov_id):
                 if s.usuario == None:
                     s.usuario = usr
 
-                return render_template('provsABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Provincias', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
+                return render_template('provsABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Provincias', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
     # New
-    return render_template('provsABC.html', error=error, s=s, load=False, titulo='Registro de Nueva Provincia', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
+    return render_template('provsABC.html', error=error, s=s, load=False, titulo='Registro de Nueva Provincia', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
+
+
+@app.route('/get_desc_nivel_prov_all', methods=['GET', 'POST'])
+@login_required
+def get_desc_nivel_prov_all():
+    s = provs.Prov(cxms)
+    sgrupo = request.args.get('sgrupo')
+    rows = s.get_desc_nivel_prov_all(sgrupo)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
 
 @app.route('/get_departamentos_all', methods=['GET', 'POST'])
 def get_departamentos_all():
@@ -2696,12 +2722,12 @@ def munABC(dep_id, prov_id, mun_id):
             str(request.form['fechaIngreso'])[:-8], fa, usr)
 
             rows = s.get_mun_all(usrdep)
-            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr)  # render a template
+            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr, puede_editar=p)  # render a template
         else: # Es Edit
             s.upd_mun(dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'],
                     fa, usr)
             rows = s.get_mun_all(usrdep)
-            return render_template('mun_list.html', municipios=rows, puede_editar='Municipios - Edicion' in permisos_usr)  # render a template
+            return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr, puede_editar=p)  # render a template
     else: # Viene de <asientos_list>
         if dep_id != '0' and prov_id != '0' and mun_id != '0': # EDIT
             if s.get_mun_id(dep_id, prov_id, mun_id) == True:
@@ -2709,9 +2735,21 @@ def munABC(dep_id, prov_id, mun_id):
                     s.fechaAct = str(datetime.datetime.now())[:-7]
                 if s.usuario == None:
                     s.usuario = usr
-                return render_template('munABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Municipios', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tprovs=s.get_combo_prov(dep_id,prov_id), tdescNivel=s.get_combo_descNivel(usrdep), puede_editar=p)
+                return render_template('munABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Municipios', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tprovs=s.get_combo_prov(dep_id,prov_id), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
     # New
-    return render_template('munABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Municipio', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tprovs=s.get_combo_prov_new(usrdep), tdescNivel=s.get_combo_descNivel(usrdep), puede_adicionar=p)
+    return render_template('munABC.html', error=error, s=s, load=False, titulo='Registro de Nuevo Municipio', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tprovs=s.get_combo_prov_new(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_adicionar=p)
+
+
+@app.route('/get_desc_nivel_mun_all', methods=['GET', 'POST'])
+@login_required
+def get_desc_nivel_mun_all():
+    s = muns.Municipio(cxms)
+    sgrupo = request.args.get('sgrupo')
+    rows = s.get_desc_nivel_mun_all(sgrupo)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
 
 
 @app.route('/bitacora_list', methods=['GET', 'POST'])

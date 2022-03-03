@@ -11,7 +11,6 @@ function cargar(valor, data) {
                 $("#iprovincia").append('<option></option>');
                 $.each(datos, function(index, obj) {
                     if (valor == obj[0]) {
-                        console.log(obj[0] + ', ' + obj[2]);
                         $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');
                         i++;
                     }
@@ -40,7 +39,6 @@ function cargar(valor, data) {
                 $("#idpto").append('<option></option>');
                 $.each(datos2, function(index2, obj2) {
                     if (pa == obj2[2]) {
-                        console.log(obj2[0] + ', ' + obj2[2]);
                         $("#idpto").append('<option value="' + obj2[0] + '">' + obj2[1] + '</option>');
                         j++;
                     }
@@ -54,7 +52,6 @@ function cargar(valor, data) {
                 $("#idpto").append('<option></option>');
                 $.each(datos2, function(index2, obj2) {
                     if (pa == obj2[2]) {
-                        console.log(obj2[0] + ', ' + obj2[2]);
                         $("#idpto").append('<option value="' + obj2[0] + '">' + obj2[1] + '</option>');
                         j++;
                     }
@@ -71,6 +68,39 @@ function cargar(valor, data) {
                         $("#iprov").append('<option value="' + obj3[1] + '">' + obj3[2] + '</option>');
                         j++;
                     }
+                });
+            });
+        } else if(data==13){
+            var sgrupo = document.getElementById("ipais").value;
+            $('#idescNivel').html('');
+            $.getJSON("/get_desc_nivel_all", {
+                sgrupo: sgrupo
+            }, function(datos13){
+                $("#idescNivel").append('<option></option>');                
+                $.each(datos13, function(index13, obj13){       
+                    $("#idescNivel").append('<option value="' + obj13[0] + '">' + obj13[1] + '</option>');
+                });
+            });
+        } else if(data==14){
+            var sgrupo = document.getElementById("ipais").value;
+            $('#idescNivel').html('');
+            $.getJSON("/get_desc_nivel_prov_all", {
+                sgrupo: sgrupo
+            }, function(datos14){
+                $("#idescNivel").append('<option></option>');                
+                $.each(datos14, function(index14, obj14){       
+                    $("#idescNivel").append('<option value="' + obj14[0] + '">' + obj14[1] + '</option>');
+                });
+            });
+        } else if(data==15){
+            var sgrupo = document.getElementById("ipais").value;
+            $('#idescNivel').html('');
+            $.getJSON("/get_desc_nivel_mun_all", {
+                sgrupo: sgrupo
+            }, function(datos15){
+                $("#idescNivel").append('<option></option>');                
+                $.each(datos15, function(index15, obj15){       
+                    $("#idescNivel").append('<option value="' + obj15[0] + '">' + obj15[1] + '</option>');
                 });
             });
         }

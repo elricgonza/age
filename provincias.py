@@ -105,11 +105,20 @@ class Prov:
             self.nomDep = row[1]
         return True
 
-    def get_combo_descNivel(self, usrdep):
-        s = "SELECT [idClasif],[descripcion] FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=6"             
+    def get_combo_desc_nivel(self, usrdep):
+        s = "SELECT idClasif, descripcion, clasifSubGrupo FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=15"             
         self.cur.execute(s) 
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False
         else:
-            return rows 
+            return rows
+
+    def get_desc_nivel_prov_all(self, sgrupo):
+        s = "SELECT idClasif, descripcion FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=15 and clasifSubGrupo=%d"             
+        self.cur.execute(s, sgrupo) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows

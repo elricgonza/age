@@ -50,7 +50,7 @@ class Departamento:
     def add_depto(self, Dep, NomDep, Diputados, DiputadosUninominales, IdPais, descNivelId, fechaIngreso, fechaAct, usuario):
         new_depto = Dep, NomDep, Diputados, DiputadosUninominales, IdPais, descNivelId, fechaIngreso, fechaAct, usuario
         s = "insert into GeografiaElectoral_app.dbo.Dep (Dep, NomDep, Diputados, DiputadosUninominales, IdPais, descNivelId, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s, %s) "
+            " (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         self.cur.execute(s, new_depto)
         self.cx.commit()
 
@@ -82,9 +82,18 @@ class Departamento:
         else:
             return rows    
 
-    def get_combo_descNivel(self, usrdep):
-        s = "SELECT [idClasif],[descripcion] FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=6"             
+    def get_combo_desc_nivel(self, usrdep):
+        s = "SELECT idClasif, descripcion, clasifSubGrupo FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=15"             
         self.cur.execute(s) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_desc_nivel_all(self, sgrupo):
+        s = "SELECT idClasif, descripcion FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=15 and clasifSubGrupo=%d"             
+        self.cur.execute(s, sgrupo) 
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False

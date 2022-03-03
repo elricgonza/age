@@ -21,7 +21,7 @@
                     <div class="col-md-4">
                         <label for="idoc">PAISES</label>
                         <input type="hidden" name="idpais" value="{{ s.idPais }}">
-                        <select id="ipais" name="pais" class="form-control" required onchange="cargar(this.value, 3)">                          
+                        <select id="ipais" name="pais" class="form-control" required onchange="cargar(this.value, 3), cargar(this.value, 14)">                          
                                 <option></option>
                                 {% for tpais in tpaises %}
                                         {% if load and s.IdPais == tpais[0] %}
@@ -56,11 +56,13 @@
                         <select id="idescNivel" name="descNivelId" class="form-control" required>                          
                                 <option></option>
                                 {% for tclasif in tdescNivel %}
-                                        {% if load and s.descNivelId|int == tclasif[0] %}
-                                                <option value = "{{ tclasif[0] }}" selected>{{ tclasif[1] }}</option>
-                                        {% else %} 
-                                                <option value = "{{ tclasif[0] }}">{{ tclasif[1] }}</option>
-                                        {% endif %}                                                                
+                                        {% if s.IdPais == tclasif[2] %}
+                                            {% if load and s.descNivelId == tclasif[0] %}
+                                                    <option value = "{{ tclasif[0] }}" selected>{{ tclasif[1] }}</option>
+                                            {% else %} 
+                                                    <option value = "{{ tclasif[0] }}">{{ tclasif[1] }}</option>
+                                            {% endif %} 
+                                        {% endif %}                                                
                                 {% endfor %}
                             </select>
                         <div class="invalid-feedback">Debe Seleccionar un clasificador...</div>
@@ -76,7 +78,7 @@
 
                     <div class="col-md-6">
                         <label for="codprov">CODIGO DE PROVINCIA:</label>
-                        <input type="text" class="form-control" id="iCodProv" placeholder="Introduzca Codigo de Provincia" name="codprov" required {% if load %} value="{{ s.codprov }}" {% endif %}>
+                        <input type="text" class="form-control" id="iCodProv" placeholder="Introduzca Codigo de Provincia" name="codprov" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required {% if load %} value="{{ s.codprov }}" {% endif %}>
                         <div class="invalid-feedback">Por favor ingrese datos.</div>
                     </div>
 
