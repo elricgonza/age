@@ -69,6 +69,21 @@ class Prov:
         except Exception as e:
             print("Error - actualización de provincia")
             print(e)
+
+    def upd_prov_1(self, DepProv1, DepProv, Prov, NomProv, codprov, descNivelId, fechaAct, usuario):
+        new_prov = DepProv1, NomProv, codprov, descNivelId, fechaAct, usuario, DepProv, Prov
+        s = "update [GeografiaElectoral_app].[dbo].[PROV]" + \
+            " set DepProv= %s, NomProv= %s, codprov= %s, descNivelId=%s, " + \
+            " fechaAct= %s, usuario= %s " + \
+            " where [GeografiaElectoral_app].[dbo].[PROV].DepProv = %d and " + \
+            "  [GeografiaElectoral_app].[dbo].[PROV].Prov = %d "
+        try:
+            self.cur.execute(s, new_prov)
+            self.cx.commit()
+            print('provincia actualizado')
+        except Exception as e:
+            print("Error - actualización de provincia")
+            print(e)
     
     def get_next_idprov(self, depto_id):
         self.cur.execute("select max(prov) + 1 from GeografiaElectoral_app.dbo.prov where DepProv=%d", depto_id)
@@ -116,6 +131,15 @@ class Prov:
 
     def get_desc_nivel_prov_all(self, sgrupo):
         s = "SELECT idClasif, descripcion FROM [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=15 and clasifSubGrupo=%d"             
+        self.cur.execute(s, sgrupo) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+    def get_deptos_all(self, sgrupo):
+        s = "SELECT Dep, NomDep FROM [GeografiaElectoral_app].[dbo].[DEP] where IdPais=%d order by IdPais"             
         self.cur.execute(s, sgrupo) 
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:

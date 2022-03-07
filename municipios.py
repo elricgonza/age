@@ -83,7 +83,64 @@ class Municipio:
         except Exception as e:
             print("Error - actualización de municipio")
             print(e)
+
+    def upd_mun_3(self, DepSec1, ProvSec1, DepSec, ProvSec, Sec, NumConceSec, NomSec, descNivelId, fechaAct, usuario):
+        new_mun = DepSec1, ProvSec1, NumConceSec, NomSec, descNivelId, fechaAct, usuario, DepSec, ProvSec, Sec
+        s = "update [GeografiaElectoral_app].[dbo].[SEC]" + \
+            " set DepSec=%s, ProvSec=%s, NumConceSec= %s, NomSec= %s, descNivelId= %s, " + \
+            " fechaAct= %s, usuario= %s " + \
+            " where [GeografiaElectoral_app].[dbo].[SEC].DepSec = %d and " + \
+            " [GeografiaElectoral_app].[dbo].[SEC].ProvSec = %d and " + \
+            " [GeografiaElectoral_app].[dbo].[SEC].Sec = %d"
+        try:
+            self.cur.execute(s, new_mun)
+            self.cx.commit()
+            print('municipio actualizado')
+        except Exception as e:
+            print("Error - actualización de municipio")
+            print(e)
     
+    def upd_mun_2(self, DepSec1, DepSec, ProvSec, Sec, NumConceSec, NomSec, descNivelId, fechaAct, usuario):
+        new_mun = DepSec1, NumConceSec, NomSec, descNivelId, fechaAct, usuario, DepSec, ProvSec, Sec
+        s = "update [GeografiaElectoral_app].[dbo].[SEC]" + \
+            " set DepSec=%s, NumConceSec= %s, NomSec= %s, descNivelId= %s, " + \
+            " fechaAct= %s, usuario= %s " + \
+            " where [GeografiaElectoral_app].[dbo].[SEC].DepSec = %d and " + \
+            " [GeografiaElectoral_app].[dbo].[SEC].ProvSec = %d and " + \
+            " [GeografiaElectoral_app].[dbo].[SEC].Sec = %d"
+        try:
+            self.cur.execute(s, new_mun)
+            self.cx.commit()
+            print('municipio actualizado')
+        except Exception as e:
+            print("Error - actualización de municipio")
+            print(e)
+
+    def upd_mun_1(self, DepSec, ProvSec1, ProvSec, Sec, NumConceSec, NomSec, descNivelId, fechaAct, usuario):
+        print(DepSec)
+        print(ProvSec1)
+        print(ProvSec)
+        print(Sec)
+        print(NumConceSec)
+        print(NomSec)
+        print(descNivelId)
+        print(fechaAct)
+        print(usuario)
+        new_mun = ProvSec1, NumConceSec, NomSec, descNivelId, fechaAct, usuario, DepSec, ProvSec, Sec
+        s = "update [GeografiaElectoral_app].[dbo].[SEC]" + \
+            " set ProvSec= %s, NumConceSec= %s, NomSec= %s, descNivelId= %s, " + \
+            " fechaAct= %s, usuario= %s " + \
+            " where [GeografiaElectoral_app].[dbo].[SEC].DepSec = %d and " + \
+            " [GeografiaElectoral_app].[dbo].[SEC].ProvSec = %d and " + \
+            " [GeografiaElectoral_app].[dbo].[SEC].Sec = %d"
+        try:
+            self.cur.execute(s, new_mun)
+            self.cx.commit()
+            print('municipio actualizado')
+        except Exception as e:
+            print("Error - actualización de municipio")
+            print(e)
+
     def get_next_idmun(self, depto, prov):
         new_mun = depto, prov
         s = "select max(sec) + 1 from GeografiaElectoral_app.dbo.sec where DepSec=%d and ProvSec=%d"
@@ -156,4 +213,13 @@ class Municipio:
         if self.cur.rowcount == 0:
             return False
         else:
-            return rows 
+            return rows
+
+    def get_provs_all(self, sgrupo):
+        s = "SELECT Prov, NomProv, DepProv FROM [GeografiaElectoral_app].[dbo].[PROV] where DepProv = %d"      
+        self.cur.execute(s, sgrupo) 
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows

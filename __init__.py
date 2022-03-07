@@ -2646,7 +2646,17 @@ def provsABC(dep_id, prov_id):
                 rows = s.get_provs_all(usrdep)
                 return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr, puede_editar=p)  # render a template
         else: # Es Edit
-            s.upd_prov(dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
+            if request.form['idpais']!=request.form['pais']:
+                if request.form['depto']!=dep_id:
+                    s.upd_prov_1(request.form['depto'], dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
+                else:
+                    s.upd_prov(dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
+            else:
+                if request.form['depto']!=dep_id:
+                    s.upd_prov_1(request.form['depto'], dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
+                else:
+                    s.upd_prov(dep_id, prov_id, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],fa, usr)
+
             rows = s.get_provs_all(usrdep)
             return render_template('provs_list.html', listaProvincias=rows, puede_adicionar='Provincias - Adición' in permisos_usr, puede_editar=p)  # render a template
     else: # Viene de <asientos_list>
@@ -2674,19 +2684,15 @@ def get_desc_nivel_prov_all():
         return jsonify(0)
 
 
-@app.route('/get_departamentos_all', methods=['GET', 'POST'])
-def get_departamentos_all():
-    s = rep.Reportes(cxms)
-    cxms2 = dbcn.get_db_ms()
-    rows = s.get_departamentos_all(usrdep)
-
+@app.route('/get_deptos_all', methods=['GET', 'POST'])
+def get_deptos_all():
+    s = provs.Prov(cxms)
+    sgrupo = request.args.get('sgrupo')
+    rows = s.get_deptos_all(sgrupo)
     if rows:
         return jsonify(rows)
     else:
-        return jsonify(departamento='NO',
-                       provincia='EXISTE !!!',
-                       municipio='DEPARTAMENTO....')
-    cxms2.close()
+        return jsonify(0)
 
 
 @app.route('/mun_list', methods=['GET', 'POST'])
@@ -2703,6 +2709,7 @@ def mun_list():
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin provincias...')
+
 
 @app.route('/munABC/<dep_id>/<prov_id>/<mun_id>', methods=['GET', 'POST'])
 @login_required
@@ -2724,8 +2731,29 @@ def munABC(dep_id, prov_id, mun_id):
             rows = s.get_mun_all(usrdep)
             return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr, puede_editar=p)  # render a template
         else: # Es Edit
-            s.upd_mun(dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'],
-                    fa, usr)
+            if request.form['idpais']!=request.form['pais']:
+                if request.form['depto']!=dep_id:
+                    if request.form['prov']!=prov_id:
+                        s.upd_mun_3(request.form['depto'], request.form['prov'], dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+                    else:
+                        s.upd_mun_2(request.form['depto'], dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+                else:
+                    if request.form['prov']!=prov_id:
+                        s.upd_mun_1(dep_id, request.form['prov'], prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+                    else:
+                        s.upd_mun(dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+            else:
+                if request.form['depto']!=dep_id:
+                    if request.form['prov']!=prov_id:
+                        s.upd_mun_3(request.form['depto'], request.form['prov'], dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+                    else:
+                        s.upd_mun_2(request.form['depto'], dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+                else:
+                    if request.form['prov']!=prov_id:
+                        s.upd_mun_1(dep_id, request.form['prov'], prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+                    else:
+                        s.upd_mun(dep_id, prov_id, mun_id, request.form['numConceSec'], request.form['nomSec'], request.form['descNivelId'], fa, usr)
+
             rows = s.get_mun_all(usrdep)
             return render_template('mun_list.html', municipios=rows, puede_adicionar='Municipios - Adición' in permisos_usr, puede_editar=p)  # render a template
     else: # Viene de <asientos_list>
@@ -2746,6 +2774,17 @@ def get_desc_nivel_mun_all():
     s = muns.Municipio(cxms)
     sgrupo = request.args.get('sgrupo')
     rows = s.get_desc_nivel_mun_all(sgrupo)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+
+@app.route('/get_provs_all', methods=['GET', 'POST'])
+def get_provs_all():
+    s = muns.Municipio(cxms)
+    sgrupo = request.args.get('sgrupo')
+    rows = s.get_provs_all(sgrupo)
     if rows:
         return jsonify(rows)
     else:

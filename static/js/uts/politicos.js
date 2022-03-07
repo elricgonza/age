@@ -29,45 +29,38 @@ function cargar(valor, data) {
                     }
                 });
             });
-        } else if (data == 2) {
-            var pa = document.getElementById("ipais").value;
-            $('#idpto').html('');
-            $('#iprovincia').html('');
-            $('#imunicipio').html('');
-            $.getJSON("/get_departamentos_all", function(datos2) {
-                var j = 1;
-                $("#idpto").append('<option></option>');
-                $.each(datos2, function(index2, obj2) {
-                    if (pa == obj2[2]) {
-                        $("#idpto").append('<option value="' + obj2[0] + '">' + obj2[1] + '</option>');
-                        j++;
-                    }
-                });
-            });
         } else if (data == 3) {
-            var pa = document.getElementById("ipais").value;
+            var sgrupo = document.getElementById("ipais").value;
             $('#idpto').html('');
-            $.getJSON("/get_departamentos_all", function(datos2) {
-                var j = 1;
-                $("#idpto").append('<option></option>');
-                $.each(datos2, function(index2, obj2) {
-                    if (pa == obj2[2]) {
-                        $("#idpto").append('<option value="' + obj2[0] + '">' + obj2[1] + '</option>');
-                        j++;
-                    }
+            $.getJSON("/get_deptos_all", {
+                sgrupo: sgrupo
+            }, function(datos3){
+                $("#idpto").append('<option></option>');                
+                $.each(datos3, function(index3, obj3){       
+                    $("#idpto").append('<option value="' + obj3[0] + '">' + obj3[1] + '</option>');
                 });
             });
         } else if (data == 4) {
-            var dp = document.getElementById("idpto").value;
+            var sgrupo = document.getElementById("ipais").value;
+            $('#idpto').html('');
             $('#iprov').html('');
-            $.getJSON("/get_provincias_all", function(datos3) {
-                var j = 1;
-                $("#iprov").append('<option></option>');
-                $.each(datos3, function(index3, obj3) {
-                    if (valor == obj3[0]) {
-                        $("#iprov").append('<option value="' + obj3[1] + '">' + obj3[2] + '</option>');
-                        j++;
-                    }
+            $.getJSON("/get_deptos_all", {
+                sgrupo: sgrupo
+            }, function(datos4){
+                $("#idpto").append('<option></option>');                
+                $.each(datos4, function(index4, obj4){       
+                    $("#idpto").append('<option value="' + obj4[0] + '">' + obj4[1] + '</option>');
+                });
+            });
+        } else if (data == 5) {
+            var sgrupo = document.getElementById("idpto").value;
+            $('#iprov').html('');
+            $.getJSON("/get_provs_all", {
+                sgrupo: sgrupo
+            }, function(datos5){
+                $("#iprov").append('<option></option>');                
+                $.each(datos5, function(index5, obj5){       
+                    $("#iprov").append('<option value="' + obj5[0] + '">' + obj5[1] + '</option>');
                 });
             });
         } else if(data==13){
