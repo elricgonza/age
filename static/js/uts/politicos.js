@@ -32,7 +32,7 @@ function cargar(valor, data) {
         } else if (data == 3) {
             var sgrupo = document.getElementById("ipais").value;
             $('#idpto').html('');
-            $.getJSON("/get_deptos_all", {
+            $.getJSON("/get_deptos_prov_all", {
                 sgrupo: sgrupo
             }, function(datos3){
                 $("#idpto").append('<option></option>');                

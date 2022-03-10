@@ -138,7 +138,7 @@ class Prov:
         else:
             return rows
 
-    def get_deptos_all(self, sgrupo):
+    def get_deptos_prov_all(self, sgrupo):
         s = "SELECT Dep, NomDep FROM [GeografiaElectoral_app].[dbo].[DEP] where IdPais=%d order by IdPais"             
         self.cur.execute(s, sgrupo) 
         rows = self.cur.fetchall()

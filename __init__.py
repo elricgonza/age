@@ -2162,7 +2162,6 @@ def get_homjurisd_all():
     ahomo = homo.Homologacion(cxms)
     idhom = request.args.get('idhom')
     rows = ahomo.get_homjurisd_all(idhom)
-    print(rows)
     if rows:
         return jsonify(rows)
     else:
@@ -2684,11 +2683,11 @@ def get_desc_nivel_prov_all():
         return jsonify(0)
 
 
-@app.route('/get_deptos_all', methods=['GET', 'POST'])
-def get_deptos_all():
+@app.route('/get_deptos_prov_all', methods=['GET', 'POST'])
+def get_deptos_prov_all():
     s = provs.Prov(cxms)
     sgrupo = request.args.get('sgrupo')
-    rows = s.get_deptos_all(sgrupo)
+    rows = s.get_deptos_prov_all(sgrupo)
     if rows:
         return jsonify(rows)
     else:
