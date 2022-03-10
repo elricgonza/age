@@ -2525,14 +2525,14 @@ def paisesABC(pais_id):
                            fa, usr)
 
                 rows = s.get_paises_all(usrdep)
-                return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr)  # render a template
+                return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr, puede_editar=p)  # render a template
         else: # Es Edit
             s.upd_pais(pais_id, request.form['Pais'], request.form['NomPais'], request.form['Nal'], request.form['Estado'],
                        request.form['codInter'], request.form['codInterISO3166'], str(request.form['fecharegistro'])[:-7],
                        fa, usr)
 
             rows = s.get_paises_all(usrdep)
-            return render_template('paises_list.html', paises=rows, puede_editar='Paises - Edicion' in permisos_usr)  # render a template
+            return render_template('paises_list.html', paises=rows, puede_adicionar='Paises - Adición' in permisos_usr, puede_editar=p)  # render a template
     else: # Viene de <asientos_list>
         if pais_id != '0':  # EDIT
             if s.get_pais_idpais(pais_id) == True:
