@@ -32,6 +32,7 @@ function cargar(valor, data) {
         } else if (data == 3) {
             var sgrupo = document.getElementById("ipais").value;
             $('#idpto').html('');
+            $('#idescNivel').html('');
             $.getJSON("/get_deptos_prov_all", {
                 sgrupo: sgrupo
             }, function(datos3){
@@ -44,7 +45,8 @@ function cargar(valor, data) {
             var sgrupo = document.getElementById("ipais").value;
             $('#idpto').html('');
             $('#iprov').html('');
-            $.getJSON("/get_deptos_all", {
+            $('#idescNivel').html('');
+            $.getJSON("/get_deptos_prov_all", {
                 sgrupo: sgrupo
             }, function(datos4){
                 $("#idpto").append('<option></option>');                

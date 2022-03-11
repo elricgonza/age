@@ -21,7 +21,7 @@
                     <div class="col-md-4">
                         <label for="idoc">PAISES</label>
                         <input type="hidden" name="idpais" value="{{ s.IdPais }}">
-                        <select id="ipais" name="pais" class="form-control" required onchange="cargar(this.value, 3); cargar(this.value, 14)">                          
+                        <select id="ipais" name="pais" class="form-control" required onchange="cargar(this.value, 3);">                          
                                 <option></option>
                                 {% for tpais in tpaises %}
                                         {% if load and s.IdPais == tpais[0] %}
@@ -37,7 +37,7 @@
                     <div class="col-md-4">
                         <label for="idoc">DEPARTAMENTOS</label>
                         <input type="hidden" name="iddepto" value="{{ s.DepProv }}">
-                        <select id="idpto" name="depto" class="form-control" required>                          
+                        <select id="idpto" name="depto" class="form-control" required onchange="cargar(this.value, 14);">                          
                                 <option></option>
                                 {% for tdepto in tdeptos %}
                                         {% if load and s.IdPais == tdepto[2] %}

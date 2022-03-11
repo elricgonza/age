@@ -2674,8 +2674,9 @@ def provsABC(dep_id, prov_id):
 @app.route('/get_desc_nivel_prov_all', methods=['GET', 'POST'])
 @login_required
 def get_desc_nivel_prov_all():
-    s = provs.Prov(cxms)
     sgrupo = request.args.get('sgrupo')
+    cxms2 = dbcn.get_db_ms()
+    s = provs.Prov(cxms2)
     rows = s.get_desc_nivel_prov_all(sgrupo)
     if rows:
         return jsonify(rows)
@@ -2685,13 +2686,26 @@ def get_desc_nivel_prov_all():
 
 @app.route('/get_deptos_prov_all', methods=['GET', 'POST'])
 def get_deptos_prov_all():
-    s = provs.Prov(cxms)
     sgrupo = request.args.get('sgrupo')
+    cxms2 = dbcn.get_db_ms()
+    s = provs.Prov(cxms2)
     rows = s.get_deptos_prov_all(sgrupo)
     if rows:
         return jsonify(rows)
     else:
         return jsonify(0)
+
+
+@app.route('/get_departamentos_all', methods=['GET', 'POST'])
+def get_departamentos_all():
+    cxms2 = dbcn.get_db_ms()
+    s = rep.Reportes(cxms2)
+    rows = s.get_departamentos_all(usrdep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+    cxms2.close()
 
 
 @app.route('/mun_list', methods=['GET', 'POST'])
