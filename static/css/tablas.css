@@ -1,0 +1,11 @@
+.table-responsive table thead th {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #6C757D), color-stop(1, #7D7D7D) );
+	background:-moz-linear-gradient( center top, #6C757D 5%, #7D7D7D 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8C8C8C', endColorstr='#7D7D7D');
+	background-color:#6C757D; 
+	color:#FFFFFF; 
+	font-size: 17px; 
+	font-weight: bold; 
+	border-left: 1px solid #A3A3A3;
+	border-radius: 4px; 
+} 

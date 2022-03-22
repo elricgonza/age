@@ -329,7 +329,7 @@
             <div class="col-md-5">
                 <label for="docRspNal">Documento Resolución de Sala Plena - Nacional:</label>
                 <input type="hidden" name="doc_idRspNal" value="{{ a.doc_idRN }}">
-                {% if usuario == 'unacional' %}
+                {% if usrdep == 0 %}
                     <select id="idocRspNal" name=docRspNal class="form-control" required>                          
                         <option></option>
                         {% for tpdfRN in tpdfsRN %}

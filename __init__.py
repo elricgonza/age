@@ -896,7 +896,7 @@ def reportes():
                                 extasientos=r.get_rep_ext_asie_all(), extrecintos=r.get_rep_ext_reci_all(), 
                                 puede_consultar='Reportes - Consulta' in permisos_usr)
     else:
-        return render_template('msg.html', l1='Sin permisos asignados !!')
+        return render_template('reportes.html', puede_consultar='Reportes - Consulta' in permisos_usr)
 
 
 @app.route('/get_provincias_all', methods=['GET', 'POST'])
