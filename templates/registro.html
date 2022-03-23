@@ -47,7 +47,7 @@
                         <div class="col-md-12">
                             <label for="idep">Departamento</label>
                             <select id="idep" name=dep class="form-control" 
-                                {% if usuario != 'admin' %}
+                                {% if usuario != 'admin' and u.tipo_usr != 117 %}
                                 disabled>
                                 {% endif %}
 
@@ -134,6 +134,26 @@
                     </div>
                     {% endif %}
 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="tusr">Tipo de Usuario</label>
+                            <select id="itusr" name="tusr" class="form-control" {% if usuario != 'admin' %} disabled {% endif %} required>
+                                <option></option>
+                                {% for t_usuario in t_usuarios %}
+                                    {% if load_u and u.tipo_usr==t_usuario[0] %}
+                                            <option value = "{{ t_usuario[0] }}" selected>{{ t_usuario[1] }}</option>
+                                    {% else %}
+                                            <option value = "{{ t_usuario[0] }}">{{ t_usuario[1] }}</option>
+                                    {% endif %}                                                                
+                                {% endfor %}
+                            </select>
+                            {% if usuario != 'admin' and u.tipo_usr == 117 %}
+                                <input type="hidden" name="tusr1" value={{ u.tipo_usr }}>
+                            {% endif %}
+                            <div class="invalid-feedback" id="v_tusr">Debe seleccionar el Tipo de Usuario.</div> 
+                        </div>
+                    </div>
+                    <br>
                     <div class="form-group form-check">
                         <label class="form-check-label">
                             <input class="form-check-input" type="checkbox" name="auth" required checked> Autenticado

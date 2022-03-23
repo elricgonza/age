@@ -267,6 +267,11 @@ def registro(usuario_id=None):
     error = None
 
     if request.method == 'POST':
+        if request.form.get('tusr') == None:
+            tusr = request.form['tusr1']
+        else:
+            tusr = request.form['tusr']
+
         if usuario_id == '0':  # es NEW
             if u.get_usuario(request.form['uname']) == True:   # valida usr
                 error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -279,7 +284,7 @@ def registro(usuario_id=None):
                             request.form['email'], \
                             pw_hash, \
                             request.form['dep'], \
-                            1)
+                            1, tusr)
                 return render_template('welcome.html')
         else: # es EDIT
             u.upd_usuario(usuario_id, \
@@ -287,7 +292,7 @@ def registro(usuario_id=None):
                             request.form['apellidos'], \
                             request.form['email'], \
                             request.form['dep'], \
-                            1)
+                            1, tusr)
             if usr == 'admin':
                 return render_template('usuarios.html', usuarios=u.get_usuarios())
             return render_template('home.html')
@@ -295,9 +300,9 @@ def registro(usuario_id=None):
     else: # viene de listado USUARIOS
         if usuario_id != 0:  # EDIT
             if u.get_usuario_id(usuario_id) == True:
-                return render_template('registro.html', error=error, u=u, load_u=True)
+                return render_template('registro.html', error=error, u=u, load_u=True, t_usuarios=u.get_tipo_usuario())
 
-    return render_template('registro.html', error=error, u=u, load_u=False)
+    return render_template('registro.html', error=error, u=u, load_u=False, t_usuarios=u.get_tipo_usuario())
 
 
 @app.route('/m_usuarios', methods=['GET', 'POST'])

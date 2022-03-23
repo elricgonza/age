@@ -14,10 +14,10 @@ class Usuarios:
         self.cx = cx
         self.cur = cx.cursor()
 
-    def add_usuario(self, usuario, nombre, apellidos, email, password, dep, authenticated):
-        new_usuario = usuario, nombre, apellidos, email, password, dep, authenticated
-        s = "insert into usuarios (usuario, nombre, apellidos, email, password, dep, authenticated) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s) "
+    def add_usuario(self, usuario, nombre, apellidos, email, password, dep, authenticated, tusr):
+        new_usuario = usuario, nombre, apellidos, email, password, dep, authenticated, tusr
+        s = "insert into usuarios (usuario, nombre, apellidos, email, password, dep, authenticated, tipo_usr) values " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s) "
         self.cur.execute(s, new_usuario)
         self.cx.commit()
         print("adicionado...")
@@ -37,6 +37,7 @@ class Usuarios:
             self.password = row[5]
             self.dep = row[6]
             self.authenticated = row[7]
+            self.tipo_usr = row[8]
             return True
 
     def get_usuario_id(self, id):
@@ -53,6 +54,7 @@ class Usuarios:
             self.password = row[5]
             self.dep = row[6]
             self.authenticated = row[7]
+            self.tipo_usr = row[8]
             return True
 
     def get_usuario_usr(self, usr):
@@ -69,6 +71,7 @@ class Usuarios:
             self.password = row[5]
             self.dep = row[6]
             self.authenticated = row[7]
+            self.tipo_usr = row[8]
             return True
 
     def get_usuarios(self):
@@ -95,10 +98,10 @@ class Usuarios:
         except:
              print("Error --DEL-- usuario...")
 
-    def upd_usuario(self, id, nombre, apellidos, email, dep, authenticated):
-        upd_usuario = (nombre, apellidos, email, dep, authenticated, id)
+    def upd_usuario(self, id, nombre, apellidos, email, dep, authenticated, tusr):
+        upd_usuario = (nombre, apellidos, email, dep, authenticated, tusr, id)
         s = "update usuarios " + \
-            " set nombre= %s, apellidos= %s, email= %s, dep= %d, authenticated= %d " + \
+            " set nombre= %s, apellidos= %s, email= %s, dep= %d, authenticated= %d, tipo_usr= %d " + \
             " where id = %d"
         try:
             self.cur.execute(s, upd_usuario)
@@ -155,6 +158,16 @@ class Usuarios:
         except Exception as e:
             print('Error -get_permisos_name-')
             print(e)
+
+
+    def get_tipo_usuario(self):
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=16"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
 
     def get_id(self):
         """return the email address to satisfy Flask-Login's requirements."""
