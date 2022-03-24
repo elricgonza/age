@@ -1,15 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="form_habilitado" style="height: 70vh;">
-    <br>
-    <h2>Bienvenido a Geografía Electoral !</h2>
-    <br>
-    <h3>
-    {{ current_user.nombre  }}
-    {{ current_user.apellidos }}
-    </h3>
-    <br>
-    <p>Se encuentra habilitado para efectuar "acciones" de acuerdo al rol asignado.</p>
+
+<link href="{{ url_for('static', filename='css/letreros.css') }}" rel="stylesheet">
+
+<div class="text-center" style="height: 70vh;">
+	<div class="col-md-8 main-section">
+		<div class="modal-content">
+			<div class="col-12 user-img">
+				<span class="input-icon"><i class="fa fa-globe"></i></span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Bienvenido a Geografía Electoral !</span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Se encuentra habilitado para efectuar "acciones" de acuerdo al rol asignado.</span>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}

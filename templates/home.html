@@ -1,18 +1,21 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="form_bienvenida" style="height: 70vh;">
-	<br>
-    <div class="row">
-	    <div class="col-md-6">
-	        <h2>Bienvenido al Portal de Geografía Electoral !</h2>
-	    </div>
-    </div>
-	<br>
-	<div class="row">
-	    <div class="col-md-12">
-	        <p>Donde encontrará información referente: Asientos/Recintos Electorales Nacional/Exterior y otras relacionadas a la Geografía Electoral. </p>
-	    </div>
+<link href="{{ url_for('static', filename='css/letreros.css') }}" rel="stylesheet">
+
+<div class="text-center" style="height: 70vh;">
+	<div class="col-md-8 main-section">
+		<div class="modal-content">
+			<div class="col-12 user-img">
+				<span class="input-icon"><i class="fa fa-globe"></i></span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Bienvenido al Portal de Geografía Electoral !</span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Donde encontrará información referente: Asientos/Recintos Electorales Nacional/Exterior y otras relacionadas a la Geografía Electoral.</span>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

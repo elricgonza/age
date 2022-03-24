@@ -136,10 +136,10 @@
             <!--</li> -->
             {% endif %}
 
-            <li class="nav-item">
+            <!--<li class="nav-item">-->
                 <!--<a class="nav-link" href="registro"><span class="fas fa-user"></span> Registro</a>-->
-                <a class="nav-link" href={{ url_for( 'registro', usuario_id=0) }}><span class="fas fa-user"></span>Registro</a>
-            </li>
+                <!--<a class="nav-link" href={{ url_for( 'registro', usuario_id=0) }}><span class="fas fa-user"></span>Registro</a>
+            </li>-->
 
             {% if not current_user.is_authenticated %}
                 <li class="nav-item">

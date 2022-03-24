@@ -4,12 +4,26 @@
 {% block page_title %}Page Not Found{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <div class="text-center">
-        <h1>404</h1>
-        <p>Sorry, that page doesn't exist.</p>
-        <p>Want to <a href="{{ url_for('public.home') }}">go home</a> instead?</p>
-    </div>
+
+<link href="{{ url_for('static', filename='css/letreros.css') }}" rel="stylesheet">
+
+<div class="text-center" style="height: 70vh;">
+	<div class="col-md-8 main-section">
+		<div class="modal-content">
+			<div class="col-12 user-img">
+				<span class="input-icon"><i class="fa fa-globe"></i></span>
+			</div>
+			<div class="col-12 form-input">
+				<span>404</span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Sorry, that page doesn't exist.</span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Want to <a href="{{ url_for('public.home') }}">go home</a> instead?</span>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 

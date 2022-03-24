@@ -4,11 +4,23 @@
 {% block page_title %}Server error{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <div class="text-center">
-        <h1>500</h1>
-        <p>Sorry, something went wrong on our system. Don't panic, we are fixing it! Please try again later.</p>
-    </div>
+
+<link href="{{ url_for('static', filename='css/letreros.css') }}" rel="stylesheet">
+
+<div class="text-center" style="height: 70vh;">
+	<div class="col-md-8 main-section">
+		<div class="modal-content">
+			<div class="col-12 user-img">
+				<span class="input-icon"><i class="fa fa-globe"></i></span>
+			</div>
+			<div class="col-12 form-input">
+				<span>500</span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Sorry, something went wrong on our system. Don't panic, we are fixing it! Please try again later.</span>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 

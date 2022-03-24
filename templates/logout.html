@@ -1,9 +1,19 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="form_despedida" style="height: 70vh;">
-    <br>
-    <h4>Gracias por su visita.</h4>
-    <br>
+
+<link href="{{ url_for('static', filename='css/letreros.css') }}" rel="stylesheet">
+
+<div class="text-center" style="height: 70vh;">
+	<div class="col-md-8 main-section">
+		<div class="modal-content">
+			<div class="col-12 user-img">
+				<span class="input-icon"><i class="fa fa-globe"></i></span>
+			</div>
+			<div class="col-12 form-input">
+				<span>Gracias por su visita. !!!</span>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
