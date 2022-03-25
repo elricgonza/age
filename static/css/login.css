@@ -6,6 +6,11 @@
 .form_horizontal{
 	font-family: "lato" sans-serif;
 	text-align: center;
+	/*border: 1px solid #000;*/
+	background: linear-gradient(rgba(215, 219, 221, 0.2), rgba(215, 219, 221, 0.2));
+	padding: 30px 40px;
+	border-radius: 10px;
+	box-shadow: 7px 7px 50px #6C757D;
 }
 .form_horizontal .form_icon{
 	color: #000;

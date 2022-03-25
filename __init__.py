@@ -148,8 +148,7 @@ def utility_processor():
 
 @app.context_processor
 def inject_global():
-    print(str(datetime.datetime.now())[0:-3])
-    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], usuario=usr, usrdep=usrdep, usrid=usrid)
+    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], anio=str(datetime.date.today())[0:-6], usuario=usr, usrdep=usrdep, usrid=usrid)
 
 
 @app.errorhandler(401)
