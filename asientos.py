@@ -170,22 +170,6 @@ class Asientos:
         Verif. si existe dif. en registro editado
         '''
         a = self.get_asiento_idloc(row_to_upd[19])  #19 -> idloc
-
-        '''
-        row_old = self.nomloc, self.poblacionloc, \
-                self.poblacionelecloc, self.fechacensoloc, self.tipolocloc, \
-                self.latitud, self.longitud, \
-                self.estado, self.etapa, \
-                self.obsUbicacion, self.obs, \
-                self.fechaIngreso, self.fechaAct, self.usuario, self.doc_idA, self.doc_idRN,  \
-                self.doc_idAF, self.urural, self.idloc
-
-        print('old---')
-        print(row_old)
-        print('new---*')
-        print(row_to_upd)
-        '''
-
         vdif = False
 
         if self.nomloc != row_to_upd[0]:
@@ -321,8 +305,14 @@ class Asientos:
         else:
             return rows
 
-    def get_etapas(self):
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+    def get_etapas(self, usrdep, usrtipo):
+
+        if usrdep != 0 and usrtipo == 116:
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
+        elif usrdep == 0 and usrtipo == 117:
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
+        else:
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:

@@ -249,21 +249,11 @@
                 <label for="ietapa">Etapa</label>
                 <select id="ietapa" name="etapa" class="form-control" onchange="carg(this);">              
                     {% for etapa in etapas %}
-                        {% if usrdep == 0 %}
-                            {% if load and a.etapa == etapa[0] %}
-                                    <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
-                            {% else %}
-                                    <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
-                            {% endif %}
-                        {% else %}
-                            {% if etapa[0] >= 70 and etapa[0]<=71 %}
-                                {% if load and a.etapa == etapa[0] %}
-                                        <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
-                                {% else %}
-                                        <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
-                                {% endif %}
-                            {% endif %}        
-                        {% endif %}                                                      
+                          {% if load and a.etapa == etapa[0] %}
+                                <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
+                          {% else %}
+                                <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
+                          {% endif %}
                     {% endfor %}
                 </select>                 
             </div>
@@ -286,7 +276,8 @@
                                     {% if load %}
                                         <i class="fas fa-file-pdf" style="font-size: 25px;display: inline-block; margin-top: 40px;"></i>
                                     {% endif %}
-                                 </a></div>
+                                 </a>
+            </div>
         </div> <!--row-->
 
         <div class="row">
