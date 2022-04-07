@@ -189,22 +189,22 @@ class Documentos:
         except:
             print("Error --UPD-- Documento...")
 
-    def upd_doc_r(self, idA, idAct, docActF):
-        upd_doc2 = (idAct, docActF)
-        s2 = "select * from GeografiaElectoral_app.dbo.reci where doc_idA = %d or doc_idAF = %d"
+    def upd_doc_r(self, idA, idAct, docActF, docTec):
+        upd_doc2 = idAct, docActF, docTec
+        s2 = "select * from GeografiaElectoral_app.dbo.reci where doc_idA = %d or doc_idAF = %d or doc_idT = %d"
         self.cur.execute(s2, upd_doc2)
         row = self.cur.fetchone()
 
         if row == None:
-            upd_doc1 = (idAct, docActF) 
+            upd_doc1 = idAct, docActF, docTec 
             s1 = "update doc " + \
-                 " set asignado = 0 where id = %d or id= %d"
+                 " set asignado = 0 where id = %d or id = %d or id = %d"
             self.cur.execute(s1, upd_doc1)
             self.cx.commit()
 
-        upd_doc = (idA, docActF) 
+        upd_doc = idA, docActF, docTec 
         s = "update doc " + \
-            " set asignado = 1 where id = %d or id= %d"
+            " set asignado = 1 where id = %d or id = %d or id = %d"
         try:
             self.cur.execute(s, upd_doc)
             self.cx.commit()

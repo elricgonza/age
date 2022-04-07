@@ -15,7 +15,7 @@ class Homologa:
         if inicio == "00-00-0000" and final == "00-00-0000":
             return False
         else:           
-            s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2" + \
+            s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2, Area" + \
                 " from [bdge].[dbo].[GeoRecintos_Hom_all]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
@@ -51,7 +51,7 @@ class Homologa:
             return rows
 
     def get_homologa_idlocreci(self, idreci, idlocreci):
-        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, CircunDist" + \
+        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, CircunDist, Dep, Prov, Sec" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where idEstado in (4, 5, 82, 83) and IdLocReci = %d and Reci = %d"
         lista = idlocreci, idreci    
@@ -67,12 +67,21 @@ class Homologa:
             self.recinto = row[4]
             self.estado = row[5]
             self.circun = row[6]
+            self.dep = row[7]
+            self.prov = row[8]
+            self.sec = row[9]
             return True
 
-    def ver_homologa_idlocreci(self, idreci, idlocreci):
+    def ver_homologa_idlocreci(self, idreci, idlocreci, idlocdes):
+        if idlocdes != 0:
+            if idlocdes == idlocreci:
+                    idlocdes=idlocreci
+        else:
+            idlocdes = idlocreci
+
         s = "Select idLoc2, reci2 from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where idEstado in (4, 5, 82, 83) and IdLocReci = %d and Reci = %d and idLoc2 = %d"
-        lista = idlocreci, idreci, idlocreci    
+        lista = idlocreci, idreci, idlocdes    
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
         if  row == None:
@@ -221,5 +230,18 @@ class Homologa:
             return False
         else:
             return rows
+
+    def get_recintos_circun(self, dep, prov, sec, circun):
+        s = "select IdLocReci, Reci, NombreRecinto, NomZona, NomDist, CircunDist, Direccion" + \
+            " from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional]" + \
+            " where Dep = %d and Prov = %d and Sec = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
+        circuns = dep, prov, sec, circun    
+        self.cur.execute(s, circuns)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
 
     

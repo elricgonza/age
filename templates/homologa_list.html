@@ -64,9 +64,10 @@
                             <th>Asiento</th>
                             <th>Recinto</th>
                             <th>Estado</th>
-                            <th>IdLocDestino</th>
-                            <th>ReciDestino</th>
-                            <th>RecintoDestino</th>
+                            <th>IdLocDest</th>
+                            <th>ReciDest</th>
+                            <th>RecintoDest</th>
+                            <th>Area</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -83,15 +84,22 @@
                                 <td>{{ homologa[7] }}</td>
                                 <td>{{ homologa[8] }}</td>
                                 <td style="text-align: center; font-size: 15px;">
+                                    {% if homologa[9] == 'Urbano' %}
+                                        <i class="fa fa-underline" style="color: #229954; font-size: 18px;"></i><br>{{ homologa[9] }}
+                                    {% else %}
+                                        <i class="fa fa-registered" style="color: #7D3C98; font-size: 18px;"></i><br>{{ homologa[9] }}
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center; font-size: 15px;">
                                     {% if homologa[6] == None %}
                                         {% if puede_adicionar %}
-                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
+                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final, ur=homologa[9], idlocdes=0) }} style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
                                         {% else %}
                                             <i class="fas fa-file-signature" style="color: grey"></i><br>Asignar
                                         {% endif %}
                                     {% else %}
                                         {% if puede_editar %}
-                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
+                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, final=final, ur=homologa[9], idlocdes=homologa[6]) }}><i class="fas fa-file-signature"></i><br>Modificar</a>
                                         {% else %}
                                             <i class="fas fa-file-signature" style="color: grey"></i><br>Modificar
                                         {% endif %}    

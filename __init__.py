@@ -16,6 +16,7 @@ import dbcn
 import usuarios
 import permisos as permisosU
 import asientos as asi
+import asiexcep as asiex
 import reportes as rep
 import documentos as docu
 import documentos_pdf as dpdf
@@ -79,6 +80,7 @@ usr = ""
 usrdep = 99
 usrid = 0
 permisos_usr = []
+usrtipo = 0
 
 # path init - to save img, ..
 chd = os.chdir(app.config['PATH_APP'])
@@ -124,11 +126,13 @@ def user_loader(txtusr):
     global usrdep
     global usrid
     global permisos_usr
+    global usrtipo
     user = usuarios.Usuarios(cxms)
     if user.get_usuario(txtusr):
         usr = user.usuario
         usrdep = user.dep
         usrid = user.id
+        usrtipo = user.tipo_usr
         permisos_usr = user.get_permisos_name(usr)
         return user
 
@@ -148,7 +152,7 @@ def utility_processor():
 
 @app.context_processor
 def inject_global():
-    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], anio=str(datetime.date.today())[0:-6], usuario=usr, usrdep=usrdep, usrid=usrid)
+    return dict(idate=datetime.date.today(), idatetime=str(datetime.datetime.now())[0:-3], anio=str(datetime.date.today())[0:-6], usuario=usr, usrdep=usrdep, usrid=usrid, usrtipo=usrtipo)
 
 
 @app.errorhandler(401)
@@ -401,6 +405,56 @@ def asiento_img(idloc, nomloc):
         else:  # New
             return render_template('asiento_img.html', rows=i.get_imgs(), nomloc=nomloc,
                                 puede_editar='Asientos - Edición' in permisos_usr)
+
+
+@app.route('/asi_excep_img/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
+@login_required
+def asi_excep_img(idloc, nomloc):
+    ''' Gestiona imágenes del asiento '''
+
+    i = img.Img(cxms)  # conecta a la BD
+    li = loc_img.LocImg(cxms)
+
+    with_img = li.get_loc_imgs(idloc)  # False or rows-img
+
+    error = None
+
+    if request.method == 'POST':
+        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
+        img_ids = list(img_ids_[0].split(","))      # list ok
+
+        uploaded_files = request.files.getlist("filelist")
+
+        for n in range(len(img_ids)):
+            f  = uploaded_files[n]
+            if f.filename != '':
+                securef = secure_filename(f.filename)
+                fpath = os.path.join(app.config['IMG_ASIENTOS'], securef)
+                arch, ext = os.path.splitext(fpath)
+                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2) + ext
+                fpath_destino = os.path.join(app.config['IMG_ASIENTOS'], name_to_save)   # loc_img.ruta
+
+                if li.exist_img(idloc, img_ids[n]):   # si upd img
+                    file_to_del = li.get_name_file_img(idloc, img_ids[n]) # referencia en bd 
+                    os.remove(file_to_del[1:]) # borra arch. de HD
+                    li.upd_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr) # upd de bd
+                else: # new
+                    li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
+
+                f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
+                resize_save_file(fpath, name_to_save, (1024, 768))
+
+                os.remove(fpath[1:])   # arch. fuente 
+
+        return redirect(url_for('asi_excep_list'))
+    else:
+        if with_img:  # Edit
+            return render_template('asiexcep_img_upd.html', rows=i.get_imgs(), nomloc=nomloc,
+                                puede_editar='Asiexcep - Edición' in permisos_usr,
+                                imgs_loaded=with_img)
+        else:  # New
+            return render_template('asiexcep_img.html', rows=i.get_imgs(), nomloc=nomloc,
+                                puede_editar='Asiexcep - Edición' in permisos_usr)
 
 
 @app.route('/documentos_list', methods=['GET', 'POST'])
@@ -701,13 +755,13 @@ def asiento(idloc):
                 if a.usuario == None:
                     a.usuario = usr
 
-                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), 
+                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrdep, usrtipo), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
                                        gj_cir=j.get_cir(usrdep),
                                        gj_mun=j.get_mun(usrdep),
                                        gj_prov=j.get_prov(usrdep))
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(), 
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrdep, usrtipo), 
                            tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
                            gj_cir=j.get_cir(usrdep),
                            gj_mun=j.get_mun(usrdep),
@@ -790,6 +844,125 @@ def recinto_vs_ext(idloc, reci):
                           )
 
 
+@app.route('/asi_excep_list', methods=['GET', 'POST'])
+@login_required
+def asi_excep_list():
+    ax = asiex.Asi_excep(cxms)
+    rows = ax.get_asi_excep_all(usrdep)
+    if rows:
+        if 'Asiexcep - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
+                                    puede_editar='Asiexcep - Edición' in permisos_usr, \
+                                    puede_eliminar='Asiexcep - Eliminación' in permisos_usr
+                                  )# render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin asientos...')
+
+
+@app.route('/asi_excep/<idloc>', methods=['GET', 'POST'])
+@login_required
+def asi_excep(idloc):
+    ax = asiex.Asi_excep(cxms)
+    d = docu.Documentos(cxms)
+    j = get_json.GetJson(cxpg)  # jsons para mapa
+
+    error = None
+    p = ('Asiexcep - Edición' in permisos_usr)  # t/f
+
+    if request.method == 'POST':
+        fa = request.form['fechaAct'][:-7]
+        if usrdep != 0: 
+            if request.form.get('docRspNal') != None:
+                docRspNal = request.form['docRspNal']
+            else:
+                docRspNal = 0
+        if usrdep == 0:
+            docRspNal = request.form['docRspNal']
+        if request.form.get('docActF') == None:
+            if request.form.get('doc_idActF') != None:
+                docActF = request.form['doc_idActF']    
+            else:
+                docActF = 0
+        else:
+            docActF = request.form['docActF']
+
+        if request.form.get('urural') == None:
+            urural = 0
+        else:
+            urural = request.form['urural']
+
+        if idloc == '0':  # es NEW
+            if False:   # valida si neces POST
+                #error = "El usuario: " + request.form['uname']  + " ya existe...!"
+                #return render_template('asiento.html', error=error, u=u, load_u=True)
+                print('msg-err')
+            else:
+                nextid = ax.get_next_idloc()
+                ax.add_asi_excep(nextid, request.form['deploc'], request.form['provloc'], \
+                              request.form['secloc'], request.form['nomloc'], request.form['poblacionloc'], \
+                              request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
+                              request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
+                              request.form['etapa'], request.form['obsUbicacion'], request.form['obs'].strip(), \
+                              request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
+                              docActF, urural)
+
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
+
+                rows = ax.get_asi_excep_all(usrdep)
+                return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
+                                        puede_editar='Asiexcep - Edición' in permisos_usr, \
+                                        puede_eliminar='Asiexcep - Eliminación' in permisos_usr
+                                      ) # render a template
+        else: # Es Edit
+            fa = str(datetime.datetime.now())[:-7]
+            fcl = request.form['fechacensoloc']
+            if fcl == '':
+                fcl = None
+
+            row_to_upd = \
+                request.form['nomloc'], request.form['poblacionloc'], \
+                request.form['poblacionelecloc'], fcl, request.form['tipolocloc'], \
+                request.form['latitud'], request.form['longitud'], \
+                request.form['estado'], '', request.form['etapa'], \
+                request.form['obsUbicacion'], request.form['obs'].strip(), \
+                str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
+                docActF, urural, idloc
+
+            ax.upd_asi_excep(row_to_upd)
+            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
+
+            rows = ax.get_asi_excep_all(usrdep)
+            return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
+                                    puede_editar='Asiexcep - Edición' in permisos_usr, \
+                                    puede_eliminar='Asiexcep - Eliminación' in permisos_usr
+                                  ) # render a template
+    else: # Viene de <asientos_list>
+        if idloc != '0':  # EDIT
+            if ax.get_asi_excep_idloc(idloc):
+                if ax.fechaIngreso == None:
+                    ax.fechaIngreso = str(datetime.datetime.now())[:-7]
+                if ax.fechaAct == None:
+                    ax.fechaAct = str(datetime.datetime.now())[:-7]
+                if ax.usuario == None:
+                    ax.usuario = usr
+
+                return render_template('asiexcep.html', error=error, ax=ax, load=True, puede_editar=p, dptos=ax.get_depa_excep_all(usrdep), provincias=ax.get_prov_excep_all(usrdep), 
+                                       municipios=ax.get_muni_excep_all(usrdep), estados=ax.get_estados(), etapas=ax.get_etapas(usrdep, usrtipo), 
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                                       gj_cir=j.get_cir(usrdep),
+                                       gj_mun=j.get_mun(usrdep),
+                                       gj_prov=j.get_prov(usrdep))
+    # New
+    return render_template('asiexcep.html', error=error, ax=ax, load=False, puede_editar=p, dptos=ax.get_depa_excep_all(usrdep), provincias=ax.get_prov_excep_all(usrdep), 
+                            municipios=ax.get_muni_excep_all(usrdep), estados=ax.get_estados(), etapas=ax.get_etapas(usrdep, usrtipo), tcircuns=ax.get_tipocircun(),  
+                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                            gj_cir=j.get_cir(usrdep),
+                            gj_mun=j.get_mun(usrdep),
+                            gj_prov=j.get_prov(usrdep))
+
+
 @app.route('/exterior_list', methods=['GET', 'POST'])
 @login_required
 def exterior_list():
@@ -865,12 +1038,12 @@ def exterior(idloc):
 
                 return render_template('exterior.html', error=error, a=ex, load=True, puede_editar=p, paises=ex.get_paises_all(usrdep),
                                        dptos=ex.get_departamentos_all(usrdep), provincias=ex.get_provincias_all(usrdep), estados=a.get_estados(),
-                                       etapas=a.get_etapas(), municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
+                                       etapas=a.get_etapas(usrdep, usrtipo), municipios=ex.get_municipios_all(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
                                        gj_cir=j.get_cir(9),
                                        gj_mun=j.get_mun(9),
                                        gj_prov=j.get_prov(9))
     # New
-    return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), estados=a.get_estados(), etapas=a.get_etapas(), 
+    return render_template('exterior.html', error=error, a=a, load=False, puede_editar=p, paises=ex.get_paises_all(usrdep), estados=a.get_estados(), etapas=a.get_etapas(usrdep, usrtipo), 
                             tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
                             gj_cir=j.get_cir(9),
                             gj_mun=j.get_mun(9),
@@ -992,10 +1165,10 @@ def recinto(idreci, idlocreci):
                                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
-                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'])
+                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
+                               request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'])
 
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
 
                 rows = rc.get_recintos_all(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1011,10 +1184,10 @@ def recinto(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], idlocreci[1], idreci    
+                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
     
             rc.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)            
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])            
 
             rows = rc.get_recintos_all(usrdep)
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1033,13 +1206,13 @@ def recinto(idreci, idlocreci):
                     rc.usuario = usr
 
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas(), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
                                        gj_cir=j.get_cir(usrdep),
                                        gj_mun=j.get_mun(usrdep),
                                        gj_prov=j.get_prov(usrdep))
 
     # New
-    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(), trecintos=rc.get_tiporecintos(), 
+    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrdep, usrtipo), trecintos=rc.get_tiporecintos(), 
                             dependencias=rc.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                            gj_cir=j.get_cir(usrdep),
                            gj_mun=j.get_mun(usrdep),
@@ -1232,10 +1405,10 @@ def reciespe(idreci, idlocreci):
                                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
-                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'])
+                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
+                               request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'])
 
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
 
                 rows = rce.get_reciespe_all(usrdep)
                 return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
@@ -1250,10 +1423,10 @@ def reciespe(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], idlocreci[1], idreci    
+                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
 
             rce.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
 
             rows = rce.get_reciespe_all(usrdep)
             return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
@@ -1271,14 +1444,14 @@ def reciespe(idreci, idlocreci):
                     rce.usuario = usr
 
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), trecintos=rce.get_tiporecintos(), 
+                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones(), 
                                        gj_cir=j.get_cir(usrdep),
                                        gj_mun=j.get_mun(usrdep),
                                        gj_prov=j.get_prov(usrdep))
     # New
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                            gj_cir=j.get_cir(usrdep),
                            gj_mun=j.get_mun(usrdep),
                            gj_prov=j.get_prov(usrdep))
@@ -1658,10 +1831,10 @@ def reciespeciales(idreci, idlocreci):
                                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, \
-                               request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'])
+                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
+                               request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'])
 
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
 
                 rows = rces.get_reciespeciales_all(usrdep)
                 return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1676,10 +1849,10 @@ def reciespeciales(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], idlocreci[1], idreci    
+                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
 
             rces.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
 
             rows = rces.get_reciespeciales_all(usrdep)
             return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1698,7 +1871,7 @@ def reciespeciales(idreci, idlocreci):
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
+                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrdep, usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
                                        municipios=rces.get_muniespeciales_all(usrdep),
                                        gj_cir=j.get_cir(2),
                                        gj_mun=j.get_mun(2),
@@ -1707,10 +1880,11 @@ def reciespeciales(idreci, idlocreci):
     # New
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
-                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
+                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
                             gj_cir=j.get_cir(2),
                             gj_mun=j.get_mun(2),
                             gj_prov=j.get_prov(2))
+
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
 def get_provespeciales_all():
@@ -1862,14 +2036,14 @@ def exterior_reci(idreci, idlocreci):
                     exr.usuario = usr
 
                 return render_template('exteriorreci.html', error=error, exr=exr, load=True, puede_editar=p, asientoRecis=exr.get_asiexterior_all(usrdep), zonasRecis=exr.get_zonexterior_all(usrdep),
-                                       estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), dependencias=exr.get_dependencias(), trecintos=exr.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfRNExt(usrdep), 
+                                       estados=exr.get_estados(usrdep), etapas=exr.get_etapas(usrdep, usrtipo), dependencias=exr.get_dependencias(), trecintos=exr.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfRNExt(usrdep), 
                                        gj_cir=j.get_cir(9),
                                        gj_mun=j.get_mun(9),
                                        gj_prov=j.get_prov(9), paises=exr.get_paises_all(usrdep), dptos=exr.get_departamentos_all(usrdep), provincias=exr.get_provincias_all(usrdep),
                                        municipios=exr.get_municipios_all(usrdep))
 
     # New
-    return render_template('exteriorreci.html', error=error, exr=exr, load=False, puede_editar=p, estados=exr.get_estados(usrdep), etapas=exr.get_etapas(), trecintos=exr.get_tiporecintos(), 
+    return render_template('exteriorreci.html', error=error, exr=exr, load=False, puede_editar=p, estados=exr.get_estados(usrdep), etapas=exr.get_etapas(usrdep, usrtipo), trecintos=exr.get_tiporecintos(), 
                            paises=exr.get_paises_all(usrdep), dependencias=exr.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfRNExt(usrdep),
                            gj_cir=j.get_cir(9),
                            gj_mun=j.get_mun(9),
@@ -2007,6 +2181,101 @@ def get_subcategorias_all():
 
 """ Final de Indicadores """
 
+""" Inicio de Indicadores Excepcional"""
+
+@app.route('/asi_excep_indicadores/<idloc>/<string:nomloc>', methods=['GET', 'POST'])
+@login_required
+def asi_excep_indicadores(idloc, nomloc):
+    lc = loc_cate.LocCate(cxms)
+    ctgoria = lc.get_loc_cates(idloc);
+    cate = lc.get_categorias_all();
+    subctgoria = lc.get_subcategorias_all1();
+    return render_template('asiexcep_ind.html', nomloc=nomloc, idloc=idloc, ctgorias=ctgoria, subctgorias=subctgoria, cates=cate, load=False, puede_editar='Asiexcep - Edición' in permisos_usr)
+
+
+@app.route('/insertar_indicador_excep', methods=['GET', 'POST'])
+@login_required
+def insertar_indicador_excep():
+    lc = loc_cate.LocCate(cxms)
+    error = None
+    if request.method == 'POST':
+        fechaAct = str(datetime.datetime.now())[:-7]
+        fechaIngreso = str(datetime.datetime.now())[:-7]
+        loc_id = request.form['loc_id']
+        nomloc = request.form['nomloc']
+        cate_id = request.form['categoria']
+        subcate_id = request.form['subcategoria']
+        obs = request.form['obs']
+        nextid = lc.get_next_idloccate(loc_id)
+        lc.add_loc_cate(loc_id, cate_id, subcate_id, obs, fechaAct, usr, fechaIngreso, nextid)
+        ctgoria = lc.get_loc_cates(loc_id);
+        cate = lc.get_categorias_all();
+        return render_template('asiexcep_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asiexcep - Edición' in permisos_usr)
+
+
+@app.route('/modificar_indicador_excep', methods=['GET', 'POST'])
+@login_required
+def modificar_indicador_excep():
+    lc = loc_cate.LocCate(cxms)
+    error = None
+    if request.method == 'POST':
+        fechaAct = str(datetime.datetime.now())[:-7]
+        loc_id = request.form['loc_id']
+        nomloc = request.form['nomloc']
+        sec = request.form['sec']
+        cate_id = request.form['categoria']
+        subcate_id = request.form['subcategoria']
+        obs = request.form['obs']
+
+        row_to_upd = cate_id, subcate_id, obs, fechaAct, usr, loc_id, sec
+        lc.upd_loc_cate(row_to_upd)
+        #lc.upd_loc_cate(loc_id, cate_id, subcate_id, obs, fechaAct, usr, sec)
+        ctgoria = lc.get_loc_cates(loc_id);
+        cate = lc.get_categorias_all();
+        return render_template('asiexcep_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asiexcep - Edición' in permisos_usr)
+
+
+@app.route('/eliminar_indicador_excep', methods=['GET', 'POST'])
+@login_required
+def eliminar_indicador_excep():
+    lc = loc_cate.LocCate(cxms)
+    error = None
+    if request.method == 'POST':
+        fechaAct = str(datetime.datetime.now())[:-7]
+        loc_id = request.form['loc_id']
+        nomloc = request.form['nomloc']
+        sec = request.form['sec']
+        lc.del_loc_cate(loc_id, sec)
+        ctgoria = lc.get_loc_cates(loc_id);
+        cate = lc.get_categorias_all();
+        return render_template('asiexcep_ind.html', nomloc=nomloc, idloc=loc_id, ctgorias=ctgoria, cates=cate, load=False, puede_editar='Asiexcep - Edición' in permisos_usr)
+
+
+@app.route('/asi_excep_ind', methods=['GET', 'POST'])
+@login_required
+def asi_excep_ind():
+    lc = loc_cate.LocCate(cxms)
+    idloc = request.args.get('idloc')
+    rows = lc.get_loc_cates(idloc)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+
+@app.route('/get_subcategorias_excep_all', methods=['GET', 'POST'])
+def get_subcategorias_excep_all():
+    cxms2 = dbcn.get_db_ms()
+    lc = loc_cate.LocCate(cxms2)
+    cate_id = request.args.get('cate_id')
+    rows = lc.get_subcategorias_all(cate_id)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+""" Final de Indicadores Excepcional"""
+
 """ Inicio de Asignar Homologaciones """
 
 @app.route('/homologa_list', methods=['GET', 'POST'])
@@ -2035,17 +2304,24 @@ def homologa_list():
                               )  # render a template)
 
 
-@app.route('/a_homologa/<idreci>/<idlocreci>/<inicio>/<final>', methods=['GET', 'POST'])
+@app.route('/a_homologa/<idreci>/<idlocreci>/<inicio>/<final>/<ur>/<idlocdes>', methods=['GET', 'POST'])
 @login_required
-def a_homologa(idreci, idlocreci, inicio, final):
+def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
     ahom = hom.Homologa(cxms)
     error = None
     
     if idreci != '0' and idlocreci !='0':  # LISTA
         ahom.get_homologa_idlocreci(idreci, idlocreci)
         circun = ahom.circun
-        rtos = ahom.get_recintos_idloc(idlocreci, circun);
-        if ahom.ver_homologa_idlocreci(idreci, idlocreci):
+        dep = ahom.dep
+        prov = ahom.prov
+        sec = ahom.sec
+        if ur == 'Urbano':
+            rtos = ahom.get_recintos_idloc(idlocreci, circun);
+        else:
+            rtos = ahom.get_recintos_circun(dep, prov, sec, circun);
+
+        if ahom.ver_homologa_idlocreci(idreci, idlocreci, idlocdes):
             print('Modificar')
             return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=False)
         else:

@@ -48,7 +48,7 @@ class Recintos:
             "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
             "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
-            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp " + \
+            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp, a.doc_idT, j.ruta as rutaT " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -58,6 +58,7 @@ class Recintos:
             "inner join [GeografiaElectoral_app].[dbo].[DIST] g on f.IdLocZona=g.IdLocDist and f.DistZona=g.Dist " + \
             "left join [bdge].[dbo].[doc] h on a.doc_idA=h.id " + \
             "left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id " + \
+            "left join [bdge].[dbo].[doc] j on a.doc_idT=j.id " + \
             "where a.IdLocReci = %d and a.Reci = %d"
         mod_recinto = idlocreci, idreci
         self.cur.execute(s, mod_recinto)
@@ -94,6 +95,8 @@ class Recintos:
             self.rutaAF = row[28]
             self.nomloc = row[29]
             self.ambientes = row[30]
+            self.doc_idT = row[31]
+            self.rutaT = row[32]
         return row
 
 
@@ -101,18 +104,18 @@ class Recintos:
                     maxmesasreci, direccion, latitud, longitud, \
                     estado, tiporecinto, codrue, \
                     codrueedif, depend, \
-                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, ambientes):
+                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, ambientes, docTec):
 
         new_recinto = idlocreci, reci, nomreci, '', '', zonareci, \
             maxmesasreci, direccion, latitud, longitud, \
             estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, '0', ambientes
+            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, '0', ambientes, docTec
 
         s = "insert into [GeografiaElectoral_app].[dbo].[RECI] (IdLocReci, Reci, NomReci, SupReci, ApoyoReci, " + \
             " ZonaReci, MaxMesasReci, Direccion, latitud, " + \
             " longitud, estado, tipoRecinto, codRue, codRueEdif, " + \
-            " depend, cantPisos, fechaIngreso, fechaAct, usuario, etapa, doc_idA, doc_idAF, nacionId, ambientesDisp) VALUES " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            " depend, cantPisos, fechaIngreso, fechaAct, usuario, etapa, doc_idA, doc_idAF, nacionId, ambientesDisp, doc_idT) VALUES " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_recinto)
             self.cx.commit()
@@ -120,30 +123,6 @@ class Recintos:
         except:
             print("Error - actualización de recinto...")
 
-    '''
-    def upd_recinto(self, idlocreci, reci, nomreci, zonareci, \
-                    maxmesasreci, direccion, latitud, longitud, \
-                    estado, tiporecinto, codrue, \
-                    codrueedif, depend, \
-                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF):
-        recinto = nomreci, zonareci, \
-            maxmesasreci, direccion, latitud, longitud, \
-            estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaAct, usuario, etapa, docAct, docActF, reci
-        s = "update GeografiaElectoral_app.dbo.RECI" + \
-            " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
-            " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
-            " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
-            " etapa= %s, doc_idA= %s, doc_idAF= %s " + \
-            " where Reci = %s"
-        try:
-            self.cur.execute(s, recinto)
-            self.cx.commit()
-            print('Recinto actualizado')
-        except Exception as e:
-            print("Error - actualización de Recinto...")
-            print(e)
-    '''
 
     def upd_recinto(self, recinto):
         if self.diff_old_new_reci(recinto):
@@ -151,7 +130,7 @@ class Recintos:
                 " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
                 " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
                 " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
-                " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s " + \
+                " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s, doc_idT= %s " + \
                 " where IdLocReci = %s and Reci = %s"
             try:
                 self.cur.execute(s, recinto)
@@ -162,7 +141,7 @@ class Recintos:
 
 
     def diff_old_new_reci(self, row_to_upd):
-        rc = self.get_recinto_idreci(row_to_upd[19], row_to_upd[18])  #18 -> idreci, #19 -> idlocreci
+        rc = self.get_recinto_idreci(row_to_upd[20], row_to_upd[19])  #19 -> idreci, #20 -> idlocreci
         vdif = False
         if self.nomreci != row_to_upd[0]:
             print('nom dif')
@@ -216,7 +195,10 @@ class Recintos:
         if self.ambientes != int(row_to_upd[17]):
             print('ambientesDisp dif')
             vdif = True
-        
+        if self.doc_idT != int(row_to_upd[18]):
+            print('doc_idT dif')
+            vdif = True
+
         return vdif
 
 
@@ -224,16 +206,6 @@ class Recintos:
         self.cur.execute("select max(reci) + 1 from GeografiaElectoral_app.dbo.reci")
         row = self.cur.fetchone()
         return row[0]
-
-
-    """def get_estados(self):
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=1"
-        self.cur.execute(s)
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows"""
 
 
     def get_estados(self, usrdep):
@@ -262,8 +234,14 @@ class Recintos:
             return rows
 
 
-    def get_etapas(self):
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+    def get_etapas(self, usrdep, usrtipo):
+
+        if usrdep != 0 and usrtipo == 116:
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
+        elif usrdep == 0 and usrtipo == 117:
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
+        else:
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
