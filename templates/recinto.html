@@ -38,7 +38,7 @@
             <div class="col-md-4">
                 <label for="">.</label>
                 <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="getgeo(event)" >Visualizar imágen Satelital</button>-->
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="viewMap({{gj_mun}}, {{gj_prov}}, {{gj_cir}})" >Visualizar imágen Satelital</button>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
             </div>
         </div>
         <br>
@@ -313,7 +313,7 @@
                 <label for="ietapa">Etapa</label>
                 <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);">              
                     {% for etapa in etapas %}
-                          {% if load and a.etapa == etapa[0] %}
+                          {% if load and rc.etapa == etapa[0] %}
                                 <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
                           {% else %}
                                 <option value = "{{ etapa[0] }}">{{ etapa[1] }}</option>
@@ -561,6 +561,25 @@
         } 
 
         return true;
+    }
+
+    function mostrarMapa(){
+        var ideploc = document.getElementById('ideploc').value;
+        $.ajax({
+            data:{
+                ideploc : ideploc
+            },
+            type: 'POST',
+            url: '/get_mapas_all',
+        })
+        .done(function(data) {
+            if (data.error){
+                console.log('Error');
+            }
+            else{
+                viewMap(data);
+            }
+        });
     }
 </script>
 

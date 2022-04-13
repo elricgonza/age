@@ -672,7 +672,6 @@ def asiento(idloc):
     '''
     a = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
-    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Asientos - Edición' in permisos_usr)  # t/f
@@ -756,16 +755,22 @@ def asiento(idloc):
                     a.usuario = usr
 
                 return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrdep, usrtipo), 
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
-                                       gj_cir=j.get_cir(usrdep),
-                                       gj_mun=j.get_mun(usrdep),
-                                       gj_prov=j.get_prov(usrdep))
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
     return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrdep, usrtipo), 
-                           tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
-                           gj_cir=j.get_cir(usrdep),
-                           gj_mun=j.get_mun(usrdep),
-                           gj_prov=j.get_prov(usrdep))
+                           tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
+
+
+@app.route('/get_mapas_all', methods=['GET', 'POST'])
+def get_mapas_all():
+    j = get_json.GetJson(cxpg)
+    ideploc = request.form['ideploc']
+    gj_cir = j.get_cir(ideploc)
+    gj_mun = j.get_mun(ideploc)
+    gj_prov = j.get_prov(ideploc)
+
+    if gj_cir:
+        return jsonify(gj_cir, gj_mun, gj_prov)
 
 
 @app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])
@@ -779,11 +784,11 @@ def asiento_vs(idloc):
     j = get_json.GetJson(cxpg)
 
     return render_template('coord_vs.html', 
-                            gj_reci=j.get_reci(usrdep), 
-                            gj_asi=j.get_asi(usrdep), 
-                            gj_cir=j.get_cir(usrdep),
-                            gj_mun=j.get_mun(usrdep),
-                            gj_prov=j.get_prov(usrdep),
+                            gj_reci=j.get_reci(a.deploc), 
+                            gj_asi=j.get_asi(a.deploc), 
+                            gj_cir=j.get_cir(a.deploc),
+                            gj_mun=j.get_mun(a.deploc),
+                            gj_prov=j.get_prov(a.deploc),
                             latitud=a.latitud, 
                             longitud=a.longitud
                           )
@@ -814,14 +819,15 @@ def recinto_vs(idloc, reci):
 
     r = recintos.Recintos(cxms)
     r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
+
      
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs.html', 
-                            gj_reci=j.get_reci(usrdep), 
-                            gj_asi=j.get_asi(usrdep), 
-                            gj_cir=j.get_cir(usrdep),
-                            gj_mun=j.get_mun(usrdep),
-                            gj_prov=j.get_prov(usrdep),
+                            gj_reci=j.get_reci(r.deploc), 
+                            gj_asi=j.get_asi(r.deploc), 
+                            gj_cir=j.get_cir(r.deploc),
+                            gj_mun=j.get_mun(r.deploc),
+                            gj_prov=j.get_prov(r.deploc),
                             latitud=r.latitud, 
                             longitud=r.longitud
                           )
@@ -866,7 +872,6 @@ def asi_excep_list():
 def asi_excep(idloc):
     ax = asiex.Asi_excep(cxms)
     d = docu.Documentos(cxms)
-    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Asiexcep - Edición' in permisos_usr)  # t/f
@@ -950,17 +955,11 @@ def asi_excep(idloc):
 
                 return render_template('asiexcep.html', error=error, ax=ax, load=True, puede_editar=p, dptos=ax.get_depa_excep_all(usrdep), provincias=ax.get_prov_excep_all(usrdep), 
                                        municipios=ax.get_muni_excep_all(usrdep), estados=ax.get_estados(), etapas=ax.get_etapas(usrdep, usrtipo), 
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
-                                       gj_cir=j.get_cir(usrdep),
-                                       gj_mun=j.get_mun(usrdep),
-                                       gj_prov=j.get_prov(usrdep))
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
     return render_template('asiexcep.html', error=error, ax=ax, load=False, puede_editar=p, dptos=ax.get_depa_excep_all(usrdep), provincias=ax.get_prov_excep_all(usrdep), 
                             municipios=ax.get_muni_excep_all(usrdep), estados=ax.get_estados(), etapas=ax.get_etapas(usrdep, usrtipo), tcircuns=ax.get_tipocircun(),  
-                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep),
-                            gj_cir=j.get_cir(usrdep),
-                            gj_mun=j.get_mun(usrdep),
-                            gj_prov=j.get_prov(usrdep))
+                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
 @app.route('/exterior_list', methods=['GET', 'POST'])
@@ -1125,7 +1124,6 @@ def recinto(idreci, idlocreci):
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
-    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
@@ -1206,17 +1204,11 @@ def recinto(idreci, idlocreci):
                     rc.usuario = usr
 
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
-                                       gj_cir=j.get_cir(usrdep),
-                                       gj_mun=j.get_mun(usrdep),
-                                       gj_prov=j.get_prov(usrdep))
+                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
     # New
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrdep, usrtipo), trecintos=rc.get_tiporecintos(), 
-                            dependencias=rc.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                           gj_cir=j.get_cir(usrdep),
-                           gj_mun=j.get_mun(usrdep),
-                           gj_prov=j.get_prov(usrdep))
+                            dependencias=rc.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
 @app.route('/get_asientos_all1', methods=['GET', 'POST'])
@@ -1365,7 +1357,6 @@ def reciespe(idreci, idlocreci):
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
-    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Especiales - Edición' in permisos_usr)  # t/f
@@ -1445,16 +1436,10 @@ def reciespe(idreci, idlocreci):
 
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones(), 
-                                       gj_cir=j.get_cir(usrdep),
-                                       gj_mun=j.get_mun(usrdep),
-                                       gj_prov=j.get_prov(usrdep))
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
     # New
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                           gj_cir=j.get_cir(usrdep),
-                           gj_mun=j.get_mun(usrdep),
-                           gj_prov=j.get_prov(usrdep))
+                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
 @app.route('/get_geo_esp', methods=['GET', 'POST'])
@@ -1791,7 +1776,6 @@ def reciespeciales(idreci, idlocreci):
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
     d = docu.Documentos(cxms)
-    j = get_json.GetJson(cxpg)  # jsons para mapa
 
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
@@ -1872,18 +1856,12 @@ def reciespeciales(idreci, idlocreci):
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                                        dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrdep, usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
-                                       municipios=rces.get_muniespeciales_all(usrdep),
-                                       gj_cir=j.get_cir(2),
-                                       gj_mun=j.get_mun(2),
-                                       gj_prov=j.get_prov(2))
+                                       municipios=rces.get_muniespeciales_all(usrdep))
 
     # New
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
-                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), 
-                            gj_cir=j.get_cir(2),
-                            gj_mun=j.get_mun(2),
-                            gj_prov=j.get_prov(2))
+                            dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
