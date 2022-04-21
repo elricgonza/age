@@ -58,7 +58,8 @@ class Asientos:
             " a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \
             " b.NomDep as _departamento, c.NomProv as _provincia, d.NomSec as _municipio, e.descripcion as TipoCircunscripcion," + \
             " a.etapa, a.doc_idA, a.obsUbicacion, a.doc_idRN, a.obs, a.fechaIngreso, a.fechaAct, a.usuario," + \
-            " g.ruta as rutaA, h.ruta as rutaRN, b.IdPais, a.doc_idAF, i.ruta as rutaAF, f.idClasif as urural" + \
+            " g.ruta as rutaA, h.ruta as rutaRN, b.IdPais, a.doc_idAF, i.ruta as rutaAF, f.idClasif as urural, a.doc_idAT, j.ruta as rutaAT," + \
+            " a.doc_idRNT, k.ruta as rutaRNT" + \
             " from [GeografiaElectoral_app].[dbo].[LOC] a" + \
             " left join [GeografiaElectoral_app].[dbo].[DEP] b on a.DepLoc= b.Dep" + \
             " left join [GeografiaElectoral_app].[dbo].[PROV] c on a.DepLoc= c.DepProv and a.ProvLoc= c.Prov" + \
@@ -68,6 +69,8 @@ class Asientos:
             " left join [bdge].[dbo].[doc] g on a.doc_idA=g.id" + \
             " left join [bdge].[dbo].[doc] h on a.doc_idRN=h.id" + \
             " left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id" + \
+            " left join [bdge].[dbo].[doc] j on a.doc_idAT=j.id" + \
+            " left join [bdge].[dbo].[doc] k on a.doc_idRNT=k.id" + \
             " where a.idloc = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
@@ -109,6 +112,10 @@ class Asientos:
             self.doc_idAF = row[30]
             self.rutaAF = row[31]
             self.urural = row[32]
+            self.doc_idAT = row[33]
+            self.rutaAT = row[34]
+            self.doc_idRNT = row[35]
+            self.rutaRNT = row[36]
         return row
 
     
@@ -117,23 +124,23 @@ class Asientos:
                     poblacionelecloc, fechacensoloc, tipolocloc, \
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
-                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural):
+                    obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural, docActT, docRspNalT):
 
         new_asiento = idloc, deploc, provloc, secloc, 0, \
             0, nomloc, poblacionloc, poblacionelecloc, fechacensoloc, \
             tipolocloc, '2007-01-01', '', 1, '', \
             '', 0, 0, 0, 0, \
             0, latitud, longitud, estado, circunconsulado, etapa, obsUbicacion, \
-            obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural
+            obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal, docActF, urural, docActT, docRspNalT
 
         s = "insert into GeografiaElectoral_app.dbo.loc (idloc, deploc, provloc, secloc, loc, " + \
             " idcanloc, nomloc, poblacionloc, poblacionelecloc, fechacensoloc, " + \
             " tipolocloc, fechabaselegloc, codbaselegloc, marcaloc, escabeceracanloc, " + \
             " escabecerasecloc, codprov, codsecc, tipocircun, circun, " + \
             " estadomapa, latitud, longitud, estado, circunconsulado, etapa, obsUbicacion, obs, fechaIngreso," + \
-            " fechaAct, usuario, doc_idA, doc_idRN, doc_idAF, urbanoRural) VALUES " + \
+            " fechaAct, usuario, doc_idA, doc_idRN, doc_idAF, urbanoRural, doc_idAT, doc_idRNT) VALUES " + \
             " (%s, %s, %s, %s, %s,  %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s," + \
-            " %s, %s,  %s, %s, %s,  %s, %s, %s, %s, %s)"
+            " %s, %s,  %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_asiento)
             self.cx.commit()
@@ -154,7 +161,7 @@ class Asientos:
                 " latitud= %s, longitud= %d, " + \
                 " estado= %d, circunconsulado= %s, " + \
                 " etapa= %d, obsUbicacion= %s, obs= %s, fechaIngreso= %s," + \
-                " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d, urbanoRural= %d" + \
+                " fechaAct= %s, usuario= %s, doc_idA= %d, doc_idRN= %d, doc_idAF= %d, urbanoRural= %d, doc_idAT= %d, doc_idRNT= %d" + \
                 " where idloc = %d"
             try:
                 self.cur.execute(s, asiento)
@@ -169,7 +176,7 @@ class Asientos:
         '''
         Verif. si existe dif. en registro editado
         '''
-        a = self.get_asiento_idloc(row_to_upd[19])  #19 -> idloc
+        a = self.get_asiento_idloc(row_to_upd[21])  #21 -> idloc
         vdif = False
 
         if self.nomloc != row_to_upd[0]:
@@ -229,6 +236,14 @@ class Asientos:
             vdif = True
         if (str(self.urural) != row_to_upd[18]):
             print('urural dif')
+            vdif = True
+        if (str(self.doc_idAT) != row_to_upd[19]):
+            print('doc_idAT  dif')
+            vdif = True
+        if (self.doc_idRNT != int(row_to_upd[20])):
+            print('doc_idRNT dif')
+            print(str(self.doc_idRN))
+            print(row_to_upd[20])
             vdif = True
 
         return vdif
@@ -319,6 +334,7 @@ class Asientos:
             return False
         else:
             return rows
+
 
     def __str__(self):
         return str(self.idloc) + '--' + self.nomloc

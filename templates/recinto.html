@@ -322,15 +322,17 @@
                 </select> 
             </div>
             <div class="col-md-5">
-                <label for="docAct">Documento Actualización:</label>
+                <label for="docAct">Documento: Resolución de Sala Plena:</label>
                 <input type="hidden" name="doc_idAct" value="{{ rc.doc_idA }}">
                 <select id="idocAct" name="docAct" class="form-control" required>                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
-                        {% if load and rc.doc_idA == tpdfA[0] %}
-                                <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
-                        {% else %}
-                                <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                        {% if tpdfA[6] == 'R' %}
+                            {% if load and rc.doc_idA == tpdfA[0] %}
+                                    <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                            {% else %}
+                                    <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                            {% endif %}
                         {% endif %}                                                                
                     {% endfor %}
                 </select>
@@ -346,15 +348,17 @@
         <br>
         <div class="row">
             <div class="col-md-5">
-                <label for="docTec">Documento Informe Técnico:</label>
+                <label for="docTec">Documento: Informe Técnico:</label>
                 <input type="hidden" name="doc_idTec" value="{{ rc.doc_idT }}">
                 <select id="idocTec" name="docTec" class="form-control" required>                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
-                        {% if load and rc.doc_idT == tpdfA[0] %}
-                                <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
-                        {% else %}
-                                <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                        {% if tpdfA[6] == 'I' %}
+                            {% if load and rc.doc_idT == tpdfA[0] %}
+                                    <option value = "{{ tpdfA[0] }}" selected>{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                            {% else %}
+                                    <option value = "{{ tpdfA[0] }}">{{ '<'~tpdfA[1]~'> '~': '~tpdfA[2]~' _ '~tpdfA[3] }}</option>
+                            {% endif %}
                         {% endif %}                                                                
                     {% endfor %}
                 </select>

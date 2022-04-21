@@ -110,7 +110,7 @@ class Documentos:
         return row[0]
 
     def get_tipo_documentos_pdfA(self, usrdep):
-        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
+        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta, doc from [bdge].[dbo].[docDepartamento]"             
         if usrdep != 0:
             s = s + " where dep = %d  order by fechaAct desc"
             self.cur.execute(s, usrdep)
@@ -121,14 +121,14 @@ class Documentos:
         return rows
 
     def get_tipo_documentos_pdfRN(self, usrdep):
-        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
+        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta, doc from [bdge].[dbo].[docDepartamento]"             
         s = s + " where dep = 0 order by fechaAct desc"
         self.cur.execute(s) 
         rows = self.cur.fetchall()
         return rows
 
     def get_tipo_documentos_pdfRNExt(self, usrdep):
-        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta from [bdge].[dbo].[docDepartamento]"             
+        s = "select id, nomDep, convert(varchar, fechaDoc, 103) as fechaDoc, cite, dep, ruta, doc from [bdge].[dbo].[docDepartamento]"             
         s = s + " where dep = 0 order by fechaAct desc"
         self.cur.execute(s) 
         rows = self.cur.fetchall()
@@ -163,25 +163,25 @@ class Documentos:
 
         return vdif
 
-    def upd_doc(self, idA, idRN, idAct, idRspNal, docActF):
+    def upd_doc(self, idA, idRN, idAct, idRspNal, docActF, idAT, idRNT, idActT, idRspNalT):
         '''
         Actualiza campo -asignado- para prever eliminación
         '''
-        upd_doc2 = (idAct, idRspNal, docActF)
-        s2 = "select * from GeografiaElectoral_app.dbo.loc where doc_idA = %d or doc_idRN = %d or doc_idAF = %d"
+        upd_doc2 = idAct, idRspNal, docActF, idActT, idRspNalT
+        s2 = "select * from GeografiaElectoral_app.dbo.loc where doc_idA = %d or doc_idRN = %d or doc_idAF = %d or doc_idAT = %d or doc_idRNT = %d"
         self.cur.execute(s2, upd_doc2)
         row = self.cur.fetchone()
 
         if row == None:
-            upd_doc1 = (idAct, idRspNal, docActF) 
+            upd_doc1 = idAct, idRspNal, docActF, idActT, idRspNalT 
             s1 = "update doc " + \
-                 " set asignado = 0 where id = %d or id= %d or id= %d"
+                 " set asignado = 0 where id = %d or id= %d or id= %d or id = %d or id = %d"
             self.cur.execute(s1, upd_doc1)
             self.cx.commit()
 
-        upd_doc = (idA, idRN, docActF) 
+        upd_doc = idA, idRN, docActF, idAT, idRNT 
         s = "update doc " + \
-            " set asignado = 1 where id = %d or id= %d or id= %d"
+            " set asignado = 1 where id = %d or id= %d or id= %d or id= %d or id= %d"
         try:
             self.cur.execute(s, upd_doc)
             self.cx.commit()

@@ -684,8 +684,15 @@ def asiento(idloc):
                 docRspNal = request.form['docRspNal']
             else:
                 docRspNal = 0
+
+            if request.form.get('docRspNalT') != None:
+                docRspNalT = request.form['docRspNalT']
+            else:
+                docRspNalT = 0
         if usrdep == 0:
             docRspNal = request.form['docRspNal']
+            docRspNalT = request.form['docRspNalT']
+
         if request.form.get('docActF') == None:
             if request.form.get('doc_idActF') != None:
                 docActF = request.form['doc_idActF']    
@@ -712,9 +719,9 @@ def asiento(idloc):
                               request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
                               request.form['etapa'], request.form['obsUbicacion'], request.form['obs'].strip(), \
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
-                              docActF, urural)
+                              docActF, urural, request.form['docActT'], docRspNalT)
 
-                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
 
                 rows = a.get_asientos_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
@@ -734,10 +741,10 @@ def asiento(idloc):
                 request.form['estado'], '', request.form['etapa'], \
                 request.form['obsUbicacion'], request.form['obs'].strip(), \
                 str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
-                docActF, urural, idloc
+                docActF, urural, request.form['docActT'], docRspNalT, idloc
 
             a.upd_asiento(row_to_upd)
-            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
+            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
 
             rows = a.get_asientos_all(usrdep)
             return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
@@ -819,7 +826,6 @@ def recinto_vs(idloc, reci):
 
     r = recintos.Recintos(cxms)
     r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
-
      
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs.html', 
@@ -883,8 +889,15 @@ def asi_excep(idloc):
                 docRspNal = request.form['docRspNal']
             else:
                 docRspNal = 0
+            if request.form.get('docRspNalT') != None:
+                docRspNalT = request.form['docRspNalT']
+            else:
+                docRspNalT = 0
+
         if usrdep == 0:
             docRspNal = request.form['docRspNal']
+            docRspNalT = request.form['docRspNalT']
+
         if request.form.get('docActF') == None:
             if request.form.get('doc_idActF') != None:
                 docActF = request.form['doc_idActF']    
@@ -911,9 +924,9 @@ def asi_excep(idloc):
                               request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
                               request.form['etapa'], request.form['obsUbicacion'], request.form['obs'].strip(), \
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
-                              docActF, urural)
+                              docActF, urural, request.form['docActT'], docRspNalT)
 
-                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
 
                 rows = ax.get_asi_excep_all(usrdep)
                 return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
@@ -933,10 +946,10 @@ def asi_excep(idloc):
                 request.form['estado'], '', request.form['etapa'], \
                 request.form['obsUbicacion'], request.form['obs'].strip(), \
                 str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
-                docActF, urural, idloc
+                docActF, urural, request.form['docActT'], docRspNalT, idloc
 
             ax.upd_asi_excep(row_to_upd)
-            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF)
+            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
 
             rows = ax.get_asi_excep_all(usrdep)
             return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
