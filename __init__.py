@@ -772,12 +772,11 @@ def asiento(idloc):
 def get_mapas_all():
     j = get_json.GetJson(cxpg)
     ideploc = request.form['ideploc']
-    gj_cir = j.get_cir(ideploc)
     gj_mun = j.get_mun(ideploc)
     gj_prov = j.get_prov(ideploc)
-
-    if gj_cir:
-        return jsonify(gj_cir, gj_mun, gj_prov)
+    gj_cir = j.get_cir(ideploc)
+    if gj_mun or gj_prov or gj_cir:
+        return jsonify(gj_mun, gj_prov, gj_cir)
 
 
 @app.route('/asiento_vs/<idloc>', methods=['GET', 'POST'])

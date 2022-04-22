@@ -255,7 +255,7 @@
         <br>
         <div class="row">
             <div class="col-md-5">
-                <label for="docAct">Documento: Informe Tecnico - TED:</label>
+                <label for="docAct">Documento: Informe Técnico - TED:</label>
                 <input type="hidden" name="doc_idActT" value="{{ a.doc_idAT }}">
                 <select id="idocActT" name="docActT" class="form-control" required>                          
                     <option></option>
@@ -330,7 +330,7 @@
         <br>
         <div class="row">
             <div class="col-md-5">
-                <label for="docRspNal">Documento: Informe Tecnico - Nal:</label>
+                <label for="docRspNal">Documento: Informe Técnico - Nal:</label>
                 <input type="hidden" name="doc_idRspNalT" value="{{ a.doc_idRNT }}">
                 {% if usrdep == 0 %}
                     <select id="idocRspNalT" name="docRspNalT" class="form-control" required>                          
@@ -590,7 +590,7 @@ function mostrarMapa(){
             console.log('Error');
         }
         else{
-            viewMap(data);
+            viewMap(data[0], data[1], data[2]);
         }
     });
 }
