@@ -348,6 +348,7 @@
       "Open TopoMap": topoMap
     };
 
+
     var overlayMaps = {
       "Recintos Electorales":reciLayer,
       "Cluster-Recintos Elect.":markersMCG,
@@ -357,20 +358,22 @@
       "Provincias":provLayer
     };	
       
-
     // Set up map
 
   //var mapCenter = [-17.05678, -64.81934];
     var mapCenter = [{{ latitud  }}, {{ longitud }}];
     var map = L.map('map', {
       defaultExtentControl: true,
+      zoom: 5,
       center: mapCenter,
-      zoom: 18,
-      layers: [mapboxStreets] // only add one!
+      layers: [mbSat] // only add one!
     });
+
 
     //Add layer control
     L.control.layers(baseLayers, overlayMaps).addTo(map);
+
+    asiLayer.addTo(map);
 
     // Add defaultExtent
     //L.control.defaultExtent().addTo(map);
@@ -554,7 +557,7 @@
 
 
     // add marker - coordenadas - parametro
-    map.setView( [{{ latitud }}, {{ longitud }}], 11);
+    map.setView( [{{ latitud }}, {{ longitud }}], 20);
 
     const markerIconParam = L.icon({
         iconSize: [25, 41],
