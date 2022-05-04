@@ -135,6 +135,7 @@ class GetJson:
           ) AS feature
           FROM (SELECT recinto,  
                 idloc::varchar(255) || '-' || reci::varchar(255) as idlocreci,
+                asiento,
                 departamento || '-' || provincia || '-' || municipio as dpm,
                 cod_dep::varchar(255) || '-' || cod_prov::varchar(255) || '-' || cod_mun::varchar(255) as cod,
                 tipo_circun || ' - ' || circun::varchar(255) as circun,
