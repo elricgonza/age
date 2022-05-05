@@ -571,11 +571,12 @@
 
     L.marker([{{ latitud  }}, {{ longitud }}],
           {
-            title:  "Nombre: xxx" + "</br>" + "Lat.: " + {{ latitud }} +  "  Long.: " + {{ longitud }},
+            title: "Lat.: " + '{{ latitud }}' +  "  Long.: " + {{ longitud }},
               opacity: 0.8,
               icon: markerIconParam
           }
-      ).addTo(map);
+    ).bindPopup( "<b><span style='color:blue'>Nombre: </b></span>" + '<b><big>' + '{{ nombre }}' + '</big></b>')
+    .addTo(map);
 
 </script>
 
