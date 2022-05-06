@@ -689,6 +689,12 @@ def asiento(idloc):
                 docRspNalT = request.form['docRspNalT']
             else:
                 docRspNalT = 0
+
+            if request.form.get('doc_idRspNalT') != None:
+                doc_idRspNalT = request.form['doc_idRspNalT']
+            else:
+                doc_idRspNalT = 0
+
         if usrdep == 0:
             docRspNal = request.form['docRspNal']
             docRspNalT = request.form['docRspNalT']
@@ -700,6 +706,22 @@ def asiento(idloc):
                 docActF = 0
         else:
             docActF = request.form['docActF']
+
+        if request.form.get('docActT') == None:
+            if request.form.get('doc_idActT') != None:
+                docActT = request.form['doc_idActT']    
+            else:
+                docActT = 0
+        else:
+            docActT = request.form['docActT']
+
+        if request.form.get('docRspNalT') == None:
+            if request.form.get('doc_idRspNalT') != None:
+                docRspNalT = request.form['doc_idRspNalT']    
+            else:
+                docRspNalT = 0
+        else:
+            docRspNalT = request.form['docRspNalT']
 
         if request.form.get('urural') == None:
             urural = 0
@@ -721,7 +743,7 @@ def asiento(idloc):
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
                               docActF, urural, request.form['docActT'], docRspNalT)
 
-                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, docActT, docRspNalT)
 
                 rows = a.get_asientos_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
@@ -744,7 +766,7 @@ def asiento(idloc):
                 docActF, urural, request.form['docActT'], docRspNalT, idloc
 
             a.upd_asiento(row_to_upd)
-            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
+            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
             rows = a.get_asientos_all(usrdep)
             return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
@@ -893,6 +915,11 @@ def asi_excep(idloc):
             else:
                 docRspNalT = 0
 
+            if request.form.get('doc_idRspNalT') != None:
+                doc_idRspNalT = request.form['doc_idRspNalT']
+            else:
+                doc_idRspNalT = 0
+
         if usrdep == 0:
             docRspNal = request.form['docRspNal']
             docRspNalT = request.form['docRspNalT']
@@ -904,6 +931,22 @@ def asi_excep(idloc):
                 docActF = 0
         else:
             docActF = request.form['docActF']
+
+        if request.form.get('docActT') == None:
+            if request.form.get('doc_idActT') != None:
+                docActT = request.form['doc_idActT']    
+            else:
+                docActT = 0
+        else:
+            docActT = request.form['docActT']
+
+        if request.form.get('docRspNalT') == None:
+            if request.form.get('doc_idRspNalT') != None:
+                docRspNalT = request.form['doc_idRspNalT']    
+            else:
+                docRspNalT = 0
+        else:
+            docRspNalT = request.form['docRspNalT']
 
         if request.form.get('urural') == None:
             urural = 0
@@ -925,7 +968,7 @@ def asi_excep(idloc):
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
                               docActF, urural, request.form['docActT'], docRspNalT)
 
-                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, docActT, docRspNalT)
 
                 rows = ax.get_asi_excep_all(usrdep)
                 return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
@@ -948,7 +991,7 @@ def asi_excep(idloc):
                 docActF, urural, request.form['docActT'], docRspNalT, idloc
 
             ax.upd_asi_excep(row_to_upd)
-            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, request.form['doc_idActT'], request.form['doc_idRspNalT'])
+            d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, docActT, docRspNalT)
 
             rows = ax.get_asi_excep_all(usrdep)
             return render_template('asiexcep_list.html', asientos=rows, puede_adicionar='Asiexcep - Adición' in permisos_usr, \
@@ -1147,6 +1190,15 @@ def recinto(idreci, idlocreci):
             docActF = 0
         else:
             docActF = request.form['docActF']
+
+        if request.form.get('docTec') == None:
+            if request.form.get('doc_idTec') != None:
+                docTec = request.form['doc_idTec']    
+            else:
+                docTec = 0
+        else:
+            docTec = request.form['docTec']
+
         """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0
@@ -1178,7 +1230,7 @@ def recinto(idreci, idlocreci):
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
                                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'])
 
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
                 rows = rc.get_recintos_all(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1197,7 +1249,7 @@ def recinto(idreci, idlocreci):
                 request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
     
             rc.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])            
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)            
 
             rows = rc.get_recintos_all(usrdep)
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1380,6 +1432,15 @@ def reciespe(idreci, idlocreci):
             docActF = 0
         else:
             docActF = request.form['docActF']
+
+        if request.form.get('docTec') == None:
+            if request.form.get('doc_idTec') != None:
+                docTec = request.form['doc_idTec']    
+            else:
+                docTec = 0
+        else:
+            docTec = request.form['docTec']
+
         """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0
@@ -1411,7 +1472,7 @@ def reciespe(idreci, idlocreci):
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
                                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'])
 
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
                 rows = rce.get_reciespe_all(usrdep)
                 return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
@@ -1429,7 +1490,7 @@ def reciespe(idreci, idlocreci):
                 request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
 
             rce.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
             rows = rce.get_reciespe_all(usrdep)
             return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
@@ -1799,6 +1860,15 @@ def reciespeciales(idreci, idlocreci):
             docActF = 0
         else:
             docActF = request.form['docActF']
+
+        if request.form.get('docTec') == None:
+            if request.form.get('doc_idTec') != None:
+                docTec = request.form['doc_idTec']    
+            else:
+                docTec = 0
+        else:
+            docTec = request.form['docTec']
+            
         """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0
@@ -1830,7 +1900,7 @@ def reciespeciales(idreci, idlocreci):
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
                                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'])
 
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
                 rows = rces.get_reciespeciales_all(usrdep)
                 return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1848,7 +1918,7 @@ def reciespeciales(idreci, idlocreci):
                 request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
 
             rces.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, request.form['doc_idTec'])
+            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
             rows = rces.get_reciespeciales_all(usrdep)
             return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \

@@ -84,6 +84,7 @@
             </div>
             <div class="col-md-3">
                 <label for="municipio">Municipio:</label>
+                <input type="hidden" name="muni" id="imuni" value="{{ a._municipio }}">
                 <input type="text" class="form-control" id="imunicipio" title="" placeholder="municipio" name="municipio" disabled
                         {% if load %}
                             value="{{ a._municipio }}"
@@ -571,6 +572,13 @@ function Validation(f) {
     if  ({{ usrdep }} > 0 && est > 100 ) { // estado corresponde a usr nal
         alert ('\n Error - Como usuario del TED debe completar el dato ESTADO...');
         return false;
+    }
+
+    if (f.muni.value.trim() != ""){
+        if(f.muni.value.trim() != f.municipio.value.trim()){
+            alert('Las nuevas coordenadas apuntan otro Municipio...');
+            return false;    
+        }
     }
 
     return true;
