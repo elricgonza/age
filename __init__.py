@@ -820,7 +820,8 @@ def asiento_vs(idloc):
                             gj_mun=j.get_mun(a.deploc),
                             gj_prov=j.get_prov(a.deploc),
                             latitud=a.latitud, 
-                            longitud=a.longitud
+                            longitud=a.longitud,
+                            nombre=a.nomloc
                           )
 
 
@@ -858,7 +859,8 @@ def recinto_vs(idloc, reci):
                             gj_mun=j.get_mun(r.deploc),
                             gj_prov=j.get_prov(r.deploc),
                             latitud=r.latitud, 
-                            longitud=r.longitud
+                            longitud=r.longitud,
+                            nombre=r.nomreci
                           )
 
 

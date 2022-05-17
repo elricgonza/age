@@ -170,7 +170,7 @@
 
     function forEachFeatureReci(feature, layer) {
       var popupContent = "<p><b><span style='color:blue'>Recinto: </b></span>" + '<b><big>' + feature.properties.recinto + '</big></b>' +
-            "</br><b><span style='color:blue'>----------------------------------------------------</b></span>" + 
+            "</br><b><span style='color:blue'>-------------------------------------------------------------------------</b></span>" + 
             "</br><b><span style='color:blue'>Asiento: </span>" + feature.properties.asiento + 
             "</br><b><span style='color:blue'>Idloc/Reci: </b></span>"+ feature.properties.idlocreci + 
             "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
@@ -191,7 +191,7 @@
 
     function forEachFeatureAsi(feature, layer) {
       var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + '<b><big>' + feature.properties.asiento + '</big></b>' +
-            "</br><b><span style='color:blue'>----------------------------------------------------</b></span>" + 
+            "</br><b><span style='color:blue'>-------------------------------------------------------------------------</b></span>" + 
             "</br><b><span style='color:blue'>Idloc: </b></span>"+ feature.properties.idloc + 
             "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
             "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
@@ -348,6 +348,7 @@
       "Open TopoMap": topoMap
     };
 
+
     var overlayMaps = {
       "Recintos Electorales":reciLayer,
       "Cluster-Recintos Elect.":markersMCG,
@@ -357,24 +358,27 @@
       "Provincias":provLayer
     };	
       
-
     // Set up map
 
   //var mapCenter = [-17.05678, -64.81934];
     var mapCenter = [{{ latitud  }}, {{ longitud }}];
     var map = L.map('map', {
       defaultExtentControl: true,
+      zoom: 5,
       center: mapCenter,
-      zoom: 18,
-      layers: [mapboxStreets] // only add one!
+      layers: [mbSat] // only add one!
     });
+
 
     //Add layer control
     L.control.layers(baseLayers, overlayMaps).addTo(map);
 
+    //asiLayer.addTo(map);    //by default
+    //cirLayer.addTo(map);
+
+
     // Add defaultExtent
     //L.control.defaultExtent().addTo(map);
-
 
 
     // add others controls 
@@ -554,7 +558,7 @@
 
 
     // add marker - coordenadas - parametro
-    map.setView( [{{ latitud }}, {{ longitud }}], 11);
+    map.setView( [{{ latitud }}, {{ longitud }}], 15);   //20
 
     const markerIconParam = L.icon({
         iconSize: [25, 41],
@@ -567,11 +571,12 @@
 
     L.marker([{{ latitud  }}, {{ longitud }}],
           {
-            title: "Lat.: " + {{ latitud }} +  "  Long.: " + {{ longitud }},
+            title: "Lat.: " + '{{ latitud }}' +  "  Long.: " + {{ longitud }},
               opacity: 0.8,
               icon: markerIconParam
           }
-      ).addTo(map);
+    ).bindPopup( "<b><span style='color:blue'>Nombre: </b></span>" + '<b><big>' + '{{ nombre }}' + '</big></b>')
+    .addTo(map);
 
 </script>
 
