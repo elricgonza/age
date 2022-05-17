@@ -335,6 +335,24 @@ class Asientos:
         else:
             return rows
 
+    def get_asientos_all1(self, usrdep):
+        '''  Utilizado sòlo para migrar a postgres '''
+        s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, doc_act, fecha_doc_act, " + \
+            "PoblacionElectoral, PoblacionCensal, tipoCircunscripcion, etapa, estado, latitud, longitud, obs, fechaIngreso, " + \
+            "fechaAct, usuario " + \
+            "from [bdge].[dbo].[Geo_Asientos_all]"
+        if usrdep != 0 :
+            s = s + " where DEP = %d order by prov, sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by DEP, PROV, SEC"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
 
     def __str__(self):
         return str(self.idloc) + '--' + self.nomloc

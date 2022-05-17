@@ -1,0 +1,28 @@
+{% extends "layout.html" %} {% block content %} {% block js_css %}
+{% endblock %}
+
+<div style="height:15px"></div>
+<!--sample-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <hr>
+            <form action="" novalidate method='POST' id='formbusqueda' name='formbusqueda'>
+                <div class="row">
+                    <div class="col-md-4">
+                    </div>
+                    {% if puede_consultar %}
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-block">{{ titulo }}</button>
+                        </div>
+                    {% endif %}
+                    <div class="col-md-4">
+                    </div>
+                </div> <!--row-->
+            </form>
+            <hr>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

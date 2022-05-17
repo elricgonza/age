@@ -260,6 +260,25 @@ class Recintos:
             return rows
 
 
+    def get_recintos_all1(self, usrdep):        
+        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, Reci, NombreRecinto, doc_act, fecha_doc_act, " + \
+            "cod_dist, NomDist, cod_zona, NomZona, Direccion, CircunDist, tipoCircunscripcion, tipoRecinto, etapa, estado, latitud, longitud, fechaIngreso, " + \
+            "fechaAct, usuario " + \
+            "from [bdge].[dbo].[Geo_Recintos_all]"
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Prov, Sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec"
+            self.cur.execute(s, usrdep)
+
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+
     def __str__(self):
         return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
     

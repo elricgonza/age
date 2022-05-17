@@ -596,13 +596,6 @@ function Validation(f) {
         return false;
     }
 
-    if (f.muni.value.trim() != ""){
-        if(f.muni.value.trim() != f.municipio.value.trim()){
-            alert('Las nuevas coordenadas apuntan otro Municipio...');
-            return false;    
-        }
-    }
-
     return true;
 }
 

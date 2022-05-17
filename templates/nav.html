@@ -1,3 +1,15 @@
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+</style>
+
 <!--<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">-->
 <nav class="navbar navbar-expand-md bg-secondary navbar-dark  sticky-top">
     <a class="navbar-brand" href="#">
@@ -96,9 +108,24 @@
                     <a class="nav-link" href="/documentos_list">Documentos</a>
                 </li>
                 <!--Codigo Grover-Final-->
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" href="/reportes">Reportes</a>
-                </li>
+                </li>-->
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reportes
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/reportes">Reportes Estadisticos</a>
+                        <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                            Reportes Gerenciales
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/gerencial_asi">Asientos</a>
+                            <a class="dropdown-item" href="/gerencial_reci">Recintos</a>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
             
 
@@ -112,6 +139,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/grupo_list">Clasificadores</a>
                 </li>
+            {% endif %}
+
+            {% if current_user.is_authenticated and current_user.usuario =='admin' %}
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sincronizar
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/sincro_asi_list">Asientos</a>
+                        <a class="dropdown-item" href="/sincro_reci_list">Recintos</a>
+                    </div>
+                </div>
             {% endif %}
 
             {% if current_user.is_authenticated %}
@@ -157,3 +196,16 @@
     </div>
     {{ permisos_usr }}
 </nav>
+<script>
+    $('.dropdown-submenu > a').on("click", function(e) {
+        var submenu = $(this);
+        $('.dropdown-submenu .dropdown-menu').removeClass('show');
+        submenu.next('.dropdown-menu').addClass('show');
+        e.stopPropagation();
+    });
+
+    $('.dropdown').on("hidden.bs.dropdown", function() {
+        // hide any open menus when parent closes
+        $('.dropdown-menu.show').removeClass('show');
+    });
+</script>
