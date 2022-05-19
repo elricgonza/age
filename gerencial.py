@@ -78,7 +78,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -86,8 +86,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) and b.usr = %s and b.Dep = %s " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.usr = %s and b.Dep = %s " + \
                                 "and Convert(char(10), b.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -177,7 +181,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -185,8 +189,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) and b.Dep = %s " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.Dep = %s " + \
                                 "and Convert(char(10), b.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -278,7 +286,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -286,8 +294,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) and b.usr = %s " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.usr = %s " + \
                                 "and Convert(char(10), b.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -377,7 +389,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -385,8 +397,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s)
                             rows = self.cur.fetchall()
@@ -477,7 +493,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -485,8 +501,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) and b.usr = %s and b.Dep = %s " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.usr = %s and b.Dep = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -576,7 +596,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -584,8 +604,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) and b.Dep = %s " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.Dep = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -676,7 +700,7 @@ class Gerencial:
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "SPACE(700) as cambios " + \
+                                "a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -684,8 +708,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) and b.usr = %s " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.usr = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -781,8 +809,12 @@ class Gerencial:
                                 "or a.Sec <> b.Sec or a.NombreMunicipio <> b.NombreMunicipio " + \
                                 "or a.TipoLocLoc <> b.TipoLocLoc or a.TipoCircunscripcion <> b.TipoCircunscripcion " + \
                                 "or a.latitud <> b.latitud or a.longitud <> b.longitud " + \
-                                "or a.idEstado <> b.idEstado or a.estado <> b.estado " + \
-                                "or a.idUrbanoRural <> b.idUrbanoRural or a.descUrbanoRural <> b.descUrbanoRural) " + \
+                                "or a.idEstado <> b.idEstado or a.AsientoElectoral <> b.AsientoElectoral " + \
+                                "or a.idUrbanoRural <> b.idUrbanoRural or a.PoblacionElectoral <> b.PoblacionElectoral " + \
+                                "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
+                                "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
+                                "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s)
                             rows = self.cur.fetchall()
@@ -906,7 +938,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion) " + \
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) " + \
                                 "and a.usuario = %s and d.Dep = %s and Convert(char(10), a.fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -1008,7 +1043,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion) " + \
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) " + \
                                 "and d.Dep = %s and Convert(char(10), a.fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -1110,7 +1148,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion) " + \
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) " + \
                                 "and a.usuario = %s and Convert(char(10), a.fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -1209,7 +1250,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion)"
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci)"
                             self.cur.execute(s)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -1310,7 +1354,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion) and a.usuario = %s " + \
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) and a.usuario = %s " + \
                                 "and d.Dep = %s"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -1411,7 +1458,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion) and d.Dep = %s"
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) and d.Dep = %s"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -1512,7 +1562,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion) and a.usuario = %s"
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) and a.usuario = %s"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -1610,7 +1663,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
                                 "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
-                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion)"
+                                "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+                                "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+                                "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci)"
                             self.cur.execute(s)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
