@@ -768,6 +768,14 @@ def asiento(idloc):
                 docActF, urural, request.form['docActT'], docRspNalT, idloc
 
             a.upd_asiento(row_to_upd)
+            print(request.form['docAct'])
+            print(request.form['doc_idAct'])
+            print(request.form['doc_idRspNal'])
+            print(docActF)
+            print(request.form['docActT'])
+            print(docRspNalT)
+            print(request.form['doc_idActT'])
+            print(request.form['doc_idRspNalT'])
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
             rows = a.get_asientos_all(usrdep)
@@ -820,8 +828,7 @@ def asiento_vs(idloc):
                             gj_mun=j.get_mun(a.deploc),
                             gj_prov=j.get_prov(a.deploc),
                             latitud=a.latitud, 
-                            longitud=a.longitud,
-                            nombre=a.nomloc
+                            longitud=a.longitud
                           )
 
 
@@ -859,8 +866,7 @@ def recinto_vs(idloc, reci):
                             gj_mun=j.get_mun(r.deploc),
                             gj_prov=j.get_prov(r.deploc),
                             latitud=r.latitud, 
-                            longitud=r.longitud,
-                            nombre=r.nomreci
+                            longitud=r.longitud
                           )
 
 
@@ -2967,17 +2973,20 @@ def sincro_asi_list():
         for asie in rows:
            situacion = 'Antiguo'       
            s.get_geos(asie[15], asie[16])
-           for rowa_n in rowas_n:
-                if rowa_n[19] == asie[6]:
-                    situacion = 'Nuevo'
+           if rowas_n != False:
+               for rowa_n in rowas_n:
+                    if rowa_n[19] == asie[6]:
+                        situacion = 'Nuevo'
 
-           for rowa_m in rowas_m:
-                if rowa_m[34] == asie[6]:
-                    situacion = 'Modificado'
+           if rowas_m != False:
+               for rowa_m in rowas_m:
+                    if rowa_m[34] == asie[6]:
+                        situacion = 'Modificado'
 
-           for rowa_s in rowas_s:
-                if rowa_s[17] == asie[6]:
-                    situacion = 'Suprimido' 
+           if rowas_s != False:
+               for rowa_s in rowas_s:
+                    if rowa_s[17] == asie[6]:
+                        situacion = 'Suprimido' 
 
            s.add_geo_asiento(asie[0], asie[1], asie[2], asie[3], asie[4], asie[5], asie[6], asie[7], asie[8], asie[9], asie[10], asie[11], asie[12], \
                              asie[13], asie[14], asie[15], asie[16], asie[17], s.geom, asie[18], asie[19], asie[20], situacion)
@@ -3004,17 +3013,20 @@ def sincro_reci_list():
             situacion = 'Antiguo'
             cont = cont + 1
             s.get_geos(reci[22], reci[23])
-            for rowa_n in rowas_n:
-                if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]: 
-                    situacion = 'Nuevo'
+            if rowas_n != False:
+                for rowa_n in rowas_n:
+                    if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]: 
+                        situacion = 'Nuevo'
 
-            for rowa_m in rowas_m:
-                if rowa_m[7] == reci[6] and rowa_m[9] == reci[8]:
-                    situacion = 'Modificado'
+            if rowas_m != False:
+                for rowa_m in rowas_m:
+                    if rowa_m[7] == reci[6] and rowa_m[9] == reci[8]:
+                        situacion = 'Modificado'
 
-            for rowa_s in rowas_s:
-                if rowa_s[7] == reci[6] and rowa_s[9] == reci[8]:
-                    situacion = 'Suprimido'
+            if rowas_s != False:
+                for rowa_s in rowas_s:
+                    if rowa_s[7] == reci[6] and rowa_s[9] == reci[8]:
+                        situacion = 'Suprimido'
 
             s.add_geo_recinto(cont, reci[0], reci[1], reci[2], reci[3], reci[4], reci[5], reci[6], reci[7], reci[8], reci[9], reci[10], reci[11], reci[12], \
                              reci[13], reci[14], reci[15], reci[16], reci[17], reci[18], reci[19], reci[20], reci[21], reci[22], reci[23], s.geom, reci[24], \

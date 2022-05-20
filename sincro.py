@@ -7,7 +7,7 @@ class LatLong:
         self.cur = cx.cursor()
 
     def get_geos(self, lat, long):
-        s = "select ST_SetSRID(ST_MakePoint(%s, %s), 4326) as geom from auxiliar where idloc=108"
+        s = "select f_crea_geom(%s, %s) as geom"
         coord = long, lat
         self.cur.execute(s, coord)
         row = self.cur.fetchone()
