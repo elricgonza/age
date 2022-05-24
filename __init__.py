@@ -2973,8 +2973,15 @@ def sincro_asi_list():
         rowas_m = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '2')
         rowas_s = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '3')
         for asie in rows:
+           if asie[15] is None or asie[16] is None:
+                latitud = -20.118403
+                longitud = -67.540008
+           else:
+                latitud = asie[15]
+                longitud = asie[16]
+                          
            situacion = 'Antiguo'       
-           s.get_geos(asie[15], asie[16])
+           s.get_geos(latitud, longitud)
            if rowas_n != False:
                for rowa_n in rowas_n:
                     if rowa_n[19] == asie[6]:
@@ -2991,7 +2998,7 @@ def sincro_asi_list():
                         situacion = 'Suprimido' 
 
            s.add_geo_asiento(asie[0], asie[1], asie[2], asie[3], asie[4], asie[5], asie[6], asie[7], asie[8], asie[9], asie[10], asie[11], asie[12], \
-                             asie[13], asie[14], asie[15], asie[16], asie[17], s.geom, asie[18], asie[19], asie[20], situacion)
+                             asie[13], asie[14], latitud, longitud, asie[17], s.geom, asie[18], asie[19], asie[20], situacion)
 
         return render_template('sincro_asi.html', titulo = 'Asientos Sincronizado', puede_consultar='Sincronizado - Consulta' in permisos_usr)# render a template
     else:
@@ -3012,9 +3019,16 @@ def sincro_reci_list():
         rowas_m = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '2')
         rowas_s = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '3')
         for reci in rows:
+            if reci[22] is None or reci[23] is None:
+                latitud = -20.118403
+                longitud = -67.540008
+            else:
+                latitud = reci[22]
+                longitud = reci[23]
+
             situacion = 'Antiguo'
             cont = cont + 1
-            s.get_geos(reci[22], reci[23])
+            s.get_geos(latitud, longitud)
             if rowas_n != False:
                 for rowa_n in rowas_n:
                     if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]: 
@@ -3031,7 +3045,7 @@ def sincro_reci_list():
                         situacion = 'Suprimido'
 
             s.add_geo_recinto(cont, reci[0], reci[1], reci[2], reci[3], reci[4], reci[5], reci[6], reci[7], reci[8], reci[9], reci[10], reci[11], reci[12], \
-                             reci[13], reci[14], reci[15], reci[16], reci[17], reci[18], reci[19], reci[20], reci[21], reci[22], reci[23], s.geom, reci[24], \
+                             reci[13], reci[14], reci[15], reci[16], reci[17], reci[18], reci[19], reci[20], reci[21], latitud, longitud, s.geom, reci[24], \
                              reci[25], reci[26], situacion)
 
         return render_template('sincro_reci.html', titulo = 'Recintos Sincronizado', puede_consultar='Sincronizado - Consulta' in permisos_usr)# render a template
