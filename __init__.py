@@ -843,9 +843,12 @@ def asiento_vs_ext(idloc):
      
     j = get_json.GetJson(cxpg)
 
-    return render_template('coord_vs_ext.html', 
-                            gj_reci=j.get_reci_ext(10), 
-                            gj_asi=j.get_asi_ext(10), 
+    return render_template('coord_vs.html', 
+                            gj_reci=j.get_reci(10), 
+                            gj_asi=j.get_asi(10),
+                            gj_cir=j.get_cir(10),
+                            gj_mun=j.get_mun(10),
+                            gj_prov=j.get_prov(10), 
                             latitud=a.latitud, 
                             longitud=a.longitud
                           )
@@ -882,10 +885,14 @@ def recinto_vs_ext(idloc, reci):
      
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs_ext.html', 
-                            gj_reci=j.get_reci(usrdep), 
-                            gj_asi=j.get_asi(usrdep), 
+                            gj_reci=j.get_reci(10), 
+                            gj_asi=j.get_asi(10),
+                            gj_cir=j.get_cir(10),
+                            gj_mun=j.get_mun(10),
+                            gj_prov=j.get_prov(10), 
                             latitud=r.latitud, 
-                            longitud=r.longitud
+                            longitud=r.longitud,
+                            nombre=r.nomreci
                           )
 
 
@@ -1168,18 +1175,24 @@ def gerencial_asi():
                     final = '00-00-0000'
                 else:
                     final = request.form['final']
-
-                if request.form['depto'] == 'Seleccionar':    
-                    depto = 0
+    
+                if request.form['dep'] != '0':
+                    depto = usrdep
                 else:
-                    depto = request.form['depto']
+                    if request.form['depto'] == 'Seleccionar':    
+                        depto = 0
+                    else:
+                        depto = request.form['depto']
 
-                if request.form['usuario'] == 'Seleccionar':    
-                    usuario = 0
+                if request.form['usua'] != '0':
+                    usuario = current_user.usuario
                 else:
-                    user = request.form['usuario']
-                    g.id_usuario(user)
-                    usuario = g.usuario
+                    if request.form['usuario'] == 'Seleccionar':    
+                        usuario = 0
+                    else:
+                        user = request.form['usuario']
+                        g.id_usuario(user)
+                        usuario = g.usuario
 
                 if request.form['accion'] == 0:    
                     accion = 0
@@ -1227,17 +1240,23 @@ def gerencial_reci():
                 else:
                     final = request.form['final']
 
-                if request.form['depto'] == 'Seleccionar':    
-                    depto = 0
+                if request.form['dep'] != '0':
+                    depto = usrdep
                 else:
-                    depto = request.form['depto']
+                    if request.form['depto'] == 'Seleccionar':    
+                        depto = 0
+                    else:
+                        depto = request.form['depto']
 
-                if request.form['usuario'] == 'Seleccionar':    
-                    usuario = 0
+                if request.form['usua'] != '0':
+                    usuario = current_user.usuario
                 else:
-                    user = request.form['usuario']
-                    g.id_usuario(user)
-                    usuario = g.usuario
+                    if request.form['usuario'] == 'Seleccionar':    
+                        usuario = 0
+                    else:
+                        user = request.form['usuario']
+                        g.id_usuario(user)
+                        usuario = g.usuario
 
                 if request.form['accion'] == 0:    
                     accion = 0

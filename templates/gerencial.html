@@ -55,16 +55,35 @@
                         <label class="float-right" for="dpto">Departamento.:</label>
                     </div>
                     <div class="col-md-4 float-left">
-                        <select id="idepto" name="depto" class="form-control">                          
-		                    <option>Seleccionar</option>
-		                    {% for dpto in dptos %}
-		                        {% if load and depa == dpto[0] %}                                
-                                        <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
-                                {% else %}
-                                        <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
-                    			{% endif %}
-		                    {% endfor %}
+                        <select id="idepto" name="depto" class="form-control"  
+                    		{% if usrdep != 0 %}	
+            	                disabled         
+                            {% endif %}>
+                            {% if usrdep != 0 %}                          
+			                    <option>Seleccionar</option>
+			                    {% for dpto in dptos %}
+			                        {% if usrdep == dpto[0] %}                                
+	                                        <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
+	                    			{% endif %}
+			                    {% endfor %}
+		                    {% else %}
+		                    	<option>Seleccionar</option>
+			                    {% for dpto in dptos %}
+			                        {% if load and depa == dpto[0] %}                                
+	                                        <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
+	                    			{% endif %}
+			                    {% endfor %}
+		                    {% endif%}
 		                </select>
+		                {% if usrdep != 0 %}
+                            <input type="hidden" name="dep" value={{ usrdep }}>
+                        {% else %}
+                            <input type="hidden" name="dep" value={{ 0 }}>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -72,16 +91,34 @@
                         <label class="float-right" for="usuario">Usuario.:</label>
                     </div>
                     <div class="col-md-5 float-left">
-                        <select id="iusuario" name="usuario" class="form-control">                          
+                        <select id="iusuario" name="usuario" class="form-control" 
+                        	{% if usrdep != 0 %}	
+            	                disabled         
+                            {% endif %}>                          
 		                    <option>Seleccionar</option>
-		                    {% for usuario in usuarios %}
-		                    	{% if load and us == usuario[1] %}                                
-                                        <option value = "{{ usuario[0] }}" selected>{{ usuario[1] }}</option>
-                                {% else %}
-                                        <option value = "{{ usuario[0] }}">{{ usuario[1] }}</option>
-                    			{% endif %}                                        	                                                         
-        					{% endfor %}
+		                    {% if usrdep != 0 %}
+			                    {% for usuario in usuarios %}
+			                    	{% if current_user.usuario == usuario[1] %}                                
+	                                        <option value = "{{ usuario[0] }}" selected>{{ usuario[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ usuario[0] }}">{{ usuario[1] }}</option>
+	                    			{% endif %}                                        	                                                         
+	        					{% endfor %}
+        					{% else %}
+        						{% for usuario in usuarios %}
+			                    	{% if load and us == usuario[1] %}                                
+	                                        <option value = "{{ usuario[0] }}" selected>{{ usuario[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ usuario[0] }}">{{ usuario[1] }}</option>
+	                    			{% endif %}                                        	                                                         
+	        					{% endfor %}
+        					{% endif %}
 		                </select>
+		                {% if usrdep != 0 %}
+                            <input type="hidden" name="usua" value={{ current_user.usuario }}>
+                        {% else %}
+                            <input type="hidden" name="usua" value={{ 0 }}>
+                        {% endif %}
                     </div>
                     <div class="col-md-2">
                         <label class="float-right" for="accion">Listado de Cambios.:</label>
@@ -132,7 +169,7 @@
 	                            <th>NomProv</th>
 	                            <th>NombreMunicipio</th>
 	                            <th>AsientoElectoral</th>
-	                            <th>TipoLocLoc</th>
+	                            <th>idTipoCircuns</th>
 	                            <th>Tipo Circuns.</th>
 	                            <th>PoblacionElectoral</th>
 	                            <th>PoblacionCensal</th>
@@ -141,7 +178,8 @@
 	                            <th>idEstado</th>
 	                            <th>Estado</th>
 	                            <th>idUrbanoRural</th>
-	                            <th>descUrbanoRural</th>				                         
+	                            <th>descUrbanoRural</th>
+	                            <th>IdLoc</th>				                         
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -163,7 +201,12 @@
 	                                <td>{{ asiento[13] }}</td>
 	                                <td>{{ asiento[14] }}</td>
 	                                <td>{{ asiento[15] }}</td>
-	                                <td>{{ asiento[16] }}</td>				                               
+	                                <td>{{ asiento[16] }}</td>
+	                                {% if accion == '1' %}
+	                                	<td>{{ asiento[19] }}</td>
+                                	{% else %}
+                                		<td>{{ asiento[17] }}</td>
+                                	{% endif %}				                               
 	                            </tr>
 	                        {% endfor %}
 	                    </tbody>
@@ -181,7 +224,7 @@
 	                            <th>NomProv</th>
 	                            <th>NombreMunicipio</th>
 	                            <th>AsientoElectoral</th>
-	                            <th>TipoLocLoc</th>
+	                            <th>idTipoCircuns</th>
 	                            <th>TipoCircuns</th>
 	                            <th>PoblacionElectoral</th>
 	                            <th>PoblacionCensal</th>
@@ -208,6 +251,7 @@
 	                            <th>EstadoN</th>
 	                            <th>idUrbanoRuralN</th>
 	                            <th>descUrbanoRuralN</th>
+	                            <th>IdLoc</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -247,6 +291,7 @@
 	                                <td>{{ asiento[31] }}</td>
 	                                <td>{{ asiento[32] }}</td>
 	                                <td>{{ asiento[33] }}</td>
+	                                <td>{{ asiento[34] }}</td>
 	                            </tr>
 	                        {% endfor %}
 	                    </tbody>
@@ -317,7 +362,7 @@
 	            buttons:[
 	                {
 	                    extend: 'excel',
-	                    messageTop: 'Documento de Asientos',
+	                    messageTop: 'Reporte de Actualizacion de Asientos',
 	                    text: 'Exportar a Excel',
 	                    className: 'btn btn-outline-success',
 	                    excelStyles: [                      
@@ -482,7 +527,7 @@
 	            buttons:[
 	                {
 	                    extend: 'excel',
-	                    messageTop: 'Documento de Homologación por cambios de Geografía',
+	                    messageTop: 'Reporte de Actualizacion de Asientos',
 	                    text: 'Exportar a Excel',
 	                    className: 'btn btn-outline-success',
 	                    excelStyles: [                      

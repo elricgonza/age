@@ -54,16 +54,35 @@
                         <label class="float-right" for="dpto">Departamento.:</label>
                     </div>
                     <div class="col-md-4 float-left">
-                        <select id="idepto" name="depto" class="form-control">                          
-		                    <option>Seleccionar</option>
-		                    {% for dpto in dptos %}
-		                        {% if load and depa == dpto[0] %}                                
-                                        <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
-                                {% else %}
-                                        <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
-                    			{% endif %}
-		                    {% endfor %}
+                        <select id="idepto" name="depto" class="form-control"
+                        	{% if usrdep != 0 %}	
+            	                disabled         
+                            {% endif %}>                          
+		                    {% if usrdep != 0 %}                          
+			                    <option>Seleccionar</option>
+			                    {% for dpto in dptos %}
+			                        {% if usrdep == dpto[0] %}                                
+	                                        <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
+	                    			{% endif %}
+			                    {% endfor %}
+		                    {% else %}
+		                    	<option>Seleccionar</option>
+			                    {% for dpto in dptos %}
+			                        {% if load and depa == dpto[0] %}                                
+	                                        <option value = "{{ dpto[0] }}" selected>{{ dpto[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ dpto[0] }}">{{ dpto[1] }}</option>
+	                    			{% endif %}
+			                    {% endfor %}
+		                    {% endif%}
 		                </select>
+		                {% if usrdep != 0 %}
+                            <input type="hidden" name="dep" value={{ usrdep }}>
+                        {% else %}
+                            <input type="hidden" name="dep" value={{ 0 }}>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -71,16 +90,34 @@
                         <label class="float-right" for="usuario">Usuario.:</label>
                     </div>
                     <div class="col-md-5 float-left">
-                        <select id="iusuario" name="usuario" class="form-control">                          
+                        <select id="iusuario" name="usuario" class="form-control" 
+                        	{% if usrdep != 0 %}	
+            	                disabled         
+                            {% endif %}>                          
 		                    <option>Seleccionar</option>
-		                    {% for usuario in usuarios %}
-		                    	{% if load and us == usuario[1] %}                                
-                                        <option value = "{{ usuario[0] }}" selected>{{ usuario[1] }}</option>
-                                {% else %}
-                                        <option value = "{{ usuario[0] }}">{{ usuario[1] }}</option>
-                    			{% endif %}                                        	                                                         
-        					{% endfor %}
+		                    {% if usrdep != 0 %}
+			                    {% for usuario in usuarios %}
+			                    	{% if current_user.usuario == usuario[1] %}                                
+	                                        <option value = "{{ usuario[0] }}" selected>{{ usuario[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ usuario[0] }}">{{ usuario[1] }}</option>
+	                    			{% endif %}                                        	                                                         
+	        					{% endfor %}
+        					{% else %}
+        						{% for usuario in usuarios %}
+			                    	{% if load and us == usuario[1] %}                                
+	                                        <option value = "{{ usuario[0] }}" selected>{{ usuario[1] }}</option>
+	                                {% else %}
+	                                        <option value = "{{ usuario[0] }}">{{ usuario[1] }}</option>
+	                    			{% endif %}                                        	                                                         
+	        					{% endfor %}
+        					{% endif %}
 		                </select>
+		                {% if usrdep != 0 %}
+                            <input type="hidden" name="usua" value={{ current_user.usuario }}>
+                        {% else %}
+                            <input type="hidden" name="usua" value={{ 0 }}>
+                        {% endif %}
                     </div>
                     <div class="col-md-2">
                         <label class="float-right" for="accion">Listado de Cambios.:</label>
@@ -130,7 +167,6 @@
 	                            <th>NomDep</th>
 	                            <th>NomProv</th>
 	                            <th>NombreMunicipio</th>
-	                            <th>MarcaLoc</th>
 	                            <th>IdLoc</th>
 	                            <th>AsientoElectoral</th>
 	                            <th>Reci</th>
@@ -143,6 +179,7 @@
 	                            <th>Zona</th>
 	                            <th>NomZona</th>
 	                            <th>MaxMesasReci</th>
+	                            <th>AmbientesDisp</th>
 	                            <th>Direccion</th>
 	                            <th>Latitud</th>
 	                            <th>Longitud</th>                            
@@ -163,7 +200,6 @@
 	                                <td>{{ recinto[3] }}</td>
 	                                <td>{{ recinto[4] }}</td>
 	                                <td>{{ recinto[5] }}</td>
-	                                <td>{{ recinto[6] }}</td>
 	                                <td>{{ recinto[7] }}</td>
 	                                <td>{{ recinto[8] }}</td>
 	                                <td>{{ recinto[9] }}</td>
@@ -176,6 +212,7 @@
 	                                <td>{{ recinto[16] }}</td>
 	                                <td>{{ recinto[17] }}</td>
 	                                <td>{{ recinto[18] }}</td>
+	                                <td>{{ recinto[6] }}</td>
 	                                <td>{{ recinto[19] }}</td>
 	                                <td>{{ recinto[20] }}</td>
 	                                <td>{{ recinto[21] }}</td>
@@ -201,7 +238,6 @@
 	                            <th>NomDep</th>
 	                            <th>NomProv</th>
 	                            <th>NombreMunicipio</th>
-	                            <th>MarcaLoc</th>
 	                            <th>IdLoc</th>
 	                            <th>AsientoElectoral</th>
 	                            <th>Reci</th>
@@ -214,6 +250,7 @@
 	                            <th>Zona</th>
 	                            <th>NomZona</th>
 	                            <th>MaxMesasReci</th>
+	                            <th>AmbientesDisp</th>
 	                            <th>Direccion</th>
 	                            <th>Latitud</th>
 	                            <th>Longitud</th>                            
@@ -229,7 +266,6 @@
 	                            <th>NomDepN</th>
 	                            <th>NomProvN</th>
 	                            <th>NombreMunicipioN</th>
-	                            <th>MarcaLocN</th>
 	                            <th>IdLocN</th>
 	                            <th>AsientoElectoralN</th>
 	                            <th>ReciN</th>
@@ -242,6 +278,7 @@
 	                            <th>ZonaN</th>
 	                            <th>NomZonaN</th>
 	                            <th>MaxMesasReciN</th>
+	                            <th>AmbientesDispN</th>
 	                            <th>DireccionN</th>
 	                            <th>LatitudN</th>
 	                            <th>LongitudN</th>                            
@@ -262,7 +299,6 @@
 	                                <td>{{ recinto[3] }}</td>
 	                                <td>{{ recinto[4] }}</td>
 	                                <td>{{ recinto[5] }}</td>
-	                                <td>{{ recinto[6] }}</td>
 	                                <td>{{ recinto[7] }}</td>
 	                                <td>{{ recinto[8] }}</td>
 	                                <td>{{ recinto[9] }}</td>
@@ -275,6 +311,7 @@
 	                                <td>{{ recinto[16] }}</td>
 	                                <td>{{ recinto[17] }}</td>
 	                                <td>{{ recinto[18] }}</td>
+	                                <td>{{ recinto[6] }}</td>
 	                                <td>{{ recinto[19] }}</td>
 	                                <td>{{ recinto[20] }}</td>
 	                                <td>{{ recinto[21] }}</td>
@@ -290,7 +327,6 @@
 	                                <td>{{ recinto[31] }}</td>
 	                                <td>{{ recinto[32] }}</td>
 	                                <td>{{ recinto[33] }}</td>
-	                                <td>{{ recinto[34] }}</td>
 	                                <td>{{ recinto[35] }}</td>
 	                                <td>{{ recinto[36] }}</td>
 	                                <td>{{ recinto[37] }}</td>
@@ -303,6 +339,7 @@
 	                                <td>{{ recinto[44] }}</td>
 	                                <td>{{ recinto[45] }}</td>
 	                                <td>{{ recinto[46] }}</td>
+	                                <td>{{ recinto[34] }}</td>
 	                                <td>{{ recinto[47] }}</td>
 	                                <td>{{ recinto[48] }}</td>
 	                                <td>{{ recinto[49] }}</td>
@@ -341,19 +378,11 @@
 	                "visible": false
 	            },
 	            {
-	                "targets": [ 6 ],
-	                "visible": false
-	            },
-	            {
 	                "targets": [ 7 ],
 	                "visible": false
 	            },
 	            {
-	                "targets": [ 8 ],
-	                "visible": false
-	            },
-	            {
-	                "targets": [ 9 ],
+	                "targets": [ 10 ],
 	                "visible": false
 	            },
 	            {
@@ -361,7 +390,7 @@
 	                "visible": false
 	            },
 	            {
-	                "targets": [ 12 ],
+	                "targets": [ 13 ],
 	                "visible": false
 	            },
 	            {
@@ -427,7 +456,7 @@
 	            buttons:[
 	                {
 	                    extend: 'excel',
-	                    messageTop: 'Documento de Asientos',
+	                    messageTop: 'Reporte de Actualizacion de Recintos',
 	                    text: 'Exportar a Excel',
 	                    className: 'btn btn-outline-success',
 	                    excelStyles: [                      
@@ -482,19 +511,11 @@
 	                "visible": false
 	            },
 	            {
-	                "targets": [ 6 ],
-	                "visible": false
-	            },
-	            {
 	                "targets": [ 7 ],
 	                "visible": false
 	            },
 	            {
-	                "targets": [ 8 ],
-	                "visible": false
-	            },
-	            {
-	                "targets": [ 9 ],
+	                "targets": [ 10 ],
 	                "visible": false
 	            },
 	            {
@@ -502,7 +523,7 @@
 	                "visible": false
 	            },
 	            {
-	                "targets": [ 12 ],
+	                "targets": [ 13 ],
 	                "visible": false
 	            },
 	            {
@@ -681,7 +702,7 @@
 	            buttons:[
 	                {
 	                    extend: 'excel',
-	                    messageTop: 'Documento de Homologación por cambios de Geografía',
+	                    messageTop: 'Reporte de Actualizacion de Recintos',
 	                    text: 'Exportar a Excel',
 	                    className: 'btn btn-outline-success',
 	                    excelStyles: [                      
