@@ -403,7 +403,7 @@ class Gerencial:
                                 "or a.PoblacionCensal <> b.PoblacionCensal or a.fechaAct <> b.fechaAct " + \
                                 "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
                                 "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
-                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and Convert(char(10), fechaAct,23) between %d and %d " + \
+                                "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and Convert(char(10), b.fechaAct,23) between %d and %d " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
