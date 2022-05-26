@@ -1611,7 +1611,7 @@ class Gerencial:
                     if accion != 0:
                         if accion == '1':
                             '''Recintos Nuevos'''                          
-                            s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, l.MarcaLoc, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+                            s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
                                 "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
@@ -1637,11 +1637,11 @@ class Gerencial:
 
                         if accion == '2':
                             '''Recintos Modificados'''                                                                    
-                            s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, l.MarcaLoc, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+                            s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
                                 "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, ll.MarcaLoc as MarcaLocN, ll.IdLoc as IdLocN, " + \
+                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
@@ -1682,7 +1682,7 @@ class Gerencial:
 
                         if accion == '3':
                             '''Recintos Suprimidos'''                            
-                            s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, l.MarcaLoc, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+                            s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
                                 "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
