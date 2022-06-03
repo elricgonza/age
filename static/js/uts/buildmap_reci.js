@@ -57,7 +57,7 @@ function asientosReci1(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
         $('#iasiento').html('');
-        $.getJSON("/get_asientos_all2", {
+        $.getJSON("/get_asientos_all1", { /*se cambio 2 por 1*/
                 dpto: $('input[name="deploc"]').val(),
                 provi: $('input[name="provloc"]').val(),
                 secci: $('input[name="secloc"]').val()
