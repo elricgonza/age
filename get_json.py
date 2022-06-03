@@ -45,8 +45,12 @@ class GetJson:
         if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
-            ss = f'WHERE cod_dep= {dep} '
-            sss = s + ss + ' ) inputs) features;'
+            if (dep >= 10):
+                ss = f'WHERE cod_dep >= {dep} '
+                sss = s + ss + ' ) inputs) features;'
+            else:
+                ss = f'WHERE cod_dep= {dep} '
+                sss = s + ss + ' ) inputs) features;'
 
         self.cur.execute(sss)
 
@@ -77,8 +81,12 @@ class GetJson:
         if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
-            ss = f'WHERE cod_dep= {dep} '
-            sss = s + ss + ' ) inputs) features;'
+            if (dep >= 10):
+                ss = f'WHERE cod_dep >= {dep} '
+                sss = s + ss + ' ) inputs) features;'
+            else:
+                ss = f'WHERE cod_dep= {dep} '
+                sss = s + ss + ' ) inputs) features;'
 
         self.cur.execute(sss)
 
@@ -109,8 +117,12 @@ class GetJson:
         if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
-            ss = f'WHERE cod_dep= {dep} '
-            sss = s + ss + ' ) inputs) features;'
+            if (dep >= 10):
+                ss = f'WHERE cod_dep >= {dep} '
+                sss = s + ss + ' ) inputs) features;'
+            else:
+                ss = f'WHERE cod_dep= {dep} '
+                sss = s + ss + ' ) inputs) features;'
 
         self.cur.execute(sss)
 
@@ -146,8 +158,12 @@ class GetJson:
         if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
-            ss = f'WHERE cod_dep= {dep} '
-            sss = s + ss + ' ) inputs) features;'
+            if (dep >= 10):
+                ss = f'WHERE cod_dep >= {dep} '
+                sss = s + ss + ' ) inputs) features;'
+            else:
+                ss = f'WHERE cod_dep= {dep} '
+                sss = s + ss + ' ) inputs) features;'
 
         self.cur.execute(sss)
 
@@ -182,8 +198,12 @@ class GetJson:
         if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
-            ss = f'WHERE cod_dep= {dep} '
-            sss = s + ss + ' ) inputs) features;'
+            if (dep >= 10):
+                ss = f'WHERE cod_dep >= {dep} '
+                sss = s + ss + ' ) inputs) features;'
+            else:
+                ss = f'WHERE cod_dep= {dep} '
+                sss = s + ss + ' ) inputs) features;'
 
         self.cur.execute(sss)
 

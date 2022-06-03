@@ -846,11 +846,12 @@ def asiento_vs_ext(idloc):
     return render_template('coord_vs.html', 
                             gj_reci=j.get_reci(10), 
                             gj_asi=j.get_asi(10),
-                            gj_cir=j.get_cir(10),
-                            gj_mun=j.get_mun(10),
-                            gj_prov=j.get_prov(10), 
+                            gj_cir=j.get_cir(9),
+                            gj_mun=j.get_mun(9),
+                            gj_prov=j.get_prov(9), 
                             latitud=a.latitud, 
-                            longitud=a.longitud
+                            longitud=a.longitud,
+                            nombre=a.nomloc
                           )
 
 
@@ -887,9 +888,9 @@ def recinto_vs_ext(idloc, reci):
     return render_template('coord_vs_ext.html', 
                             gj_reci=j.get_reci(10), 
                             gj_asi=j.get_asi(10),
-                            gj_cir=j.get_cir(10),
-                            gj_mun=j.get_mun(10),
-                            gj_prov=j.get_prov(10), 
+                            gj_cir=j.get_cir(9),
+                            gj_mun=j.get_mun(9),
+                            gj_prov=j.get_prov(9), 
                             latitud=r.latitud, 
                             longitud=r.longitud,
                             nombre=r.nomreci
@@ -1264,7 +1265,6 @@ def gerencial_reci():
                     accion = request.form['accion']
 
                 rows = g.get_gerencial_reci(inicio, final, depto, usuario, accion)
-                print(rows)
                 if rows:
                     return render_template('gerencial_reci.html', recintos=rows, dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=True, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)  # render a template
                 else:
