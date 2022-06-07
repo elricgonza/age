@@ -803,7 +803,7 @@ def asiento(idloc):
 @app.route('/get_mapas_all', methods=['GET', 'POST'])
 def get_mapas_all():
     j = get_json.GetJson(cxpg)
-    ideploc = request.form['ideploc']
+    ideploc = request.values.get('ideploc', type=int)
     gj_mun = j.get_mun(ideploc)
     gj_prov = j.get_prov(ideploc)
     gj_cir = j.get_cir(ideploc)
