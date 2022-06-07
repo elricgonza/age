@@ -158,8 +158,8 @@ class GetJson:
         if (dep == 0):
             sss = s + ' ) inputs) features;'
         else:
-            if (dep >= 10):
-                ss = f'WHERE cod_dep >= {dep} '
+            if (dep > 9):
+                ss = f'WHERE cod_dep > {dep} '
                 sss = s + ss + ' ) inputs) features;'
             else:
                 ss = f'WHERE cod_dep= {dep} '

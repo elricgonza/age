@@ -24,6 +24,18 @@ function getgeoreci1(event) {
     };
 }
 
+function getgeoreci2(event) {
+    var x = event.keyCode;
+    var idloc = document.getElementById("ireci_idasiento").value;
+    if (x == 27 || x == 9 || 'undefined') {
+        if($('input[name="load"]').val()=='True'){
+            asiento_reci(idloc, $('input[name="circun"]').val());            
+        }else{
+            asientosReci2($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+        };             
+    };
+}
+
 function asiento_reci(idloc, cir) {
     $('#iasiento').html('');
     $.getJSON("/get_asiento_one", {
@@ -57,7 +69,24 @@ function asientosReci1(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
         $('#iasiento').html('');
-        $.getJSON("/get_asientos_all1", { /*se cambio 2 por 1*/
+        $.getJSON("/get_asientos_all2", { 
+                dpto: $('input[name="deploc"]').val(),
+                provi: $('input[name="provloc"]').val(),
+                secci: $('input[name="secloc"]').val()
+            }, function(datos){
+            $("#iasiento").append('<option></option>');
+                $.each(datos, function(index, obj){
+                    $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                });
+            });
+    };
+}
+
+function asientosReci2(dep, prov, sec, cir) {
+    var x = event.keyCode;
+    if (x == 27 || x == 9 || 'undefined') {
+        $('#iasiento').html('');
+        $.getJSON("/get_asientos_all1", {
                 dpto: $('input[name="deploc"]').val(),
                 provi: $('input[name="provloc"]').val(),
                 secci: $('input[name="secloc"]').val()
