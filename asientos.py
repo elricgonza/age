@@ -293,7 +293,6 @@ class Asientos:
             self.cur.execute(s, usrdep)
         else:
             s = s + " order by gn.DEP, gn.PROV, gn.SEC"
-            print(s)
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
