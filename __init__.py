@@ -768,14 +768,6 @@ def asiento(idloc):
                 docActF, urural, request.form['docActT'], docRspNalT, idloc
 
             a.upd_asiento(row_to_upd)
-            print(request.form['docAct'])
-            print(request.form['doc_idAct'])
-            print(request.form['doc_idRspNal'])
-            print(docActF)
-            print(request.form['docActT'])
-            print(docRspNalT)
-            print(request.form['doc_idActT'])
-            print(request.form['doc_idRspNalT'])
             d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
             rows = a.get_asientos_all(usrdep)
