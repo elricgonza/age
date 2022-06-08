@@ -927,10 +927,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1032,10 +1032,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1137,10 +1137,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1241,10 +1241,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1347,10 +1347,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1451,10 +1451,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1555,10 +1555,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1656,10 +1656,10 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON l.IdLoc = di.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON ll.IdLoc = dii.IdLocDist " + \
-                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON di.Dist = z.DistZona AND l.IdLoc = z.IdLocZona AND di.IdLocDist = z.IdLocZona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON dii.Dist = zz.DistZona AND ll.IdLoc = zz.IdLocZona AND dii.IdLocDist = zz.IdLocZona " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
@@ -1672,7 +1672,7 @@ class Gerencial:
                                 "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
                                 "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
                                 "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
-                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci)"
+                                "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci)" 
                             self.cur.execute(s)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
