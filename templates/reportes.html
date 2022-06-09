@@ -271,86 +271,178 @@
         <div class="tab-pane" id="homologacion">
             <div class="container">
                 <div class="row">
-                    <div class="table-responsive">
-                        <table id="id_dthomo" class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr style="font-size: 13px;">
-                                    <th>IdLoc</th>
-                                    <th>Reci</th>
-                                    <th>Depto</th>
-                                    <th>Asiento</th>
-                                    <th>Recinto</th>
-                                    <th>IdLocDestino</th>
-                                    <th>ReciDestino</th>
-                                    <th>RecintoDestino</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for homologacion in homologaciones %}
-                                    <tr style="font-size: 13px;">                                        
-                                        <td>{{ homologacion[0] }}</td>
-                                        <td>{{ homologacion[1] }}</td>
-                                        <td>{{ homologacion[2] }}</td>
-                                        <td>{{ homologacion[3] }}</td>
-                                        <td>{{ homologacion[4] }}</td>
-                                        <td>{{ homologacion[5] }}</td>
-                                        <td>{{ homologacion[6] }}</td>
-                                        <td>{{ homologacion[7] }}</td>                                        
-                                    </tr>
-                                {% endfor %}
-                                {% for homojurisd in homojurisds %}
+                    {% if homologaciones %}
+                        <div class="table-responsive">
+                            <table id="id_dthomo" class="table table-striped table-bordered table-hover">
+                                <thead>
                                     <tr style="font-size: 13px;">
-                                        <td>{{ homojurisd[0] }}</td>
-                                        <td>{{ homojurisd[1] }}</td>
-                                        <td>{{ homojurisd[2] }}</td>
-                                        <td>{{ homojurisd[3] }}</td>
-                                        <td>{{ homojurisd[4] }}</td>
-                                        <td>{{ homojurisd[5] }}</td>
-                                        <td>{{ homojurisd[6] }}</td>
-                                        <td>{{ homojurisd[7] }}</td>                                        
+                                        <th>IdLoc</th>
+                                        <th>Reci</th>
+                                        <th>Depto</th>
+                                        <th>Asiento</th>
+                                        <th>Recinto</th>
+                                        <th>IdLocDestino</th>
+                                        <th>ReciDestino</th>
+                                        <th>RecintoDestino</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {% for homologacion in homologaciones %}
+                                        <tr style="font-size: 13px;">                                        
+                                            <td>{{ homologacion[0] }}</td>
+                                            <td>{{ homologacion[1] }}</td>
+                                            <td>{{ homologacion[2] }}</td>
+                                            <td>{{ homologacion[3] }}</td>
+                                            <td>{{ homologacion[4] }}</td>
+                                            <td>{{ homologacion[5] }}</td>
+                                            <td>{{ homologacion[6] }}</td>
+                                            <td>{{ homologacion[7] }}</td>                                        
+                                        </tr>
+                                    {% endfor %}
+                                    {% for homojurisd in homojurisds %}
+                                        <tr style="font-size: 13px;">
+                                            <td>{{ homojurisd[0] }}</td>
+                                            <td>{{ homojurisd[1] }}</td>
+                                            <td>{{ homojurisd[2] }}</td>
+                                            <td>{{ homojurisd[3] }}</td>
+                                            <td>{{ homojurisd[4] }}</td>
+                                            <td>{{ homojurisd[5] }}</td>
+                                            <td>{{ homojurisd[6] }}</td>
+                                            <td>{{ homojurisd[7] }}</td>                                        
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table id="id_dthomo" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr style="font-size: 13px;">
+                                        <th>IdLoc</th>
+                                        <th>Reci</th>
+                                        <th>Depto</th>
+                                        <th>Asiento</th>
+                                        <th>Recinto</th>
+                                        <th>IdLocDestino</th>
+                                        <th>ReciDestino</th>
+                                        <th>RecintoDestino</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                    
+                                    <tr style="font-size: 13px;">                                        
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>                                        
+                                    </tr>                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
         <div class="tab-pane" id="jurisdiccion">
             <div class="container">
                 <div class="row">
-                    <div class="table-responsive">
-                        <table id="id_dtjurisd" class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr style="font-size: 13px;">
-                                    <th>IdLoc</th>
-                                    <th>Reci</th>
-                                    <th>Depto</th>
-                                    <th>Asiento</th>
-                                    <th>Recinto</th>
-                                    <th>IdLocDestino</th>
-                                    <th>ReciDestino</th>
-                                    <th>RecintoDestino</th>
-                                    <th>Origen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for jurisdiccion in jurisdicciones %}
-                                    <tr style="font-size: 13px;">                                        
-                                        <td>{{ jurisdiccion[0] }}</td>
-                                        <td>{{ jurisdiccion[1] }}</td>
-                                        <td>{{ jurisdiccion[2] }}</td>
-                                        <td>{{ jurisdiccion[3] }}</td>
-                                        <td>{{ jurisdiccion[4] }}</td>
-                                        <td>{{ jurisdiccion[5] }}</td>
-                                        <td>{{ jurisdiccion[6] }}</td>
-                                        <td>{{ jurisdiccion[7] }}</td>
-                                        <td>{{ jurisdiccion[8] }}</td>                                        
+                    {% if jurisdicciones %}
+                        <div class="table-responsive">
+                            <table id="id_dtjurisd" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr style="font-size: 13px;">
+                                        <th>IdLoc</th>
+                                        <th>Reci</th>
+                                        <th>Dpto</th>
+                                        <th>Prov</th>
+                                        <th>Mun</th>
+                                        <th>Asiento</th>
+                                        <th>Recinto</th>
+                                        <th>IdLocD</th>
+                                        <th>ReciD</th>
+                                        <th>DptoD</th>
+                                        <th>ProvD</th>
+                                        <th>MunD</th>
+                                        <th>RecintoD</th>
+                                        <th>Fecha</th>
+                                        <th>Usr</th>
+                                        <th>Origen</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {% for jurisdiccion in jurisdicciones %}
+                                        <tr style="font-size: 13px;">                                        
+                                            <td>{{ jurisdiccion[0] }}</td>
+                                            <td>{{ jurisdiccion[1] }}</td>
+                                            <td>{{ jurisdiccion[2] }}</td>
+                                            <td>{{ jurisdiccion[3] }}</td>
+                                            <td>{{ jurisdiccion[4] }}</td>
+                                            <td>{{ jurisdiccion[5] }}</td>
+                                            <td>{{ jurisdiccion[6] }}</td>
+                                            <td>{{ jurisdiccion[7] }}</td>
+                                            <td>{{ jurisdiccion[8] }}</td>
+                                            <td>{{ jurisdiccion[9] }}</td>
+                                            <td>{{ jurisdiccion[10] }}</td>
+                                            <td>{{ jurisdiccion[11] }}</td>
+                                            <td>{{ jurisdiccion[12] }}</td>
+                                            <td>{{ jurisdiccion[13] }}</td>
+                                            <td>{{ jurisdiccion[14] }}</td>
+                                            <td>{{ jurisdiccion[15] }}</td>                                        
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table id="id_dtjurisd" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr style="font-size: 13px;">
+                                        <th>IdLoc</th>
+                                        <th>Reci</th>
+                                        <th>Dpto</th>
+                                        <th>Prov</th>
+                                        <th>Mun</th>
+                                        <th>Asiento</th>
+                                        <th>Recinto</th>
+                                        <th>IdLocD</th>
+                                        <th>ReciD</th>
+                                        <th>DptoD</th>
+                                        <th>ProvD</th>
+                                        <th>MunD</th>
+                                        <th>RecintoD</th>
+                                        <th>Fecha</th>
+                                        <th>Usr</th>
+                                        <th>Origen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                    
+                                    <tr style="font-size: 13px;">                                        
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>                                        
+                                    </tr>                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

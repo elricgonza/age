@@ -1465,6 +1465,22 @@ def get_asientos_all3():
                        municipio='INTENTE NUEVAMENTE....')
 
 
+@app.route('/get_asientos_all4', methods=['GET', 'POST'])
+def get_asientos_all4():
+    dp = request.args.get('dpto')
+    pro = request.args.get('provi')
+    se = request.args.get('secci')
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_asientos_all4(usrdep, dp, pro, se)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
 @app.route('/get_asiento_one', methods=['GET', 'POST'])
 def get_asiento_one():
     idloc = request.args.get('idloc')

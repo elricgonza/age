@@ -135,7 +135,6 @@ class Usuarios:
             else:
                 permisos = []
                 for p in rows:
-                    print(p[0])
                     permisos.append(p[0])
                 return permisos
         except Exception as e:

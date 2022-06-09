@@ -59,6 +59,20 @@ class Reciasiento:
         else:
             return rows
 
+    def get_asientos_all4(self, usrdep, dep, prov, secc):
+        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        if usrdep != 0 :
+            asie = dep, prov, secc, usrdep
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) and tipocircun in (67, 68, 69) order by AsientoElectoral"
+            self.cur.execute(s, asie)
+        else:
+            asie = dep, prov, secc
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) and tipocircun in (67, 68, 69) order by AsientoElectoral"
+            self.cur.execute(s, asie)
+
+        rows = self.cur.fetchall()
+        return rows
+
     def get_asientos_all3(self, usrdep, pa, dep, prov, secc):        
         s = "select IdPais, Dep, Prov, Sec, IdLoc, NomLoc from [bdge].[dbo].[GeoAsientos_Exterior_all]"
         if usrdep != 0 :
@@ -74,7 +88,7 @@ class Reciasiento:
         if self.cur.rowcount == 0:
             return False
         else:
-            return rows
+            return rows    
 
     def get_asiento_one(self, usrdep, idloc):        
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"

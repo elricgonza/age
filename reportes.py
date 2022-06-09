@@ -81,8 +81,8 @@ class Reportes:
             return rows
 
     def get_rep_jurisdiccion_all(self, usrdep):           
-        s = "Select idLoc, reci, nomDep as Departamento, nomLoc, nomReci," + \
-            " idloc2, reci2, nomReci2, origen" + \
+        s = "Select idLoc, reci, nomDep as Departamento, nomProv, nomSec, nomLoc, nomReci," + \
+            " idloc2, reci2, nomDep2, nomProv2, nomSec2, nomReci2, fechaAct, usuario, origen" + \
             " from [bdge].[dbo].[actJurisd]"
         if usrdep != 0 :
             s = s + " where dep = %d order by prov, sec"

@@ -47,6 +47,5 @@ class Permisos:
             s = "insert into permisos (usuario_id, modulo_id) values " + \
                 " (%s, %s) "
             self.cur.execute(s, new_permiso)
-            print(modulo_id)
         self.cx.commit()
 

@@ -51,8 +51,7 @@ class LatLong:
             "(%s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_asiento)
-            self.cx.commit()
-            print("Asiento adicionado...") 
+            self.cx.commit() 
         except:
             print("Error - actualización de asiento...")
 
@@ -71,7 +70,6 @@ class LatLong:
             "(%s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_recinto)
-            self.cx.commit()
-            print("Recinto adicionado...") 
+            self.cx.commit() 
         except:
             print("Error - actualización de recinto...")
