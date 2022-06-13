@@ -179,7 +179,8 @@
 	                            <th>Estado</th>
 	                            <th>idUrbanoRural</th>
 	                            <th>descUrbanoRural</th>
-	                            <th>IdLoc</th>				                         
+	                            <th>IdLoc</th>
+	                            <th>Etapa</th>				                         
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -202,11 +203,13 @@
 	                                <td>{{ asiento[14] }}</td>
 	                                <td>{{ asiento[15] }}</td>
 	                                <td>{{ asiento[16] }}</td>
-	                                {% if accion == '1' %}
+	                                {% if accion == '1' %}	                            	                               
 	                                	<td>{{ asiento[19] }}</td>
+	                                	<td>{{ asiento[20] }}</td>
                                 	{% else %}
                                 		<td>{{ asiento[17] }}</td>
-                                	{% endif %}				                               
+                                		<td>{{ asiento[18] }}</td>
+                                	{% endif %}                                					                               
 	                            </tr>
 	                        {% endfor %}
 	                    </tbody>
@@ -234,6 +237,7 @@
 	                            <th>Estado</th>
 	                            <th>idUrbanoRural</th>
 	                            <th>descUrbanoRural</th>
+	                            <th>Etapa</th>
 	                            <th>DepN</th>
 	                            <th>ProvN</th>
 	                            <th>SecN</th>
@@ -251,6 +255,7 @@
 	                            <th>EstadoN</th>
 	                            <th>idUrbanoRuralN</th>
 	                            <th>descUrbanoRuralN</th>
+	                            <th>EtapaN</th>
 	                            <th>IdLoc</th>
 	                        </tr>
 	                    </thead>
@@ -292,6 +297,8 @@
 	                                <td>{{ asiento[32] }}</td>
 	                                <td>{{ asiento[33] }}</td>
 	                                <td>{{ asiento[34] }}</td>
+	                                <td>{{ asiento[35] }}</td>
+	                                <td>{{ asiento[36] }}</td>
 	                            </tr>
 	                        {% endfor %}
 	                    </tbody>
@@ -349,6 +356,10 @@
 	            },
 	            {
 	                "targets": [ 16 ],
+	                "visible": false
+	            },
+	            {
+	                "targets": [ 18 ],
 	                "visible": false
 	            }
 	        ],
@@ -514,6 +525,14 @@
 	            },
 	            {
 	                "targets": [ 33 ],
+	                "visible": false
+	            },
+	            {
+	                "targets": [ 34 ],
+	                "visible": false
+	            },
+	            {
+	                "targets": [ 35 ],
 	                "visible": false
 	            }
 	        ],

@@ -49,7 +49,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = usuario, dpto, inicio, final                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s and Dep = %s " + \
                                 "and Convert(char(10), fechaAct,23) between %d and %d"
@@ -67,18 +68,18 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error --DEL-- documento...")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -95,6 +96,7 @@ class Gerencial:
                                 "and Convert(char(10), b.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
+                            print(rows)
                             if self.cur.rowcount == 0:
                                 return False
                             else:
@@ -103,26 +105,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -135,7 +137,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''   
                             lista = usuario, dpto, inicio, final                         
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s and a.Dep = %s " + \
                                 "and Convert(char(10), a.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
@@ -153,7 +156,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = dpto, inicio, final                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and Dep = %s and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
@@ -177,11 +181,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -206,26 +211,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -238,7 +243,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''
                             lista = dpto, inicio, final                            
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.Dep = %s " + \
                                 "and Convert(char(10), a.fechaAct,23) between %d and %d " + \
@@ -258,7 +264,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = usuario, inicio, final                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
@@ -282,11 +289,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -311,26 +319,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -343,7 +351,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''   
                             lista = usuario, inicio, final                         
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s " + \
                                 "and Convert(char(10), a.fechaAct,23) between %d and %d " + \
@@ -362,7 +371,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = inicio, final                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
@@ -386,11 +396,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -415,26 +426,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -447,7 +458,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''
                             lista = inicio, final                            
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and Convert(char(10), fechaAct,23) between %d and %d " + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -467,7 +479,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = usuario, dpto                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s and Dep = %s"
                             self.cur.execute(s, lista)
@@ -491,11 +504,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -520,26 +534,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -552,7 +566,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''   
                             lista = usuario, dpto                         
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s and a.Dep = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -570,7 +585,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = dpto                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and Dep = %s"
                             self.cur.execute(s, lista)
@@ -594,11 +610,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -623,26 +640,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -655,7 +672,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''
                             lista = dpto                            
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.Dep = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -674,7 +692,8 @@ class Gerencial:
                             '''Asientos Registrados'''
                             lista = usuario                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s"
                             self.cur.execute(s, lista)
@@ -698,11 +717,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -727,26 +747,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -759,7 +779,8 @@ class Gerencial:
                             '''Asientos Suprimidos'''   
                             lista = usuario                         
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s" + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -776,7 +797,8 @@ class Gerencial:
                         if accion == '1':
                             '''Asientos Nuevos'''                            
                             s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, " + \
-                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc " + \
+                                "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
+                                "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
                                 "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes)"
                             self.cur.execute(s)
@@ -799,11 +821,12 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
                                 "b.Dep as DepN, b.Prov as ProvN, b.Sec as SecN, b.NomDep as NomDepN, b.NomProv as NomProvN, b.NombreMunicipio as NombreMunicipioN, " + \
                                 "b.AsientoElectoral as AsientoElectoralN, b.TipoLocLoc as TipoLocLocN, b.TipoCircunscripcion as TipoCircunscripcionN, " + \
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
-                                "a.IdLoc " + \
+                                "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
                                 "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
@@ -828,26 +851,26 @@ class Gerencial:
                                           asiento[9], asiento[10], asiento[11], asiento[12], asiento[13], asiento[14], asiento[15], asiento[16], \
                                           asiento[17], asiento[18], asiento[19], asiento[20], asiento[21], asiento[22], asiento[23], asiento[24], \
                                           asiento[25], asiento[26], asiento[27], asiento[28], asiento[29], asiento[30], asiento[31], asiento[32], \
-                                          asiento[33], asiento[34]
+                                          asiento[33], asiento[34], asiento[35], asiento[36]
                                     s = "insert into bdge.dbo.asi_mod (Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                         "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                        "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                         "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                         "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                         "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc) VALUES " + \
-                                        " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
-                                        " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                        "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc) VALUES " + \
+                                        "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " + \
+                                        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                                     self.cur.execute(s, asi)
                                     self.cx.commit()
 
                                 s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, " + \
                                     "AsientoElectoral, TipoLocLoc, TipoCircunscripcion, PoblacionElectoral, PoblacionCensal, " + \
-                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, " + \
+                                    "latitud, longitud, idEstado, estado, idUrbanoRural, descUrbanoRural, Etapa, " + \
                                     "DepN, ProvN, SecN, NomDepN, NomProvN, NombreMunicipioN, " + \
                                     "AsientoElectoralN, TipoLocLocN, TipoCircunscripcionN, " + \
                                     "PoblacionElectoralN, PoblacionCensalN, latitudN, longitudN, " + \
-                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, IdLoc " + \
+                                    "idEstadoN, estadoN, idUrbanoRuralN, descUrbanoRuralN, EtapaN, IdLoc " + \
                                     "from bdge.dbo.asi_mod"
                                 self.cur.execute(s)
                                 rows = self.cur.fetchall()
@@ -859,7 +882,8 @@ class Gerencial:
                         if accion == '3':
                             '''Asientos Suprimidos'''                            
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
-                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc " + \
+                                "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
+                                "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) " + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -883,7 +907,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -911,12 +936,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -958,7 +986,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -989,7 +1018,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1016,12 +1046,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1063,7 +1096,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1094,7 +1128,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1121,12 +1156,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1168,7 +1206,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1198,7 +1237,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1225,12 +1265,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1272,7 +1315,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1304,7 +1348,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1331,12 +1376,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1378,7 +1426,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1408,7 +1457,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1435,12 +1485,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1481,7 +1534,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1512,7 +1566,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1539,12 +1594,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1585,7 +1643,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1614,7 +1673,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "FROM GeografiaElectoral_app.dbo.RECI a " + \
                                 "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1640,12 +1700,15 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, dd.Dep as DepN, pp.Prov as ProvN, " + \
-                                "ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa, " + \
+                                "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+                                "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
                                 "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
                                 "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
                                 "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
-                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN " + \
+                                "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, " + \
+                                "CASE WHEN b.etapa = 73 THEN 'Aprobado' WHEN b.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
@@ -1685,7 +1748,8 @@ class Gerencial:
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
-                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural " + \
+                                "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, " + \
+                                "CASE WHEN a.etapa = 73 THEN 'Aprobado' WHEN a.etapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from GeografiaElectoral_app.dbo.RECI a " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \

@@ -188,7 +188,8 @@
 	                            <th>idTipoRecinto</th>
 	                            <th>TipoRecinto</th>
 	                            <th>idUrbanoRural</th>
-	                            <th>descUrbanoRural</th>				                         
+	                            <th>descUrbanoRural</th>
+	                            <th>Etapa</th>				                         
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -221,7 +222,8 @@
 	                                <td>{{ recinto[24] }}</td>
 	                                <td>{{ recinto[25] }}</td>
 	                                <td>{{ recinto[26] }}</td>
-	                                <td>{{ recinto[27] }}</td>				                               
+	                                <td>{{ recinto[27] }}</td>
+	                                <td>{{ recinto[28] }}</td>				                               
 	                            </tr>
 	                        {% endfor %}
 	                    </tbody>
@@ -260,6 +262,7 @@
 	                            <th>TipoRecinto</th>
 	                            <th>idUrbanoRural</th>
 	                            <th>descUrbanoRural</th>
+	                            <th>Etapa</th>
 	                            <th>DepN</th>
 	                            <th>ProvN</th>
 	                            <th>SecN</th>
@@ -288,12 +291,12 @@
 	                            <th>TipoRecintoN</th>
 	                            <th>idUrbanoRuralN</th>
 	                            <th>descUrbanoRuralN</th>
+	                            <th>EtapaN</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	                        {% for recinto in recintos %}
-	                            <tr style="font-size: 13px;">
-	                            	<td>{{ recinto[28] }}</td>
+	                            <tr style="font-size: 13px;">	                           
 	                                <td>{{ recinto[29] }}</td>
 	                                <td>{{ recinto[30] }}</td>
 	                                <td>{{ recinto[31] }}</td>
@@ -321,6 +324,8 @@
 	                                <td>{{ recinto[53] }}</td>
 	                                <td>{{ recinto[54] }}</td>
 	                                <td>{{ recinto[55] }}</td>
+	                                <td>{{ recinto[56] }}</td>
+	                                <td>{{ recinto[57] }}</td>
 	                            	<td>{{ recinto[0] }}</td>
 	                                <td>{{ recinto[1] }}</td>
 	                                <td>{{ recinto[2] }}</td>
@@ -348,7 +353,8 @@
 	                                <td>{{ recinto[24] }}</td>
 	                                <td>{{ recinto[25] }}</td>
 	                                <td>{{ recinto[26] }}</td>
-	                                <td>{{ recinto[27] }}</td>	                              	                                
+	                                <td>{{ recinto[27] }}</td>
+	                                <td>{{ recinto[28] }}</td>	                              	                                
 	                            </tr>
 	                        {% endfor %}
 	                    </tbody>
@@ -442,6 +448,10 @@
 	            },
 	            {
 	                "targets": [ 27 ],
+	                "visible": false
+	            },
+	            {
+	                "targets": [ 28 ],
 	                "visible": false
 	            }
 	        ],
@@ -688,6 +698,14 @@
 	            },
 	            {
 	                "targets": [ 55 ],
+	                "visible": false
+	            },
+	            {
+	                "targets": [ 56 ],
+	                "visible": false
+	            },
+	            {
+	                "targets": [ 57 ],
 	                "visible": false
 	            }
 	        ],
