@@ -69,7 +69,7 @@ class Gerencial:
                                 self.cur.execute(s)
                                 self.cx.commit()
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -176,7 +176,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -284,7 +284,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -391,7 +391,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -499,7 +499,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -605,7 +605,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -712,7 +712,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
                                        
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
@@ -816,7 +816,7 @@ class Gerencial:
                                 self.cx.commit()
                                 print('Documento eliminado')
                             except:
-                                 print("Error --DEL-- documento...")
+                                 print("Error eliminación datos")
 
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \

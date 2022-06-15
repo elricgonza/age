@@ -995,6 +995,7 @@ def asi_excep(idloc):
                 fcl = None
 
             row_to_upd = \
+                request.form['departamento'], request.form['provincia'], request.form['municipio'], \
                 request.form['nomloc'], request.form['poblacionloc'], \
                 request.form['poblacionelecloc'], fcl, request.form['tipolocloc'], \
                 request.form['latitud'], request.form['longitud'], \

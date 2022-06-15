@@ -156,7 +156,7 @@ class Asi_excep:
 
         if self.diff_old_new_asi(asiento):
             s = "update GeografiaElectoral_app.dbo.loc" + \
-                " set nomloc= %s, poblacionloc= %d, " + \
+                " set deploc= %d, provloc= %d, secloc= %d, nomloc= %s, poblacionloc= %d, " + \
                 " poblacionelecloc= %s, fechacensoloc= %s, tipolocloc= %d, " + \
                 " latitud= %s, longitud= %d, " + \
                 " estado= %d, circunconsulado= %s, " + \
@@ -176,74 +176,75 @@ class Asi_excep:
         '''
         Verif. si existe dif. en registro editado
         '''
-        a = self.get_asi_excep_idloc(row_to_upd[21])  #21 -> idloc
+        a = self.get_asi_excep_idloc(row_to_upd[24])  #21 -> idloc
         vdif = False
 
-        if self.nomloc != row_to_upd[0]:
+        if self.deploc != row_to_upd[0]:
+            print('dep dif')
+            vdif = True
+        if self.provloc != row_to_upd[1]:
+            print('prov dif')
+            vdif = True
+        if self.secloc != row_to_upd[2]:
+            print('sec dif')
+            vdif = True
+        if self.nomloc != row_to_upd[3]:
             print('nom dif')
             vdif = True
-        if self.poblacionloc != int(row_to_upd[1]):
+        if self.poblacionloc != int(row_to_upd[4]):
             print('poblacionloc dif')
             vdif = True
-        if self.poblacionelecloc != int(row_to_upd[2]):
+        if self.poblacionelecloc != int(row_to_upd[5]):
             print('poblacionelecloc dif')
             vdif = True
-        if (self.fechacensoloc == None and row_to_upd[3] != None):
+        if (self.fechacensoloc == None and row_to_upd[6] != None):
             print('fechacensoloc- null')
             vdif = True
-        if (self.tipolocloc.strip() != row_to_upd[4]):
+        if (self.tipolocloc.strip() != row_to_upd[7]):
             print('tipolocloc- dif')
             vdif = True
-        if (str(self.latitud) != row_to_upd[5]):
+        if (str(self.latitud) != row_to_upd[8]):
             print('lat - dif')
             print(str(self.latitud))
             vdif = True
-        if (str(self.longitud) != row_to_upd[6]):
+        if (str(self.longitud) != row_to_upd[9]):
             print('long - dif')
             vdif = True
-        if (str(self.estado) != row_to_upd[7]):
+        if (str(self.estado) != row_to_upd[10]):
             print('estado - dif')
             vdif = True
         #a.circunConsulado
-        if str(self.etapa) != row_to_upd[9]:
-            print('etapa - dif')
-            print(self.etapa)
-            print(row_to_upd[9])
+        if str(self.etapa) != row_to_upd[12]:
+            print('etapa - dif')            
             vdif = True
-        if (self.obsUbicacion != row_to_upd[10]):
+        if (self.obsUbicacion != row_to_upd[13]):
             print('obsUbicacion dif')
             vdif = True
-        if (self.obs != row_to_upd[11]):
+        if (self.obs != row_to_upd[14]):
             print('obs dif')
             vdif = True
         #a.fechaIngreso
         #a.fechaAct
-        if (self.usuario != row_to_upd[14]):
+        if (self.usuario != row_to_upd[17]):
             print('usuario dif')
             vdif = True
-        if (str(self.doc_idA) != row_to_upd[15]):
+        if (str(self.doc_idA) != row_to_upd[18]):
             print('doc_idA  dif')
             vdif = True
-        if (self.doc_idRN != int(row_to_upd[16])):
+        if (self.doc_idRN != int(row_to_upd[19])):
             print('doc_idRN dif')
-            print(str(self.doc_idRN))
-            print(row_to_upd[16])
             vdif = True
-        if ((self.doc_idAF) != int(row_to_upd[17])):
+        if ((self.doc_idAF) != int(row_to_upd[20])):
             print('doc_idAF dif')
-            print(str(self.doc_idAF))
-            print(row_to_upd[17])
             vdif = True
-        if (str(self.urural) != row_to_upd[18]):
+        if (str(self.urural) != row_to_upd[21]):
             print('urural dif')
             vdif = True
-        if (str(self.doc_idAT) != row_to_upd[19]):
+        if (str(self.doc_idAT) != row_to_upd[22]):
             print('doc_idAT  dif')
             vdif = True
-        if (self.doc_idRNT != int(row_to_upd[20])):
+        if (self.doc_idRNT != int(row_to_upd[23])):
             print('doc_idRNT dif')
-            print(str(self.doc_idRN))
-            print(row_to_upd[20])
             vdif = True
 
         return vdif
