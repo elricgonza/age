@@ -52,7 +52,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s and Dep = %s " + \
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and usr = %s and Dep = %s " + \
                                 "and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
@@ -80,7 +80,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -139,7 +139,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s and a.Dep = %s " + \
                                 "and Convert(char(10), a.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
@@ -159,7 +159,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and Dep = %s and Convert(char(10), fechaAct,23) between %d and %d"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and Dep = %s and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -187,7 +187,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -245,7 +245,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.Dep = %s " + \
                                 "and Convert(char(10), a.fechaAct,23) between %d and %d " + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -267,7 +267,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s and Convert(char(10), fechaAct,23) between %d and %d"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and usr = %s and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -295,7 +295,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -353,7 +353,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s " + \
                                 "and Convert(char(10), a.fechaAct,23) between %d and %d " + \
                                 "order by a.Dep, a.Prov, a.Sec"
@@ -374,7 +374,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and Convert(char(10), fechaAct,23) between %d and %d"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and Convert(char(10), fechaAct,23) between %d and %d"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -402,7 +402,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -460,7 +460,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and Convert(char(10), fechaAct,23) between %d and %d " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
@@ -482,7 +482,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s and Dep = %s"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and usr = %s and Dep = %s"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -510,7 +510,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -568,7 +568,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s and a.Dep = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
@@ -588,7 +588,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and Dep = %s"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and Dep = %s"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -616,7 +616,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -674,7 +674,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.Dep = %s " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
@@ -695,7 +695,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes) and usr = %s"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA) and usr = %s"
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -723,7 +723,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -781,7 +781,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) and a.usr = %s" + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s, lista)
@@ -800,7 +800,7 @@ class Gerencial:
                                 "PoblacionCensal, latitud, longitud, idEstado, Estado, idUrbanoRural, descUrbanoRural, fechaAct, usr, IdLoc, " + \
                                 "CASE WHEN idEtapa = 73 THEN 'Aprobado' WHEN idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
                                 "from bdge.dbo.GeoAsientos_Reportes " + \
-                                "where IdLoc not in (select IdLoc from bdgeA.dbo.GeoAsientos_Reportes)"
+                                "where IdLoc not in (select IdLoc from bdge.dbo.GeoAsientos_ReportesA)"
                             self.cur.execute(s)
                             rows = self.cur.fetchall()
                             if self.cur.rowcount == 0:
@@ -827,7 +827,7 @@ class Gerencial:
                                 "b.PoblacionElectoral as PoblacionElectoralN, b.PoblacionCensal as PoblacionCensalN, b.latitud as latitudN, b.longitud as longitudN, " + \
                                 "b.idEstado as idEstadoN, b.estado as estadoN, b.idUrbanoRural as idUrbanoRuralN, b.descUrbanoRural as descUrbanoRuralN, " + \
                                 "CASE WHEN b.idEtapa = 73 THEN 'Aprobado' WHEN b.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS EtapaN, a.IdLoc " + \
-                                "from bdgeA.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_ReportesA a, bdge.dbo.GeoAsientos_Reportes b " + \
                                 "where a.IdLoc = b.IdLoc " + \
                                 "and (a.Dep <> b.Dep or a.NomDep <> b.NomDep " + \
                                 "or a.Prov <> b.Prov or a.NomProv <> b.NomProv " + \
@@ -884,7 +884,7 @@ class Gerencial:
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, " + \
                                 "a.PoblacionElectoral, a.PoblacionCensal, a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.IdLoc, " + \
                                 "CASE WHEN a.idEtapa = 73 THEN 'Aprobado' WHEN a.idEtapa = 74 THEN 'Aprobado con Corrección' ELSE 'Revisión' END AS Etapa " + \
-                                "from bdge.dbo.GeoAsientos_Reportes a, bdgeA.dbo.GeoAsientos_Reportes b " + \
+                                "from bdge.dbo.GeoAsientos_Reportes a, bdge.dbo.GeoAsientos_ReportesA b " + \
                                 "where a.IdLoc = b.IdLoc and (a.idEstado <> b.idEstado and a.idEstado in(18, 19, 77, 78)) " + \
                                 "order by a.Dep, a.Prov, a.Sec"
                             self.cur.execute(s)
