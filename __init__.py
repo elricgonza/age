@@ -83,6 +83,7 @@ usrdep = 99
 usrid = 0
 permisos_usr = []
 usrtipo = 0
+usrauth = 0
 
 # path init - to save img, ..
 chd = os.chdir(app.config['PATH_APP'])
@@ -129,12 +130,14 @@ def user_loader(txtusr):
     global usrid
     global permisos_usr
     global usrtipo
+    global usrauth
     user = usuarios.Usuarios(cxms)
     if user.get_usuario(txtusr):
         usr = user.usuario
         usrdep = user.dep
         usrid = user.id
         usrtipo = user.tipo_usr
+        usrauth = user.authenticated
         permisos_usr = user.get_permisos_name(usr)
         return user
 
