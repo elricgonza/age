@@ -249,6 +249,85 @@ class Asientos:
         return vdif
 
 
+    def upd_asi_noauth(self, row_to_upd):
+        '''tmpauth3 valida q no se grabe si datos no autoriz. modificados'''
+
+        a = self.get_asiento_idloc(row_to_upd[21])  #21 -> idloc
+        vdif = False
+
+        if self.nomloc != row_to_upd[0]:
+            print('nom dif')
+            vdif = True
+        if self.poblacionloc != int(row_to_upd[1]):
+            print('poblacionloc dif')
+            vdif = True
+        if self.poblacionelecloc != int(row_to_upd[2]):
+            print('poblacionelecloc dif')
+            vdif = True
+        if (self.fechacensoloc == None and row_to_upd[3] != None):
+            print('fechacensoloc- null')
+            vdif = True
+        if (self.tipolocloc.strip() != row_to_upd[4]):
+            print('tipolocloc- dif')
+            vdif = True
+        if (str(self.latitud) != row_to_upd[5]):
+            print('lat - dif')
+            print(str(self.latitud))
+            vdif = True
+        if (str(self.longitud) != row_to_upd[6]):
+            print('long - dif')
+            vdif = True
+        if (str(self.estado) != row_to_upd[7]):
+            print('estado - dif')
+            vdif = True
+        #a.circunConsulado
+        if str(self.etapa) != row_to_upd[9]:
+            print('etapa - dif')
+            print(self.etapa)
+            print(row_to_upd[9])
+            vdif = True
+        if (self.obsUbicacion != row_to_upd[10]):
+            print('obsUbicacion dif')
+            vdif = True
+        if (self.obs != row_to_upd[11]):
+            print('obs dif')
+            vdif = True
+        #a.fechaIngreso
+        #a.fechaAct
+        if (self.usuario != row_to_upd[14]):
+            print('usuario dif')
+            vdif = True
+        if (str(self.doc_idA) != row_to_upd[15]):
+            print('doc_idA  dif')
+            vdif = True
+        if (self.doc_idRN != int(row_to_upd[16])):
+            print('doc_idRN dif')
+            print(str(self.doc_idRN))
+            print(row_to_upd[16])
+            vdif = True
+        if ((self.doc_idAF) != int(row_to_upd[17])):
+            print('doc_idAF dif')
+            print(str(self.doc_idAF))
+            print(row_to_upd[17])
+            vdif = True
+        if (str(self.urural) != row_to_upd[18]):
+            print('urural dif')
+            vdif = True
+        if (str(self.doc_idAT) != row_to_upd[19]):
+            print('doc_idAT  dif')
+            vdif = True
+        if (self.doc_idRNT != int(row_to_upd[20])):
+            print('doc_idRNT dif')
+            print(str(self.doc_idRN))
+            print(row_to_upd[20])
+            vdif = True
+
+        return vdif
+
+
+
+
+
     def upd_asiento_ex(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, tipolocloc, \
@@ -334,6 +413,17 @@ class Asientos:
         else:
             return rows
 
+
+    def get_etapas_auth(self, usrdep, usrtipo):
+        #auth3tmp creado sólo para transcripción habilitar usuario transcriptor
+
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
     def get_asientos_all1(self, usrdep):
         '''  Utilizado sòlo para migrar a postgres '''
         s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, doc_act, fecha_doc_act, " + \

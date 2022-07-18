@@ -17,7 +17,7 @@
                         {% if load %}
                             value="{{ a.latitud }}"
                         {% endif %}
-                        {% if not usrauth %}
+                        {% if usrauth == 3 %}
                             readonly
                         {% endif %}
                 >
@@ -29,7 +29,7 @@
                         {% if load %}
                             value="{{ a.longitud }}"
                         {% endif %}
-                        {% if not usrauth %}
+                        {% if usrauth == 3 %}
                             readonly
                         {% endif %}
                     >
@@ -122,7 +122,7 @@
                         {% if load %}
                             value="{{ a.nomloc }}"
                         {% endif %}
-                        {% if not usrauth %}
+                        {% if usrauth == 3 %}
                             readonly
                         {% endif %}
                     >
@@ -131,7 +131,7 @@
             <div class="col-md-2">
                 <label for="urural">Area de Poblacion:</label>
                 <select id="iurural" name="urural" class="form-control"
-                    {% if not usrauth %}
+                    {% if usrauth == 3 %}
                         disabled
                     {% endif %}
                 >
@@ -194,9 +194,17 @@
                 {% endif %}
                 >
                 {% if load and a.tipolocloc.strip()=="67" %}
-                    <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off" checked="">Uninominal
+                    <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off" checked=""
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                    >Uninominal
                 {% else %}
-                    <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off">Uninominal
+                    <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off"
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                    >Uninominal
                 {% endif %}
                 </label>
 
@@ -208,9 +216,17 @@
                 {% endif %}
                 >
                 {% if load and a.tipolocloc.strip()=="68" %}
-                    <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off" checked="">Especial
+                    <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off" checked=""
+                    {% if usrauth == 3 %}
+                        disabled
+                    {% endif %}
+                    >Especial
                 {% else %}
-                    <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off">Especial
+                    <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off"
+                    {% if usrauth == 3 %}
+                        disabled
+                    {% endif %}
+                    >Especial
                 {% endif %}
                 </label>
 
@@ -222,16 +238,28 @@
                 {% endif %}
                 >
                 {% if load and a.tipolocloc.strip()=="69" %}
-                    <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off" checked="">Mixto
+                    <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off" checked=""
+                    {% if usrauth == 3 %}
+                        disabled
+                    {% endif %}
+                    >Mixto
                 {% else %}
-                    <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off">Mixto
+                    <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off"
+                    {% if usrauth == 3 %}
+                        disabled
+                    {% endif %}
+                    >Mixto
                 {% endif %}
                 </label>
                 </div>
             </div>
             <div class="col-md-5">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name="estado" class="form-control" required>                          
+                <select id="iestado" name="estado" class="form-control" required
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >                          
                     <option></option>
                     {% for estado in estados %}
                         {% if usrdep == 0 %}
@@ -255,7 +283,11 @@
             </div>
             <div class="col-md-4">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name="etapa" class="form-control" onchange="carg(this);">              
+                <select id="ietapa" name="etapa" class="form-control" onchange="carg(this);"
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >              
                     {% for etapa in etapas %}
                           {% if load and a.etapa == etapa[0] %}
                                 <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
