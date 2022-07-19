@@ -8,11 +8,19 @@
     <script src="{{ url_for('static', filename='js/uts/buildmap.js') }}"></script>
 {% endblock %}
 
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show">
+    <strong>Error!</strong> {{ error }} 
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
+
 <div class="container">
     <h2 class="text-center text-blue pt-5" >Asiento Electoral</h2>
     <form class="needs-validation" novalidate method='POST' onsubmit="return Validation(this)" >
         <div class="form-row">
-            <div class="col-md-4">                <label for="latitud">Latitud:</label>
+            <div class="col-md-4">                
+                <label for="latitud">Latitud:</label>
                 <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}"
                         {% if load %}
                             value="{{ a.latitud }}"
@@ -129,10 +137,10 @@
                 <div class="invalid-feedback">Debe introducir un nombre válido.</div>
             </div>
             <div class="col-md-2">
-                <label for="urural">Area de Poblacion:</label>
+                <label for="urural">Area de Población:</label>
                 <select id="iurural" name="urural" class="form-control"
                     {% if usrauth == 3 %}
-                        disabled
+                        readonly
                     {% endif %}
                 >
                     <option></option>
@@ -195,15 +203,9 @@
                 >
                 {% if load and a.tipolocloc.strip()=="67" %}
                     <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off" checked=""
-                    {% if usrauth == 3 %}
-                        readonly
-                    {% endif %}
                     >Uninominal
                 {% else %}
                     <input type="radio" value=67 name="tipolocloc" id="itipolocloc1" autocomplete="off"
-                    {% if usrauth == 3 %}
-                        readonly
-                    {% endif %}
                     >Uninominal
                 {% endif %}
                 </label>
@@ -217,15 +219,9 @@
                 >
                 {% if load and a.tipolocloc.strip()=="68" %}
                     <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off" checked=""
-                    {% if usrauth == 3 %}
-                        disabled
-                    {% endif %}
                     >Especial
                 {% else %}
                     <input type="radio" value=68 name="tipolocloc" id="itipolocloc2" autocomplete="off"
-                    {% if usrauth == 3 %}
-                        disabled
-                    {% endif %}
                     >Especial
                 {% endif %}
                 </label>
@@ -239,15 +235,9 @@
                 >
                 {% if load and a.tipolocloc.strip()=="69" %}
                     <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off" checked=""
-                    {% if usrauth == 3 %}
-                        disabled
-                    {% endif %}
                     >Mixto
                 {% else %}
                     <input type="radio" value=69 name="tipolocloc" id="itipolocloc3" autocomplete="off"
-                    {% if usrauth == 3 %}
-                        disabled
-                    {% endif %}
                     >Mixto
                 {% endif %}
                 </label>
@@ -530,13 +520,6 @@
     </form>
 
 
-    {% if error %}
-    <br>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> {{ error }} 
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    {% endif %}
 </div> <!--main-->
 
 <script>

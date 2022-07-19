@@ -756,30 +756,26 @@ def asiento(idloc):
                                         puede_eliminar='Asientos - Eliminación' in permisos_usr
                                       ) # render a template
         else: # Es Edit
-            if usrauth == 3 and a.upd_noauth():   #tmpauth3 valida act datos no autoriz.
-                error = "Error - intenta actualizar datos NO autorizados..."
-                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrdep, usrtipo), \
+            fa = str(datetime.datetime.now())[:-7]
+            fcl = request.form['fechacensoloc']
+            if fcl == '':
+                fcl = None
+
+            row_to_upd = \
+                request.form['nomloc'], request.form['poblacionloc'], \
+                request.form['poblacionelecloc'], fcl, request.form['tipolocloc'], \
+                request.form['latitud'], request.form['longitud'], \
+                request.form['estado'], '', request.form['etapa'], \
+                request.form['obsUbicacion'], request.form['obs'].strip(), \
+                str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
+                docActF, urural, request.form['docActT'], docRspNalT, idloc
+
+            if usrauth == 3 and a.upd_asi_noauth(row_to_upd):   #tmpauth3 valida act datos no autoriz. show msg si err
+                error = "Intenta actualizar datos NO autorizados."
+                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas_auth(usrdep, usrtipo), \
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep)
                                       )
             else:
-                fa = str(datetime.datetime.now())[:-7]
-                fcl = request.form['fechacensoloc']
-                if fcl == '':
-                    fcl = None
-
-                print("--------------------------ppp")
-                print(request.form['estado'])
-                print(request.form['etapa'])
-                print("--------------------------ppp>>")
-                row_to_upd = \
-                    request.form['nomloc'], request.form['poblacionloc'], \
-                    request.form['poblacionelecloc'], fcl, request.form['tipolocloc'], \
-                    request.form['latitud'], request.form['longitud'], \
-                    request.form['estado'], '', request.form['etapa'], \
-                    request.form['obsUbicacion'], request.form['obs'].strip(), \
-                    str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
-                    docActF, urural, request.form['docActT'], docRspNalT, idloc
-
                 a.upd_asiento(row_to_upd)
                 d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
@@ -798,7 +794,7 @@ def asiento(idloc):
                 if a.usuario == None:
                     a.usuario = usr
 
-                if usrauth == 3:  #auth3tmp 
+                if usrauth == 3:  #tmpauth3 
                     return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas_auth(usrdep, usrtipo), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
                 else:

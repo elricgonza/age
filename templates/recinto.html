@@ -21,6 +21,10 @@
                         {% if load %}
                             value="{{ rc.latitud }}"
                         {% endif %}
+
+                        {% if usrauth == 3 %}
+                            readonly
+                        {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
             </div>
@@ -29,6 +33,10 @@
                 <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeo(event)"
                         {% if load %}
                             value="{{ rc.longitud }}"
+                        {% endif %}
+
+                        {% if usrauth == 3 %}
+                            readonly
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
@@ -117,7 +125,12 @@
                 <label for="asiento">Asientos del Municipio:</label>
                 <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rc.idlocreci }}">
                 <input type="hidden" name="load" id="iload" value="{{ load }}">
-                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" required>
+                
+                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" required
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >
                     {% for asientoReci in asientoRecis %}
                         {% if rc.deploc==asientoReci[0] and rc.provloc==asientoReci[1] and rc.secloc==asientoReci[2] %}
                             {% if load %}
@@ -139,7 +152,11 @@
             <div class="col-md-4">
                 <label for="zonareci">Zona del Recinto:</label>
                 <input type="hidden" name="reci_idzona" value="{{ rc.zonareci }}">
-                <select id="izonareci" name="zonareci" class="form-control" required>                          
+                <select id="izonareci" name="zonareci" class="form-control" required
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >                          
                     <option></option>
                     {% for zonasreci in zonasRecis %}
                         {% if rc.idlocreci==zonasreci[0] and rc.circundist==zonasreci[3] %}
@@ -187,15 +204,22 @@
             <div class="col-md-7">
                 <label for="nomreci">Recinto ELectoral:</label>
                 <input type="text" class="form-control" id="inomreci" title="" placeholder="Introduzca nombre de Recinto" name="nomreci"  required 
-                        {% if load %}
-                            value="{{ rc.nomreci }}"
-                        {% endif %}
-                    >
+                    {% if load %}
+                        value="{{ rc.nomreci }}"
+                    {% endif %}
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >
                 <div class="invalid-feedback">Debe introducir un nombre válido.</div>
             </div>
             <div class="col-md-3">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name="estado" class="form-control" required>
+                <select id="iestado" name="estado" class="form-control" required
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >
                     <option></option>
                     {% for estado in estados %}
                         {% if load and rc.estado==estado[0] %}
@@ -311,7 +335,11 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);">              
+                <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);"
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >              
                     {% for etapa in etapas %}
                           {% if load and rc.etapa == etapa[0] %}
                                 <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
@@ -322,7 +350,7 @@
                 </select> 
             </div>
             <div class="col-md-5">
-                <label for="docAct">Documento: Resolución de Sala Plena:</label>
+                <label for="docAct">Documento: Resolución de Sala Plena TED:</label>
                 <input type="hidden" name="doc_idAct" value="{{ rc.doc_idA }}">
                 <select id="idocAct" name="docAct" class="form-control" required>                          
                     <option></option>
