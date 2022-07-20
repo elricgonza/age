@@ -10,6 +10,13 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
 {% endblock %}
 
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show">
+    <strong>Error!</strong> {{ error }} 
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
+
 <div class="container">
     <h2 class="text-center text-blue pt-5" >Recinto Electoral</h2>
     <br>
@@ -195,7 +202,7 @@
             </div>
             <div class="col-md-1">
                 <label for="reci">Reci:</label>
-                <input type="text" class="form-control" id="ireci" title="" placeholder="Reci" name="reci" disabled
+                <input type="text" class="form-control" id="ireci" title="" placeholder="Reci" name="reci" disabled size=7
                         {% if load %}
                             value="{{ rc.reci }}"
                         {% endif %}
@@ -476,13 +483,6 @@
 
     </form>
 
-    {% if error %}
-    <br>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> {{ error }} 
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    {% endif %}
 </div> <!--main-->
 
 <script>

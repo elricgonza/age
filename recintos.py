@@ -144,26 +144,92 @@ class Recintos:
         rc = self.get_recinto_idreci(row_to_upd[20], row_to_upd[19])  #19 -> idreci, #20 -> idlocreci
         vdif = False
         if self.nomreci != row_to_upd[0]:
-            print('nom dif')
+            #print('nom dif')
             vdif = True
         if self.zonareci != int(row_to_upd[1]):
-            print('zonareci dif')
+            #print('zonareci dif')
             vdif = True
+        if self.maxmesasreci != int(row_to_upd[2]):
+            #print('maxmesasreci dif')
+            vdif = True
+        if (self.direccion != row_to_upd[3]):
+            #print('direccion dif')
+            vdif = True
+        if (str(self.latitud) != row_to_upd[4]):
+            #print('latitud dif')
+            vdif = True
+        if (str(self.longitud) != row_to_upd[5]):
+            #print('longitud dif')
+            vdif = True
+        if self.estado != int(row_to_upd[6]):
+            #print('estado dif')
+            vdif = True
+        if self.tiporecinto != int(row_to_upd[7]):
+            #print('tiporecinto dif')
+            vdif = True
+        if self.codrue != row_to_upd[8]:
+            #print('codrue dif')
+            vdif = True
+        if self.codrueedif != row_to_upd[9]:
+            #print('codrueedit dif')
+            vdif = True
+        if self.depend != int(row_to_upd[10]):
+            #print('depend dif')
+            vdif = True
+        if self.cantpisos != row_to_upd[11]:
+            #print('cantPisos dif')
+            vdif = True
+        #a.fechaAct
+        if self.usuario != row_to_upd[13]:
+            #print('usuario dif')
+            vdif = True
+        if self.etapa != int(row_to_upd[14]):
+            #print('etapa dif')
+            vdif = True
+        if self.doc_idA != int(row_to_upd[15]):
+            #print('doc_idA dif')
+            vdif = True
+        if self.doc_idAF != int(row_to_upd[16]):
+            #print('doc_idAF dif')
+            vdif = True
+        if self.ambientes != int(row_to_upd[17]):
+            #print('ambientesDisp dif')
+            vdif = True
+        if self.doc_idT != int(row_to_upd[18]):
+            #print('doc_idT dif')
+            vdif = True
+
+        return vdif
+
+
+    def upd_reci_noauth(self, row_to_upd):
+        #tmpauth3 valida que no se modifiquen datos no autorizados
+        rc = self.get_recinto_idreci(row_to_upd[20], row_to_upd[19])  #19 -> idreci, #20 -> idlocreci
+        vdif = False
+        if self.nomreci != row_to_upd[0]:
+            print('nom dif -auth3')
+            vdif = True
+        if self.zonareci != int(row_to_upd[1]):
+            print('zonareci dif -auth3')
+            vdif = True
+        '''
         if self.maxmesasreci != int(row_to_upd[2]):
             print('maxmesasreci dif')
             vdif = True
         if (self.direccion != row_to_upd[3]):
             print('direccion dif')
             vdif = True
+        '''
         if (str(self.latitud) != row_to_upd[4]):
-            print('latitud dif')
+            print('latitud dif -auth3')
             vdif = True
         if (str(self.longitud) != row_to_upd[5]):
-            print('longitud dif')
+            print('longitud dif -auth3')
             vdif = True
         if self.estado != int(row_to_upd[6]):
-            print('estado dif')
+            print('estado dif -auth3')
             vdif = True
+        '''
         if self.tiporecinto != int(row_to_upd[7]):
             print('tiporecinto dif')
             vdif = True
@@ -183,9 +249,11 @@ class Recintos:
         if self.usuario != row_to_upd[13]:
             print('usuario dif')
             vdif = True
+        '''
         if self.etapa != int(row_to_upd[14]):
-            print('etapa dif')
+            print('etapa dif -auth3')
             vdif = True
+        '''
         if self.doc_idA != int(row_to_upd[15]):
             print('doc_idA dif')
             vdif = True
@@ -198,9 +266,9 @@ class Recintos:
         if self.doc_idT != int(row_to_upd[18]):
             print('doc_idT dif')
             vdif = True
+        '''
 
         return vdif
-
 
     def get_next_reci(self):
         self.cur.execute("select max(reci) + 1 from GeografiaElectoral_app.dbo.reci")
@@ -242,6 +310,18 @@ class Recintos:
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
         else:
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+
+    def get_etapas_auth(self, usrdep, usrtipo):
+        #auth3tmp creado sólo para transcripción habilitar usuario transcriptor
+
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:

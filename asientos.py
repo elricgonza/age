@@ -425,6 +425,8 @@ class Asientos:
             return False
         else:
             return rows
+
+
     def get_asientos_all1(self, usrdep):
         '''  Utilizado sòlo para migrar a postgres '''
         s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, doc_act, fecha_doc_act, " + \
