@@ -1575,11 +1575,11 @@ def get_distritos_all2():
 
     cxms2.close()
 
-#========== Modulo GeoRecintos Pueblos Indigenas ============#
 
 @app.route('/reciespe_list', methods=['GET', 'POST'])
 @login_required
 def reciespe_list():
+    ''' Pueblos Indigenas list '''
     rce = recie.Reciespe(cxms)
     rows = rce.get_reciespe_all(usrdep)
     if rows:
@@ -1597,6 +1597,7 @@ def reciespe_list():
 @app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def reciespe(idreci, idlocreci):
+    ''' Pueblos Indigenas '''
     rce = recie.Reciespe(cxms)
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
@@ -1669,12 +1670,18 @@ def reciespe(idreci, idlocreci):
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
 
-            rce.upd_recinto(row_to_upd)
-            d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
+            if usrauth == 3 and rce.upd_reci_esp_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
+                error = 'Intenta actualizar datos NO autorizados.'
+                return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
+                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
+            else:    
+                rce.upd_recinto(row_to_upd)
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-            rows = rce.get_reciespe_all(usrdep)
-            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
-                                    puede_editar='Especiales - Edición' in permisos_usr)  # render a template
+                rows = rce.get_reciespe_all(usrdep)
+                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                        puede_editar='Especiales - Edición' in permisos_usr)  # render a template
     else: # Viene de <recintos_list>
         if idreci != '0':  # EDIT
             if rce.get_recinto_idreci(idreci, idlocreci) == True:

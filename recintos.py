@@ -203,7 +203,8 @@ class Recintos:
 
 
     def upd_reci_noauth(self, row_to_upd):
-        #tmpauth3 valida que no se modifiquen datos no autorizados
+        '''tmpauth3 valida que no se modifiquen datos no autorizados'''
+
         rc = self.get_recinto_idreci(row_to_upd[20], row_to_upd[19])  #19 -> idreci, #20 -> idlocreci
         vdif = False
         if self.nomreci != row_to_upd[0]:

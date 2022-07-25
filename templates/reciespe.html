@@ -21,6 +21,10 @@
                         {% if load %}
                             value="{{ rce.latitud }}"
                         {% endif %}
+
+                        {% if usrauth == 3 %}
+                            readonly
+                        {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
             </div>
@@ -29,6 +33,10 @@
                 <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeoesp(event)"
                         {% if load %}
                             value="{{ rce.longitud }}"
+                        {% endif %}
+
+                        {% if usrauth == 3 %}
+                            readonly
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
@@ -134,7 +142,11 @@
                 <label for="asiento">Asientos del Municipio:</label>
                 <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rce.idlocreci }}">
                 <input type="hidden" name="load" id="iload" value="{{ load }}">
-                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" required>
+                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" required
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >
                     {% for asientoReci in asientoRecis %}
                         {% if rce.deploc==asientoReci[0] and rce.provloc==asientoReci[1] and rce.secloc==asientoReci[2] %}
                             {% if load %}
@@ -156,7 +168,11 @@
             <div class="col-md-4">
                 <label for="zonareci">Zona del Recinto:</label>
                 <input type="hidden" name="reci_idzona" value="{{ rce.zonareci }}">
-                <select id="izonareci" name="zonareci" class="form-control" required>                          
+                <select id="izonareci" name="zonareci" class="form-control" required
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >                          
                     <option></option>
                     {% for zonasreci in zonasRecis %}
                         {% if rce.idlocreci==zonasreci[0] and rce.circundist==zonasreci[3] %}
@@ -207,12 +223,19 @@
                         {% if load %}
                             value="{{ rce.nomreci }}"
                         {% endif %}
+                        {% if usrauth == 3 %}
+                            readonly
+                        {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir un nombre válido.</div>
             </div>
             <div class="col-md-3">
                 <label for="iestado">Estado</label>
-                <select id="iestado" name="estado" class="form-control" required>
+                <select id="iestado" name="estado" class="form-control" required
+                        {% if usrauth == 3 %}
+                            readonly
+                        {% endif %}
+                >
                     <option></option>
                     {% for estado in estados %}
                         {% if load and rce.estado==estado[0] %}
@@ -328,7 +351,11 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="ietapa">Etapa</label>
-                <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);">              
+                <select id="ietapa" name="etapa" class="form-control" onchange="carg1(this);"
+                    {% if usrauth == 3 %}
+                        readonly
+                    {% endif %}
+                >              
                     {% for etapa in etapas %}
                           {% if load and rce.etapa == etapa[0] %}
                                 <option value = "{{ etapa[0] }}" selected>{{ etapa[1] }}</option>
