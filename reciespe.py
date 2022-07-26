@@ -206,7 +206,7 @@ class Reciespe:
         return vdif
 
 
-    def upd_reci_esp_noauth(self, row_to_upd)
+    def upd_reci_esp_noauth(self, row_to_upd):
         '''tmpauth3 valida que no se modifiquen datos no autorizados - recintos indígenas especiales'''
         rc = self.get_recinto_idreci(row_to_upd[21], row_to_upd[20])  #20 -> idreci, #21 -> idlocreci
         vdif = False
@@ -328,6 +328,7 @@ class Reciespe:
         else:
             return rows
 
+
     def get_etapas(self, usrdep, usrtipo):
 
         if usrdep != 0 and usrtipo == 116:
@@ -342,3 +343,16 @@ class Reciespe:
             return False
         else:
             return rows
+
+
+    def get_etapas_auth(self, usrdep, usrtipo):
+        #auth3tmp creado sólo para transcripción habilitar usuario transcriptor
+
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+

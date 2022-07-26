@@ -1673,7 +1673,7 @@ def reciespe(idreci, idlocreci):
             if usrauth == 3 and rce.upd_reci_esp_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
+                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
             else:    
                 rce.upd_recinto(row_to_upd)
@@ -1694,10 +1694,15 @@ def reciespe(idreci, idlocreci):
                 if rce.usuario == None:
                     rce.usuario = usr
 
-                return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
-    # New
+                if usrauth == 3:  #tmpauth3 - get_etapas_auth
+                    return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
+                                           estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
+                                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
+                else:
+                    return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_asientos_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
+                                           estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
+                                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
+        # New
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
                            dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrdep, usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 

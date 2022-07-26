@@ -10,6 +10,14 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
 {% endblock %}
 
+
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show">
+    <strong>Error!</strong> {{ error }} 
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
+
 <div class="container">
     <h2 class="text-center text-blue pt-5" >Recinto Especial</h2>
     <br>
@@ -492,13 +500,6 @@
 
     </form>
 
-    {% if error %}
-    <br>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> {{ error }} 
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    {% endif %}
 </div> <!--main-->
 
 <script>
