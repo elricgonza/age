@@ -266,10 +266,10 @@ class Asientos:
             print('poblacionelecloc dif')
             vdif = True
 
-        '''
         if (self.fechacensoloc == None and row_to_upd[3] != None):
             print('fechacensoloc- null -tmpauth3')
             vdif = True
+        '''
         if (self.tipolocloc.strip() != row_to_upd[4]):
             print('tipolocloc- dif -tmpauth3')
             vdif = True
