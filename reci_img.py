@@ -69,10 +69,10 @@ class ReciImg:
                 print(e)
 
 
-    def get_reci_imgs(self, idLoc):
-        s = "select * from reci_img where idLoc = %d order by imgId"
+    def get_reci_imgs(self, idLoc, reci):
+        s = "select * from reci_img where idLoc = %d and reci = %d order by imgId"
         try:
-            self.cur.execute(s, idLoc)
+            self.cur.execute(s, idLoc, reci)
             rows = self.cur.fetchall()
             self._nro_rows = self.cur.rowcount  # 0 not found
             return rows

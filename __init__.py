@@ -1308,11 +1308,11 @@ def get_municipios_all():
                        provincia='INCORRECTA !!!',
                        municipio='INTENTE NUEVAMENTE....')
 
-#========== Modulo Recintos ============#
 
 @app.route('/recintos_list', methods=['GET', 'POST'])
 @login_required
 def recintos_list():
+    ''' Recintos '''
     rc = recintos.Recintos(cxms)
     rows = rc.get_recintos_all(usrdep)
     if rows:
@@ -3619,18 +3619,19 @@ def clas(clas_id, clas_grup_id):
     # New
     return render_template('clas.html', error=error, s=s, load=False, titulo='Registro de Nuevo clasificador', puede_editar=p)
 
-#Recintos - Uninominales
-@app.route('/recinto_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
+
+@app.route('/recinto_img/<idloc>/<reci>/<string:nomreci>', methods=['GET', 'POST'])
 @login_required
-def recinto_img(idloc, nomloc, idreci):
+def recinto_img(idloc, reci, nomreci):
+    ''' Recintos - Uninominales '''
 
     i = clasif_get.ClasifGet(cxms)  # conecta a la BD
     li = reci_img.ReciImg(cxms)
 
-    with_img = li.get_reci_imgs(idloc)  # False or rows-img
+    with_img = li.get_reci_imgs(idloc, idreci)  # False or rows-img
     error = None
     if request.method == 'POST':
-        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
+        img_ids_ = request.form.getlist('imgsa[]')  # options img for Recinto
         img_ids = list(img_ids_[0].split(","))      # list ok
 
         uploaded_files = request.files.getlist("filelist")
@@ -3641,7 +3642,7 @@ def recinto_img(idloc, nomloc, idreci):
                 securef = secure_filename(f.filename)
                 fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2) + ext
+                name_to_save = str(idloc).zfill(5) + "_" +str()+ str(img_ids[n]).zfill(2) + ext
                 fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)   # loc_img.ruta
 
                 if li.exist_img_reci(idloc, img_ids[n], idreci):   # si upd img
@@ -3660,11 +3661,11 @@ def recinto_img(idloc, nomloc, idreci):
 
     else:
         if with_img:  # Edit
-            return render_template('recinto_img_upd.html', rows=i.get_descripcion(14), nomloc=nomloc,
+            return render_template('recinto_img_upd.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Recintos - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('recinto_img.html', rows=i.get_descripcion(14), nomloc=nomloc,
+            return render_template('recinto_img.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Recintos - Edición' in permisos_usr)
 
 
