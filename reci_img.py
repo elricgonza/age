@@ -44,7 +44,7 @@ class ReciImg:
 
     def exist_img_reci(self, idloc, reci, imgId):
         s = "select * from reci_img where idloc= %d and reci= %d and imgId= %d"
-        parm = idLoc, reci, imgId
+        parm = idloc, reci, imgId
         try:
             self.cur.execute(s, parm)
             if not self.cur.fetchall():
@@ -69,10 +69,11 @@ class ReciImg:
                 print(e)
 
 
-    def get_reci_imgs(self, idLoc, reci):
+    def get_reci_imgs(self, idloc, reci):
         s = "select * from reci_img where idLoc = %d and reci = %d order by imgId"
+        parm = idloc, reci
         try:
-            self.cur.execute(s, idLoc, reci)
+            self.cur.execute(s, parm)
             rows = self.cur.fetchall()
             self._nro_rows = self.cur.rowcount  # 0 not found
             return rows
