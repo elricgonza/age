@@ -3671,20 +3671,22 @@ def recinto_img(idloc, reci, nomreci):
                                 puede_editar='Recintos - Edición' in permisos_usr)
 
 
-#Recintos - Especiales
-@app.route('/reciespe_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
+@app.route('/reciespe_img/<idloc>/<reci>/<string:nomreci>', methods=['GET', 'POST'])
 @login_required
-def reciespe_img(idloc, nomloc, idreci):
+def reciespe_img(idloc, reci, nomreci):
+    ''' Gestiona imágenes Recintos - Especiales (Indígenas) '''
+
     i = clasif_get.ClasifGet(cxms)  # conecta a la BD
     li = reci_img.ReciImg(cxms)
 
-    with_img = li.get_reci_imgs(idloc)  # False or rows-img
+    with_img = li.get_reci_imgs(idloc, reci)  # False or rows-img
 
     error = None
 
     if request.method == 'POST':
         img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
         img_ids = list(img_ids_[0].split(","))      # list ok
+
         uploaded_files = request.files.getlist("filelist")
         
         for n in range(len(img_ids)):
@@ -3693,15 +3695,15 @@ def reciespe_img(idloc, nomloc, idreci):
                 securef = secure_filename(f.filename)
                 fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2) + ext
+                name_to_save = str(idloc).zfill(5) + "_" + str(reci).zfill(5) + "_" + str(img_ids[n]).zfill(2) + ext
                 fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)   # loc_img.ruta
 
-                if li.exist_img_reci(idloc, img_ids[n], idreci):   # si upd img
-                    file_to_del = li.get_name_file_img_reci(idloc, img_ids[n], idreci) # referencia en bd 
+                if li.exist_img_reci(idloc, reci, img_ids[n]):   # si upd img
+                    file_to_del = li.get_name_file_img_reci(idloc, reci, img_ids[n]) # referencia en bd 
                     os.remove(file_to_del[1:]) # borra arch. de HD
-                    li.upd_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr) # upd de bd
+                    li.upd_reci_img(idloc, img_ids[n], reci, fpath_destino, datetime.datetime.now(), usr) # upd de bd
                 else: # new
-                    li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
+                    li.add_reci_img(idloc, img_ids[n], reci, fpath_destino, datetime.datetime.now(), usr)
 
                 f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
                 resize_save_file1(fpath, name_to_save, (1024, 768))
@@ -3712,11 +3714,11 @@ def reciespe_img(idloc, nomloc, idreci):
 
     else:
         if with_img:  # Edit
-            return render_template('reciespe_img_upd.html', rows=i.get_descripcion(14), nomloc=nomloc,
+            return render_template('reciespe_img_upd.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Especiales - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('reciespe_img.html', rows=i.get_descripcion(14), nomloc=nomloc,
+            return render_template('reciespe_img.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Especiales - Edición' in permisos_usr)
 
 
