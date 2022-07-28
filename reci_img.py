@@ -42,9 +42,9 @@ class ReciImg:
             print (e)
 
 
-    def exist_img_reci(self, idLoc, imgId, reci):
-        s = "select * from reci_img where idLoc= %d and imgId= %d and reci= %d"
-        parm = idLoc, imgId, reci
+    def exist_img_reci(self, idloc, reci, imgId):
+        s = "select * from reci_img where idloc= %d and reci= %d and imgId= %d"
+        parm = idLoc, reci, imgId
         try:
             self.cur.execute(s, parm)
             if not self.cur.fetchall():
@@ -82,11 +82,11 @@ class ReciImg:
             print (e)
 
 
-    def get_name_file_img_reci(self, idLoc, imgId, reci):
+    def get_name_file_img_reci(self, idLoc, reci, imgId):
         ''' get name file incluído el path '''
 
-        s = "select ruta from reci_img where idLoc = %d and imgId = %d and reci = %d"
-        parm = idLoc, imgId, reci
+        s = "select ruta from reci_img where idLoc = %d and reci = %d and imgId = %d"
+        parm = idLoc, reci, imgId
         try:
             self.cur.execute(s, parm)
             rows = self.cur.fetchall()
@@ -98,5 +98,5 @@ class ReciImg:
                 return ''
 
         except Exception as e:
-            print ('Error en método  -get_name_file_img- ')
+            print ('Error en método  -get_name_file_img-reci ')
             print (e)

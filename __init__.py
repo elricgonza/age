@@ -3623,7 +3623,7 @@ def clas(clas_id, clas_grup_id):
 @app.route('/recinto_img/<idloc>/<reci>/<string:nomreci>', methods=['GET', 'POST'])
 @login_required
 def recinto_img(idloc, reci, nomreci):
-    ''' Recintos - Uninominales '''
+    ''' Gestiona imágenes Recintos - Uninominales '''
 
     i = clasif_get.ClasifGet(cxms)  # conecta a la BD
     li = reci_img.ReciImg(cxms)
@@ -3642,11 +3642,11 @@ def recinto_img(idloc, reci, nomreci):
                 securef = secure_filename(f.filename)
                 fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
                 arch, ext = os.path.splitext(fpath)
-                name_to_save = str(idloc).zfill(5) + "_" +str()+ str(img_ids[n]).zfill(2) + ext
+                name_to_save = str(idloc).zfill(5) + "_" + str(reci).zfill(5) + str(img_ids[n]).zfill(2) + ext
                 fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)   # loc_img.ruta
 
-                if li.exist_img_reci(idloc, img_ids[n], idreci):   # si upd img
-                    file_to_del = li.get_name_file_img_reci(idloc, img_ids[n], idreci) # referencia en bd 
+                if li.exist_img_reci(idloc, reci, img_ids[n]):   # si upd img
+                    file_to_del = li.get_name_file_img_reci(idloc, reci, img_ids[n]) # referencia en bd 
                     os.remove(file_to_del[1:]) # borra arch. de HD
                     li.upd_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr) # upd de bd
                 else: # new
