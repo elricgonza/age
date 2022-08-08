@@ -2011,13 +2011,12 @@ def get_circundist():
 
     cxms2.close()
 
-#========== Final Modulo Zon ============#
-
-#========== Modulo Recintos Casos Especiales ============#
 
 @app.route('/reciespeciales_list', methods=['GET', 'POST'])
 @login_required
 def reciespeciales_list():
+    '''Casos excepcionales - coordenadas/circun que no corresponden espacialmente '''
+
     rces = recies.Reciespeciales(cxms)
     rows = rces.get_reciespeciales_all(usrdep)
     if rows:
@@ -3720,56 +3719,6 @@ def reciespe_img(idloc, reci, nomreci):
         else:  # New
             return render_template('reciespe_img.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Especiales - Edición' in permisos_usr)
-
-
-#Recintos - Casos Especiales
-@app.route('/reciespeciales_img/<idloc>/<string:nomloc>/<idreci>', methods=['GET', 'POST'])
-@login_required
-def reciespeciales_img(idloc, nomloc, idreci):
-    i = clasif_get.ClasifGet(cxms)  # conecta a la BD
-    li = reci_img.ReciImg(cxms)
-
-    with_img = li.get_reci_imgs(idloc)  # False or rows-img
-
-    error = None
-
-    if request.method == 'POST':
-        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
-        img_ids = list(img_ids_[0].split(","))      # list ok
-        uploaded_files = request.files.getlist("filelist")
-
-        for n in range(len(img_ids)):
-            f  = uploaded_files[n]
-            if f.filename != '':
-                securef = secure_filename(f.filename)
-                fpath = os.path.join(app.config['IMG_RECINTOS'], securef)
-                arch, ext = os.path.splitext(fpath)
-                name_to_save = str(idloc).zfill(5) + "_" + str(img_ids[n]).zfill(2) + ext
-                fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)   # loc_img.ruta
-
-                if li.exist_img_reci(idloc, img_ids[n], idreci):   # si upd img
-                    file_to_del = li.get_name_file_img_reci(idloc, img_ids[n], idreci) # referencia en bd 
-                    os.remove(file_to_del[1:]) # borra arch. de HD
-                    li.upd_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr) # upd de bd
-                else: # new
-                    li.add_reci_img(idloc, img_ids[n], idreci, fpath_destino, datetime.datetime.now(), usr)
-
-                f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
-                resize_save_file1(fpath, name_to_save, (1024, 768))
-
-                os.remove(fpath[1:])   # arch. fuente
-
-        return redirect(url_for('reciespeciales_list'))
-
-    else:
-        if with_img:  # Edit
-            return render_template('reciespeciales_img_upd.html', rows=i.get_descripcion(14), nomloc=nomloc,
-                                puede_editar='Reci_espe - Edición' in permisos_usr,
-                                imgs_loaded=with_img)
-        else:  # New
-            return render_template('reciespeciales_img.html', rows=i.get_descripcion(14), nomloc=nomloc,
-                                puede_editar='Reci_espe - Edición' in permisos_usr)
-
 
 
 #def resize_save_file(in_file, out_file, size, ruta_img):
