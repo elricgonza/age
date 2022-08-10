@@ -153,6 +153,20 @@
                 </div>
             {% endif %}
 
+
+            {% if current_user.is_authenticated and current_user.usuario == 'admin' %}
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            BD
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" href="/sql2008">Migra a SQL2008</a> 
+                      <a class="dropdown-item" href="/sincro_reci_list">Recintos</a>
+                    </div>
+                </div>
+            {% endif %}
+
+
             {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="/help_doc" target="_blank">Ayuda</a>
