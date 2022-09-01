@@ -293,7 +293,7 @@
             <div class="col-md-5">
                 <label for="docAct">Documento: Informe Técnico - TED:</label>
                 <input type="hidden" name="doc_idActT" value="{{ a.doc_idAT }}">
-                <select id="idocActT" name="docActT" class="form-control" required>                          
+                <select id="idocActT" name="docActT" class="form-control">                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if tpdfA[6] == 'I' %}
@@ -316,7 +316,7 @@
             <div class="col-md-5">
                 <label for="docAct">Documento: Resolución de Sala Plena - TED:</label>
                 <input type="hidden" name="doc_idAct" value="{{ a.doc_idA }}">
-                <select id="idocAct" name=docAct class="form-control" required>                          
+                <select id="idocAct" name=docAct class="form-control" >                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if tpdfA[6] == 'R' %}
@@ -369,7 +369,7 @@
                 <label for="docRspNal">Documento: Informe Técnico - Nal:</label>
                 <input type="hidden" name="doc_idRspNalT" value="{{ a.doc_idRNT }}">
                 {% if usrdep == 0 %}
-                    <select id="idocRspNalT" name="docRspNalT" class="form-control" required>                          
+                    <select id="idocRspNalT" name="docRspNalT" class="form-control">                          
                         <option></option>
                         {% for tpdfRN in tpdfsRN %}
                             {% if tpdfRN[6] == 'I' %}
@@ -404,7 +404,7 @@
                 <label for="docRspNal">Documento: Resolución de Sala Plena - Nal:</label>
                 <input type="hidden" name="doc_idRspNal" value="{{ a.doc_idRN }}">
                 {% if usrdep == 0 %}
-                    <select id="idocRspNal" name=docRspNal class="form-control" required>                          
+                    <select id="idocRspNal" name=docRspNal class="form-control">                          
                         <option></option>
                         {% for tpdfRN in tpdfsRN %}
                             {% if tpdfRN[6] == 'R' %}
@@ -592,10 +592,13 @@ function Validation(f) {
         return false;
     }
 
+    /*
     if (parseFloat(f.poblacionelecloc.value) >= parseFloat(f.poblacionloc.value)) {
         alert('\n Error - Población Electoral mayor o igual a Población Total ?? \n\n Por favor verifique ...');
         return false;
     }
+    */
+
     est = parseFloat(f.estado.value);
     if  ({{ usrdep }} > 0 && est > 100 ) { // estado corresponde a usr nal
         alert ('\n Error - Como usuario del TED debe completar el dato ESTADO...');

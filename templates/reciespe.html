@@ -274,7 +274,7 @@
             </div>
             <div class="col-md-2">
                 <label for="ruereci">Cod. RUE:</label>
-                <input type="text" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci"  required pattern="^ *\d[\d ]*$"
+                <input type="text" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci"  pattern="^ *\d[\d ]*$"
                         {% if load and rce.codrue != '0' and rce.tiporecinto == 7 %}
                             enabled value="{{ rce.codrue }}"
                          {% else %}
@@ -285,7 +285,7 @@
             </div>
             <div class="col-md-2">
                 <label for="edireci">Cod. Edificio:</label>
-                <input type="text" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"  required pattern="^ *\d[\d ]*$"
+                <input type="text" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"  pattern="^ *\d[\d ]*$"
                         {% if load and rce.codrueedif != '0' and rce.tiporecinto == 7 %}
                             enabled value="{{ rce.codrueedif }}"
                          {% else %}
@@ -297,7 +297,7 @@
             <div class="col-md-4">
                 <label for="depenreci">Tipo de Dependencia:</label>
                 <input type="hidden" name="reci_iddepen" value="">
-                <select id="idepenreci" name="depenreci" class="form-control" required
+                <select id="idepenreci" name="depenreci" class="form-control" 
                     {% if load and rce.codrueedif != '0' and rce.tiporecinto == 7 %}
                             enabled
                      {% else %}
@@ -376,7 +376,7 @@
             <div class="col-md-5">
                 <label for="docAct">Documento: Resolución de Sala Plena:</label>
                 <input type="hidden" name="doc_idAct" value="{{ rce.doc_idA }}">
-                <select id="idocAct" name=docAct class="form-control" required>                          
+                <select id="idocAct" name=docAct class="form-control">                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if tpdfA[6] == 'R' %}
@@ -402,7 +402,7 @@
             <div class="col-md-5">
                 <label for="docTec">Documento: Informe Técnico:</label>
                 <input type="hidden" name="doc_idTec" value="{{ rce.doc_idT }}">
-                <select id="idocTec" name="docTec" class="form-control" required>                          
+                <select id="idocTec" name="docTec" class="form-control">                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if tpdfA[6] == 'I' %}

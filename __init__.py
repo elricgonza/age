@@ -777,7 +777,7 @@ def asiento(idloc):
                                       )
             else:
                 a.upd_asiento(row_to_upd)
-                d.upd_doc(request.form['docAct'], 0, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
                 rows = a.get_asientos_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \

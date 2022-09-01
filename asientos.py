@@ -176,6 +176,7 @@ class Asientos:
         '''
         Verif. si existe dif. en registro editado
         '''
+
         a = self.get_asiento_idloc(row_to_upd[21])  #21 -> idloc
         vdif = False
 
@@ -218,13 +219,22 @@ class Asientos:
             vdif = True
         #a.fechaIngreso
         #a.fechaAct
+
+        '''
         if (self.usuario != row_to_upd[14]):
             #print('usuario dif')
             vdif = True
-        if (str(self.doc_idA) != row_to_upd[15]):
+        '''
+
+        # resol sala plena ted
+        #if (str(self.doc_idA) != row_to_upd[15]):
+        if ((self.doc_idA) !=  (0 if row_to_upd[15]=="" else int(row_to_upd[15]) )):
             #print('doc_idA  dif')
             vdif = True
-        if (self.doc_idRN != int(row_to_upd[16])):
+
+        # resol sala plena nal
+        #if ((self.doc_idAF) != int(row_to_upd[16])):
+        if ((self.doc_idRN) !=  (0 if row_to_upd[16]=="" else int(row_to_upd[16]) )):
             #print('doc_idRN dif')
             #print(str(self.doc_idRN))
             #print(row_to_upd[16])
@@ -237,12 +247,16 @@ class Asientos:
         if (str(self.urural) != row_to_upd[18]):
             #print('urural dif')
             vdif = True
-        if (str(self.doc_idAT) != row_to_upd[19]):
+        #inf téc ted -- (combo template)
+        #if (str(self.doc_idAT) != row_to_upd[19]):
+        if ((self.doc_idAT) != (0 if row_to_upd[19]=="" else int(row_to_upd[19]) )):
             #print('doc_idAT  dif')
             vdif = True
-        if (self.doc_idRNT != int(row_to_upd[20])):
-            #print('doc_idRNT dif')
-            #print(str(self.doc_idRN))
+
+        # doc inf tec nal 
+        #if (self.doc_idRNT != int(row_to_upd[20])):
+        if ((self.doc_idRNT) !=  (0 if row_to_upd[20]=="" else int(row_to_upd[20]) )):
+            #print('doc_idRNT dif') #print(str(self.doc_idRN))
             #print(row_to_upd[20])
             vdif = True
 

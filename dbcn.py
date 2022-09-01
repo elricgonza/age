@@ -10,8 +10,9 @@ import psycopg2.extras
 def get_db_ms():
     #pms = ("192.168.110.1","appgeoh","1234qweAS","bdge")
     #pms = ("10.100.107.31","appgeoh","1234qweAS","bdge")
-    #pms = ("10.100.15.145\MSSQLSERVER2","sa","Ugle2022","bdge")
-    pms = ("10.100.15.54","appgeo","1234qweAS","bdge")
+    #pms = ("10.100.15.54","appgeo","1234qweAS","bdge")
+    pms = ("10.100.15.53","sa","123qweAS","bdge")
+
     try:
         cx = mss.connect(*pms)
         print("cnx mssql ok -bdge-")

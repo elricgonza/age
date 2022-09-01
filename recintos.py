@@ -173,20 +173,24 @@ class Recintos:
         if self.codrueedif != row_to_upd[9]:
             #print('codrueedit dif')
             vdif = True
-        if self.depend != int(row_to_upd[10]):
+        #if self.depend != int(row_to_upd[10]):
+        if ((self.depend) != (0 if row_to_upd[10]=="" else int(row_to_upd[10]) )):
             #print('depend dif')
             vdif = True
         if self.cantpisos != row_to_upd[11]:
             #print('cantPisos dif')
             vdif = True
         #a.fechaAct
+        '''
         if self.usuario != row_to_upd[13]:
             #print('usuario dif')
             vdif = True
+        '''
         if self.etapa != int(row_to_upd[14]):
             #print('etapa dif')
             vdif = True
-        if self.doc_idA != int(row_to_upd[15]):
+        #if self.doc_idA != int(row_to_upd[15]):
+        if ((self.doc_idA) != (0 if row_to_upd[15]=="" else int(row_to_upd[15]) )):
             #print('doc_idA dif')
             vdif = True
         if self.doc_idAF != int(row_to_upd[16]):
@@ -195,7 +199,8 @@ class Recintos:
         if self.ambientes != int(row_to_upd[17]):
             #print('ambientesDisp dif')
             vdif = True
-        if self.doc_idT != int(row_to_upd[18]):
+        #if self.doc_idT != int(row_to_upd[18]):
+        if ((self.doc_idT) != (0 if row_to_upd[18]=="" else int(row_to_upd[18]) )):
             #print('doc_idT dif')
             vdif = True
 
