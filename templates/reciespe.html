@@ -25,7 +25,8 @@
         <div class="form-row">
             <div class="col-md-3">
                 <label for="latitud">Latitud:</label>
-                <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}"
+                <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud" 
+                    required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6} " onfocusout="getgeo(event)"
                         {% if load %}
                             value="{{ rce.latitud }}"
                         {% endif %}
@@ -38,7 +39,8 @@
             </div>
             <div class="col-md-3">
                 <label for="longitud">Longitud:</label>
-                <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"  required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeoesp(event)"
+                <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud" 
+                    required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeoesp(event)" onfocusout="getgeo(event)"
                         {% if load %}
                             value="{{ rce.longitud }}"
                         {% endif %}
@@ -605,7 +607,7 @@
         str=f.muni.value;
         str1=f.municipio.value;
         if (str.trim() != "" && str.trim() != str1.trim()) {
-            alert('Las nuevas coordenadas apuntan otro Municipio...');
+            alert('Las nuevas coordenadas se encuentran en otro Municipio...');
             return false;
         }
 
