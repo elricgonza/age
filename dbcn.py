@@ -22,7 +22,7 @@ def get_db_ms():
 
 
 def get_db_pg():
-    ppg = {'host': '10.100.15.54',  \
+    ppg = {'host': '10.100.15.53',  \
         'user': 'appgeo', \
         'password': 'appgeo', \
         'port': '5432', \
@@ -31,9 +31,9 @@ def get_db_pg():
         cx = pg.connect(**ppg)
         #cx.set_isolation_level(0)  # Avoid transactions, autocommit
         #self.cur = cx.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        print("cnx postgres ok -geodb-")
+        print("cnx postgres ok -bdgeo-")
         return cx
     except pg.DatabaseError as e:
-        print("Error en conexión... Postgres -geodb-")
+        print("Error en conexión... Postgres -bdgeo-")
         print(e)
         sys.exit()
