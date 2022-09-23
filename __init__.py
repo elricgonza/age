@@ -1312,9 +1312,9 @@ def get_municipios_all():
 @app.route('/recintos_list', methods=['GET', 'POST'])
 @login_required
 def recintos_list():
-    ''' Recintos '''
+    ''' Recintos uninom y mixtos '''
     rc = recintos.Recintos(cxms)
-    rows = rc.get_recintos_all(usrdep)
+    rows = rc.get_reci_uninom_mixto(usrdep)
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
@@ -1330,6 +1330,7 @@ def recintos_list():
 @app.route('/recinto/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def recinto(idreci, idlocreci):
+    ''' Uninominales y mixtos '''
     rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
@@ -1387,7 +1388,7 @@ def recinto(idreci, idlocreci):
 
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rc.get_recintos_all(usrdep)
+                rows = rc.get_reci_uninom_mixto(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
                                         puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
@@ -1411,7 +1412,7 @@ def recinto(idreci, idlocreci):
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)            
 
-                rows = rc.get_recintos_all(usrdep)
+                rows = rc.get_reci_uninom_mixto(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
                                         puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template

@@ -38,6 +38,7 @@
                             <th>Recinto</th>
                             <th>Tipo Circun.</th>
                             <th>Estado</th>
+                            <th>Etapa</th>
                             <th>Editar</th>
                             <th>Imágen</th>
                         </tr>
@@ -54,6 +55,7 @@
                             <td><a href={{ url_for( 'recinto_vs', idloc=recinto[0], reci=recinto[1]) }}>{{ recinto[5] }}</a></td>
                             <td>{{ recinto[6] }}</td>
                             <td>{{ recinto[10] }}</td>
+                            <td>{{ recinto[11] }}</td>
                             <td>
                                 {% if puede_editar %}
                                     <a href={{ url_for( 'recinto', idreci=recinto[1], idlocreci=recinto[0]) }}><span class="fas fa-edit"></span></a>

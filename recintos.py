@@ -25,22 +25,21 @@ class Recintos:
         self.cur = cx.cursor()
 
 
-    def get_recintos_all(self, usrdep):        
+    def get_reci_uninom_mixto(self, usrdep):
+        '''Obtiene recintos uninominales y mixtos '''
+
         s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " NombreRecinto, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
-            " from [bdge].[dbo].[GeoRecintos_all]"
-        if usrdep != 0 :
-            s = s + " where  TipoLocLoc in (67, 69) and DEP = %d order by prov, sec"
+            " NombreRecinto, nombreTipoLocLoc as TipoCircunscripcion, DEP, PROV, SEC, Estado, desEtapa, usuario" + \
+            " from [bdge].[dbo].[v_reci_nal_all]"
+        if usrdep != 0:
+            s = s + " where  TipoLocLoc in (67, 69) and DEP = %d order by prov, sec"  #67 uninom, 69 mixt
             self.cur.execute(s, usrdep)
         else:
             s = s + " where  TipoLocLoc in (67, 69) order by Dep, Prov, Sec"
             self.cur.execute(s, usrdep)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
 
 
     def get_recinto_idreci(self, idreci, idlocreci):
