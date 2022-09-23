@@ -1577,22 +1577,23 @@ def get_distritos_all2():
     cxms2.close()
 
 
-@app.route('/reciespe_list', methods=['GET', 'POST'])
+@app.route('/reci_espec_list', methods=['GET', 'POST'])
 @login_required
-def reciespe_list():
-    ''' Pueblos Indigenas list '''
+def reci_espec_list():
+    ''' Recintos Especiales / Indígenas list '''
+
     rce = recie.Reciespe(cxms)
-    rows = rce.get_reciespe_all(usrdep)
+    rows = rce.get_reci_espec(usrdep)
     if rows:
         if 'Especiales - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+            return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
                                     puede_editar='Especiales - Edición' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print ('Sin recintos...')
-        return render_template('reciespe_list.html', puede_adicionar='Especiales - Adición' in permisos_usr)
+        print ('Sin recintos especiales...')
+        return render_template('reci_espec_list.html', puede_adicionar='Especiales - Adición' in permisos_usr)
 
 
 @app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -1656,8 +1657,8 @@ def reciespe(idreci, idlocreci):
 
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rce.get_reciespe_all(usrdep)
-                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                rows = rce.get_reci_espec(usrdep)
+                return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
                                         puede_editar='Especiales - Edición' in permisos_usr)  # render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
@@ -1680,8 +1681,8 @@ def reciespe(idreci, idlocreci):
                 rce.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rce.get_reciespe_all(usrdep)
-                return render_template('reciespe_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                rows = rce.get_recie_espec(usrdep)
+                return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
                                         puede_editar='Especiales - Edición' in permisos_usr)  # render a template
     else: # Viene de <recintos_list>
         if idreci != '0':  # EDIT
@@ -3710,7 +3711,7 @@ def reciespe_img(idloc, reci, nomreci):
 
                 os.remove(fpath[1:])   # arch. fuente 
         
-        return redirect(url_for('reciespe_list'))
+        return redirect(url_for('reci_espec_list'))
 
     else:
         if with_img:  # Edit

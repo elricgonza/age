@@ -24,6 +24,7 @@ class Reciespe:
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_reciespe_all(self, usrdep):        
         s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
             " NombreRecinto, TipoCircunscripcion, DEP, PROV, SEC, Estado" + \
@@ -40,6 +41,23 @@ class Reciespe:
             return False
         else:
             return rows
+
+
+    def get_reci_espec(self, usrdep):        
+        ''' Obtiene recintos especiales (indígenas) '''
+        
+        s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
+            " NombreRecinto, nombreTipoLocLoc as TipoCircunscripcion, DEP, PROV, SEC, Estado, desEtapa, usuario" + \
+            " from [bdge].[dbo].[v_reci_nal_all]"
+        if usrdep != 0:
+            s = s + " where  TipoLocLoc = 68 and DEP = %d order by prov, sec"  #68 espec
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " where  TipoLocLoc = 68 order by Dep, Prov, Sec"
+            self.cur.execute(s, usrdep)
+
+        rows = self.cur.fetchall()
+        return rows
 
 
     def get_recinto_idreci(self, idreci, idlocreci):
@@ -197,7 +215,8 @@ class Reciespe:
         if self.doc_idAF != int(row_to_upd[16]):
             #print('doc_idAF dif')
             vdif = True
-        if self.nacionId != int(row_to_upd[17]):
+        #if self.nacionId != int(row_to_upd[17]):
+        if ((self.nacionId) != (0 if row_to_upd[17]=="" else int(row_to_upd[17]) )):
             #print('nacionId dif')
             vdif = True
         if self.ambientes != int(row_to_upd[18]):
