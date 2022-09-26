@@ -1681,7 +1681,7 @@ def reciespe(idreci, idlocreci):
                 rce.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rce.get_recie_espec(usrdep)
+                rows = rce.get_reci_espec(usrdep)
                 return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
                                         puede_editar='Especiales - Edición' in permisos_usr)  # render a template
     else: # Viene de <recintos_list>
