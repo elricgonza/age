@@ -37,6 +37,7 @@
                             <th>Asiento</th>
                             <th>Tipo Cir.</th>
                             <th>Estado</th>
+                            <th>Etapa</th>
                             <th>Editar</th>
                             <th>Imágen</th>
                             <th>Ind.</th>
@@ -53,6 +54,7 @@
                             <td><a href={{ url_for( 'asiento_vs', idloc=asiento[0]) }}>{{ asiento[4] }}</a></td>
                             <td>{{ asiento[5] }}</td>
                             <td>{{ asiento[9] }}</td>
+                            <td>{{ asiento[10] }}</td>
                             <td>
                                 {% if puede_editar %}
                                     <a href={{ url_for( 'asiento', idloc=asiento[0]) }}><span class="fas fa-edit"></span></a>

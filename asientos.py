@@ -31,11 +31,14 @@ class Asientos:
     _municipio = ''
     _tipo_circun = ''
 
+
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_asientos_all(self, usrdep):        
+        ''' test to replace '''
         s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
             " AsientoElectoral as Asiento, tipoCircunscripcion, DEP, PROV, SEC, Estado" + \
             " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
@@ -51,6 +54,23 @@ class Asientos:
             return False
         else:
             return rows
+
+
+    def get_loc_all(self, usrdep):
+        ''' Obtiene asientos nacional '''
+        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio," + \
+            " NomLoc as Asiento, desTipoCircun, dep, prov, sec, desEstado, desEtapa" + \
+            " from [bdge].[dbo].[v_loc_nal_all]"
+        if usrdep != 0 :
+            s = s + " where DEP = %d order by prov, sec, idloc"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by dep, prov, sec, idloc"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
 
     def get_asiento_idloc(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \

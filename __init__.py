@@ -649,14 +649,13 @@ def documento_del(doc_id, tipo_d):
         return render_template('documentos_list.html', documentos=rows, puede_adicionar='Documentos - Adición' in permisos_usr)
     else:
         print ('Sin documentos...')
-#Codigo Grover-Final
 
 
 @app.route('/asientos_list', methods=['GET', 'POST'])
 @login_required
 def asientos_list():
     a = asi.Asientos(cxms)
-    rows = a.get_asientos_all(usrdep)
+    rows = a.get_loc_all(usrdep)
     if rows:
         if 'Asientos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
@@ -750,7 +749,7 @@ def asiento(idloc):
 
                 d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, docActT, docRspNalT)
 
-                rows = a.get_asientos_all(usrdep)
+                rows = a.get_loc_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
                                         puede_editar='Asientos - Edición' in permisos_usr, \
                                         puede_eliminar='Asientos - Eliminación' in permisos_usr
@@ -779,7 +778,7 @@ def asiento(idloc):
                 a.upd_asiento(row_to_upd)
                 d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
-                rows = a.get_asientos_all(usrdep)
+                rows = a.get_loc_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
                                         puede_editar='Asientos - Edición' in permisos_usr, \
                                         puede_eliminar='Asientos - Eliminación' in permisos_usr
