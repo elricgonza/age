@@ -37,25 +37,6 @@ class Asientos:
         self.cur = cx.cursor()
 
 
-    def get_asientos_all(self, usrdep):        
-        ''' test to replace '''
-        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " AsientoElectoral as Asiento, tipoCircunscripcion, DEP, PROV, SEC, Estado" + \
-            " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
-        if usrdep != 0 :
-            s = s + " where DEP = %d order by prov, sec"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " order by DEP, PROV, SEC"
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-
-
     def get_loc_all(self, usrdep):
         ''' Obtiene asientos nacional '''
         s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio," + \

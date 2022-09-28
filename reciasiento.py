@@ -6,12 +6,15 @@ class Reciasiento:
     secloc = 0
     nomloc = ""
 
+
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
 
-    def get_asientos_all(self, usrdep):        
-        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+
+    def get_loc_all(self, usrdep):        
+        ''' Obtiene datos bàsicos de asiento para - recintos '''
+        s = "select Dep, Prov, Sec, IdLoc, nomloc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
         if usrdep != 0 :
             s = s + " where Dep = %d order by AsientoElectoral"
             self.cur.execute(s, usrdep)
@@ -20,10 +23,8 @@ class Reciasiento:
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
+
 
     def get_asientos_all1(self, usrdep, dep, prov, secc):
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
@@ -42,6 +43,7 @@ class Reciasiento:
         else:
             return rows
 
+
     def get_asientos_all2(self, usrdep, dep, prov, secc):        
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
@@ -58,6 +60,7 @@ class Reciasiento:
             return False
         else:
             return rows
+
 
     def get_asientos_all4(self, usrdep, dep, prov, secc):
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"

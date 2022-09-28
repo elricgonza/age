@@ -101,21 +101,22 @@ class Jurisdiccion:
             self.idzona = row[32]
             return True
     
-    def get_asientos_all(self, usrdep):        
-        s = "select IdLoc, AsientoElectoral, Dep, Prov, Sec" + \
-        " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+
+    def get_loc_estado_hab(self, usrdep):        
+        ''' Obtiene asientos con estado habilitado/rehabilitado '''
+
+        s = "select IdLoc, nomLoc as AsientoElectoral, Dep, Prov, Sec" + \
+        " from [bdge].[dbo].[v_loc_nal_all]"
         if usrdep != 0:
-            s = s + " where Dep = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where Dep = %d and estado in (16, 17, 75, 76) order by AsientoElectoral"  # hab ted, rehab ted, hab tse, rehab tse
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where idclasif in (16, 17, 75, 76) order by AsientoElectoral"
+            s = s + " where estado in (16, 17, 75, 76) order by AsientoElectoral"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
+
 
     def get_zonasd_all(self, usrdep):
         s = "Select d.Dist, z.Zona, z.NomZona, d.CircunDist, a.IdLoc from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
