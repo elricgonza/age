@@ -378,23 +378,6 @@ class Asientos:
         row = self.cur.fetchone()
         return row[0]
 
-    def get_geo_all(self, usrdep):
-        s = "select gn.IdLoc, gn.Dep, gn.NomDep, gn.Prov, gn.NomProv, gn.Sec, gn.NombreMunicipio, gn.AsientoElectoral, gn.latitud," + \
-        " gn.longitud, gn.idEstado, Convert(CHAR(10),gn.fechaIngreso,23) as fecha, gn.TipoCircunscripcion"  + \
-        " from [bdge].[dbo].[GeoAsientos_Nacional_all] AS gn"
-        self.cur.execute(s)
-        if usrdep != 0 :
-            s = s + " where DEP = %d order by gn.prov, gn.sec"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " order by gn.DEP, gn.PROV, gn.SEC"
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
 
     def get_tipocircun(self):
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=7"

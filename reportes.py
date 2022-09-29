@@ -11,10 +11,12 @@ class Reportes:
         self.cx = cx
         self.cur = cx.cursor()
 
+
+    '''
     def get_rep_asientos_all(self, usrdep):        
         s = "select IdLoc, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NombreMunicipio as Municipio," + \
             " AsientoElectoral as Asiento, tipoCircunscripcion, estado, etapa, urbanorural, PoblacionElectoral, PoblacionCensal" + \
-            " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+            " from [bdge].[dbo].[XeoAsientos_Nacional_all]"
         if usrdep != 0 :
             s = s + " where DEP = %d order by prov, sec"
             self.cur.execute(s, usrdep)
@@ -27,6 +29,25 @@ class Reportes:
             return False
         else:
             return rows
+    '''
+
+    def get_rep_asientos_all(self, usrdep):        
+        ''' (query actualizado) '''
+
+        s = "select IdLoc, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NomMun as Municipio," + \
+            " nomLoc as Asiento, desTipoCircun as tipoCircunscripcion, desEstado, desEtapa, desUrbanorural," + \
+            " PoblacionLoc as PoblacionElectoral, PoblacionElecLoc as PoblacionCensal" + \
+            " from [bdge].[dbo].[v_loc_nal_all]"
+        if usrdep != 0 :
+            s = s + " where dep = %d order by prov, sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by dep, prov, sec"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
 
     def get_rep_recintos_all(self, usrdep):        
         s = "Select IdLocReci, Reci, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NombreMunicipio as Municipio," + \

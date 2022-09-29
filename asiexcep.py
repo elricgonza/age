@@ -36,21 +36,21 @@ class Asi_excep:
         self.cur = cx.cursor()
 
     def get_asi_excep_all(self, usrdep):        
-        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " AsientoElectoral as Asiento, tipoCircunscripcion, DEP, PROV, SEC, Estado" + \
-            " from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        ''' Obtiene asientos (query actualizado) '''
+
+        s = "select IdLoc, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio," + \
+            " nomLoc as Asiento, desTipoCircun as tipoCircunscripcion, dep, prov, sec, desEstado as estado" + \
+            " from [bdge].[dbo].[v_loc_nal_all]"
         if usrdep != 0 :
-            s = s + " where DEP = %d order by prov, sec"
+            s = s + " where dep = %d order by prov, sec"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " order by DEP, PROV, SEC"
+            s = s + " order by dep, prov, sec"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
+
 
     def get_asi_excep_idloc(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
@@ -284,24 +284,6 @@ class Asi_excep:
         row = self.cur.fetchone()
         return row[0]
 
-    def get_geo_all(self, usrdep):
-        s = "select gn.IdLoc, gn.Dep, gn.NomDep, gn.Prov, gn.NomProv, gn.Sec, gn.NombreMunicipio, gn.AsientoElectoral, gn.latitud," + \
-        " gn.longitud, gn.idEstado, Convert(CHAR(10),gn.fechaIngreso,23) as fecha, gn.TipoCircunscripcion"  + \
-        " from [bdge].[dbo].[GeoAsientos_Nacional_all] AS gn"
-        self.cur.execute(s)
-        if usrdep != 0 :
-            s = s + " where DEP = %d order by gn.prov, gn.sec"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " order by gn.DEP, gn.PROV, gn.SEC"
-            print(s)
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
 
     def get_tipocircun(self):
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=7"

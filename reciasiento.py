@@ -25,7 +25,7 @@ class Reciasiento:
         rows = self.cur.fetchall()
         return rows
 
-
+    '''
     def get_asientos_all1(self, usrdep, dep, prov, secc):
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
@@ -42,8 +42,26 @@ class Reciasiento:
             return False
         else:
             return rows
+    '''
 
 
+    def get_asientos_all1(self, usrdep, dep, prov, secc):
+        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE y TipoCircun ESPECIAL (actualizado query) '''
+
+        s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
+        if usrdep != 0 :
+            asie = dep, prov, secc, usrdep
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc = 68 order by AsientoElectoral"
+            self.cur.execute(s, asie)
+        else:
+            asie = dep, prov, secc
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc = 68 order by AsientoElectoral"
+            self.cur.execute(s, asie)
+
+        rows = self.cur.fetchall()
+        return rows
+
+    '''
     def get_asientos_all2(self, usrdep, dep, prov, secc):        
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
@@ -60,8 +78,26 @@ class Reciasiento:
             return False
         else:
             return rows
+    '''
+
+    def get_asientos_all2(self, usrdep, dep, prov, secc):        
+        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE y TipoCircun UNINOM y MIXTO (actualizado query) '''
+
+        s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
+        if usrdep != 0 :
+            asie = dep, prov, secc, usrdep
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc in (67, 69) order by AsientoElectoral"
+            self.cur.execute(s, asie)
+        else:
+            asie = dep, prov, secc
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado  in (16, 17, 75, 76) and tipoLocLoc in (67, 69) order by AsientoElectoral"
+            self.cur.execute(s, asie)
+
+        rows = self.cur.fetchall()
+        return rows
 
 
+    '''
     def get_asientos_all4(self, usrdep, dep, prov, secc):
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
@@ -75,6 +111,25 @@ class Reciasiento:
 
         rows = self.cur.fetchall()
         return rows
+    '''
+
+
+    def get_asientos_all4(self, usrdep, dep, prov, secc):
+        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE y TipoCircun UNINOM, ESPECIAL y MIXTO (actualizado query) '''
+
+        s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
+        if usrdep != 0 :
+            asie = dep, prov, secc, usrdep
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc in (67, 68, 69) order by AsientoElectoral"
+            self.cur.execute(s, asie)
+        else:
+            asie = dep, prov, secc
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc in (67, 68, 69) order by AsientoElectoral"
+            self.cur.execute(s, asie)
+
+        rows = self.cur.fetchall()
+        return rows
+
 
     def get_asientos_all3(self, usrdep, pa, dep, prov, secc):        
         s = "select IdPais, Dep, Prov, Sec, IdLoc, NomLoc from [bdge].[dbo].[GeoAsientos_Exterior_all]"
@@ -93,6 +148,8 @@ class Reciasiento:
         else:
             return rows    
 
+
+    '''
     def get_asiento_one(self, usrdep, idloc):        
         s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
         if usrdep != 0 :
@@ -109,6 +166,24 @@ class Reciasiento:
             return False
         else:
             return rows
+    '''
+
+    def get_asiento_one(self, usrdep, idloc):        
+        ''' Obtiene asiento por idLoc (query actualizado) '''
+
+        s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
+        if usrdep != 0 :
+            asie = idloc, usrdep
+            s = s + " where IdLoc = %d and Dep = %d order by AsientoElectoral"
+            self.cur.execute(s, asie)
+        else:
+            asie = idloc
+            s = s + " where IdLoc = %d order by AsientoElectoral"
+            self.cur.execute(s, asie)
+
+        rows = self.cur.fetchall()
+        return rows
+
 
     def get_zonas_all(self, usrdep):        
         s = "select l.IdLoc, z.Zona, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z" + \

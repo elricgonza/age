@@ -22,7 +22,6 @@ import gerencial as ger
 import documentos as docu
 import documentos_pdf as dpdf
 import tipodocs as tdoc
-import reportesPDF as rpdf
 import exterior as ext
 import exteriorreci as extr
 import recintos 
@@ -1128,19 +1127,6 @@ def exterior(idloc):
                             gj_cir=j.get_cir(9),
                             gj_mun=j.get_mun(9),
                             gj_prov=j.get_prov(9))
-
-
-@app.route('/get_geo_all', methods=['GET', 'POST'])
-def get_geo_all():
-    '''  '''
-    a = asi.Asientos(cxms)
-    rows = a.get_geo_all(usrdep)
-    if rows:
-        return jsonify(rows)
-    else:
-        return jsonify(departamento='COORDENADA',
-                       provincia='INCORRECTA !!!',
-                       municipio='INTENTE NUEVAMENTE....')
 
 
 @app.route('/reportes', methods=['GET', 'POST'])

@@ -134,9 +134,10 @@ class Jurisdiccion:
         else:
             return rows
 
+    '''
     def get_asijuri_all(self, dp, pr, mu):
         s = "select distinct IdLoc, AsientoElectoral, Dep, Prov, Sec" + \
-            " from [bdge].[dbo].[GeoAsientos_Nacional_all]" + \
+            " from [bdge].[dbo].[XeoAsientos_Nacional_all]" + \
             " where Dep = %d and Prov = %d and Sec = %d and idclasif in (16, 17, 75, 76) order by AsientoElectoral"
         lista = dp, pr, mu    
         self.cur.execute(s, lista)
@@ -145,6 +146,19 @@ class Jurisdiccion:
             return False
         else:
             return rows
+    '''
+
+    def get_asijuri_all(self, dp, pr, mu):
+        ''' (query actualizado) '''
+
+        s = "select distinct IdLoc, NomLoc as AsientoElectoral, Dep, Prov, Sec" + \
+            " from [bdge].[dbo].[v_loc_nal_all]" + \
+            " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) order by NomLoc"
+        lista = dp, pr, mu    
+        self.cur.execute(s, lista)
+        rows = self.cur.fetchall()
+        return rows
+
 
     def get_zondist_all(self, idloc):
         s = "Select d.Dist, z.Zona, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \

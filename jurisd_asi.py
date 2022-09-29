@@ -11,10 +11,11 @@ class JurisdAsi:
         self.cx = cx
         self.cur = cx.cursor()
 
+    ''' 
     def get_jurisd_asi_all(self, usrdep):        
         s = "select a.IdLoc, a.NomDep as Departamento, a.NomProv as Provincia, a.NombreMunicipio as Municipio, "  + \
             "a.AsientoElectoral as Asiento, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen" + \
-            " from [bdge].[dbo].[GeoAsientos_Nacional_all] a" + \
+            " from [bdge].[dbo].[XeoAsientos_Nacional_all] a" + \
             " left join [bdge].[dbo].[actJurisd] j on a.IdLoc=j.idLoc"
         if usrdep != 0 :
             s = s + " where a.DEP = %d group by a.IdLoc, a.NomDep, a.NomProv, a.NombreMunicipio, "  + \
@@ -30,8 +31,29 @@ class JurisdAsi:
             return False
         else:
             return rows
+    ''' 
 
+
+    def get_jurisd_asi_all(self, usrdep):        
+        '''  (query actualizado) '''
+
+        s = "select a.IdLoc, a.NomDep as Departamento, a.NomProv as Provincia, a.NomMun as Municipio, "  + \
+            "a.nomLoc as Asiento, a.desTipoCircun as TipoCircunscripcion, a.dep, a.prov, a.sec, a.desEstado as Estado, j.idLoc, j.origen" + \
+            " from [bdge].[dbo].[v_loc_nal_all] a" + \
+            " left join [bdge].[dbo].[actJurisd] j on a.IdLoc=j.idLoc"
+        if usrdep != 0 :
+            s = s + " where a.dep = %d group by a.IdLoc, a.NomDep, a.NomProv, a.NomMun, "  + \
+                    "a.nomLoc, a.desTipoCircun, a.dep, a.prov, a.sec, a.desEstado, j.idLoc, j.origen order by a.prov, a.sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " group by a.IdLoc, a.NomDep, a.NomProv, a.NomMun, "  + \
+                    "a.nomLoc, a.desTipoCircun, a.dep, a.prov, a.sec, a.desEstado, j.idLoc, j.origen order by a.dep, a.prov, a.sec"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
     
+
     def get_jurisd_asi_idloc(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
             "a.PoblacionLoc, a.PoblacionElecLoc, a.FechaCensoLoc, a.TipoLocLoc, a.fechaBaseLegLoc," + \
@@ -269,10 +291,12 @@ class JurisdAsi:
             print('Distrito actualizado')
         except Exception as e:
             print("Error - actualización de Distrito...")    
-    
+
+
+    ''' 
     def get_jurisd_asi_idloc_idjurisd(self, idloc):        
-        s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.GeoAsientos_Nacional_all" + \
-            " left join bdge.dbo.actJurisd on bdge.dbo.GeoAsientos_Nacional_all.IdLoc=bdge.dbo.actJurisd.idLoc" + \
+        s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.XeoAsientos_Nacional_all" + \
+            " left join bdge.dbo.actJurisd on bdge.dbo.XeoAsientos_Nacional_all.IdLoc=bdge.dbo.actJurisd.idLoc" + \
             " where bdge.dbo.actJurisd.idLoc=%d group by bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2"    
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
@@ -284,6 +308,23 @@ class JurisdAsi:
             self.idzona = row[2]
             self.dist = row[3]
             return True
+     '''
+
+    def get_jurisd_asi_idloc_idjurisd(self, idloc):        
+        s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.v_loc_nal_all" + \
+            " left join bdge.dbo.actJurisd on bdge.dbo.v_loc_nal_all.IdLoc=bdge.dbo.actJurisd.idLoc" + \
+            " where bdge.dbo.actJurisd.idLoc=%d group by bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2"    
+        self.cur.execute(s, idloc)
+        row = self.cur.fetchone()
+        if  row == None:
+            return False
+        else:
+            self.idloc = row[0]
+            self.circ = row[1]
+            self.idzona = row[2]
+            self.dist = row[3]
+            return True
+
 
     def get_zonasd_all(self, usrdep):        
         s = "Select d.Dist, z.Zona, z.NomZona, d.CircunDist, a.DepLoc, a.ProvLoc, a.SecLoc from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
