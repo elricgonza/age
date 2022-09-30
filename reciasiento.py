@@ -27,7 +27,7 @@ class Reciasiento:
 
     '''
     def get_asientos_all1(self, usrdep, dep, prov, secc):
-        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[XeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
             s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) and tipocircun = 68 order by AsientoElectoral"
@@ -63,7 +63,7 @@ class Reciasiento:
 
     '''
     def get_asientos_all2(self, usrdep, dep, prov, secc):        
-        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[XeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
             s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) and tipocircun in (67, 69) order by AsientoElectoral"
@@ -99,7 +99,7 @@ class Reciasiento:
 
     '''
     def get_asientos_all4(self, usrdep, dep, prov, secc):
-        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[XeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
             s = s + " where Dep = %d and Prov = %d and Sec = %d and Dep = %d and idclasif in (16, 17, 75, 76) and tipocircun in (67, 68, 69) order by AsientoElectoral"
@@ -151,7 +151,7 @@ class Reciasiento:
 
     '''
     def get_asiento_one(self, usrdep, idloc):        
-        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[GeoAsientos_Nacional_all]"
+        s = "select Dep, Prov, Sec, IdLoc, AsientoElectoral from [bdge].[dbo].[XeoAsientos_Nacional_all]"
         if usrdep != 0 :
             asie = idloc, usrdep
             s = s + " where IdLoc = %d and Dep = %d order by AsientoElectoral"
