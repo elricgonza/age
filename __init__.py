@@ -2140,9 +2140,10 @@ def get_provespeciales_all():
 
 @app.route('/get_provespeciales_all1', methods=['GET', 'POST'])
 def get_provespeciales_all1():
+    # excepc.
     dep = request.args.get('dep')
     cxms2 = dbcn.get_db_ms()
-    rces = recies.Reciespeciales(cxms2)
+    rces = recies.Reciespeciales(cxms2)  #excepc
     rows = rces.get_provespeciales_all1(dep)
     if rows:
         return jsonify(rows)

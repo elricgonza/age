@@ -279,7 +279,21 @@ class Reciespeciales:
         else:
             return rows
 
+
     def get_provespeciales_all1(self, dep):        
+        ''' excepc '''
+
+        print('*************************')
+        print(dep)
+        print('*************************')
+
+        if dep == "---":
+            return False
+
+        print('<<<*************************')
+        print('aqui ya no deb ingr cuando es ---')
+        print('*************************')
+
         s = "select DepProv, Prov, NomProv from [GeografiaElectoral_app].[dbo].[PROV] where DepProv = %d order by DepProv"
         self.cur.execute(s, dep)
         rows = self.cur.fetchall()
@@ -288,7 +302,13 @@ class Reciespeciales:
         else:
             return rows
 
+
     def get_muniespeciales_all1(self, dep, prov):        
+        ''' excepc '''
+
+        if dep == "---":
+            return False
+
         s = "select DepSec, ProvSec, Sec, NomSec from [GeografiaElectoral_app].[dbo].[SEC] where DepSec = %d and ProvSec = %d order by DepSec"
         consulta = dep, prov
         self.cur.execute(s, consulta)
