@@ -179,13 +179,13 @@ class Asi_excep:
         a = self.get_asi_excep_idloc(row_to_upd[24])  #21 -> idloc
         vdif = False
 
-        if self.deploc != row_to_upd[0]:
+        if self.deploc != int(row_to_upd[0]):
             print('dep dif')
             vdif = True
-        if self.provloc != row_to_upd[1]:
+        if self.provloc != int(row_to_upd[1]):
             print('prov dif')
             vdif = True
-        if self.secloc != row_to_upd[2]:
+        if self.secloc != int(row_to_upd[2]):
             print('sec dif')
             vdif = True
         if self.nomloc != row_to_upd[3]:
@@ -228,10 +228,12 @@ class Asi_excep:
         if (self.usuario != row_to_upd[17]):
             print('usuario dif')
             vdif = True
-        if (str(self.doc_idA) != row_to_upd[18]):
+        #if (str(self.doc_idA) != row_to_upd[18]):
+        if ((self.doc_idA) != (0 if row_to_upd[18]=="" else int(row_to_upd[18]))):
             print('doc_idA  dif')
             vdif = True
-        if (self.doc_idRN != int(row_to_upd[19])):
+        #if (self.doc_idRN != int(row_to_upd[19])):
+        if ((self.doc_idRN) != (0 if row_to_upd[19]=="" else int(row_to_upd[19]))):
             print('doc_idRN dif')
             vdif = True
         if ((self.doc_idAF) != int(row_to_upd[20])):
@@ -240,10 +242,12 @@ class Asi_excep:
         if (str(self.urural) != row_to_upd[21]):
             print('urural dif')
             vdif = True
-        if (str(self.doc_idAT) != row_to_upd[22]):
+        #if (str(self.doc_idAT) != row_to_upd[22]):
+        if ((self.doc_idAT) != (0 if row_to_upd[22]=="" else int(row_to_upd[22]))):
             print('doc_idAT  dif')
             vdif = True
-        if (self.doc_idRNT != int(row_to_upd[23])):
+        #if (self.doc_idRNT != int(row_to_upd[23])):
+        if ((self.doc_idRNT) != (0 if row_to_upd[23]=="" else int(row_to_upd[23]))):
             print('doc_idRNT dif')
             vdif = True
 
