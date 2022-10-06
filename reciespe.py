@@ -46,8 +46,8 @@ class Reciespe:
     def get_reci_espec(self, usrdep):        
         ''' Obtiene recintos especiales (indígenas) '''
         
-        s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " NombreRecinto, nombreTipoLocLoc as TipoCircunscripcion, DEP, PROV, SEC, Estado, desEtapa, usuario" + \
+        s = "Select IdLoc as IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio, " + \
+            " NomReci as NombreRecinto, nombreTipoLocLoc as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
             " from [bdge].[dbo].[v_reci_nal_all]"
         if usrdep != 0:
             s = s + " where  TipoLocLoc = 68 and DEP = %d order by prov, sec"  #68 espec
