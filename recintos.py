@@ -28,8 +28,8 @@ class Recintos:
     def get_reci_uninom_mixto(self, usrdep):
         '''Obtiene recintos uninominales y mixtos '''
 
-        s = "Select IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NombreMunicipio as Municipio," + \
-            " NombreRecinto, nombreTipoLocLoc as TipoCircunscripcion, DEP, PROV, SEC, Estado, desEtapa, usuario" + \
+        s = "Select IdLoc as IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio," + \
+            " NomReci as NombreRecinto, nombreTipoLocLoc as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
             " from [bdge].[dbo].[v_reci_nal_all]"
         if usrdep != 0:
             s = s + " where  TipoLocLoc in (67, 69) and DEP = %d order by prov, sec"  #67 uninom, 69 mixt
