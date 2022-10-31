@@ -308,10 +308,12 @@ class Recintos:
 
 
     def get_etapas(self, usrdep, usrtipo):
-
-        if usrdep != 0 and usrtipo == 116:
+        ''' test si permanece... '''
+        
+        '''
+        if usrdep != 0 and usrtipo == 116:  #usrtipo depart
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrdep == 0 and usrtipo == 117:
+        elif usrdep == 0 and usrtipo == 117: #usrtipo nal
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
         else:
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
@@ -321,6 +323,21 @@ class Recintos:
             return False
         else:
             return rows
+        '''
+
+    def get_etapas_usrtipo(self, usrtipo):
+        ''' Obtiene etapas en función del tipo de usuario '''
+
+        if usrtipo == 116: # dep
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
+        elif usrtipo == 117: # nal
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
+        elif usrtipo == 119: # jefat
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        return rows
 
 
     def get_etapas_auth(self, usrdep, usrtipo):
