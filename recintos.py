@@ -307,25 +307,7 @@ class Recintos:
             return rows
 
 
-    def get_etapas(self, usrdep, usrtipo):
-        ''' test si permanece... '''
-        
-        '''
-        if usrdep != 0 and usrtipo == 116:  #usrtipo depart
-            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrdep == 0 and usrtipo == 117: #usrtipo nal
-            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
-        else:
-            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
-        self.cur.execute(s)
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-        '''
-
-    def get_etapas_usrtipo(self, usrtipo):
+    def get_etapas(self, usrtipo):
         ''' Obtiene etapas en función del tipo de usuario '''
 
         if usrtipo == 116: # dep

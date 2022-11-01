@@ -274,14 +274,19 @@ class Exteriorr:
             return rows
 
 
-    def get_etapas(self):
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+    def get_etapas(self, usrtipo):
+        ''' Obtiene etapas en función del tipo de usuario '''
+
+        if usrtipo == 116: # dep
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
+        elif usrtipo == 117: # nal
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
+        elif usrtipo == 119: # jefat
+            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+
         self.cur.execute(s)
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
 
 
     def get_dependencias(self):

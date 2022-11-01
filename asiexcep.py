@@ -307,20 +307,21 @@ class Asi_excep:
         else:
             return rows
 
-    def get_etapas(self, usrdep, usrtipo):
 
-        if usrdep != 0 and usrtipo == 116:
+    def get_etapas(self, usrtipo):
+        ''' Obtiene etapas en función del tipo de usuario '''
+
+        if usrtipo == 116: # dep
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrdep == 0 and usrtipo == 117:
+        elif usrtipo == 117: # nal
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
-        else:
+        elif usrtipo == 119: # jefat
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
+
         self.cur.execute(s)
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
+
 
     def get_depa_excep_all(self, usrdep):        
             s = "select Dep, NomDep from [GeografiaElectoral_app].[dbo].[DEP]"
