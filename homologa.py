@@ -219,29 +219,22 @@ class Homologa:
         except Exception as e:
             print("Error - actualización de Homologa...")        
 
+
     def get_recintos_idloc(self, idlocreci, circun):
-        s = "select IdLocReci, Reci, NombreRecinto, NomZona, NomDist, CircunDist, Direccion" + \
-            " from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional]" + \
-            " where IdLocReci = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
+        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
+            " from [bdge].[dbo].[v_reci_nal_all]" + \
+            " where IdLoc = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
         circuns = idlocreci, circun    
         self.cur.execute(s, circuns)
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
+
 
     def get_recintos_circun(self, dep, prov, sec, circun):
-        s = "select IdLocReci, Reci, NombreRecinto, NomZona, NomDist, CircunDist, Direccion" + \
-            " from [GeografiaElectoral_app].[dbo].[GeoRecintos_Nacional]" + \
+        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
+            " from [bdge].[dbo].[v_reci_nal_all]" + \
             " where Dep = %d and Prov = %d and Sec = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
         circuns = dep, prov, sec, circun    
         self.cur.execute(s, circuns)
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-
-
-    
+        return rows

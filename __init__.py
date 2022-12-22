@@ -2563,11 +2563,11 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
             rtos = ahom.get_recintos_circun(dep, prov, sec, circun);
 
         if ahom.ver_homologa_idlocreci(idreci, idlocreci, idlocdes):
-            print('Modificar')
+            #print('Modificar')
             return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=False)
         else:
             if rtos != False:
-                print('Asignar')
+                #print('Asignar')
                 return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=True)
             else:
                 return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False , ban=True)
