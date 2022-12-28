@@ -161,7 +161,7 @@
             </div>
             <div class="col-md-2">
                 <label for="poblacionloc">Población Localidad:</label>
-                <input type="text" class="form-control" id="ipoblacionloc" title="" placeholder="Introduzca población en localidad" name="poblacionloc"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 1000000)"
+                <input type="text" class="form-control" id="ipoblacionloc" title="" placeholder="Introduzca población en localidad" name="poblacionloc"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 0, 1000000)"
                         {% if load %}
                             value="{{ a.poblacionloc }}"
                         {% endif %}
@@ -170,7 +170,7 @@
             </div>
             <div class="col-md-2">
                 <label for="poblacionelecloc">Población electoral:</label>
-                <input type="text" class="form-control" id="ipoblacionelecloc" title="" placeholder="Introduzca población electoral en localidad" name="poblacionelecloc"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 700000)"
+                <input type="text" class="form-control" id="ipoblacionelecloc" title="" placeholder="Introduzca población electoral en localidad" name="poblacionelecloc"  required pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 0, 700000)"
                         {% if load %}
                             value="{{ a.poblacionelecloc }}"
                         {% endif %}
