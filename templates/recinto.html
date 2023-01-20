@@ -704,7 +704,7 @@
                     </div>                        
                     <div class="col-md-4">
                         <label for="usuario">Usuario:</label>
-                        <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                        <input type="text" class="form-control" id="iusuario_zona" title="" placeholder="Usuario" name="usuario"  readonly 
                                 {% if load_d %}
                                     value=""
                                 {% else %}
@@ -749,7 +749,7 @@
         var nomdist = document.getElementById('inomdist').value;
         var fingreso = document.getElementById('ifechaIngresoM').value;
         var factual = document.getElementById('ifechaActM').value;
-        var usuario = document.getElementById('iusuario').value;
+        var usuario = document.getElementById('iusuario_zona').value;
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario;
         $.ajax({

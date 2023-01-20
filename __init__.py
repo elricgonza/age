@@ -920,6 +920,8 @@ def asi_excep_list():
 @app.route('/asi_excep/<idloc>', methods=['GET', 'POST'])
 @login_required
 def asi_excep(idloc):
+    ''' Casos Excepcionales '''
+
     ax = asiex.Asi_excep(cxms)
     d = docu.Documentos(cxms)
 
@@ -2024,6 +2026,8 @@ def reciespeciales_list():
 @app.route('/reciespeciales/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def reciespeciales(idreci, idlocreci):
+    '''Casos Excepcionales'''
+
     rces = recies.Reciespeciales(cxms)
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)

@@ -343,7 +343,7 @@
             <div class="col-md-5">
                 <label for="docAct">Documento: Resolución de Sala Plena:</label>
                 <input type="hidden" name="doc_idAct" value="{{ rces.doc_idA }}">
-                <select id="idocAct" name=docAct class="form-control" required>                          
+                <select id="idocAct" name=docAct class="form-control">                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if tpdfA[6] == 'R' %}
@@ -355,7 +355,7 @@
                         {% endif %}                                                                
                     {% endfor %}
                 </select>
-                <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
+                <div class="invalid-feedback">Debe Seleccionar Resolución de Sala Plena...</div>
             </div>
             <div class="col-md-1"><a href="{{ rces.rutaA }}" target="_blank">
                                     {% if load %}
@@ -368,7 +368,7 @@
             <div class="col-md-5">
                 <label for="docTec">Documento: Informe Técnico:</label>
                 <input type="hidden" name="doc_idTec" value="{{ rces.doc_idT }}">
-                <select id="idocTec" name="docTec" class="form-control" required>                          
+                <select id="idocTec" name="docTec" class="form-control">                          
                     <option></option>
                     {% for tpdfA in tpdfsA %}
                         {% if tpdfA[6] == 'I' %}
@@ -380,7 +380,7 @@
                         {% endif %}                                                                
                     {% endfor %}
                 </select>
-                <div class="invalid-feedback">Debe Seleccionar un Tipo de Documento...</div>
+                <div class="invalid-feedback">Debe Seleccionar Informe Técnico...</div>
             </div>
             <div class="col-md-1"><a href="{{ rces.rutaT }}" target="_blank">
                                     {% if load %}
