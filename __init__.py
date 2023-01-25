@@ -87,6 +87,8 @@ usrauth = 0
 # path init - to save img, ..
 chd = os.chdir(app.config['PATH_APP'])
 
+# flag para homologaciones excep
+hom_excep = False
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -2526,6 +2528,12 @@ def get_subcategorias_excep_all():
 @app.route('/homologa_list', methods=['GET', 'POST'])
 @login_required
 def homologa_list():
+    ''' Lista recintos susp/supr para ASIGNACION de homologación  '''
+
+
+    global hom_excep
+    hom_excep = False
+
     ahom = hom.Homologa(cxms)
     if request.method == 'POST':
         inicio = request.form['inicio']
@@ -2534,7 +2542,7 @@ def homologa_list():
         inicio = '00-00-0000'
         final = '00-00-0000'
 
-    rows = ahom.get_homologa_all(usrdep, inicio, final)
+    rows = ahom.get_homologa_all(usrdep, inicio, final)  # ret recintos susp/supr en rango de fechas
     if rows:
         if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
@@ -2543,8 +2551,43 @@ def homologa_list():
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
-        print ('Sin Homologas...')
+        print ('Sin recintos para Homologación...')
         return render_template('homologa_list.html', puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                puede_editar='Homologa - Edición' in permisos_usr
+                              )  # render a template)
+
+
+@app.route('/homologa_list_excep', methods=['GET', 'POST'])
+@login_required
+def homologa_list_excep():
+    ''' Lista recintos susp/supr para ASIGNACION de homologación Casos Excepcionales 
+    -sólo difiere en hom_excep = True 
+    -homologa_list.html (título)  
+    -func. a_homologa  
+    '''
+
+    global hom_excep
+    hom_excep = True
+
+    ahom = hom.Homologa(cxms)
+    if request.method == 'POST':
+        inicio = request.form['inicio']
+        final = request.form['final']
+    else:
+        inicio = '00-00-0000'
+        final = '00-00-0000'
+
+    rows = ahom.get_homologa_all(usrdep, inicio, final)  # ret recintos susp/supr en rango de fechas
+    if rows:
+        if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('homologa_list_excep.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                    puede_editar='Homologa - Edición' in permisos_usr
+                                  )  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin recintos para Homologación...')
+        return render_template('homologa_list_excep.html', puede_adicionar='Homologa - Adición' in permisos_usr, \
                                 puede_editar='Homologa - Edición' in permisos_usr
                               )  # render a template)
 
@@ -2552,6 +2595,7 @@ def homologa_list():
 @app.route('/a_homologa/<idreci>/<idlocreci>/<inicio>/<final>/<ur>/<idlocdes>', methods=['GET', 'POST'])
 @login_required
 def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
+    ''' Obtiene recintos destino para homologación '''
     ahom = hom.Homologa(cxms)
     error = None
     
@@ -2561,6 +2605,13 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
         dep = ahom.dep
         prov = ahom.prov
         sec = ahom.sec
+
+        print('========================================hh=')
+        if hom_excep:
+            print("hom excep TRUE")
+        else:
+            print('hom excep FALSE Normalito')
+
         if ur == 'Urbano':
             rtos = ahom.get_recintos_idloc(idlocreci, circun);
         else:
@@ -2580,6 +2631,7 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
 @app.route('/a_homologa_m', methods=['GET', 'POST'])
 @login_required
 def a_homologa_m():
+    ''' Upd/Add homologación con Reci destino seleccionado (Ajax) '''
     ahom = hom.Homologa(cxms)
     error = None
     if request.method == 'POST':
@@ -2617,11 +2669,13 @@ def a_homologa_m():
         return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False, ban=True)
 
 """ Final de Asignar Homologaciones """
+
 """ Inicio de Listar Homologaciones """
 
 @app.route('/homologacion_list', methods=['GET', 'POST'])
 @login_required
 def homologacion_list():
+    ''' Solo listado/Reporte homologaciones '''
     ahomo = homo.Homologacion(cxms)
     if request.method == 'POST':
         inicio = request.form['inicio']

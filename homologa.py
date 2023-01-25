@@ -19,6 +19,7 @@ class Homologa:
                 " from [bdge].[dbo].[GeoRecintos_Hom_all]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
+                # suspendidos/suprimidos 
                 s = s + " where idEstado in (4, 5, 82, 83) and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
                 self.cur.execute(s, lista)
             else:
