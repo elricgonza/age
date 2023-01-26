@@ -239,3 +239,15 @@ class Homologa:
         self.cur.execute(s, circuns)
         rows = self.cur.fetchall()
         return rows
+
+
+    def get_recintos_dep(self, dep):
+        ''' Obtiene recintos destino para casos excepcionales (cualquier recinto del dep) '''
+
+        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
+            " from [bdge].[dbo].[v_reci_nal_all]" + \
+            " where Dep = %d  and estado in (1, 2, 79, 80)"
+        self.cur.execute(s, dep)
+        rows = self.cur.fetchall()
+        return rows
+

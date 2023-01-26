@@ -2530,7 +2530,6 @@ def get_subcategorias_excep_all():
 def homologa_list():
     ''' Lista recintos susp/supr para ASIGNACION de homologación  '''
 
-
     global hom_excep
     hom_excep = False
 
@@ -2563,7 +2562,7 @@ def homologa_list_excep():
     ''' Lista recintos susp/supr para ASIGNACION de homologación Casos Excepcionales 
     -sólo difiere en hom_excep = True 
     -homologa_list.html (título)  
-    -func. a_homologa  
+    -func. a_homologa (get all reci of dep) 
     '''
 
     global hom_excep
@@ -2596,6 +2595,7 @@ def homologa_list_excep():
 @login_required
 def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
     ''' Obtiene recintos destino para homologación '''
+
     ahom = hom.Homologa(cxms)
     error = None
     
@@ -2606,16 +2606,13 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
         prov = ahom.prov
         sec = ahom.sec
 
-        print('========================================hh=')
-        if hom_excep:
-            print("hom excep TRUE")
+        if hom_excep:  # si homolog excep: get all from dep p
+            rtos = ahom.get_recintos_dep(dep)
         else:
-            print('hom excep FALSE Normalito')
-
-        if ur == 'Urbano':
-            rtos = ahom.get_recintos_idloc(idlocreci, circun);
-        else:
-            rtos = ahom.get_recintos_circun(dep, prov, sec, circun);
+            if ur == 'Urbano':
+                rtos = ahom.get_recintos_idloc(idlocreci, circun);
+            else:
+                rtos = ahom.get_recintos_circun(dep, prov, sec, circun);
 
         if ahom.ver_homologa_idlocreci(idreci, idlocreci, idlocdes):
             #print('Modificar')
@@ -2632,6 +2629,7 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
 @login_required
 def a_homologa_m():
     ''' Upd/Add homologación con Reci destino seleccionado (Ajax) '''
+
     ahom = hom.Homologa(cxms)
     error = None
     if request.method == 'POST':
