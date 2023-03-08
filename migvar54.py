@@ -14,7 +14,7 @@ def get_db_ms():
     #pms = ("localhost","sa","123qweAS","GeografiaElectoral_app")
     #pms = ("10.100.15.54","appgeo","1234qweAS","GeografiaElectoral_app")
     #pms = ("10.100.15.53","sa","123qweAS","GeografiaElectoral_app")
-    pms = ("10.100.15.53","sa","123qweAS","work")
+    pms = ("10.100.15.54","sa","123qweAS","work")
     try:
         cx = mss.connect(*pms)
         print("cnx mssql ok -app-")
@@ -165,7 +165,7 @@ def migra_agisreci():
                     latitud, longitud, idTipoReci, idEstado, Documentos,
                     Observacio, Accion, Control, Aprobacion, RecAprob, 
                     [SHAPE *], created_user, created_date, last_edited_user, last_edited_date,
-                    idUrbanoRural, cpsistema)
+                    idUrbanoRural)
                 values (%s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
@@ -173,7 +173,7 @@ def migra_agisreci():
                     %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
-                    %s, %s)
+                    %s)
         """
         curms.execute(s, (
             row[0], row[1], row[2], row[3], row[4], 
@@ -183,7 +183,7 @@ def migra_agisreci():
             row[20], row[21], row[22], row[23], row[24],
             row[25], row[26], row[27], row[28], row[29],
             row[30], row[31], row[32], row[33], row[34],
-            row[35], row[36]))
+            row[35]))
         n+= 1
         if n % 100 == 0:
             print(n)
@@ -194,66 +194,7 @@ def migra_agisreci():
     print('---END AGISRECI Fecha y Hora End: = %s' %x)
 
 
-def migra_agisasi():
-    global cxms
-    global cx08
-    cxms = get_db_ms()
-    cx08 = get_db_08()
-
-    curms = cxms.cursor()
-    cur08 = cx08.cursor()
-
- 
-    # AGISRECI
-    x = datetime.datetime.now()
-    print('---AGISASI - Fecha y Hora inicio: = %s' %x)
-
-    s = 'delete from agisasi'
-    curms.execute(s)
-    cxms.commit()
-
-    s = 'select * from agisasi'
-    cur08.execute(s)
-    rows = cur08.fetchall()
-
-    n = 0
-    for row in rows:
-        s = """
-            insert into agisasi ([OBJECTID *], Nro, dep, NomDep, prov, 
-                    NomProv, sec, NombreMuni, loc, idloc, 
-                    asientoEle, PobElector, PobCensal, NombreTipo, latitud,
-                    longitud, idEstado, Poblcion18, PobLoc18, TotalPob18,
-                    Localidads, Documentos, Observacio, Accion, HojaRuta,
-                    Aprobacion, EstAprobado, [SHAPE *], created_user, created_date, 
-                    last_edited_user, last_edited_date, idUrbanoRural)
-                values (%s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s,
-                    %s, %s, %s)
-        """
-        curms.execute(s, (
-            row[0], row[1], row[2], row[3], row[4], 
-            row[5], row[6], row[7], row[8], row[9], 
-            row[10], row[11], row[12], row[13], row[14], 
-            row[15], row[16], row[17], row[18], row[19],
-            row[20], row[21], row[22], row[23], row[24],
-            row[25], row[26], row[27], row[28], row[29],
-            row[30], row[31], row[32]))
-        n+= 1
-        if n % 100 == 0:
-            print(n)
-    cxms.commit()
-
-    x = datetime.datetime.now()
-    print(n)
-    print('---END AGISasi Fecha y Hora End: = %s' %x)
-
-
 if __name__ == '__main__':
-    #migra_lpcasi()
+    migra_lpcasi()
     #migra_lpcreci()
-    migra_agisreci()
-    #migra_agisasi()
+    #migra_agisreci()
