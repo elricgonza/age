@@ -7,15 +7,25 @@ class LatLong:
         self.cur = cx.cursor()
 
     def get_geos(self, lat, long):
+        print('---------------------------------------------')
+        print(lat)
+        print(long)
         s = "select f_crea_geom(%s, %s) as geom"
+        print(s)
         coord = long, lat
-        self.cur.execute(s, coord)
+        try: 
+            self.cur.execute(s, coord)
+        except Exception as e:
+            print(e)
+            print('Error conversión --f_crea_geom--')
+
         row = self.cur.fetchone()
         if row == None:
             return False
         else:
             self.geom = row[0]
             return True
+
 
     def del_geo_asiento(self):
         s = "delete from asientos"
