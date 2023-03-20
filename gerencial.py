@@ -169,7 +169,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
                                        
@@ -273,7 +272,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
                                        
@@ -376,7 +374,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
                                        
@@ -480,7 +477,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
                                        
@@ -582,7 +578,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
                                        
@@ -685,7 +680,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
                                        
@@ -785,7 +779,6 @@ class Gerencial:
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
-                                print('Documento eliminado')
                             except:
                                  print("Error eliminación datos")
 

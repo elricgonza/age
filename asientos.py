@@ -426,7 +426,7 @@ class Asientos:
 
 
     def get_asientos_all1(self, usrdep):
-        '''  Utilizado sòlo para migrar a postgres '''
+        '''  Utilizado sòlo para migrar a postgres - check replace get_loc_nal_dep '''
         s = "select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, doc_act, fecha_doc_act, " + \
             "PoblacionElectoral, PoblacionCensal, tipoCircunscripcion, etapa, estado, latitud, longitud, obs, fechaIngreso, " + \
             "fechaAct, usuario " + \
@@ -443,6 +443,29 @@ class Asientos:
             return False
         else:
             return rows
+
+
+    def get_loc_nal_dep(self, usrdep):
+        '''  Utilizado para migrar a postgres - a partir de vista v_loc_nal_all '''
+
+        s = "select a.dep, a.prov, a.sec, a.NomDep, a.NomProv, a.NomMun, a.IdLoc, a.NomLoc, " + \
+            "b.cite as doc_act, b.fechaDoc as fecha_doc_act, " + \
+            "a.PoblacionLoc, a.PoblacionElecLoc, a.desTipoCircun, a.desEtapa, a.desEstado, a.Latitud, a.Longitud, " + \
+            "a.obs, a.fechaIngreso, a.FechaAct, a.usuario " + \
+            "from v_loc_nal_all a " + \
+            "left join bdge.dbo.doc b " + \
+            "   on a.doc_idA = b.id"
+        
+        if usrdep != 0 :
+            s = s + " where a.dep = %d order by a.prov, a.sec, a.idloc"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by a.dep, a.prov, a.sec, a.idloc"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
 
     def __str__(self):
         return str(self.idloc) + '--' + self.nomloc

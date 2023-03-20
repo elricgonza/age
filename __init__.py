@@ -3077,17 +3077,17 @@ def sincro_asi_list():
     g = ger.Gerencial(cxms)
     if request.method == 'POST':
         s.del_geo_asiento()
-        rows = a.get_asientos_all1(0)
+        rows = a.get_loc_nal_dep(0) #  0 nal
         rowas_n = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '1')
         rowas_m = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '2')
         rowas_s = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '3')
         for asie in rows:
            if asie[15] is None or asie[16] is None:
-                latitud = -20.118403
-                longitud = -67.540008
+               latitud = -20.118403
+               longitud = -67.540008
            else:
-                latitud = asie[15]
-                longitud = asie[16]
+               latitud = asie[15]
+               longitud = asie[16]
                           
            situacion = 'Antiguo'       
            s.get_geos(latitud, longitud)
