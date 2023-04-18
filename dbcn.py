@@ -8,8 +8,12 @@ import psycopg2.extensions
 import psycopg2.extras
 
 def get_db_ms():
-    pms = ("10.100.15.53","sa","123qweAS","bdge")
-
+    #pms = ("192.168.110.1","appgeoh","1234qweAS","bdge")
+    #pms = ("10.100.107.31","appgeoh","1234qweAS","bdge")
+    #pms = ("10.100.15.145\MSSQLSERVER2","sa","Ugle2022","bdge")
+    #pms = ("localhost","appgeo","1234qweAS","bdge")
+    pms = ("localhost","sa","123qweAS","bdge")
+    #pms = ("10.100.15.54","appgeo","1234qweAS","bdge")
     try:
         cx = mss.connect(*pms)
         print("cnx mssql ok -bdge-")
@@ -19,18 +23,18 @@ def get_db_ms():
 
 
 def get_db_pg():
-    ppg = {'host': '10.100.15.53',  \
+    ppg = {'host': 'localhost',  \
         'user': 'appgeo', \
-        'password': 'appgeo__53', \
+        'password': 'appgeo', \
         'port': '5432', \
         'dbname': 'bdgeo'}
     try:
         cx = pg.connect(**ppg)
         #cx.set_isolation_level(0)  # Avoid transactions, autocommit
         #self.cur = cx.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        print("cnx postgres ok -bdgeo-")
+        print("cnx postgres ok -geodb-")
         return cx
     except pg.DatabaseError as e:
-        print("Error en conexión... Postgres -bdgeo-")
+        print("Error en conexión... Postgres -geodb-")
         print(e)
         sys.exit()

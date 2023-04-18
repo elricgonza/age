@@ -14,24 +14,24 @@ class Homologa:
     def get_homologa_all(self, usrdep, inicio, final):
         if inicio == "00-00-0000" and final == "00-00-0000":
             return False
-        else:           
-            s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2, Area" + \
-                " from [bdge].[dbo].[GeoRecintos_Hom_all]"
+        else:
+            s = "select a.IdLoc, a.reci, a.NomDep, a.NomLoc, a.NomReci, a.desEstado, " + \
+                    "h.idLoc2, h.reci2, h.nomReci2, a.desUrbanoRural " + \
+                "from bdge.dbo.v_reci_nal_all a " + \
+                "left join bdge.dbo.hom h on a.IdLoc = h.idLoc and a.Reci = h.reci"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
                 # suspendidos/suprimidos 
-                s = s + " where idEstado in (4, 5, 82, 83) and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
+                s = s + " where Estado in (4, 5, 82, 83) and a.DEP = %d and Convert(CHAR(10),a.fechaAct,23) between %d and %d order by a.prov, a.sec"
                 self.cur.execute(s, lista)
             else:
                 lista = inicio, final
-                s = s + " where idEstado in (4, 5, 82, 83)  and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
+                s = s + " where Estado in (4, 5, 82, 83)  and Convert(CHAR(10),a.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
                 self.cur.execute(s, lista)
 
             rows = self.cur.fetchall()
-            if self.cur.rowcount == 0:
-                return False
-            else:
-                return rows
+            return rows
+
 
     def get_homologa_idloc(self, idlocreci):   
         s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2" + \
