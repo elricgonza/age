@@ -8,7 +8,7 @@ import psycopg2.extensions
 import psycopg2.extras
 
 def get_db_ms():
-    pms = ("10.100.15.53","sa","123qweAS","bdge")
+    pms = ("10.100.15.54","appgeo","appgeo54","bdge")
 
     try:
         cx = mss.connect(*pms)
@@ -19,9 +19,9 @@ def get_db_ms():
 
 
 def get_db_pg():
-    ppg = {'host': '10.100.15.53',  \
+    ppg = {'host': 'localhost',  \
         'user': 'appgeo', \
-        'password': 'appgeo__53', \
+        'password': 'appgeo', \
         'port': '5432', \
         'dbname': 'bdgeo'}
     try:
