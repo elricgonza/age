@@ -214,6 +214,17 @@ def vs(dep):
                             gj_prov=j.get_prov(dep))
 
 
+@app.route('/ftwms/', methods=['GET', 'POST'])
+def ftwms():
+    return render_template('twms.html') 
+
+
+@app.route('/ftwms2/', methods=['GET', 'POST'])
+def ftwms2():
+    return render_template('twms2.html') 
+
+
+
 @app.route('/')
 def home():
     return render_template('home.html')

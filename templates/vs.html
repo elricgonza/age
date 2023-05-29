@@ -308,7 +308,7 @@
     var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
     var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
 
-    <!--geoservicios-->
+    // geoservicios
     var ueLayer0 = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?version=2.0.0", {opacity: 0.1,});
     var ueLayer = ueLayer0.getLayer("ue2021");
 
