@@ -12,6 +12,8 @@ import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
 from resizeimage import resizeimage
+from flask_cors import CORS
+
 import dbcn
 import usuarios
 import permisos as permisosU
@@ -58,6 +60,8 @@ import get_json
 
 # create the application object
 app = Flask(__name__)
+CORS(app)
+
 app.secret_key ='\xfd{H\xe7<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa7'
 app.config['LOGIN_DISABLED'] = False
 app.config['PATH_APP'] = '/var/www/flasks/age/'
