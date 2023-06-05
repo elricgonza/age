@@ -228,6 +228,11 @@ def ftwms2():
     return render_template('twms2.html') 
 
 
+@app.route('/ftwms3/', methods=['GET', 'POST'])
+def ftwms3():
+    return render_template('twms3.html') 
+
+
 
 @app.route('/')
 def home():

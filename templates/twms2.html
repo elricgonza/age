@@ -63,12 +63,11 @@
     */
 
 
-    var lay_dep = L.tileLayer.wms("http://10.100.15.54:8080/geoserver/ows?version=2.0.0", {
+    var lay_dep = L.tileLayer.wms("http://192.168.80.231:8080/geoserver/ows?version=2.0.0", {
        layers: "departamentos",//nombre de la capa (ver get capabilities)
        format: 'image/jpeg',
        transparent: true,
-       version: '1.1.1',//wms version (ver get capabilities)
-       attribution: "DEPTOS"
+       attribution: "DEPTOz"
     }).addTo(map);
 
 </script>

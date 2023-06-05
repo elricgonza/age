@@ -45,31 +45,20 @@
 
 <script>
 
-    var map = L.map('map').setView( [-17.05678, -64.81934], 16);
+    //var map = L.map('map').setView( [40.965, -5.004], 16);
+    var map = L.map('map').setView( [-17.056787, -64.819349], 6);
       
-    /*
-    var pnoa = L.tileLayer.wms("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?", {
-       layers: "Catastro",//nombre de la capa (ver get capabilities)
+    var pnoa = L.tileLayer.wms("https://geo.gob.bo/geoserver/ows?", {
+       layers: "departamento",//nombre de la capa (ver get capabilities)
        format: 'image/jpeg',
        transparent: true,
-       version: '1.1.1',//wms version (ver get capabilities)
-       attribution: "DIRECCION GENERAL DEL CATASTRO"
+       attribution: "stadi"
     }).addTo(map);
 
-    var source = L.WMS.source("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?", {
+    var source = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", {
         opacity: 0.1,
     });
-    source.getLayer("PARCELA").addTo(map);
-    */
-
-
-    var lay_dep = L.tileLayer.wms("http://10.100.15.54:8080/geoserver/ows?version=2.0.0", {
-       layers: "departamentos",//nombre de la capa (ver get capabilities)
-       format: 'image/jpeg',
-       transparent: true,
-       version: '1.1.1',//wms version (ver get capabilities)
-       attribution: "DEPTOS"
-    }).addTo(map);
+    source.getLayer("ue2021").addTo(map);
 
 </script>
 

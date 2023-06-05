@@ -309,10 +309,8 @@
     var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
 
     // geoservicios
-    var ueLayer0 = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?version=2.0.0", {opacity: 0.1,});
-    var ueLayer = ueLayer0.getLayer("ue2021");
-
-
+    //var ueLayer = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", {opacity: 0.1,});
+    var ueLayer = L.WMS.source("http://192.168.80.231:8080/geoserver/ows?", {opacity: 0.1,});
 
     // baseMaps - overlayMaps
 
@@ -399,6 +397,8 @@
     L.control.locate({
       strings: {title: "Ver donde estoy.."}
     }).addTo(map);
+
+    ueLayer.getLayer("ue2021").addTo(map);  //ttt
 
     //----- Add the Street View buttons in the bottom left corner -----
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
