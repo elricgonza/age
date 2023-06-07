@@ -364,8 +364,7 @@
       "Asientos Electorales":asiLayer,
       "Circunscripciones":cirLayer,
       "Municipios":munLayer,
-      "Provincias":provLayer,
-      "UE":ueLayer
+      "Provincias":provLayer
     };	
       
 
@@ -398,7 +397,7 @@
       strings: {title: "Ver donde estoy.."}
     }).addTo(map);
 
-    ueLayer.getLayer("ue2021").addTo(map);  //ttt
+    //ueLayer.getLayer("ue2021").addTo(map);  //ttt
 
     //----- Add the Street View buttons in the bottom left corner -----
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
@@ -422,12 +421,17 @@
          gsvPopup.setLatLng(map.getCenter()).openOn(map);
          marker_gsv.addTo(map);
          sw_marker_gsv = 1;
+         ueLayer.getLayer("ue2021").addTo(map);  //ttt
+         console.log(sw_marker_gsv);
          }
       else {
          sv.remove();
          map.removeLayer(marker_gsv);
          gsvPopup.removeFrom(map);
          sw_marker_gsv = 0;
+         console.log(sw_marker_gsv);
+        //map.removeLayer(ue2021); //ttt
+         ueLayer.remove();
          }
       },'Habilitar/Inhabilitar Google Street View (GSV)').addTo(map);
     // end Street View - easyButton
