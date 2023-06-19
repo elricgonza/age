@@ -426,10 +426,11 @@
          }
       else {
          sv.remove();
-         map.removeLayer(marker_gsv);
+         console.log(map);
+         map.removeLayer("ueLayer");
          gsvPopup.removeFrom(map);
          sw_marker_gsv = 0;
-         console.log(sw_marker_gsv);
+         console.log("valor sw: " + sw_marker_gsv);
         //map.removeLayer(ue2021); //ttt
          ueLayer.remove();
          }
