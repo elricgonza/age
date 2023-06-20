@@ -358,13 +358,26 @@
       "Open TopoMap": topoMap
     };
 
+    //var ueLayer = L.WMS.source("http://192.168.80.231:8080/geoserver/ows?", {opacity: 0.1,});
+    //  "Places": L.tileLayer.wms('http://ows.mundialis.de/services/service?', {
+    //    layers: 'OSM-Overlay-WMS'
+    //})
+   /* ok funciona pero como img sobrepuesta sin view atrib 
+      "Places": L.tileLayer.wms("http://192.168.80.231:8080/geoserver/ows?", {
+        layers: 'ue2021',
+        transparent: true
+      })
+    */
+
+//      https://github.com/heigeo/leaflet.wms
+
     var overlayMaps = {
       "Recintos Electorales":reciLayer,
       "Cluster-Recintos Elect.":markersMCG,
       "Asientos Electorales":asiLayer,
       "Circunscripciones":cirLayer,
       "Municipios":munLayer,
-      "Provincias":provLayer
+      "Provincias":provLayer,
     };	
       
 
@@ -427,7 +440,8 @@
       else {
          sv.remove();
          console.log(map);
-         map.removeLayer("ueLayer");
+        //map.removeLayer("ueLayer");
+        removeGeoJSON(map, ue2021);
          gsvPopup.removeFrom(map);
          sw_marker_gsv = 0;
          console.log("valor sw: " + sw_marker_gsv);
