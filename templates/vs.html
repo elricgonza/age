@@ -369,7 +369,12 @@
       })
     */
 
-//      https://github.com/heigeo/leaflet.wms
+    //https://github.com/heigeo/leaflet.wms
+    //explicit source spec wms
+    var options = {'transparent': true, 'opacity': 0.1};
+    var source = L.WMS.source("http://192.168.80.231:8080/geoserver/ows?", options);
+    var ueLayer = source.getLayer('ue2021');
+
 
     var overlayMaps = {
       "Recintos Electorales":reciLayer,
@@ -378,6 +383,7 @@
       "Circunscripciones":cirLayer,
       "Municipios":munLayer,
       "Provincias":provLayer,
+      "U.Etruen":ueLayer
     };	
       
 
