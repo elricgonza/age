@@ -308,9 +308,6 @@
     var provLayer = L.geoJson( {{ gj_prov | safe }}, {onEachFeature: forEachFeatureProv, style: styleProv});
     var cirLayer = L.geoJson( {{ gj_cir | safe }}, {onEachFeature: forEachFeatureCir, style: styleCir});
 
-    // geoservicios
-    //var ueLayer = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", {opacity: 0.1,});
-    var ueLayer = L.WMS.source("http://192.168.80.231:8080/geoserver/ows?", {opacity: 0.1,});
 
     // baseMaps - overlayMaps
 
@@ -358,23 +355,11 @@
       "Open TopoMap": topoMap
     };
 
-    //var ueLayer = L.WMS.source("http://192.168.80.231:8080/geoserver/ows?", {opacity: 0.1,});
-    //  "Places": L.tileLayer.wms('http://ows.mundialis.de/services/service?', {
-    //    layers: 'OSM-Overlay-WMS'
-    //})
-   /* ok funciona pero como img sobrepuesta sin view atrib 
-      "Places": L.tileLayer.wms("http://192.168.80.231:8080/geoserver/ows?", {
-        layers: 'ue2021',
-        transparent: true
-      })
-    */
-
-    //https://github.com/heigeo/leaflet.wms
-    //explicit source spec wms
+    // geoservicios
+    // https://github.com/heigeo/leaflet.wms - explicit source spec wms
     var options = {'transparent': true, 'opacity': 0.1};
     var source = L.WMS.source("http://192.168.80.231:8080/geoserver/ows?", options);
     var ueLayer = source.getLayer('ue2021');
-
 
     var overlayMaps = {
       "Recintos Electorales":reciLayer,
@@ -383,7 +368,7 @@
       "Circunscripciones":cirLayer,
       "Municipios":munLayer,
       "Provincias":provLayer,
-      "U.Etruen":ueLayer
+      "Unidades Educativas":ueLayer
     };	
       
 
@@ -416,7 +401,6 @@
       strings: {title: "Ver donde estoy.."}
     }).addTo(map);
 
-    //ueLayer.getLayer("ue2021").addTo(map);  //ttt
 
     //----- Add the Street View buttons in the bottom left corner -----
     // (Please get your own Client ID on https://www.mapillary.com/app/settings/developers)
@@ -440,19 +424,12 @@
          gsvPopup.setLatLng(map.getCenter()).openOn(map);
          marker_gsv.addTo(map);
          sw_marker_gsv = 1;
-         ueLayer.getLayer("ue2021").addTo(map);  //ttt
-         console.log(sw_marker_gsv);
          }
       else {
          sv.remove();
-         console.log(map);
-        //map.removeLayer("ueLayer");
-        removeGeoJSON(map, ue2021);
+         map.removeLayer(marker_gsv);
          gsvPopup.removeFrom(map);
          sw_marker_gsv = 0;
-         console.log("valor sw: " + sw_marker_gsv);
-        //map.removeLayer(ue2021); //ttt
-         ueLayer.remove();
          }
       },'Habilitar/Inhabilitar Google Street View (GSV)').addTo(map);
     // end Street View - easyButton
@@ -584,4 +561,3 @@
     );
 
 </script>
-
