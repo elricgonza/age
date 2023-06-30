@@ -357,7 +357,7 @@
 
     // geoservicios
     // https://github.com/heigeo/leaflet.wms - explicit source spec wms
-    var options = {'transparent': true, 'opacity': 0.1};
+    var options = {'transparent': true, 'opacity': 0.3};
     var source = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", options);
     var ueLayer = source.getLayer('uniedu');
     var locLayer = source.getLayer('loc2012');
