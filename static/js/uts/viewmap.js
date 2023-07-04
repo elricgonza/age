@@ -54,10 +54,12 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
 
     // geoservicios
     // https://github.com/heigeo/leaflet.wms - explicit source spec wms
-    var options = {'transparent': true, 'opacity': 0.3};
+    var options = {'transparent': true, 'opacity': 0.4};
     var source = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", options);
     var ueLayer = source.getLayer('uniedu');
     var locLayer = source.getLayer('loc2012');
+    var asiLayer = source.getLayer('asientos');
+    var reciLayer = source.getLayer('recintos');
 
     /*
       "Recintos Electorales":reciLayer,
@@ -69,7 +71,9 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       "Municipios":munLayer,
       "Provincias":provLayer,
       "Unidades Educativas":ueLayer,
-      "Centros Poblados INE-2012":locLayer
+      "Centros Poblados INE-2012":locLayer,
+      "Asientos Electorales":asiLayer,
+      "Recintos Electorales":reciLayer
     };	
       
 
