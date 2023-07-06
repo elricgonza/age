@@ -14,7 +14,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
         thunAttrib = 'only Attrib',
         googleSatUrl = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
         googleMapUrl = 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
-        mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibzJicGlja2luIiwiYSI6ImNpbXUyMzNldTAyNTF1cmtrZXdnbWZycDIifQ.JdYE50MBxDn1fdZtVFYXZw',
+        mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWJ1Z2xlMjAyMSIsImEiOiJjbGpyY2NiZTUwZWRzM3BzMHF2MnVybGZoIn0.FFzEizwxsT_0jOxOmcHrCA',
         topoUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         topoAttrib = 'Kartendaten: &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, <a href="http://viewfinderpanoramas.org">SRTM</a> | Kartendarstellung: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)';
 
