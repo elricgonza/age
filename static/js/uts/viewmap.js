@@ -286,7 +286,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     function style(feature) {
         return {
             fillColor: 'green', 
-            fillOpacity: 0.5,  
+            fillOpacity: 0.2,  
             weight: 2,
             opacity: 1,
             color: '#ffffff',
@@ -297,7 +297,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     function styleProv(feature) {
         return {
             fillColor: 'orange', 
-            fillOpacity: 0.5,  
+            fillOpacity: 0.2,  
             weight: 2,
             opacity: 1,
             color: '#ffffff',
@@ -308,7 +308,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     function styleCir(feature) {
         return {
             fillColor: 'gray', 
-            fillOpacity: 0.5,  
+            fillOpacity: 0.2,  
             weight: 2,
             opacity: 1,
             color: 'red',
