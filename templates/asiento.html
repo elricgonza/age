@@ -54,7 +54,7 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                <label for="dep">DEP:</label>
+                <label for="dep">COD:</label>
                 <input type="text" class="form-control" id="ideploc" title="" placeholder="DEP" name="deploc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ a.deploc }}"
@@ -63,8 +63,8 @@
                 <div class="invalid-feedback">Debe introducir DEP.</div>
             </div>
             <div class="col-md-3">
-                <label for="departamento">Departamento:</label>
-                <input type="text" class="form-control" id="idepartamento" title="" placeholder="departamento" name="departamento" disabled
+                <label for="departamento">1er. Nivel:</label>
+                <input type="text" class="form-control" id="idepartamento" title="" placeholder="1er. Nivel" name="departamento" disabled
                         {% if load %}
                             value="{{ a._departamento }}"
                         {% endif %}
@@ -72,7 +72,7 @@
             </div>
 
             <div class="col-md-1">
-                <label for="prov">PROV:</label>
+                <label for="prov">COD:</label>
                 <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ a.provloc }}"
@@ -81,8 +81,8 @@
                 <div class="invalid-feedback">Debe introducir PROV.</div>
             </div>
             <div class="col-md-3">
-                <label for="provincia">Provincia:</label>
-                <input type="text" class="form-control" id="iprovincia" title="" placeholder="provincia" name="provincia" disabled
+                <label for="provincia">2do. Nivel:</label>
+                <input type="text" class="form-control" id="iprovincia" title="" placeholder="2do. Nivel" name="provincia" disabled
                         {% if load %}
                             value="{{ a._provincia }}"
                         {% endif %}
@@ -90,7 +90,7 @@
             </div>
 
             <div class="col-md-1">
-                <label for="sec">SEC:</label>
+                <label for="sec">COD:</label>
                 <input type="text" class="form-control" id="isecloc" title="" placeholder="SEC" name="secloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ a.secloc }}"
@@ -99,9 +99,9 @@
                 <div class="invalid-feedback">Debe introducir SEC.</div>
             </div>
             <div class="col-md-3">
-                <label for="municipio">Municipio:</label>
+                <label for="municipio">3er. Nivel:</label>
                 <input type="hidden" name="muni" id="imuni" value="{{ a._municipio }}">
-                <input type="text" class="form-control" id="imunicipio" title="" placeholder="municipio" name="municipio" disabled
+                <input type="text" class="form-control" id="imunicipio" title="" placeholder="3er. Nivel" name="municipio" disabled
                         {% if load %}
                             value="{{ a._municipio }}"
                         {% endif %}
@@ -609,7 +609,7 @@ function Validation(f) {
 
     if (f.muni.value.trim() != ""){
         if(f.muni.value.trim() != f.municipio.value.trim()){
-            alert('Las nuevas coordenadas se encuentran en otro Municipio...');
+            alert('Las nuevas coordenadas se encuentran en otro Municipio (3er. Nivel)...');
             return false;    
         }
     }

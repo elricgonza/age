@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-xs-6 col-md-4">
                     {% if puede_adicionar %}
-                        <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('deptosABC', dep_id = 0) }} >Adicionar Departamento</a></button>
+                        <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('deptosABC', dep_id = 0) }} >Adicionar 1er. Nivel</a></button>
                     {% endif %}
                 </div>
             </div>
@@ -30,7 +30,7 @@
                             <!-- <th>IdPais</th>
                             <th>Dep</th> -->
                             <th>Nombre de Pais</th>
-                            <th>Nombre de Departamento</th>
+                            <th>Nombre 1er. Nivel</th>
                             <!--  <th>Adicionar</th> -->
                             <th>Editar</th>
                             <!-- <th>Eliminar</th> -->
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <p>Elminará un departamento. </p>
+                        <p>Eliminará 1er. Nivel </p>
                         <p>Esta seguro?</p>
                         <p class="debug-url"></p>
                     </div>

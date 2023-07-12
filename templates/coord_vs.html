@@ -176,8 +176,8 @@
             "</br><b><span style='color:blue'>-------------------------------------------------------------------------</b></span>" + 
             "</br><b><span style='color:blue'>Asiento: </span>" + feature.properties.asiento + 
             "</br><b><span style='color:blue'>Idloc/Reci: </b></span>"+ feature.properties.idlocreci + 
-            "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
-            "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
+            "</br><b><span style='color:blue'>Niv.1/Niv.2/Niv.3: </b></span>"+ feature.properties.dpm + 
+            "</br><b><span style='color:blue'>Cod. Niv.1/Niv.2/Niv.3: </b></span>"+ feature.properties.cod + 
             "</br><b><span style='color:blue'>Circunscripción: </b></span>"+ feature.properties.circun + 
             "</br><b><span style='color:blue'>Zona: </b></span>"+ feature.properties.zona + 
             "</br><b><span style='color:blue'>Dirección:  </b></span>"+ feature.properties.direccion + 
@@ -196,8 +196,8 @@
       var popupContent = "<p><b><span style='color:blue'>Asiento: </b></span>" + '<b><big>' + feature.properties.asiento + '</big></b>' +
             "</br><b><span style='color:blue'>-------------------------------------------------------------------------</b></span>" + 
             "</br><b><span style='color:blue'>Idloc: </b></span>"+ feature.properties.idloc + 
-            "</br><b><span style='color:blue'>Dep/Prov/Municipio: </b></span>"+ feature.properties.dpm + 
-            "</br><b><span style='color:blue'>Cod. Dep/Prov/Municipio: </b></span>"+ feature.properties.cod + 
+            "</br><b><span style='color:blue'>Niv.1/Niv.2/Niv.3: </b></span>"+ feature.properties.dpm + 
+            "</br><b><span style='color:blue'>Cod. Niv.1/Niv.2/Niv.3: </b></span>"+ feature.properties.cod + 
             "</br><b><span style='color:blue'>Tipo Circunscripción: </b></span>"+ feature.properties.tipo_circun + 
             '</p>';
 
@@ -212,7 +212,7 @@
 
     function forEachFeatureMun(feature, layer) {
         var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
-          "</br><b><span style='color:blue'>Municipio: </span></b>"+ feature.properties.municipio + '</p>';
+          "</br><b><span style='color:blue'>3er. Nivel: </span></b>"+ feature.properties.municipio + '</p>';
 
         layer.bindPopup(popupContent);
 
@@ -225,7 +225,7 @@
 
     function forEachFeatureProv(feature, layer) {
         var popupContent = "<p><b><span style='color:blue'>Cod.: </span></b>"+ feature.properties.cod +
-          "</br><b><span style='color:blue'>Provincia: </span></b>"+ feature.properties.provincia + '</p>';
+          "</br><b><span style='color:blue'>2do. Nivel: </span></b>"+ feature.properties.provincia + '</p>';
 
         layer.bindPopup(popupContent);
 

@@ -70,7 +70,7 @@
                                         >
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="departamento1">Departamento:</label>
+                                    <label for="departamento1">1er. Nivel:</label>
                                     <input type="text" class="form-control" id="idepartamento1" title="" name="departamento1" readonly 
                                             {% if load %}
                                                 value="{{ ju.nomdep }}"
@@ -86,7 +86,7 @@
                                         >
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="provincia1">Provincia:</label>
+                                    <label for="provincia1">2do. Nivel:</label>
                                     <input type="text" class="form-control" id="iprovincia1" title="" name="provincia1" readonly 
                                             {% if load %}
                                                 value="{{ ju.nomprov }}"
@@ -102,7 +102,7 @@
                                         >
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="municipio1">Municipio:</label>
+                                    <label for="municipio1">3er. Nivel:</label>
                                     <input type="text" class="form-control" id="imunicipio1" title="" name="municipio1" readonly 
                                             {% if load %}
                                                 value="{{ ju.nomsec }}"
@@ -168,7 +168,7 @@
                             >
                     </div>
                     <div class="col-lg-2">
-                        <label for="departamento" class="col-form-label">Departamento:</label>
+                        <label for="departamento" class="col-form-label">1er. Nivel:</label>
                         <select id="idepartamento" name="departamento" class="form-control" onchange="cargarjuri(this.value, 0)" required>
                             <option></option>
                             {% for dpto in dptos %}
@@ -189,7 +189,7 @@
                             >
                     </div>
                     <div class="col-lg-2">
-                        <label for="provincia" class="col-form-label">Provincia:</label>
+                        <label for="provincia" class="col-form-label">2do. Nivel:</label>
                         <select id="iprovincia" name="provincia" class="form-control" onchange="cargarjuri(this.value, 1)" required>
                             {% for provincia in provincias %}
                                 {% if ju.deploc == provincia[0] %}
@@ -211,7 +211,7 @@
                             >
                     </div>
                     <div class="col-lg-3">
-                        <label for="municipio" class="col-form-label">Municipio:</label>
+                        <label for="municipio" class="col-form-label">3er. Nivel:</label>
                         <select id="imunicipio" name="municipio" class="form-control" onchange="cargarjuri(this.value, 2)" required>
                             {% for municipio in municipios %}
                                 {% if ju.deploc == municipio[0] and ju.provloc == municipio[1]%}

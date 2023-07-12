@@ -49,7 +49,7 @@
                                         {% endif %}                                                     
                                 {% endfor %}
                             </select>
-                        <div class="invalid-feedback">Debe Seleccionar un departamento...</div>
+                        <div class="invalid-feedback">Debe Seleccionar 1er. Nivel...</div>
                     </div>
 
                     <div class="col-md-4">
@@ -73,14 +73,14 @@
                 <br>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="NomProv">PROVINCIA</label>
-                        <input type="text" class="form-control" id="iNomProv" placeholder="Introduzca Provincia" name="NomProv" required {% if load %} value="{{ s.NomProv }}" {% endif %}>
-                        <div class="invalid-feedback">Debe Agregar una Provincia...</div>
+                        <label for="NomProv">2do. Nivel</label>
+                        <input type="text" class="form-control" id="iNomProv" placeholder="Introduzca 2do. Nivel" name="NomProv" required {% if load %} value="{{ s.NomProv }}" {% endif %}>
+                        <div class="invalid-feedback">Debe Agregar 2do. Nivel...</div>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="codprov">CODIGO DE PROVINCIA:</label>
-                        <input type="text" class="form-control" id="iCodProv" placeholder="Introduzca Codigo de Provincia" name="codprov" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required {% if load %} value="{{ s.codprov }}" {% endif %}>
+                        <label for="codprov">CODIGO DE 2do. NIVEL:</label>
+                        <input type="text" class="form-control" id="iCodProv" placeholder="Introduzca Código de 2do. Nivel" name="codprov" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required {% if load %} value="{{ s.codprov }}" {% endif %}>
                         <div class="invalid-feedback">Por favor ingrese datos.</div>
                     </div>
 

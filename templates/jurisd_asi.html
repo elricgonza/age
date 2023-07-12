@@ -65,7 +65,7 @@
                                         >
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="departamento1">Departamento:</label>
+                                    <label for="departamento1">1er. Nivel:</label>
                                     <input type="text" class="form-control" id="idepartamento1" title="" name="departamento1" readonly 
                                             {% if load %}
                                                 value="{{ ja._departamento }}"
@@ -81,7 +81,7 @@
                                         >
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="provincia1">Provincia:</label>
+                                    <label for="provincia1">2do. Nivel:</label>
                                     <input type="text" class="form-control" id="iprovincia1" title="" name="provincia1" readonly 
                                             {% if load %}
                                                 value="{{ ja._provincia }}"
@@ -97,7 +97,7 @@
                                         >
                                 </div>
                                 <div class="col-md-5">
-                                    <label for="municipio1">Municipio:</label>
+                                    <label for="municipio1">3er. Nivel:</label>
                                     <input type="text" class="form-control" id="imunicipio1" title="" name="municipio1" readonly 
                                             {% if load %}
                                                 value="{{ ja._municipio }}"
@@ -131,7 +131,7 @@
                             >
                     </div>
                     <div class="col-lg-2">
-                        <label for="departamento" class="col-form-label">Departamento:</label>
+                        <label for="departamento" class="col-form-label">1er. Nivel:</label>
                         <select id="idepartamento" name="departamento" class="form-control" onchange="cargarjuri_a(this.value, 0)" required>
                             <option></option>
                             {% for dpto in dptos %}
@@ -152,7 +152,7 @@
                             >
                     </div>
                     <div class="col-lg-2">
-                        <label for="provincia" class="col-form-label">Provincia:</label>
+                        <label for="provincia" class="col-form-label">1er. Nivel:</label>
                         <input type="hidden" id="iprovincia2" name="provincia2" value="{{ ja.provloc }}">
                         <select id="iprovincia" name="provincia" class="form-control" onchange="cargarjuri_a(this.value, 1)" required>
                             {% for provincia in provincias %}
@@ -176,7 +176,7 @@
                             >
                     </div>
                     <div class="col-lg-3">
-                        <label for="municipio" class="col-form-label">Municipio:</label>
+                        <label for="municipio" class="col-form-label">3er. Nivel:</label>
                         <select id="imunicipio" name="municipio" class="form-control" onchange="cargarjuri_a(this.value, 2)" required>
                             {% for municipio in municipios %}
                                 {% if ja.deploc == municipio[0] and ja.provloc == municipio[1]%}
@@ -293,7 +293,7 @@
                 if(secloc2 != secloc){
                     $("#formjurisd_asi").attr("action", "/jurisd_asi/" + idloc + "");
                 }else{
-                    alert('Debe Seleccionar Un Municipio DIFERENTE al cual Asignar el Asiento. !!!');
+                    alert('Debe Seleccionar Un Municipio (3er.Nivel) DIFERENTE al cual Asignar el Asiento. !!!');
                 }
             }
         }
