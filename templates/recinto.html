@@ -181,7 +181,7 @@
             </div>
             <div class="col-md-2">
                 <label for="zonareci">Zona y Distrito:</label>
-                <button type="button" class="btn btn-info btn-block openBtn">Registrar</button>
+                <button type="button" class="btn btn-info btn-block openBtn">Registrar..</button>
             </div>
         </div> <!--row-->
 
@@ -492,6 +492,14 @@
     var edireci = document.getElementById('iedireci');
     var depenreci = document.getElementById('idepenreci');
 
+    // show Modal - Zonas/Distritos
+    $('.openBtn').on('click',function(){
+        $('.modal-body').load('/opcional.html',function(){
+            $('#exampleModal').modal({show:true});
+        });
+    });
+
+
     function carg(elemento) {
       d = elemento.value;
       if(d == 7){
@@ -521,11 +529,6 @@
       }
     }
 
-    $('.openBtn').on('click',function(){
-        $('.modal-body').load('/zona1.html',function(){
-            $('#exampleModal').modal({show:true});
-        });
-    });
     // Disable form submissions if there are invalid fields
     (function() {
         'use strict';
@@ -622,7 +625,7 @@
     <div class="modal-content">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
-          <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>  
+          <h3 class="text-center text-blue pt-3" >{{ titulo }}</h3> 
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
             <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align: center;"></div>    
@@ -649,14 +652,12 @@
                     <div class="col-md-12">
                         <label for="nomzona">Nombre de la Zona:</label>
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
-                            {% if load %}
-                                value=""        
-                            {% endif %}
+                                value="SIN ZONA"        
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
                     </div>
                 </div>
-                <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
+                <h5 class="text-left text-blue pt-5">Datos del Distrito (Circunscripción):</h5>
                 <div class="row">
                     <div class="col-md-2">
                         <label for="nrodist">Circun.:</label>
@@ -674,8 +675,8 @@
                         <div class="invalid-feedback">Debe Seleccionar el Distrito...</div>
                     </div>
                     <div class="col-md-3">
-                        <label for="nomdist">Nuevo Dist</label>
-                        <button type="button" class="btn btn-light btn-block"><a href="javascript:void();" onclick="document.getElementById('form1').submit();"><span class="fas fa-university" style="font-size: 25px;"></span></a></button>
+                        <label for="nomdist">Nuevo Dist.</label>
+                        <button type="button" class="btn btn-light btn-block"><a href="javascript:void();" onclick="document.getElementById('form1').submit();"><span class="fas fa-university" style="font-size:25px;"></span></a></button>
                     </div>
                 </div>
                 <br>
@@ -689,7 +690,6 @@
                                     value="{{ idatetime }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
                     </div>
                     <div class="col-md-4">
                         <label for="fechaAct">Actual:</label>
@@ -700,7 +700,6 @@
                                     value="{{ idatetime }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback" id="v_fechaAct">Debe introducir una fecha válida.</div>
                     </div>                        
                     <div class="col-md-4">
                         <label for="usuario">Usuario:</label>
@@ -711,7 +710,6 @@
                                     value="{{ usuario }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback">Debe introducir un nombre válido.</div>
                     </div>
                 </div>
 
@@ -719,7 +717,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <button type="button" id="cerrar" onclick="cerrarmodal();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="cerrar" onclick="cerrarmodal();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar/Cancelar</button>
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="submit" id="button" class="btn btn-outline-success btn-md btn-block" 
@@ -733,6 +731,7 @@
     </div>
   </div>
 </div>
+
 <script type="text/javascript">
     function enviar(){
         var valor = document.getElementById("inomzona").value;
@@ -791,6 +790,8 @@
         window.close();
     }
 </script>
+
+
 <!-- Otro Modal -->
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -840,6 +841,6 @@
   </div>
 </div>
 
-
 {% endblock %}
+
 <!--https://programacion.net/articulo/como_cargar_contenido_dinamico_en_un_modal_de_bootstrap_1867-->
