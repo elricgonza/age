@@ -1837,6 +1837,8 @@ def zonas(idloc, iddist, ban):
 @app.route('/zonasr', methods=['POST'])
 @login_required
 def zonasr():
+    ''' Invocado por ajax - adición de zonas (recinto.html) '''
+
     z = zo.Zonas(cxms)
     fa = request.form['factual'][:-7]
     idloc = request.form['idloc']
@@ -1845,6 +1847,17 @@ def zonasr():
     nextidzona = z.get_next_zona(request.form['idloc'])
     ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
     
+    print('---------------factual')
+    print(fa)
+    print('---------------idloc')
+    print(idloc)
+    print('---------------nomdist')
+    print(nomdist)
+    print('---------------nextidzona')
+    print(nextidzona)
+    print('---------------nomzona')
+    print(request.form['nomzona'])
+
     z.add_zona(request.form['idloc'], nextidzona, request.form['nomzona'], \
                ultimodist, request.form['fingreso'][:-7], fa, request.form['usuario'])
 
