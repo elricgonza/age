@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Operaciones Zona / Recintos
 
 class Zonas:
     idlocreci=0
@@ -38,6 +38,7 @@ class Zonas:
         row = self.cur.fetchone()
         return row[0]
 
+
     """ Aqui esta el ERRROR """    
     def get_next_dist(self, idloc):
         s = "select isnull(max(dist), 0)+1 from GeografiaElectoral_app.dbo.dist where IdLocDist = %d"
@@ -46,8 +47,8 @@ class Zonas:
         return row[0]
 
 
-    def add_zona(self, idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso):
-        new_zona = idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso
+    def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario):
+        new_zona = idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario
         s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
             " (%s, %s, %s, %s, %s, %s, %s) "
         self.cur.execute(s, new_zona)
@@ -123,6 +124,7 @@ class Zonas:
             self.nomloc = row[1]
             return True
 
+
     def get_nomdist(self, idloc, nomdist):
         con = idloc, nomdist
         s = "select NomDist from [GeografiaElectoral_app].[dbo].[DIST]" + \
@@ -131,13 +133,10 @@ class Zonas:
         row = self.cur.fetchone()
         return row[0]
 
+
     def get_ultimodist(self, nomdist, idloc):
         con1 = nomdist, idloc
         s = "select max(dist) from GeografiaElectoral_app.dbo.dist where Dist = %d and IdLocDist = %d"
         self.cur.execute(s, con1)
         row = self.cur.fetchone()
         return row[0]
-
-
-
-    

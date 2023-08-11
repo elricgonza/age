@@ -1840,26 +1840,42 @@ def zonasr():
     ''' Invocado por ajax - adición de zonas (recinto.html) '''
 
     z = zo.Zonas(cxms)
-    fa = request.form['factual'][:-7]
-    idloc = request.form['idloc']
-    nomdist = request.form['nomdist']
 
-    nextidzona = z.get_next_zona(request.form['idloc'])
+    idloc = request.form['idloc']
+    nomzona = request.form['nomzona'].upper()
+    nomdist = request.form['nomdist']    # cod. DIST 
+
+    # obtiene cod zona
+    if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
+        if z.existe_sinzona_cod0(idloc):
+            return jsonify({'error' : 'Error, complemente el nombre SIN ZONA, debido a que ya que existe en el asiento'})
+        else:
+            zona = 0
+    else:
+        zona = z.get_next_zona(idloc)
+
+    if nomzona_existe(idloc, nomzona):
+        return jsonify({'error' : 'Error, el NOMBRE DE ZONA ya existe en el asiento'})
+
+
     ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
     
-    print('---------------factual')
-    print(fa)
     print('---------------idloc')
     print(idloc)
-    print('---------------nomdist')
+    print('---------------nomdist')  # 7 DIST
     print(nomdist)
     print('---------------nextidzona')
     print(nextidzona)
     print('---------------nomzona')
-    print(request.form['nomzona'])
+    print(request.form['nomzona'])  # NEW ZONA 
+    print('---------------ultimodist')
+    print(ultimodist)               # = nomdist = ultimodist
+    print('---------------usuario')
+    print(request.form['usuario'])
 
-    z.add_zona(request.form['idloc'], nextidzona, request.form['nomzona'], \
-               ultimodist, request.form['fingreso'][:-7], fa, request.form['usuario'])
+
+    z.add_zona(idloc, zona, nomzona, ultimodist, \
+               request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
 
     if idloc:
         return jsonify({'name' : 'Registros grabados !!! CORRECTAMENTE !!!'})

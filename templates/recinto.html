@@ -676,7 +676,9 @@
                     </div>
                     <div class="col-md-3">
                         <label for="nomdist">Nuevo Dist.</label>
-                        <button type="button" class="btn btn-light btn-block"><a href="javascript:void();" onclick="document.getElementById('form1').submit();"><span class="fas fa-university" style="font-size:25px;"></span></a></button>
+                        <button type="button" class="btn btn-light btn-block">
+                                <a href="javascript:void();" onclick="document.getElementById('form1').submit();">
+                                <span class="fas fa-university" style="font-size:25px;"></span></a></button>
                     </div>
                 </div>
                 <br>
@@ -777,11 +779,6 @@
                $('#izonareci').html('');
                $("#izonareci").append('<option></option>');
         }, 3000);
-        /*$('#button').submit(function(e) {
-               e.preventDefault();
-               $('#exampleModal').modal('hide');
-               return false;
-        });*/
     }
     function cerrarmodal(){
         $("#iasiento").val('0');
