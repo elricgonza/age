@@ -620,6 +620,7 @@
     }
 </script>
 
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -719,10 +720,10 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <button type="button" id="cerrar" onclick="cerrarmodal();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar/Cancelar</button>
+                        <button type="button" id="cerrar" onclick="cerrarmodal();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <button type="submit" id="button" class="btn btn-outline-success btn-md btn-block" 
+                        <button type="submit" id="isubmitaceptar" class="btn btn-outline-success btn-md btn-block" 
                         >Aceptar</button>
                     </div>
                 </div> <!--row-->
@@ -755,7 +756,7 @@
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario;
         $.ajax({
             type: 'POST',
-            url: '/zonasr',
+            url: '/reci_zona_add',
             data: dataenv
         })
         .done(function(data) {
@@ -766,10 +767,15 @@
             else {
                 $('#successAlert').text(data.name).show();
                 $('#errorAlert').hide();
-                document.getElementById('inomzona').value = "";
-                document.getElementById('inomdist').selectedIndex = 0;
+                //document.getElementById('inomzona').value = "";
+                //document.getElementById('inomdist').selectedIndex = 0;
+                console.log('grabado ok---previo cerrarmodal 1608 ');
+                $('#isubmitaceptar').enabled = false;
+                document.getElementById('isubmitaceptar').disabled = True;
             }
         });
+
+        /*
         setTimeout(function(){
                $('#exampleModal').modal('hide');
                $('#successAlert').hide();
@@ -778,7 +784,8 @@
                $("#iasiento").append('<option></option>');
                $('#izonareci').html('');
                $("#izonareci").append('<option></option>');
-        }, 3000);
+        }, 4000);
+        */
     }
     function cerrarmodal(){
         $("#iasiento").val('0');

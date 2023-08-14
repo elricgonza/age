@@ -140,3 +140,14 @@ class Zonas:
         self.cur.execute(s, con1)
         row = self.cur.fetchone()
         return row[0]
+
+
+    def nomzona_existe(self, idloc, nomzona):
+        ''' Valida q no se duplique nomZona en asiento  '''
+
+        s = "select NomZona from [GeografiaElectoral_app].[dbo].[ZONA]" + \
+            "where IdLocZona= %d and nomzona= %s "
+        t = idloc, nomzona
+        self.cur.execute(s, t)
+        row = self.cur.fetchall()
+        return row

@@ -1775,6 +1775,8 @@ def zonas_list():
 @app.route('/zonas/<idloc>/<iddist>/<ban>', methods=['GET', 'POST'])
 @login_required
 def zonas(idloc, iddist, ban):
+    ''' Adición de Distrito desde form. recinto '''
+
     z = zo.Zonas(cxms)
 
     error = None
@@ -1788,7 +1790,7 @@ def zonas(idloc, iddist, ban):
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
                 #return render_template('asiento.html', error=error, u=u, load_u=True)
                 print('msg-err')
-            else:
+            else:  # Adiciona distrito #
                 nextiddist = z.get_next_dist(request.form['idloc'])
                 if ban == '2':
                     z.add_dist(request.form['idloc'], nextiddist, '0', request.form['nomdist'], \
@@ -1834,9 +1836,9 @@ def zonas(idloc, iddist, ban):
     return render_template('zona.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos')
 
 
-@app.route('/zonasr', methods=['POST'])
+@app.route('/reci_zona_add', methods=['POST'])
 @login_required
-def zonasr():
+def reci_zona_add():
     ''' Invocado por ajax - adición de zonas (recinto.html) '''
 
     z = zo.Zonas(cxms)
@@ -1846,16 +1848,19 @@ def zonasr():
     nomdist = request.form['nomdist']    # cod. DIST 
 
     # obtiene cod zona
+    print('---------------nomzona_exis')
+    print(z.nomzona_existe(idloc, nomzona))
     if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
-        if z.existe_sinzona_cod0(idloc):
-            return jsonify({'error' : 'Error, complemente el nombre SIN ZONA, debido a que ya que existe en el asiento'})
+        if z.nomzona_existe(idloc, nomzona):
+            print("existe...")
+            return jsonify({'error' : 'Error, el nombre: --SIN ZONA-- ya existe en el asiento, debe complementar nombre.'})
         else:
             zona = 0
     else:
         zona = z.get_next_zona(idloc)
 
-    if nomzona_existe(idloc, nomzona):
-        return jsonify({'error' : 'Error, el NOMBRE DE ZONA ya existe en el asiento'})
+    if z.nomzona_existe(idloc, nomzona):
+        return jsonify({'error' : 'Error, el nombre: --' + nomzona + '-- ya existe en el asiento, debe verificar/complementar nombre'})
 
 
     ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
@@ -1865,7 +1870,7 @@ def zonasr():
     print('---------------nomdist')  # 7 DIST
     print(nomdist)
     print('---------------nextidzona')
-    print(nextidzona)
+    print(zona)
     print('---------------nomzona')
     print(request.form['nomzona'])  # NEW ZONA 
     print('---------------ultimodist')
@@ -1878,7 +1883,7 @@ def zonasr():
                request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
 
     if idloc:
-        return jsonify({'name' : 'Registros grabados !!! CORRECTAMENTE !!!'})
+        return jsonify({'name' : 'Registros grabados ¡¡¡ CORRECTAMENTE !!!'})
 
     return jsonify({'error' : 'Error al Grabar Datos!'})
 
