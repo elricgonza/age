@@ -488,6 +488,8 @@
 </div> <!--main-->
 
 <script>
+    char_restringidos = [34,44,61,43,136,124,42,59,58,94, 191,63,161,33,123,125, ];  // ",=+~|*;:^  ¿?¡!{}    
+
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
     var depenreci = document.getElementById('idepenreci');
@@ -651,8 +653,10 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="nomzona">Nombre de la Zona:</label>
+                        <label for="nomzona">Nombre de la Zona:::</label>
+                        <!--char_restringidos = [34,44,61,43,136,124,42,59,58,94, 191,63,161,33,123,125, ]    ",=+~|*;:^  ¿?¡!{}   --> 
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
+                                onkeypress="return !char_restringidos.includes(event.charCode)"
                                 value="SIN ZONA"        
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
@@ -737,14 +741,19 @@
 
 <script type="text/javascript">
     function enviar(){
+        // valida nomzona
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
           return false;
         }
+        
+
+
         var indice = document.getElementById("inomdist").selectedIndex;
         if( indice == null || indice == 0 ) {
           return false;
         }
+        /*
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
         var circundist = document.getElementById('inrodist').value;
@@ -754,6 +763,8 @@
         var usuario = document.getElementById('iusuario_zona').value;
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario;
+        */
+
         $.ajax({
             type: 'POST',
             url: '/reci_zona_add',
@@ -769,9 +780,7 @@
                 $('#errorAlert').hide();
                 //document.getElementById('inomzona').value = "";
                 //document.getElementById('inomdist').selectedIndex = 0;
-                console.log('grabado ok---previo cerrarmodal 1608 ');
-                $('#isubmitaceptar').enabled = false;
-                document.getElementById('isubmitaceptar').disabled = True;
+                document.getElementById('isubmitaceptar').disabled = true;
             }
         });
 
@@ -848,3 +857,4 @@
 {% endblock %}
 
 <!--https://programacion.net/articulo/como_cargar_contenido_dinamico_en_un_modal_de_bootstrap_1867-->
+
