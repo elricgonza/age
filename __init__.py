@@ -1801,7 +1801,7 @@ def zonas(idloc, iddist, ban):
                     
                 if ban == '1':
                     #flash('Registro grabado !!! CORRECTAMENTE !!!')
-                    return render_template('zonare.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
+                    return render_template('reci_dist.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos')
                 elif ban == '2':
                     #flash('Registro grabado !!! CORRECTAMENTE !!!')
                     return render_template('zonareext.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
@@ -1887,25 +1887,71 @@ def reci_zona_add():
 
     return jsonify({'error' : 'Error al Grabar Datos!'})
 
-
-@app.route('/zonasre', methods=['GET', 'POST'])
+@app.route('/reci_dist_add2/<idlocreci>/<nrodist1>', methods=['POST'])
 @login_required
-def zonasre():
+def reci_dist_add2(idlocreci, nrodist1):
+    print('----------22')
+    print(idlocreci)
+    print(nrodist1)
+
+
+    error = None
+    z = zo.Zonas(cxms)
+    p = ('Recintos - Edición' in permisos_usr)  # t/f
+
+    return render_template('reci_dist.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idlocreci, nomloc='locc', nrodist=nrodist1)
+
+
+@app.route('/reci_dist_add', methods=['GET', 'POST'])
+@login_required
+def reci_dist_add():
+    ''' Invocado por recinto.html/zona/Nuevo Dist. '''
+
     z = zo.Zonas(cxms)
     ban = 0
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
 
+    print('zonasre---------------------reci_dist_add')
+    print(request.method)
+
     if request.method == 'POST':
+        print('text oso------------------')
+        #print(request.form['oso'])
+        print(request.form.get('oso', 'defaultt'))
+        print('text oso------------------>>')
+
+
+        print('request.form.get(idlocreci1)---------')
+        print(request.form.get('idlocreci1'))
+        print('request.form[idlocreci1]-----------')
+        print(request.form['idlocreci1'])
         if request.form.get('idlocreci1') == None:
             idloc = request.form.get('idlocreci1', 0)
         else:
             idloc = request.form['idlocreci1']
+
+        print('request.form.get(nomloc)------------')
         print(request.form.get('nomloc'))    
+
         if request.form.get('nomloc') == None:
             nomloc = request.form.get('nomloc', 0)
+            print('nomloc = None')
         else:
             nomloc = request.form['nomloc']
+            print(nomloc)
+
+        print('nomloc------------')
+        print(nomloc)
+
+
+        print('request.form.get(nrodist1)------------------')
+        print(request.form.get('nrodist1'))
+        print('request.form[nrodist1]----------------')
+        print(request.form['nrodist1'])
+
+        print('rf s asiento----------------------------')
+        print(request.form.get('asiento', '777'))
         if request.form.get('nrodist1') == None:
             nrodist = request.form.get('nrodist1', 0)
         else:
@@ -1913,7 +1959,7 @@ def zonasre():
         if ban != 0:
             print('Otra Cosa')
         else:
-            return render_template('zonare.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
+            return render_template('reci_dist.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
 
 
 @app.route('/zonasre_ext', methods=['GET', 'POST'])

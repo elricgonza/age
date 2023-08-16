@@ -488,7 +488,7 @@
 </div> <!--main-->
 
 <script>
-    char_restringidos = [34,44,61,43,136,124,42,59,58,94, 191,63,161,33,123,125, ];  // ",=+~|*;:^  ¿?¡!{}    
+    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`  ¿?¡!{}\/<>
 
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
@@ -654,7 +654,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label for="nomzona">Nombre de la Zona:::</label>
-                        <!--char_restringidos = [34,44,61,43,136,124,42,59,58,94, 191,63,161,33,123,125, ]    ",=+~|*;:^  ¿?¡!{}   --> 
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
                                 onkeypress="return !char_restringidos.includes(event.charCode)"
                                 value="SIN ZONA"        
@@ -682,7 +681,7 @@
                     <div class="col-md-3">
                         <label for="nomdist">Nuevo Dist.</label>
                         <button type="button" class="btn btn-light btn-block">
-                                <a href="javascript:void();" onclick="document.getElementById('form1').submit();">
+                            <a href="javascript:void();" onclick="document.getElementById('form1').submit();">
                                 <span class="fas fa-university" style="font-size:25px;"></span></a></button>
                     </div>
                 </div>
@@ -747,13 +746,11 @@
           return false;
         }
         
-
-
         var indice = document.getElementById("inomdist").selectedIndex;
         if( indice == null || indice == 0 ) {
           return false;
         }
-        /*
+
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
         var circundist = document.getElementById('inrodist').value;
@@ -763,7 +760,6 @@
         var usuario = document.getElementById('iusuario_zona').value;
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario;
-        */
 
         $.ajax({
             type: 'POST',
@@ -784,17 +780,6 @@
             }
         });
 
-        /*
-        setTimeout(function(){
-               $('#exampleModal').modal('hide');
-               $('#successAlert').hide();
-               $('#errorAlert').hide();
-               $('#iasiento').html('');
-               $("#iasiento").append('<option></option>');
-               $('#izonareci').html('');
-               $("#izonareci").append('<option></option>');
-        }, 4000);
-        */
     }
     function cerrarmodal(){
         $("#iasiento").val('0');
@@ -812,13 +797,15 @@
     <div class="modal-content">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
-          <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>  
+          <h2 class="text-center text-blue pt-3" >{{ titulo }}exmodal1</h2>  
           <div class="modal-body">    
-            <form id="form1" action="{{ url_for('zonasre') }}" target="_blank" class="needs-validation" novalidate method="POST">
-                <input type="hidden" name="nomloc" value="{{ rc.nomloc }}">                
+            <form id="form1" action="{{ url_for('reci_dist_add') }}" target="_blank" class="needs-validation" novalidate method="POST">
+                <input type="hidden" name="nomloc" value="{{ rc.nomloc }}">
+                <label for="oso">test:</label>
+                <input type="text" name="oso" value="meloso">
                 <div class="row">
                     <div class="col-md-3">
-                        <label for="idloc">IdLoc:</label>
+                        <label for="idloc">IdLoc:exmodal1</label>
                         <input type="text" class="form-control" id="iidlocreci1" title="" placeholder="Instroduzca IdLoc" name="idlocreci1" required readonly 
                                 {% if load %}
                                     value="{{ rc.idlocreci }}"
@@ -831,7 +818,7 @@
                 </div> <!--row-->
                 <div class="row">
                     <div class="col-md-2">
-                        <label for="nrodist">Circun.:</label>
+                        <label for="nrodist">Circun.:exmodal1</label>
                         <input type="text" class="form-control" id="inrodist1" placeholder="Nro." name="nrodist1" required readonly
                             {% if load %}
                                 value="{{ rc.circundist }}"        
@@ -840,7 +827,7 @@
                         <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
                     </div>
                     <div class="col-md-10">
-                        <label for="nomdist">Nombre del Distrito:</label>
+                        <label for="nomdist">Nombre del Distrito:exmodal1</label>
                         <select id="inomdist" name="nomdist" class="form-control">
                         </select>
                         <div class="invalid-feedback">Debe Seleccionar el Distrito...</div>
@@ -854,7 +841,27 @@
   </div>
 </div>
 
+<!--
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-body">    
+            <form id="form1" action="{{ url_for('reci_dist_add') }}" target="_blank" class="needs-validation" novalidate method="POST">
+                <input type="hidden" name="nomloc" value="{{ rc.nomloc }}">
+                        <input type="text" class="form-control" id="iidlocreci1" title="" placeholder="Instroduzca IdLoc" name="idlocreci1" required readonly 
+                                {% if load %}
+                                    value="{{ rc.idlocreci }}"
+                                {% endif %}
+                            >
+                        <input type="text" class="form-control" id="inrodist1" placeholder="Nro." name="nrodist1" required readonly
+                            {% if load %}
+                                value="{{ rc.circundist }}"        
+                            {% endif %}
+                        >
+            </form>
+          </div>
+</div>
+-->
+
 {% endblock %}
 
 <!--https://programacion.net/articulo/como_cargar_contenido_dinamico_en_un_modal_de_bootstrap_1867-->
-
+<!--https://es.stackoverflow.com/questions/289413/bloquear-números-letras-y-o-caracteres-especiales-en-un-input-->

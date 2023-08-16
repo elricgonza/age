@@ -9,7 +9,7 @@
     <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
 {% endblock %}
 <div class="container">
-    <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
+    <h2 class="text-center text-blue pt-3" >{{ titulo }}--zonare--</h2>
     <br>    
     <div id="login-row" class="row justify-content-center align-items-center">
         {% with messages = get_flashed_messages(with_categories=false) %}
@@ -29,7 +29,7 @@
                 <form action="{{ url_for('zonas', idloc = 0, iddist = 0, ban = 1) }}" class="needs-validation" novalidate method="POST">                
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="idloc">IdLoc:</label>
+                            <label for="idloc">IdLoc:--zonare--</label>
                             <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
                                     {% if load %}
                                         value="{{ z.idloc }}"
