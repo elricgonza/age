@@ -57,7 +57,7 @@ import clasif_get
 import get_json
 
 
-# create the application object
+# Create the application object
 app = Flask(__name__)
 
 app.secret_key ='\xfd{H\xe7<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa7'
@@ -1887,32 +1887,18 @@ def reci_zona_add():
 
     return jsonify({'error' : 'Error al Grabar Datos!'})
 
-@app.route('/reci_dist_add2/<idlocreci>/<nrodist1>', methods=['POST'])
+
+@app.route('/reci_dist_send', methods=['GET', 'POST'])
 @login_required
-def reci_dist_add2(idlocreci, nrodist1):
-    print('----------22')
-    print(idlocreci)
-    print(nrodist1)
-
-
-    error = None
-    z = zo.Zonas(cxms)
-    p = ('Recintos - Edición' in permisos_usr)  # t/f
-
-    return render_template('reci_dist.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idlocreci, nomloc='locc', nrodist=nrodist1)
-
-
-@app.route('/reci_dist_add', methods=['GET', 'POST'])
-@login_required
-def reci_dist_add():
-    ''' Invocado por recinto.html/zona/Nuevo Dist. '''
+def reci_dist_send():
+    ''' Invocado por recinto.html/zona/Nuevo Dist. SEND variables '''
 
     z = zo.Zonas(cxms)
     ban = 0
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
 
-    print('zonasre---------------------reci_dist_add')
+    print('zonasre---------------------reci_dist_send********************************')
     print(request.method)
 
     if request.method == 'POST':
@@ -3887,7 +3873,6 @@ def resize_save_file1(in_file, out_file, size):
     image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
     image.close()
     #return(out_file)
-
 
 
 # start the server with the 'run()' method

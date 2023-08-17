@@ -54,7 +54,6 @@
             </div>
             <div class="col-md-4">
                 <label for="">.</label>
-                <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="getgeo(event)" >Visualizar imágen Satelital</button>-->
                 <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
             </div>
         </div>
@@ -644,7 +643,7 @@
                         <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                     </div>
                     <div class="col-md-3">
-                        <label for="nomzona">Refresh:</label>
+                        <label for="nomzona">Refresh Distritos:</label>
                         <button type="button" class="btn btn-light btn-block"><a onclick="cargar(this.value, 7)"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>
                     </div>
                     <div class="col-md-6">
@@ -793,73 +792,21 @@
 <!-- Otro Modal -->
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="row justify-content-center align-items-center">
-        <div class="col-md-11">  
-          <h2 class="text-center text-blue pt-3" >{{ titulo }}exmodal1</h2>  
-          <div class="modal-body">    
-            <form id="form1" action="{{ url_for('reci_dist_add') }}" target="_blank" class="needs-validation" novalidate method="POST">
-                <input type="hidden" name="nomloc" value="{{ rc.nomloc }}">
-                <label for="oso">test:</label>
-                <input type="text" name="oso" value="meloso">
-                <div class="row">
-                    <div class="col-md-3">
-                        <label for="idloc">IdLoc:exmodal1</label>
-                        <input type="text" class="form-control" id="iidlocreci1" title="" placeholder="Instroduzca IdLoc" name="idlocreci1" required readonly 
-                                {% if load %}
-                                    value="{{ rc.idlocreci }}"
-                                {% endif %}
-                            >
-                        <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
-                    </div>
-                    <div class="col-md-9">
-                    </div>
-                </div> <!--row-->
-                <div class="row">
-                    <div class="col-md-2">
-                        <label for="nrodist">Circun.:exmodal1</label>
-                        <input type="text" class="form-control" id="inrodist1" placeholder="Nro." name="nrodist1" required readonly
-                            {% if load %}
-                                value="{{ rc.circundist }}"        
-                            {% endif %}
-                        >
-                        <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
-                    </div>
-                    <div class="col-md-10">
-                        <label for="nomdist">Nombre del Distrito:exmodal1</label>
-                        <select id="inomdist" name="nomdist" class="form-control">
-                        </select>
-                        <div class="invalid-feedback">Debe Seleccionar el Distrito...</div>
-                    </div>
-                </div>
-            </form>
-          </div>
-        </div>  
-      </div>
-    </div>
-  </div>
+    <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
+        <input type="hidden" name="nomloc" value="reNEW-1500">
+        <input type="text" id="iidlocreci1"  name="idlocreci1"  
+                {% if load %}
+                    value="{{ rc.idlocreci }}"
+                {% endif %}
+            >
+        <input type="text" id="inrodist1"  name="nrodist1" 
+                {% if load %}
+                    value="{{ rc.circundist }}"        
+                {% endif %}
+        >
+    </form>
 </div>
 
-<!--
-<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-body">    
-            <form id="form1" action="{{ url_for('reci_dist_add') }}" target="_blank" class="needs-validation" novalidate method="POST">
-                <input type="hidden" name="nomloc" value="{{ rc.nomloc }}">
-                        <input type="text" class="form-control" id="iidlocreci1" title="" placeholder="Instroduzca IdLoc" name="idlocreci1" required readonly 
-                                {% if load %}
-                                    value="{{ rc.idlocreci }}"
-                                {% endif %}
-                            >
-                        <input type="text" class="form-control" id="inrodist1" placeholder="Nro." name="nrodist1" required readonly
-                            {% if load %}
-                                value="{{ rc.circundist }}"        
-                            {% endif %}
-                        >
-            </form>
-          </div>
-</div>
--->
 
 {% endblock %}
 

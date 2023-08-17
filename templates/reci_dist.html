@@ -9,7 +9,7 @@
     <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
 {% endblock %}
 <div class="container">
-    <h2 class="text-center text-blue pt-3" >{{ titulo }}--zonare--</h2>
+    <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
     <br>    
     <div id="login-row" class="row justify-content-center align-items-center">
         {% with messages = get_flashed_messages(with_categories=false) %}
@@ -21,7 +21,7 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
               </div>
-            {% endfor %}        
+            {% endfor %}
           {% endif %}
         {% endwith %}
         <div id="login-column" class="col-md-8">
@@ -29,7 +29,7 @@
                 <form action="{{ url_for('zonas', idloc = 0, iddist = 0, ban = 1) }}" class="needs-validation" novalidate method="POST">                
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="idloc">IdLoc:--zonare--</label>
+                            <label for="idloc">IdLoc:</label>
                             <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
                                     {% if load %}
                                         value="{{ z.idloc }}"
@@ -40,7 +40,7 @@
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                         </div>
                         <div class="col-md-9">
-                            <label for="nomloc">Nombre Asiento::</label>
+                            <label for="nomloc">Nombre Asiento:</label>
                             <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
                                     {% if load %}
                                         value="{{ z.nomloc }}"
@@ -55,7 +55,7 @@
                     <div class="row">
                         <div class="col-md-2">
                             <label for="nrodist">Circun.:</label>
-                            <input type="text" class="form-control" maxlength="2" id="inrodist" placeholder="Nro." name="nrodist" required
+                            <input type="text" class="form-control" maxlength="2" id="inrodist" placeholder="Nro." name="nrodist" required readonly
                                 {% if load %}
                                     value="{{ z.circundist }}"
                                   {% else %}
@@ -65,8 +65,9 @@
                             <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
                         </div>
                         <div class="col-md-10">
-                            <label for="nomdist">Nombre del Distrito:</label>
-                            <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required
+                            <label for="nomdist">Nombre del Distrito::</label>
+                            <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
+                                onkeypress="return !char_restringidos.includes(event.charCode)"
                                 {% if load %}
                                     value="{{ z.nomdist }}"        
                                 {% endif %}
@@ -155,6 +156,8 @@
 </div>
 
 <script>
+    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`  ¿?¡!{}\/<>
+
     $('.custom-file-input').on('change', function() { 
           let fileName = $(this).val().split('\\').pop(); 
           $(this).next('.custom-file-label').addClass("selected").html(fileName); 
@@ -177,7 +180,6 @@
             });
         }, false);
     })();
-
 </script>
 
 {% endblock %}
