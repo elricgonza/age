@@ -151,3 +151,13 @@ class Zonas:
         self.cur.execute(s, t)
         row = self.cur.fetchall()
         return row
+
+    def nomdist_existe(self, idloc, nomdist):
+        ''' Valida q no se duplique nomDist en asiento  '''
+
+        s = "select NomDist from [GeografiaElectoral_app].[dbo].[DIST]" + \
+            "where IdLocDist= %d and nomDist= %s "
+        t = idloc, nomdist
+        self.cur.execute(s, t)
+        row = self.cur.fetchall()
+        return row
