@@ -57,6 +57,7 @@ class Zonas:
 
 
     def add_dist(self, idlocdist, dist, circundist, nomdist, fecharegistro, usuario, fechaingreso):
+        nomdist = nomdist.upper()
         new_dist = idlocdist, dist, circundist, nomdist, fecharegistro, usuario, fechaingreso
         s = "insert into GeografiaElectoral_app.dbo.dist (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) values " + \
             " (%s, %s, %s, %s, %s, %s, %s) "
@@ -79,6 +80,7 @@ class Zonas:
 
 
     def upd_dist(self, idlocdist, iddist, circundist, nomdist, fa, usuario):        
+        nomdist = nomdist.upper()
         upd_dist = (circundist, nomdist, fa, usuario, idlocdist, iddist) 
         s = "update GeografiaElectoral_app.dbo.dist set CircunDist = %s, NomDist = %s, fechaAct = %s, usuario = %s" + \
             " where IdLocDist = %d and Dist = %d"

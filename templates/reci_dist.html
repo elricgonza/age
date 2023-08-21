@@ -12,19 +12,6 @@
     <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
     <br>    
     <div id="login-row" class="row justify-content-center align-items-center">
-        {% with messages = get_flashed_messages(with_categories=false) %}
-          {% if messages %}        
-            {% for message in messages %}         
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  {{ message }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
                 <form action="{{ url_for('reci_dist_add_upd', idloc = 0, iddist = 0, ban = 1) }}" class="needs-validation" novalidate method="POST">                
@@ -81,8 +68,8 @@
                         <div class="col-md-4">
                             <label for="fechaIngreso">Fecha y Hora de Registro:</label>
                             <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
-                                    {% if load_d %}
-                                        value=""
+                                    {% if load %}
+                                       value = "{{ z.fechaIngreso }}" 
                                     {% else %}
                                         value="{{ idatetime }}"
                                     {% endif %}
@@ -92,24 +79,22 @@
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
                             <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
-                                    {% if load_d %}
-                                        value=""
+                                    {% if load %}
+                                       value = "{{ z.fechaAct }}" 
                                     {% else %}
                                         value="{{ idatetime }}"
                                     {% endif %}
                                 >
-                            <div class="invalid-feedback" id="v_fechaAct">Debe introducir una fecha válida.</div>
                         </div>                        
                         <div class="col-md-4">
                             <label for="usuario">Usuario Logueado:</label>
                             <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
-                                    {% if load_d %}
-                                        value=""
+                                    {% if load %}
+                                        value="{{ z.usuario }}"
                                     {% else %}
                                         value="{{ usuario }}"
                                     {% endif %}
                                 >
-                            <div class="invalid-feedback">Debe introducir un nombre válido.</div>
                         </div>
                     </div>
 
@@ -118,22 +103,23 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <button type="button"
-                            {% if load_d %}  
+                            {% if dook %}  
                                     onclick="javascript: window.close();"
                                 {% else %}
                                     onclick="javascript: window.close();"
                             {% endif %}      
                             class="btn btn-outline-danger btn-md btn-block">
-                            {% if load_d %}
+                            {% if dook %}
                                     Cerrar
                                 {% else %}
-                                    Cancelar
+                                    Cancelar/Cerrar
                             {% endif %}        
                             </button>
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <button type="submit" class="btn btn-outline-success btn-md btn-block"
-                            {% if load_d %}
+                            {% if dook %}
                                 disabled
                             {% else %}
                                 enabled
@@ -154,6 +140,14 @@
     </div>
     {% endif %}
 
+    {% if dook %}
+    <br>
+    <div class="alert alert-success alert-dismissible fade show">
+        <strong>Mensaje: </strong> {{ dook }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <script>document.getElementById('i')</script>
+    </div>
+    {% endif %}
 </div>
 
 <script>

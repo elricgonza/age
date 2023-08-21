@@ -642,11 +642,11 @@
                             >
                         <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="nomzona">Refresh Distritos:</label>
+                    <div class="col-md-6">
+                        <label for="nomzona">Refresh  - Nombres Distrito:</label>
                         <button type="button" class="btn btn-light btn-block"><a onclick="cargar(this.value, 7)"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                     </div>
                 </div> <!--row-->
                 <br>
@@ -793,7 +793,7 @@
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
-        <input type="hidden" name="nomloc" value="202308-954">
+        <input type="hidden" name="nomloc" value="20230821-0926">
         <input type="text" id="iidlocreci1"  name="idlocreci1"  
                 {% if load %}
                     value="{{ rc.idlocreci }}"
