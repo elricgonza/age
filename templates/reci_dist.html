@@ -11,6 +11,23 @@
 <div class="container">
     <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
     <br>    
+    {% if error %}
+    <br>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+    {% if dook %}
+    <br>
+    <div class="alert alert-success alert-dismissible fade show">
+        <strong>Mensaje: </strong> {{ dook }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <script>document.getElementById('i')</script>
+    </div>
+    {% endif %}
+
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
@@ -50,7 +67,7 @@
                                     value="{{ nrodist }}"          
                                 {% endif %}
                             >
-                            <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
+                            <div class="invalid-feedback">Por favor ingrese Nro. de Circunscripción...</div>
                         </div>
                         <div class="col-md-10">
                             <label for="nomdist">Nombre del Distrito::</label>
@@ -132,22 +149,6 @@
         </div>
     </div>
 
-    {% if error %}
-    <br>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> {{ error }} 
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    {% endif %}
-
-    {% if dook %}
-    <br>
-    <div class="alert alert-success alert-dismissible fade show">
-        <strong>Mensaje: </strong> {{ dook }} 
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <script>document.getElementById('i')</script>
-    </div>
-    {% endif %}
 </div>
 
 <script>

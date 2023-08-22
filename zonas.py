@@ -1,4 +1,4 @@
-# Operaciones Zona / Recintos
+# Operaciones Zonas / Distritos / Recintos
 
 class Zonas:
     idlocreci=0
@@ -11,25 +11,22 @@ class Zonas:
         self.cur = cx.cursor()
 
 
-    def get_zonas_all(self, usrdep):        
+    def get_dist_enable(self, usrdep): 
+        ''' Obtiene distritos de recintos habilitados sg ESTADO en reci '''
+
         s = "select distinct d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[RECI] r" + \
             " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
             " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
             " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist"
         if usrdep != 0 :
-            #s = s + " where l.DepLoc = %d and d.Dist>0 order by d.IdLocDist, d.Dist"
             s = s + " where r.estado in (1, 2, 3, 6, 79, 80, 81, 84) and l.DepLoc = %d order by d.IdLocDist, d.Dist"
             self.cur.execute(s, usrdep)
         else:
-            #s = s + " where d.Dist>0 order by d.IdLocDist, d.Dist"
             s = s + " where r.estado in (1, 2, 3, 6, 79, 80, 81, 84) order by d.IdLocDist, d.Dist"
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
 
 
     def get_next_zona(self, idloc):
@@ -39,7 +36,6 @@ class Zonas:
         return row[0]
 
 
-    """ Aqui esta el ERRROR """    
     def get_next_dist(self, idloc):
         s = "select isnull(max(dist), 0)+1 from GeografiaElectoral_app.dbo.dist where IdLocDist = %d"
         self.cur.execute(s, idloc)
