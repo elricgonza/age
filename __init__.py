@@ -1443,9 +1443,9 @@ def recinto(idreci, idlocreci):
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
-    # New
+    # New from <recintos_list>
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrtipo), trecintos=rc.get_tiporecintos(), 
-                            dependencias=rc.get_dependencias(), titulo='Registro de Zonas y Distritos', tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                            dependencias=rc.get_dependencias(), titulo='*-*', tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
 @app.route('/get_asientos_all1', methods=['GET', 'POST'])
@@ -1778,63 +1778,29 @@ def reci_dist_send():
     ''' Invocado por recinto.html/zona/Nuevo Dist. SEND variables '''
 
     z = zo.Zonas(cxms)
-    ban = 0
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
 
-    print('zonasre---------------------reci_dist_send********************************')
-    print(request.method)
+    print('---------------------reci_dist_send********************************')
 
     if request.method == 'POST':
-        print('text oso------------------')
-        #print(request.form['oso'])
-        print(request.form.get('oso', 'defaultt'))
-        print('text oso------------------>>')
+        #idloc = request.form.get('idlocreci1', 0)
+        idloc = request.form['idlocreci1']
+        nomloc = request.form.get('nomloc', 0)      # empty...
+        nrodist = request.form['nrodist1']
 
-
-        print('request.form.get(idlocreci1)---------')
-        print(request.form.get('idlocreci1'))
-        print('request.form[idlocreci1]-----------')
-        print(request.form['idlocreci1'])
-        if request.form.get('idlocreci1') == None:
-            idloc = request.form.get('idlocreci1', 0)
-        else:
-            idloc = request.form['idlocreci1']
-
-        print('request.form.get(nomloc)------------')
-        print(request.form.get('nomloc'))    
-
-        if request.form.get('nomloc') == None:
-            nomloc = request.form.get('nomloc', 0)
-            print('nomloc = None')
-        else:
-            nomloc = request.form['nomloc']
-            print(nomloc)
-
-        print('nomloc------------')
+        print('idloc, nomloc, nrodist------------')
+        print(idloc)
         print(nomloc)
+        print(nrodist)
+        print('idloc, nomloc, nrodist------------>>>')
+
+        return render_template('reci_dist_add.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
 
 
-        print('request.form.get(nrodist1)------------------')
-        print(request.form.get('nrodist1'))
-        print('request.form[nrodist1]----------------')
-        print(request.form['nrodist1'])
-
-        print('rf s asiento----------------------------')
-        print(request.form.get('asiento', '777'))
-        if request.form.get('nrodist1') == None:
-            nrodist = request.form.get('nrodist1', 0)
-        else:
-            nrodist = request.form['nrodist1']
-        if ban != 0:
-            print('Otra Cosa')
-        else:
-            return render_template('reci_dist.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
-
-
-@app.route('/reci_dist_add_upd/<idloc>/<iddist>/<ban>', methods=['GET', 'POST'])
+@app.route('/recixx_dist_add_upd/<idloc>/<iddist>/<ban>', methods=['GET', 'POST'])
 @login_required
-def reci_dist_add_upd(idloc, iddist, ban):
+def recixx_dist_add_upd(idloc, iddist, ban):
     ''' Adición de Distrito desde form. recinto/zona '''
     ''' idloc= 0, iddist= 0, ban=1  desde url_for '''
 
@@ -1908,6 +1874,46 @@ def reci_dist_add_upd(idloc, iddist, ban):
     return render_template('reci_dist.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos--ZONA.html when new de list???')
 
 
+@app.route('/reci_dist_add/<nalext>', methods=['GET', 'POST'])
+@login_required
+def reci_dist_add(nalext):
+    ''' Adición de Distrito desde form. recinto/zona '''
+    ''' desde url_for param: nalext='nal'  '''
+
+    z = zo.Zonas(cxms)
+    error = None
+    p = ('Zonas - Edición' in permisos_usr)  # t/f
+
+    if request.method == 'POST':
+            idloc = request.form['idloc']
+            nomdist = request.form['nomdist']
+            circundist = request.form['nrodist']
+            if nomdist.upper() == 'SIN DISTRITO':
+                nextiddist = 0
+            else:
+                nextiddist = z.get_next_dist(request.form['idloc'])
+
+            if z.nomdist_existe(idloc, nomdist):  # valida si err en datos POST
+                error = "El distrito: --" + nomdist + "-- ya existe en el asiento..."
+
+                if nalext == 'nal': # nal
+                    return render_template('reci_dist_add.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc='_', nrodist=circundist, dook=None)
+                if nalext == 'ext': # ext
+                    return render_template('zonareext.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
+            else:  # Adiciona distrito 
+                if nalext == 'nal':  # nal
+                    z.add_dist(idloc, nextiddist, circundist, nomdist, \
+                               request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
+                    dook = 'Distrito Adicionado...'
+                    return render_template('reci_dist_add.html', error=None, z=z, load=False, puede_editar=p, titulo='Registro de Distritos', idloc=idloc, nomloc='', nrodist=circundist, dook=dook)
+                if nalext == 'ext':  # ext
+                    circundist = 0
+                    z.add_dist(idloc, nextiddist, circundist, nomdist, \
+                               request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
+                    return render_template('zonareext.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
+        
+
+
 @app.route('/reci_zona_add', methods=['POST'])
 @login_required
 def reci_zona_add():
@@ -1920,11 +1926,8 @@ def reci_zona_add():
     nomdist = request.form['nomdist']    # cod. DIST 
 
     # obtiene cod zona
-    print('---------------nomzona_exis')
-    print(z.nomzona_existe(idloc, nomzona))
     if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
         if z.nomzona_existe(idloc, nomzona):
-            print("existe...")
             return jsonify({'error' : 'Error, el nombre: --SIN ZONA-- ya existe en el asiento, debe complementar nombre.'})
         else:
             zona = 0
@@ -1937,27 +1940,12 @@ def reci_zona_add():
 
     ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
     
-    print('---------------idloc')
-    print(idloc)
-    print('---------------nomdist')  # 7 DIST
-    print(nomdist)
-    print('---------------nextidzona')
-    print(zona)
-    print('---------------nomzona')
-    print(request.form['nomzona'])  # NEW ZONA 
-    print('---------------ultimodist')
-    print(ultimodist)               # = nomdist = ultimodist
-    print('---------------usuario')
-    print(request.form['usuario'])
-
-
     z.add_zona(idloc, zona, nomzona, ultimodist, \
                request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
 
-    if idloc:
-        return jsonify({'name' : 'Registros grabados ¡¡¡ CORRECTAMENTE !!!'})
+    return jsonify({'name' : 'Zona adicionada...'})
 
-    return jsonify({'error' : 'Error al Grabar Datos!'})
+    #return jsonify({'error' : 'Error al Grabar Datos!'})
 
 
 @app.route('/zonasre_ext', methods=['GET', 'POST'])

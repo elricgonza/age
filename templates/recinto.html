@@ -627,7 +627,7 @@
     <div class="modal-content">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
-          <h3 class="text-center text-blue pt-3" >{{ titulo }}</h3> 
+          <h3 class="text-center text-blue pt-3" >Adición de Zona</h3> 
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
             <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align: center;"></div>    
@@ -793,7 +793,7 @@
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
-        <input type="hidden" name="nomloc" value="20230821-0926">
+        <input type="hidden" name="nomloc" value="20230823-0931">
         <input type="text" id="iidlocreci1"  name="idlocreci1"  
                 {% if load %}
                     value="{{ rc.idlocreci }}"
