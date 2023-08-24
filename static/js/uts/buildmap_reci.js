@@ -13,6 +13,8 @@ function getgeoreci(event) {
 } 
 
 function getgeoreci1(event) {
+  // Invocado por recinto/evento click: Ver "Asientos / Zonas"
+
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
     if (x == 27 || x == 9 || 'undefined') {

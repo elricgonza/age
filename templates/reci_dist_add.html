@@ -37,22 +37,14 @@
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
                             <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
-                                    {% if load %}
-                                        value="{{ z.idloc }}"
-                                      {% else %}
                                         value="{{ idloc }}"
-                                    {% endif %}
                                 >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                         </div>
                         <div class="col-md-9">
                             <label for="nomloc">Nombre Asiento:</label>
                             <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
-                                    {% if load %}
-                                        value="{{ z.nomloc }}"
-                                    {% else %}
                                         value="{{ nomloc }}"
-                                    {% endif %}
                                 >
                             <div class="invalid-feedback">Ingrese Nombre Asiento...</div>
                         </div>
@@ -62,11 +54,7 @@
                         <div class="col-md-2">
                             <label for="nrodist">Circun.:</label>
                             <input type="text" class="form-control" maxlength="2" id="inrodist" placeholder="Nro." name="nrodist" required readonly
-                                {% if load %}
-                                    value="{{ z.circundist }}"
-                                  {% else %}
                                     value="{{ nrodist }}"          
-                                {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese Nro. de Circunscripción...</div>
                         </div>
@@ -74,9 +62,6 @@
                             <label for="nomdist">Nombre del Distrito::</label>
                             <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
                                 onkeypress="return !char_restringidos.includes(event.charCode)"
-                                {% if load %}
-                                    value="{{ z.nomdist }}"        
-                                {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
                         </div>
@@ -86,33 +71,21 @@
                         <div class="col-md-4">
                             <label for="fechaIngreso">Fecha y Hora de Registro:</label>
                             <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
-                                    {% if load %}
-                                       value = "{{ z.fechaIngreso }}" 
-                                    {% else %}
                                         value="{{ idatetime }}"
-                                    {% endif %}
-                                >
+                            >
                             <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
                         </div>
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
                             <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
-                                    {% if load %}
-                                       value = "{{ z.fechaAct }}" 
-                                    {% else %}
                                         value="{{ idatetime }}"
-                                    {% endif %}
-                                >
+                            >
                         </div>                        
                         <div class="col-md-4">
                             <label for="usuario">Usuario Logueado:</label>
                             <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
-                                    {% if load %}
-                                        value="{{ z.usuario }}"
-                                    {% else %}
                                         value="{{ usuario }}"
-                                    {% endif %}
-                                >
+                            >
                         </div>
                     </div>
 
