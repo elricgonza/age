@@ -181,7 +181,7 @@
             </div>
             <div class="col-md-2">
                 <label for="zonareci">Zona y Distrito:</label>
-                <button type="button" class="btn btn-info btn-block openBtn">Registrar..</button>
+                <button type="button" class="btn btn-info btn-block openBtn">Registrar...</button>
             </div>
         </div> <!--row-->
 
@@ -470,7 +470,8 @@
 
         <div class="row">
             <div class="col-md-6">
-                <button type="button"  onclick="javascript: window.location.href = '/recintos_list';"  class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
+                <button type="button"  onclick="javascript: window.location.href = '/recintos_list';"  
+                              class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
             </div>
             <div class="col-md-6">
                 <button type="submit" class="btn btn-outline-success btn-lg btn-block" id="iaceptar" 
@@ -659,7 +660,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="nomzona">Nombre de la Zona:::</label>
+                        <label for="nomzona">Nombre de la Zona:</label>
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
                                 onkeypress="return !char_restringidos.includes(event.charCode)"
                                 value="SIN ZONA"        
@@ -729,7 +730,8 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <button type="button" id="cerrar" onclick="cerrarmodal();" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="cerrar" onclick="cerrarmodal();" 
+                            class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="submit" id="isubmitaceptar" class="btn btn-outline-success btn-md btn-block" 
@@ -780,12 +782,9 @@
             else {
                 $('#successAlert').text(data.name).show();
                 $('#errorAlert').hide();
-                //document.getElementById('inomzona').value = "";
-                //document.getElementById('inomdist').selectedIndex = 0;
                 document.getElementById('isubmitaceptar').disabled = true;
             }
         });
-
     }
     function cerrarmodal(){
         $("#iasiento").val('0');
@@ -794,7 +793,6 @@
         window.close();
     }
 </script>
-
 
 <!-- Otro Modal -->
 
@@ -805,7 +803,7 @@
                 {% if load %}
                     value="{{ rc.idlocreci }}"
                 {% endif %}
-            >
+        >
         <input type="text" id="inrodist1"  name="nrodist1" 
                 {% if load %}
                     value="{{ rc.circundist }}"        

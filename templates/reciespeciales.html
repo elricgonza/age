@@ -174,7 +174,7 @@
             </div>
             <div class="col-md-2">
                 <label for="zonareci">Zona y Distrito:</label>
-                <button type="button" class="btn btn-info btn-block openBtn">Registrar</button>
+                <button type="button" class="btn btn-info btn-block openBtn">Registrar...</button>
             </div>
         </div> <!--row-->
 
@@ -615,7 +615,7 @@
     <div class="modal-content">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
-          <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>  
+          <h2 class="text-center text-blue pt-3" >Adición de nueva Zona</h2>  
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
             <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align: center;"></div>    
@@ -630,8 +630,8 @@
                             >
                         <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="nomzona">Refresh:</label>
+                    <div class="col-md-6">
+                        <label for="nomzona">Refresh - Nombres Distrito:</label>
                         <button type="button" class="btn btn-light btn-block"><a onclick="cargar(this.value, 7)"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>
                     </div>
                     <div class="col-md-6">
@@ -668,7 +668,9 @@
                     </div>
                     <div class="col-md-3">
                         <label for="nomdist">Nuevo Dist</label>
-                        <button type="button" class="btn btn-light btn-block"><a href="javascript:void();" onclick="document.getElementById('form1').submit();"><span class="fas fa-university" style="font-size: 25px;"></span></a></button>
+                        <button type="button" class="btn btn-light btn-block">
+                            <a href="javascript:void();" onclick="document.getElementById('form1').submit();">
+                                <span class="fas fa-university" style="font-size: 25px;"></span></a></button>
                     </div>
                 </div>
                 <br>
@@ -715,7 +717,7 @@
                         <button type="button" id="cerrar" onclick="cerrarmodal()" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cancelar</button>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <button type="submit" class="btn btn-outline-success btn-md btn-block" 
+                        <button type="submit" id="isubmitaceptar" class="btn btn-outline-success btn-md btn-block" 
                         >Aceptar</button>
                     </div>
                 </div> <!--row-->
@@ -728,14 +730,17 @@
 </div>
 <script type="text/javascript">
     function enviar(){
+        // valida nomzona
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
           return false;
         }
+
         var indice = document.getElementById("inomdist").selectedIndex;
         if( indice == null || indice == 0 ) {
           return false;
         }
+
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
         var circundist = document.getElementById('inrodist').value;
@@ -758,25 +763,9 @@
             else {
                 $('#successAlert').text(data.name).show();
                 $('#errorAlert').hide();
-                document.getElementById('inomzona').value = "";
-                document.getElementById('inomdist').selectedIndex = 0;
+                document.getElementById('isubmitaceptar').disabled = true;
             }
-
         });
-        setTimeout(function(){
-               $('#exampleModal').modal('hide');
-               $('#successAlert').hide();
-               $('#errorAlert').hide();
-               $('#iasiento').html('');
-               $("#iasiento").append('<option></option>');
-               $('#izonareci').html('');
-               $("#izonareci").append('<option></option>');
-        }, 3000);
-        /*$('#button').submit(function(e) {
-               e.preventDefault();
-               $('#exampleModal').modal('hide');
-               return false;
-        });*/
     }
     function cerrarmodal(){
         $("#iasiento").val('0');
@@ -785,54 +774,28 @@
         window.close();
     }
 </script>
+
+
 <!-- Otro Modal -->
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="row justify-content-center align-items-center">
-        <div class="col-md-11">  
-          <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>  
-          <div class="modal-body">    
-            <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" class="needs-validation" novalidate method="POST">                
-                <div class="row">
-                    <div class="col-md-3">
-                        <label for="idloc">IdLoc:</label>
-                        <input type="text" class="form-control" id="iidlocreci1" title="" placeholder="Instroduzca IdLoc" name="idlocreci1" required readonly 
-                                {% if load %}
-                                    value="{{ rces.idlocreci }}"
-                                {% endif %}
-                            >
-                        <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
-                    </div>
-                    <div class="col-md-9">
-                    </div>
-                </div> <!--row-->
-                <div class="row">
-                    <div class="col-md-2">
-                        <label for="nrodist">Circun.:</label>
-                        <input type="text" class="form-control" id="inrodist1" placeholder="Nro." name="nrodist1" required readonly
-                            {% if load %}
-                                value="{{ rces.circundist }}"        
-                            {% endif %}
-                        >
-                        <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
-                    </div>
-                    <div class="col-md-10">
-                        <label for="nomdist">Nombre del Distrito:</label>
-                        <select id="inomdist" name="nomdist" class="form-control">
-                        </select>
-                        <div class="invalid-feedback">Debe Seleccionar el Distrito...</div>
-                    </div>
-                </div>
-            </form>
-          </div>
-        </div>  
-      </div>
-    </div>
-  </div>
+    <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
+        <input type="hidden" id="idnomlocmodal" name="nomloc" >
+        <input type="text" id="iidlocreci1"  name="idlocreci1"  
+                {% if load %}
+                    value="{{ rc.idlocreci }}"
+                {% endif %}
+        >
+        <input type="text" id="inrodist1"  name="nrodist1" 
+                {% if load %}
+                    value="{{ rc.circundist }}"        
+                {% endif %}
+        >
+    </form>
 </div>
 
 
 {% endblock %}
+
 <!--https://programacion.net/articulo/como_cargar_contenido_dinamico_en_un_modal_de_bootstrap_1867-->
+<!--https://es.stackoverflow.com/questions/289413/bloquear-números-letras-y-o-caracteres-especiales-en-un-input-->

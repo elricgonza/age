@@ -47,8 +47,8 @@ function cargar(valor, data) {
                 });
             });
         }else if(data==5){
-            var ia = document.getElementById("iasiento").value;
-            var cir = ia.split(':');
+            var ia = document.getElementById("iasiento").value;    // circun:idloc
+            var cir = ia.split(':');    // circun,idloc
             document.getElementById('iidloc').value = cir[1];
             document.getElementById('iidlocreci').value = cir[1];
             document.getElementById('inrodist').value = cir[0];

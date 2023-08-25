@@ -1607,7 +1607,7 @@ def reci_espec_list():
 @app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def reciespe(idreci, idlocreci):
-    ''' Pueblos Indigenas '''
+    ''' Recintos Especiales/Indigenas '''
     rce = recie.Reciespe(cxms)
     rca = recia.Reciasiento(cxms)
     z = zo.Zonas(cxms)
@@ -1712,7 +1712,7 @@ def reciespe(idreci, idlocreci):
                     return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                            estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), trecintos=rce.get_tiporecintos(), 
                                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
-        # New
+    # New from <recintos_list>
     return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
                            dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
