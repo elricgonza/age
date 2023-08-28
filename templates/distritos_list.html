@@ -23,7 +23,7 @@
             </div>
             {% if puede_adicionar %}
             <div class="col-xs-6 col-md-4">
-                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('reci_dist_add_upd', idloc=0, iddist=0, ban=0) }} >Adicionar Distrito</a></button>
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('dist_adm', idloc=0, dist=0, nalext='nal') }} >Adicionar Distrito</a></button>
             </div>
             {% endif %}
         </div>
@@ -44,16 +44,16 @@
                     </thead>
                     <tbody>
 
-                    {% for zona in zonas %}
+                    {% for dist in dists %}
                     <tr>
-                        <td>{{ zona[0] }}</td>
-                        <td>{{ zona[1] }}</td>
-                        <td>{{ zona[2] }}</td>
-                        <td>{{ zona[3] }}</td>
-                        <td>{{ zona[4] }}</td>
+                        <td>{{ dist[0] }}</td>
+                        <td>{{ dist[1] }}</td>
+                        <td>{{ dist[2] }}</td>
+                        <td>{{ dist[3] }}</td>
+                        <td>{{ dist[4] }}</td>
                         <td>
                             {% if puede_editar %}
-                                <a href={{ url_for('reci_dist_add_upd', idloc = zona[0], iddist = zona[2], ban = 0) }}><span class="fas fa-edit"></span></a>
+                                <a href={{ url_for('dist_adm', idloc = dist[0], dist = dist[2], nalext='nal') }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>
                             {% endif%}                
