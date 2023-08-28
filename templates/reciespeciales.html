@@ -51,7 +51,7 @@
                             value="{{ rces.deploc }}"
                         {% endif %}
                     >
-                <div class="invalid-feedback">Debe introducir DEP.</div>
+                <div class="invalid-feedback">Debe introducir COD.</div>
             </div>
             <div class="col-md-2">
                 <label for="departamento">1er. Nivel:</label>
@@ -74,7 +74,7 @@
                             value="{{ rces.provloc }}"
                         {% endif %}
                     >
-                <div class="invalid-feedback">Debe introducir PROV.</div>
+                <div class="invalid-feedback">Debe introducir COD.</div>
             </div>
             <div class="col-md-2">
                 <label for="provincia">2do. Nivel:</label>
@@ -98,7 +98,7 @@
                             value="{{ rces.secloc }}"
                         {% endif %}
                     >
-                <div class="invalid-feedback">Debe introducir SEC.</div>
+                <div class="invalid-feedback">Debe introducir COD.</div>
             </div>
             <div class="col-md-4">
                 <label for="municipio">3er. Nivel:</label>
@@ -133,10 +133,10 @@
                 <button type='button' class="btn btn-info btn-md btn-block" onclick="getgeoreci4(event)">Ver Asientos / Zonas</button>
             </div>
             <div class="col-md-3">
-                <label for="asiento">Asientos del Municipio (3er.Niv):</label>
+                <label for="asiento">Asientos del 3er.Nivel (Municipio):</label>
                 <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rces.idlocreci }}">
                 <input type="hidden" name="load" id="iload" value="{{ load }}">
-                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" required>
+                <select id="iasiento" name="asiento" class="form-control" onchange="cargar(this.value, 5);" onBlur="getNomLoc();" required>
                     {% for asientoReci in asientoRecis %}
                         {% if rces.deploc==asientoReci[0] and rces.provloc==asientoReci[1] and rces.secloc==asientoReci[2] %}
                             {% if load %}
@@ -442,7 +442,6 @@
                             value="{{ usuario }}"
                         {% endif %}
                     >
-                <div class="invalid-feedback">Debe introducir un nombre válido.</div>
             </div>
         </div> <!--row-->
 
@@ -474,7 +473,10 @@
     {% endif %}
 </div> <!--main-->
 
+
 <script>
+    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`  ¿?¡!{}\/<>
+
     var ruereci = document.getElementById('iruereci');
     var edireci = document.getElementById('iedireci');
     var depenreci = document.getElementById('idepenreci');
@@ -510,7 +512,7 @@
     }
 
     $('.openBtn').on('click',function(){
-        $('.modal-body').load('/zona1.html',function(){
+        $('.modal-body').load('/opcional.html',function(){
             $('#exampleModal').modal({show:true});
         });
     });
@@ -608,7 +610,14 @@
             }
         });
     }
+
+    function getNomLoc(){
+        var combo = document.getElementById('iasiento')
+        var selected = combo.options[combo.selectedIndex].text;
+        document.getElementById('idnomlocmodal').value = selected;  // nomloc
+    }
 </script>
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -642,9 +651,8 @@
                     <div class="col-md-12">
                         <label for="nomzona">Nombre de la Zona:</label>
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
-                            {% if load %}
-                                value=""        
-                            {% endif %}
+                                onkeypress="return !char_restringidos.includes(event.charCode)"
+                                value="SIN ZONA"        
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
                     </div>
@@ -658,7 +666,7 @@
                                 value="{{ rces.circundist }}"        
                             {% endif %}
                         >
-                        <div class="invalid-feedback">Por favor ingrese El Nro. del Distrito...</div>
+                        <div class="invalid-feedback">Por favor ingrese Nro. de Circun...</div>
                     </div>
                     <div class="col-md-7">
                         <label for="nomdist">Nombre del Distrito:</label>
@@ -684,7 +692,6 @@
                                     value="{{ idatetime }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
                     </div>
                     <div class="col-md-4">
                         <label for="fechaAct">Actual:</label>
@@ -695,7 +702,6 @@
                                     value="{{ idatetime }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback" id="v_fechaAct">Debe introducir una fecha válida.</div>
                     </div>                        
                     <div class="col-md-4">
                         <label for="usuario">Usuario:</label>
@@ -706,7 +712,6 @@
                                     value="{{ usuario }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback">Debe introducir un nombre válido.</div>
                     </div>
                 </div>
 
@@ -714,7 +719,8 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <button type="button" id="cerrar" onclick="cerrarmodal()" class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cancelar</button>
+                        <button type="button" id="cerrar" onclick="cerrarmodal()" 
+                            class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="submit" id="isubmitaceptar" class="btn btn-outline-success btn-md btn-block" 
@@ -728,6 +734,7 @@
     </div>
   </div>
 </div>
+
 <script type="text/javascript">
     function enviar(){
         // valida nomzona
@@ -783,12 +790,12 @@
         <input type="hidden" id="idnomlocmodal" name="nomloc" >
         <input type="text" id="iidlocreci1"  name="idlocreci1"  
                 {% if load %}
-                    value="{{ rc.idlocreci }}"
+                    value="{{ rces.idlocreci }}"
                 {% endif %}
         >
         <input type="text" id="inrodist1"  name="nrodist1" 
                 {% if load %}
-                    value="{{ rc.circundist }}"        
+                    value="{{ rces.circundist }}"        
                 {% endif %}
         >
     </form>

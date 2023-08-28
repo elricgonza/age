@@ -1905,7 +1905,6 @@ def reci_dist_add(nalext):
                     z.add_dist(idloc, nextiddist, circundist, nomdist, \
                                request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
                     return render_template('zonareext.html', error=error, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
-        
 
 
 @app.route('/reci_zona_add', methods=['POST'])
@@ -2085,28 +2084,28 @@ def get_circundist():
 @app.route('/reciespeciales_list', methods=['GET', 'POST'])
 @login_required
 def reciespeciales_list():
-    '''Casos excepcionales - coordenadas/circun que no corresponden espacialmente '''
+    '''Casos excepcionales - coordenadas/circun que no corresponden espacialmente (en opc/mod equiv Especiales)'''
 
     rces = recies.Reciespeciales(cxms)
     rows = rces.get_reciespeciales_all(usrdep)
     if rows:
-        if 'Reci_espe - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Reci_espe - Adición' in permisos_usr, \
-                                    puede_editar='Reci_espe - Edición' in permisos_usr
+        if 'Especiales - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                    puede_editar='Especiales - Edición' in permisos_usr
                                   )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
-        return render_template('reciespeciales_list.html', puede_adicionar='Reci_espe - Adición' in permisos_usr, \
-                                puede_editar='Reci_espe - Edición' in permisos_usr
+        return render_template('reciespeciales_list.html', puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                puede_editar='Especiales - Edición' in permisos_usr
                               )
 
 
 @app.route('/reciespeciales/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def reciespeciales(idreci, idlocreci):
-    '''Casos Excepcionales'''
+    '''Casos Excepcionales  - (opc Especiales en tabla modulo y archs '''
 
     rces = recies.Reciespeciales(cxms)
     rca = recia.Reciasiento(cxms)
@@ -2114,7 +2113,7 @@ def reciespeciales(idreci, idlocreci):
     d = docu.Documentos(cxms)
 
     error = None
-    p = ('Recintos - Edición' in permisos_usr)  # t/f
+    p = ('Especiales - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
@@ -2186,7 +2185,7 @@ def reciespeciales(idreci, idlocreci):
             rows = rces.get_reciespeciales_all(usrdep)
             return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
                                     puede_editar='Reci_espe - Edición' in permisos_usr)  # render a template
-    else: # Viene de <asientos_list>
+    else: # Viene de <recintos_list>
         if idreci != '0':  # EDIT
             if rces.get_recinto_idreciespecial(idreci, idlocreci) == True:
                 """if a.docAct == None:
@@ -2203,7 +2202,7 @@ def reciespeciales(idreci, idlocreci):
                                        dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
                                        municipios=rces.get_muniespeciales_all(usrdep))
 
-    # New
+    # New from <reciespeciales_list>
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
                             dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
