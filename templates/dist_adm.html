@@ -35,32 +35,42 @@
                     <div class="row">
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
-                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
-                                        value="{{ idloc }}"
-                                >
+                            <input type="text" class="form-control" id="idloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required 
+                                        onblur="getNomloc();" 
+                                        {% if load %}
+                                            value="{{ d.idloc }}"
+                                            readonly
+                                        {% endif %}
+                            >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                         </div>
                         <div class="col-md-9">
                             <label for="nomloc">Nombre Asiento:</label>
-                            <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
-                                        value="{{ nomloc }}"
-                                >
-                            <div class="invalid-feedback">Ingrese Nombre Asiento...</div>
+                            <input type="text" class="form-control" id="nomloc" title="" name="nomloc" required readonly
+                                        {% if load %}
+                                            value="{{ d.nomloc }}"
+                                        {% endif %}
+                            >
                         </div>
                     </div> <!--row-->
                     <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
                     <div class="row">
                         <div class="col-md-2">
-                            <label for="nrodist">Circun.:</label>
-                            <input type="text" class="form-control" maxlength="2" id="inrodist" placeholder="Nro." name="nrodist" required readonly
-                                    value="{{ nrodist }}"          
+                            <label for="circundist">Circun.:</label>
+                            <input type="text" class="form-control" maxlength="2" id="circundist" placeholder="No. Circ." name="circundist" required
+                                        {% if load %}
+                                            value="{{ d.circundist }}"
+                                        {% endif %}
                             >
-                            <div class="invalid-feedback">Por favor ingrese Nro. de Circunscripción...</div>
+                            <div class="invalid-feedback">Por favor ingrese No. de Circunscripción...</div>
                         </div>
                         <div class="col-md-10">
                             <label for="nomdist">Nombre del Distrito::</label>
                             <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
-                                onkeypress="return !char_restringidos.includes(event.charCode)"
+                                        onkeypress="return !char_restringidos.includes(event.charCode)"
+                                        {% if load %}
+                                            value="{{ d.nomdist }}"
+                                        {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
                         </div>
@@ -69,14 +79,18 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label for="fechaIngreso">Fecha y Hora de Registro:</label>
-                            <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
-                                        value="{{ idatetime }}"
+                            <input type="datetime" class="form-control" id="fechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
+                                        {% if load %}
+                                            value="{{ d.fechaIngreso }}"
+                                        {% else %}
+                                            value="{{ idatetime }}"
+                                        {% endif %}
                             >
                             <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
                         </div>
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
-                            <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                            <input type="datetime" class="form-control" id="fechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
                                         value="{{ idatetime }}"
                             >
                         </div>                        
@@ -92,28 +106,23 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <button type="button"
-                            {% if dook %}  
-                                    onclick="javascript: window.close();"
-                                {% else %}
-                                    onclick="javascript: window.close();"
-                            {% endif %}      
-                            class="btn btn-outline-danger btn-md btn-block">
-                            {% if dook %}
+                            <button type="button" onclick="javascript: window.location.href = '/distritos_list';"
+                                class="btn btn-outline-danger btn-md btn-block">
+                                {% if dook %}
                                     Cerrar
                                 {% else %}
                                     Cancelar/Cerrar
-                            {% endif %}        
+                                {% endif %}        
                             </button>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <button type="submit" class="btn btn-outline-success btn-md btn-block"
-                            {% if dook %}
-                                disabled
-                            {% else %}
-                                enabled
-                            {% endif %}
+                                {% if dook %}
+                                    disabled
+                                {% else %}
+                                    enabled
+                                {% endif %}
                             >Aceptar</button>
                         </div>
                     </div> <!--row-->

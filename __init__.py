@@ -1861,7 +1861,7 @@ def dist_adm(idloc, dist, nalext):
 
     # New
     print('dist_list / New ')
-    return render_template('dist_adm.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Distrito --from LIST')
+    return render_template('dist_adm.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Distrito')
 
 
 @app.route('/recixx_dist_add_upd/<idloc>/<iddist>/<ban>', methods=['GET', 'POST'])
@@ -2051,6 +2051,20 @@ def asientoz():
         return jsonify(nomasi=z.nomloc)
     else:
         return jsonify(nomasi='NO EXISTE ASIENTO')
+
+
+@app.route('/get_nomloc', methods=['GET', 'POST'])
+def get_nomloc():
+    ''' invocado desde dist_adm - ajax'''
+
+    idloc = request.args.get('idloc', 0, type=int)
+
+    z = zo.Zonas(cxms)
+    if z.asientoz(idloc):
+        return jsonify(nomloc=z.nomloc)
+    else:
+        return jsonify(nomloc='NO EXISTE ASIENTO')
+
 
 #========== Final Modulo Zonas y Distritos ============#
 
