@@ -29,6 +29,24 @@ class Zonas:
         return rows
 
 
+    def get_dist_all(self, usrdep): 
+        ''' Obtiene todos los distritos en la bd habilitados/inhabilitados '''
+
+        s = "select distinct d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[RECI] r" + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
+            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
+            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist"
+        if usrdep != 0 :
+            s = s + " where  l.DepLoc = %d order by d.IdLocDist, d.Dist"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by d.IdLocDist, d.Dist"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
     def get_next_zona(self, idloc):
         s = "select isnull(max(zona), 0)+1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
         self.cur.execute(s, idloc)

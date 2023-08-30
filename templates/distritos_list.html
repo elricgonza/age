@@ -23,7 +23,7 @@
             </div>
             {% if puede_adicionar %}
             <div class="col-xs-6 col-md-4">
-                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('dist_adm', idloc=0, dist=0, nalext='nal') }} >Adicionar Distrito</a></button>
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('dist_adm', pidloc=0, pdist=0, pnalext='nal') }} >Adicionar Distrito</a></button>
             </div>
             {% endif %}
         </div>
@@ -53,7 +53,7 @@
                         <td>{{ dist[4] }}</td>
                         <td>
                             {% if puede_editar %}
-                                <a href={{ url_for('dist_adm', idloc = dist[0], dist = dist[2], nalext='nal') }}><span class="fas fa-edit"></span></a>
+                                <a href={{ url_for('dist_adm', pidloc = dist[0], pdist = dist[2], pnalext='nal') }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>
                             {% endif%}                

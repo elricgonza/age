@@ -31,7 +31,7 @@
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
-                <form action="" class="needs-validation" novalidate method="POST">                
+                <form action="" class="needs-validation" novalidate method="POST">
                     <div class="row">
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-9">
                             <label for="nomloc">Nombre Asiento:</label>
-                            <input type="text" class="form-control" id="nomloc" title="" name="nomloc" required readonly
+                            <input type="text" class="form-control" id="nomloc" title="" placeholder="Asiento" name="nomloc" required readonly
                                         {% if load %}
                                             value="{{ d.nomloc }}"
                                         {% endif %}
@@ -56,6 +56,15 @@
                     <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
                     <div class="row">
                         <div class="col-md-2">
+                            <label for="dist">Dist.:</label>
+                            <input type="text" class="form-control" maxlength="2" id="dist" placeholder="Cod" name="dist" readonly
+                                        {% if load %}
+                                            value="{{ d.dist }}"
+                                        {% endif %}
+                            >
+                            <div class="invalid-feedback">Código parcial - distrito ...</div>
+                        </div>
+                        <div class="col-md-2">
                             <label for="circundist">Circun.:</label>
                             <input type="text" class="form-control" maxlength="2" id="circundist" placeholder="No. Circ." name="circundist" required
                                         {% if load %}
@@ -64,7 +73,7 @@
                             >
                             <div class="invalid-feedback">Por favor ingrese No. de Circunscripción...</div>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                             <label for="nomdist">Nombre del Distrito::</label>
                             <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
                                         onkeypress="return !char_restringidos.includes(event.charCode)"
@@ -96,7 +105,7 @@
                         </div>                        
                         <div class="col-md-4">
                             <label for="usuario">Usuario Logueado:</label>
-                            <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                            <input type="text" class="form-control" id="usuario" title="" placeholder="Usuario" name="usuario"  readonly 
                                         value="{{ usuario }}"
                             >
                         </div>
