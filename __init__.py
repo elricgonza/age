@@ -1845,7 +1845,7 @@ def dist_adm(pidloc, pdist, pnalext):
             print('edit from LIST ---es post---y no es new--pidloc, pdist')
             print(pidloc)
             print(pdist)
-            if nomdist_existe:  # en edición actualiza a nom existente
+            if len(nomdist_existe) > 1 :  # en edición actualiza a nom existente
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento..."
                 if pnalext == 'nal': # nal
                     z.get_zonadist_idloc(pidloc, pdist)
