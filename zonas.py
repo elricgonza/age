@@ -32,10 +32,9 @@ class Zonas:
     def get_dist_all(self, usrdep): 
         ''' Obtiene todos los distritos en la bd habilitados/inhabilitados '''
 
-        s = "select distinct d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist from [GeografiaElectoral_app].[dbo].[RECI] r" + \
-            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
-            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
-            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist"
+        s = "select d.IdLocDist, l.NomLoc, d.Dist, d.CircunDist, d.NomDist " + \
+            " from [GeografiaElectoral_app].[dbo].[DIST] d " + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on d.IdLocDist=l.IdLoc " 
         if usrdep != 0 :
             s = s + " where  l.DepLoc = %d order by d.IdLocDist, d.Dist"
             self.cur.execute(s, usrdep)
@@ -168,12 +167,33 @@ class Zonas:
         row = self.cur.fetchall()
         return row
 
+
     def nomdist_existe(self, idloc, nomdist):
         ''' Valida q no se duplique nomDist en asiento  '''
 
         s = "select NomDist from [GeografiaElectoral_app].[dbo].[DIST]" + \
             "where IdLocDist= %d and nomDist= %s "
         t = idloc, nomdist
-        self.cur.execute(s, t)
-        row = self.cur.fetchall()
-        return row
+        try:
+            self.cur.execute(s, t)
+            row = self.cur.fetchall()
+            return row
+        except Exception as e:
+            print("Error valid nomdist_existe")
+            print(e)
+
+
+    def nomdist_existe_edit(self, idloc, dist, nomdist):
+        ''' Valida q no se duplique nomDist en asiento y que no sea el editado  '''
+
+        s = "select NomDist from [GeografiaElectoral_app].[dbo].[DIST]" + \
+            "where IdLocDist= %d and nomDist= %s  and dist <> %d "
+        t = idloc, nomdist, dist
+        try:
+            self.cur.execute(s, t)
+            row = self.cur.fetchall()
+            return row
+        except Exception as e:
+            print("Error valid nomdist_existe")
+            print(e)
+
