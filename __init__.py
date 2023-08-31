@@ -1984,19 +1984,18 @@ def get_nomloc():
         return jsonify(nomloc='NO EXISTE ASIENTO')
 
 
-#========== Final Modulo Zonas y Distritos ============#
+# Zonas #
 
-#========== Modulo Zon ============#
-
-@app.route('/zon_list', methods=['GET', 'POST'])
+@app.route('/zonas_list', methods=['GET', 'POST'])
 @login_required
-def zon_list():
+def zonas_list():
     za = zon.Zon(cxms)
     rows = za.get_zon_all(usrdep)
     if rows:
-        if 'Zon - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
-                                    puede_editar='Zon - Edición' in permisos_usr
+        if 'Zonas - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('zonas_list.html', zonas=rows, \
+                                    puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                    puede_editar='Zonas - Edición' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
@@ -2004,14 +2003,14 @@ def zon_list():
         print ('Sin zonas...')
 
 
-@app.route('/zonass/<idloczona>/<idzon>', methods=['GET', 'POST'])
+@app.route('/zona_adm/<idloczona>/<idzon>', methods=['GET', 'POST'])
 @login_required
-def zonass(idloczona, idzon):
+def zona_adm(idloczona, idzon):
     za = zon.Zon(cxms)
     cxms2 = dbcn.get_db_ms()
     rca = recia.Reciasiento(cxms2)
     error = None
-    p = ('Zon - Edición' in permisos_usr)  # t/f
+    p = ('Zonas - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
@@ -2028,7 +2027,7 @@ def zonass(idloczona, idzon):
                            nomdist[0], request.form['fechaIngreso'][:-7], fa, request.form['usuario'])     
 
             rows = za.get_zon_all(usrdep)
-            return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
+            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
                                     puede_editar='Zon - Edición' in permisos_usr
                                   )# render a template
         else: # Es Edit
@@ -2037,11 +2036,11 @@ def zonass(idloczona, idzon):
             za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], nomdist[0], fa, usr)
 
             rows = za.get_zon_all(usrdep)
-            return render_template('zon_list.html', zonss=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
+            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
                                     puede_editar='Zon - Edición' in permisos_usr
                                   )# render a template
         
-    else: # Viene de <zon_list>
+    else: # Viene de <zonas_list>
         if idloczona != '0':  # EDIT
             if za.get_zon_idloc(idloczona, idzon) == True:
                 """if a.docAct == None:
@@ -2053,10 +2052,10 @@ def zonass(idloczona, idzon):
                 if za.usuario == None:
                     za.usuario = usr
 
-                return render_template('zons.html', error=error, distritos=rca.get_distritos_all1(idloczona), za=za, load=True, puede_editar=p, titulo='Modificación de Zonas')
+                return render_template('zona_adm.html', error=error, distritos=rca.get_distritos_all1(idloczona), za=za, load=True, puede_editar=p, titulo='Modificación de Zonas')
 
     # New
-    return render_template('zons.html', error=error, za=za, load=False, puede_editar=p, titulo='Registro de Zonas')
+    return render_template('zona_adm.html', error=error, za=za, load=False, puede_editar=p, titulo='Adición de Zona')
 
 
 @app.route('/get_distritos_all1', methods=['GET', 'POST'])

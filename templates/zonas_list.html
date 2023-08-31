@@ -23,7 +23,7 @@
             </div>
             {% if puede_adicionar %}
             <div class="col-xs-6 col-md-4">
-                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href={{ url_for('zonass', idloczona='0', idzon='0') }} >Adicionar Zona</a></button>
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href={{ url_for('zona_adm', idloczona='0', idzon='0') }} >Adicionar Zona</a></button>
             </div>
             {% endif %}
         </div>
@@ -45,7 +45,7 @@
                     </thead>
                     <tbody>
 
-                    {% for zona in zonss %}
+                    {% for zona in zonas %}
                     <tr>
                         <td>{{ zona[0] }}</td>
                         <td>{{ zona[1] }}</td>
@@ -55,7 +55,7 @@
                         <td>{{ zona[5] }}</td>
                         <td>
                             {% if puede_editar %}
-                                <a href={{ url_for( 'zonass', idloczona=zona[0], idzon=zona[6]) }}><span class="fas fa-edit"></span></a>
+                                <a href={{ url_for( 'zona_adm', idloczona=zona[0], idzon=zona[6]) }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>
                             {% endif %}                
