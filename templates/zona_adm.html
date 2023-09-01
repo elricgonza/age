@@ -18,30 +18,33 @@
                     <div class="row">
                         <div class="col-md-2">
                             <label for="idloc">IdLoc:</label>
-                            <input type="hidden" name="idzon" value="{{ za.idzon }}">
-                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required onkeydown="asientoZona(event)" 
+                            <input type="text" class="form-control" id="idloczona" title="" placeholder="Instroduzca IdLoc" name="idloczona" required 
+                                    onblur="getNomloc()" 
                                     {% if load %}
-                                        readonly value="{{ za.idloc }}"
+                                        value="{{ za.idloczona }}"
+                                        readonly
                                     {% endif %}
-                                >
+                            >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
+                            <input type="hidden" name="zona" value="{{ za.zona }}">
                         </div>
                         <div class="col-md-10">
-                            <label for="nomloc">Nombre Asiento:</label>
-                            <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
+                            <label for="nomloc">Nombre Asiento::</label>
+                            <input type="text" class="form-control" id="nomloc" title="" placeholder="Introduzca Nombre del Asiento" name="nomloc" required 
                                     {% if load %}
                                         value="{{ za.nomloc }}"
+                                        readonly
                                     {% endif %}
                                 >
-                            <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
+                            <div class="invalid-feedback">Sin Nombre de Asiento...</div>
                         </div>
                     </div> <!--row-->
                     <h5 class="text-left text-blue pt-5" >Datos de la Zona:</h5>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="nomdist">Nombre del Distrito:</label>
                             <input type="hidden" name="circundist" value="{{ za.circundist }}">
-                            <select id="inomdist" name="nomdist" class="form-control" onchange="cargar(this.value, 10)" required>
+                            <label for="distzona">Nombre del Distrito:</label>
+                            <select id="distzona" name="distzona" class="form-control" onchange="cargar(this.value, 10)" required>
                                 {% for distrito in distritos %}
                                     {% if load and za.distzona==distrito[1] %}
                                             <option value = "{{ distrito[1]~':'~za.idzon~':'~distrito[2] }}" selected>{{ distrito[1] ~' - '~ distrito[3] ~'('~ 'Cir ' ~ distrito[2] ~')' }}</option>

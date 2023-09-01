@@ -29,7 +29,7 @@ import recintos
 import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
-import zonas as zo
+import distritos as dist
 import zon as zon
 import geo as geo
 import sincro as sin
@@ -1341,7 +1341,7 @@ def recinto(idreci, idlocreci):
     ''' Uninominales y mixtos '''
     rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     d = docu.Documentos(cxms)
 
     error = None
@@ -1610,7 +1610,7 @@ def reciespe(idreci, idlocreci):
     ''' Recintos Especiales/Indigenas '''
     rce = recie.Reciespe(cxms)
     rca = recia.Reciasiento(cxms)
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     d = docu.Documentos(cxms)
 
     error = None
@@ -1759,8 +1759,7 @@ def get_pueblos_all():
 @app.route('/distritos_list', methods=['GET', 'POST'])
 @login_required
 def distritos_list():
-    z = zo.Zonas(cxms)
-    #rows = z.get_dist_enable(usrdep)
+    z = dist.Distritos(cxms)
     rows = z.get_dist_all(usrdep)
     if rows:
         if 'Distritos - Consulta' in permisos_usr:    # tiene pemisos asignados
@@ -1779,7 +1778,7 @@ def distritos_list():
 def reci_dist_send():
     ''' Invocado por recinto.html/zona/Nuevo Dist. SEND variables '''
 
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     error = None
     p = ('Distritos - Edición' in permisos_usr)  # t/f
 
@@ -1799,7 +1798,7 @@ def dist_adm(pidloc, pdist, pnalext):
     '''     distritos_list - new: idloc= 0, dist= 0  nalext= 'adm'  '''
     '''     distritos_list - edit: idloc= n, dist= n  nalext= 'adm'  '''
 
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     error = None
     p = ('Distritos - Edición' in permisos_usr)  # t/f
 
@@ -1864,7 +1863,7 @@ def reci_dist_add(nalext):
     ''' Adición de Distrito desde form. recinto/zona '''
     ''' desde url_for param: nalext='nal'  '''
 
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     error = None
     p = ('Distritos - Edición' in permisos_usr)  # t/f
 
@@ -1904,7 +1903,7 @@ def reci_dist_add(nalext):
 def reci_zona_add():
     ''' Invocado por ajax - adición de zonas (recinto.html) '''
 
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
 
     idloc = request.form['idloc']
     nomzona = request.form['nomzona'].upper()
@@ -1936,7 +1935,7 @@ def reci_zona_add():
 @app.route('/zonasre_ext', methods=['GET', 'POST'])
 @login_required
 def zonasre_ext():
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     ban = 0
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
@@ -1964,7 +1963,7 @@ def zonasre_ext():
 def asientoz():
     azona = request.args.get('azona', 0, type=int)
 
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     if z.asientoz(azona):
         return jsonify(nomasi=z.nomloc)
     else:
@@ -1977,7 +1976,7 @@ def get_nomloc():
 
     idloc = request.args.get('idloc', 0, type=int)
 
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     if z.asientoz(idloc):
         return jsonify(nomloc=z.nomloc)
     else:
@@ -2003,28 +2002,43 @@ def zonas_list():
         print ('Sin zonas...')
 
 
-@app.route('/zona_adm/<idloczona>/<idzon>', methods=['GET', 'POST'])
+@app.route('/zona_adm/<pidloczona>/<pzona>', methods=['GET', 'POST'])
 @login_required
-def zona_adm(idloczona, idzon):
+def zona_adm(pidloczona, pzona):
+    '''
+    Adm Zonas - desde zonas_list
+    '''
     za = zon.Zon(cxms)
     cxms2 = dbcn.get_db_ms()
-    rca = recia.Reciasiento(cxms2)
+    rca = recia.Reciasiento(cxms2) # p elim
+    d = dist.Distritos(cxms2)
     error = None
     p = ('Zonas - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
-        fa = request.form['fechaAct'][:-7]
+        idloczona = request.form['idloczona']
+        zona = request.form['zona']
+        nomzona = request.form['nomzona']
+        distzona = request.form['distzona']
 
-        if idloczona == '0' and idzon == '0':  # es NEW
-            if False:   # valida si neces POST
-                #error = "El usuario: " + request.form['uname']  + " ya existe...!"
-                #return render_template('asiento.html', error=error, u=u, load_u=True)
-                print('msg-err')
+        if pidloczona == '0' and pzona == '0':  # es New 
+            if nomzona.upper() == 'SIN ZONA':   
+                nextzona = 0
             else:
-                nomdist = request.form['nomdist'].split(':')
-                nextidzona = za.get_next_zon(request.form['idloc'])
-                za.add_zon(request.form['idloc'], nextidzona, request.form['nomzon'], \
-                           nomdist[0], request.form['fechaIngreso'][:-7], fa, request.form['usuario'])     
+                nextzona = za.get_next_zon(idloczona)
+
+            if za.nomzona_existe(idloczona, nomzona):   # valida si neces datos POST
+                error = "La zona: --" + nomzona + "-- ya existe en el asiento"
+                return render_template('zona_adm.html', error=error, load=True, dza=za,
+                                       distritos=d.get_dists_en_idloc(idloczona),
+                                       puede_editar=p, titulo='Adición de Zona')
+            else:
+                distzona = request.form['distzona'].split(':')
+                print('-----------------distzona')
+                print(distzona)
+                nextidzona = za.get_next_zon(idloczona)
+                za.add_zon(idloczona, nextzona, nomzona, distzona[0], \
+                           request.form['fechaIngreso'][:-7], request.form['FechaAct'], request.form['usuario'])     
 
             rows = za.get_zon_all(usrdep)
             return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
@@ -2114,7 +2128,7 @@ def reciespeciales(idreci, idlocreci):
 
     rces = recies.Reciespeciales(cxms)
     rca = recia.Reciasiento(cxms)
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     d = docu.Documentos(cxms)
 
     error = None
@@ -2292,7 +2306,7 @@ def exterior_reci_list():
 @login_required
 def exterior_reci(idreci, idlocreci):
     exr = extr.Exteriorr(cxms)
-    z = zo.Zonas(cxms)
+    z = dist.Distritos(cxms)
     d = docu.Documentos(cxms)
     j = get_json.GetJson(cxpg)  # jsons para mapa
 

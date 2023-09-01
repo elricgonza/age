@@ -1,6 +1,6 @@
 # Operaciones Zonas / Distritos / Recintos
 
-class Zonas:
+class Distritos:
     idlocreci=0
     reci=0
     nomreci=''
@@ -196,4 +196,11 @@ class Zonas:
         except Exception as e:
             print("Error valid nomdist_existe")
             print(e)
+
+
+    def get_dists_en_idloc(self, idloc):        
+        s = "select IdLocDist, Dist, CircunDist, NomDist from [GeografiaElectoral_app].[dbo].[DIST] where IdLocDist = %d order by Dist"
+        self.cur.execute(s, idloc)
+        rows = self.cur.fetchall()
+        return rows
 
