@@ -19,6 +19,7 @@
                             <label for="idloc">IdLoc:</label>
                             <input type="text" class="form-control" id="idloczona" title="" placeholder="Instroduzca IdLoc" name="idloczona" required 
                                     onblur="getNomloc()" 
+                                    onchange="getDistByIdloc(this.value)"
                                     {% if load %}
                                         value="{{ za.idloczona }}"
                                         readonly
@@ -34,7 +35,7 @@
                                         value="{{ za.nomloc }}"
                                         readonly
                                     {% endif %}
-                                >
+                            >
                             <div class="invalid-feedback">Sin Nombre de Asiento...</div>
                         </div>
                     </div> <!--row-->
@@ -139,6 +140,18 @@
         });
     } 
 
+    function getDistByIdloc(pidloc) {
+        $('#distzona').html('');    // reset
+
+        $.getJSON("/get_dist_by_idloc", {
+            idloc: pidloc
+        }, function(retlist) {
+            $.each(retlist, function(index, e){
+                $("#distzona").append('<option value="' + e[1] + '">' + e[1] + ' | ' + e[3] + ' (' + 'Circ. ' + e[2] +')'+'</option>');
+            });
+        }
+        );
+    }
 
     // Disable form submissions if there are invalid fields
     (function() {

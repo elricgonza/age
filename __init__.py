@@ -1558,11 +1558,42 @@ def get_zonas_all2():
 
 @app.route('/get_distritos_all', methods=['GET', 'POST'])
 def get_distritos_all():
+    ''' 
+    (ajax) invocado por cargar.js (idloc, circun) param 7 
+    ret: list(tupla) [(IdLocDist, Dist, CircunDist, NomDist), ...]
+    '''
+
     circun = request.args.get('circun')
     idlocreci = request.args.get('idlocreci')
+
     cxms2 = dbcn.get_db_ms()
     rca = recia.Reciasiento(cxms2)
-    rows = rca.get_distritos_all(circun, idlocreci)
+    rows = rca.get_distritos_all(circun, idlocreci) # en circun e idloc
+    print('------------get_distritos_all xxx')
+    print(rows)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
+@app.route('/get_dist_by_idloc', methods=['GET', 'POST'])
+def get_dist_by_idloc():
+    ''' 
+    (ajax) invocado por zona_adm.html / getDistByIdloc  (idloc) 
+    ret: list(tupla) [(IdLocDist, Dist, CircunDist, NomDist), ...]
+    '''
+
+    idloc = request.args.get('idloc')
+
+    cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    d = dist.Distritos(cxms2)
+    rows = d.get_dists_en_idloc(idloc) # 
+    print('------------get_dist_by_idloc  xxx')
+    print(rows)
     if rows:
         return jsonify(rows)
     else:
