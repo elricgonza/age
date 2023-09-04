@@ -1972,10 +1972,9 @@ def asientoz():
 
 @app.route('/get_nomloc', methods=['GET', 'POST'])
 def get_nomloc():
-    ''' invocado desde dist_adm - ajax'''
+    ''' invocado desde dist_adm, zona_adm - ajax'''
 
     idloc = request.args.get('idloc', 0, type=int)
-
     z = dist.Distritos(cxms)
     if z.asientoz(idloc):
         return jsonify(nomloc=z.nomloc)
@@ -2053,9 +2052,9 @@ def zona_adm(pidloczona, pzona):
             return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
                                     puede_editar='Zon - Edición' in permisos_usr
                                   )# render a template
-        
+
     else: # Viene de <zonas_list>
-        if idloczona != '0':  # EDIT
+        if pidloczona != '0':  # EDIT
             if za.get_zon_idloc(idloczona, idzon) == True:
                 """if a.docAct == None:
                     a.docAct = """
@@ -2066,7 +2065,9 @@ def zona_adm(pidloczona, pzona):
                 if za.usuario == None:
                     za.usuario = usr
 
-                return render_template('zona_adm.html', error=error, distritos=rca.get_distritos_all1(idloczona), za=za, load=True, puede_editar=p, titulo='Modificación de Zonas')
+                return render_template('zona_adm.html', eload=True, rror=error, dza=za, \
+                                       distritos=rca.get_distritos_all1(idloczona), 
+                                       puede_editar=p, titulo='Edición de Zona')
 
     # New
     return render_template('zona_adm.html', error=error, za=za, load=False, puede_editar=p, titulo='Adición de Zona')

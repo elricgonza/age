@@ -5,7 +5,6 @@
 {% block js_css %}
     <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
 {% endblock %}
 <div class="container">
@@ -14,7 +13,7 @@
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
-                <form action="{{ url_for('zona_adm', idloczona = za.idloc, idzon = 0) }}" class="needs-validation" novalidate method="POST" onsubmit="return Validation(this)" name="form">                
+                <form action="" class="needs-validation" novalidate method="POST" onsubmit="return Validation(this)" name="form">                
                     <div class="row">
                         <div class="col-md-2">
                             <label for="idloc">IdLoc:</label>
@@ -58,6 +57,7 @@
                         <div class="col-md-6">
                             <label for="nomzon">Nombre de la Zona:</label>
                             <input type="text" class="form-control" id="inomzon" placeholder="Introduzca el Nombre de la Zona" name="nomzon" required
+                                onkeypress="return !char_restringidos.includes(event.charCode)"
                                 {% if load %}
                                     value="{{ za.nomzona }}"        
                                 {% endif %}
@@ -129,6 +129,17 @@
 </div>
 
 <script>  
+    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`  ¿?¡!{}\/<>
+
+    function getNomloc() {
+        $.getJSON('/get_nomloc', {
+            idloc: $('input[name="idloczona"]').val()
+        }, function(data) {
+            document.getElementById("nomloc").setAttribute("value", data.nomloc)
+        });
+    } 
+
+
     // Disable form submissions if there are invalid fields
     (function() {
         'use strict';
@@ -147,6 +158,7 @@
             });
         }, false);
     })();
+
 
 </script>
 
