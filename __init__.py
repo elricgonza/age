@@ -1934,7 +1934,9 @@ def reci_dist_add(nalext):
 def reci_zona_add():
     ''' Invocado por ajax - adición de zonas (recinto.html) '''
 
-    z = dist.Distritos(cxms)
+    d = dist.Distritos(cxms)
+    cxms_z = dbcn.get_db_ms()
+    z = zon.Zon(cxms_z)   
 
     idloc = request.form['idloc']
     nomzona = request.form['nomzona'].upper()
@@ -1952,15 +1954,12 @@ def reci_zona_add():
     if z.nomzona_existe(idloc, nomzona):
         return jsonify({'error' : 'Error, el nombre: --' + nomzona + '-- ya existe en el asiento, debe verificar/complementar nombre'})
 
-
-    ultimodist = z.get_ultimodist(request.form['nomdist'], request.form['idloc'])
+    ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc'])
     
     z.add_zona(idloc, zona, nomzona, ultimodist, \
                request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
 
     return jsonify({'name' : 'Zona adicionada...'})
-
-    #return jsonify({'error' : 'Error al Grabar Datos!'})
 
 
 @app.route('/zonasre_ext', methods=['GET', 'POST'])
@@ -2037,6 +2036,8 @@ def zonas_list():
 def zona_adm(pidloczona, pzona):
     '''
     Adm Zonas - desde zonas_list
+        zonas_list - new: pidloczona= 0, pzona= 0
+        zonas_list - edit: pidloczona= n, pzona= n
     '''
     za = zon.Zon(cxms)
     cxms2 = dbcn.get_db_ms()
@@ -2064,7 +2065,8 @@ def zona_adm(pidloczona, pzona):
                                        puede_editar=p, titulo='Adición de Zona')
             else:
                 distzona = request.form['distzona'].split(':')
-                print('-----------------distzona')
+                print('-----------------request, distzona')
+                print(request.form['distzona'])
                 print(distzona)
                 nextidzona = za.get_next_zon(idloczona)
                 za.add_zon(idloczona, nextzona, nomzona, distzona[0], \

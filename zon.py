@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Operaciones recintos
 
 class Zon:
     idlocreci=0
@@ -88,3 +88,31 @@ class Zon:
             return False
         else:
             return rows
+
+
+    def get_next_zona(self, idloc):
+        s = "select isnull(max(zona), 0)+1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
+        self.cur.execute(s, idloc)
+        row = self.cur.fetchone()
+        return row[0]
+
+
+    def nomzona_existe(self, idloc, nomzona):
+        ''' Valida q no se duplique nomZona en asiento  '''
+
+        s = "select NomZona from [GeografiaElectoral_app].[dbo].[ZONA]" + \
+            "where IdLocZona= %d and nomzona= %s "
+        t = idloc, nomzona
+        self.cur.execute(s, t)
+        row = self.cur.fetchall()
+        return row
+
+
+    def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario):
+        new_zona = idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario
+        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
+            " (%s, %s, %s, %s, %s, %s, %s) "
+        self.cur.execute(s, new_zona)
+        self.cx.commit()
+        print("adicionado...")
+
