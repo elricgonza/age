@@ -2060,17 +2060,15 @@ def zona_adm(pidloczona, pzona):
 
             if za.nomzona_existe(idloczona, nomzona):   # valida si neces datos POST
                 error = "La zona: --" + nomzona + "-- ya existe en el asiento"
-                return render_template('zona_adm.html', error=error, load=True, dza=za,
+                return render_template('zona_adm.html', error=error, load=False, za=za,
                                        distritos=d.get_dists_en_idloc(idloczona),
                                        puede_editar=p, titulo='Adición de Zona')
             else:
-                distzona = request.form['distzona'].split(':')
-                print('-----------------request, distzona')
+                print('-----------------request distzona')
                 print(request.form['distzona'])
-                print(distzona)
                 nextidzona = za.get_next_zon(idloczona)
-                za.add_zon(idloczona, nextzona, nomzona, distzona[0], \
-                           request.form['fechaIngreso'][:-7], request.form['FechaAct'], request.form['usuario'])     
+                za.add_zon(idloczona, nextzona, nomzona, distzona, \
+                           request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])     
 
             rows = za.get_zon_all(usrdep)
             return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \

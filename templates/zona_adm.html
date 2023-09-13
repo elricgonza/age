@@ -76,12 +76,12 @@
                                     {% else %}
                                         value="{{ idatetime }}"
                                     {% endif %}
-                                >
+                            >
                             <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
                         </div>
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
-                            <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                            <input type="datetime" class="form-control" id="fechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
                                     {% if load_d %}
                                         value=""
                                     {% else %}
@@ -92,7 +92,7 @@
                         </div>                        
                         <div class="col-md-4">
                             <label for="usuario">Usuario Logueado:</label>
-                            <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                            <input type="text" class="form-control" id="usuario" title="" placeholder="Usuario" name="usuario"  readonly 
                                     {% if load_d %}
                                         value=""
                                     {% else %}
@@ -147,7 +147,8 @@
             idloc: pidloc
         }, function(retlist) {
             $.each(retlist, function(index, e){
-                $("#distzona").append('<option value="' + e[1] + '">' + e[1] + ' | ' + e[3] + ' (' + 'Circ. ' + e[2] +')'+'</option>');
+                //$("#distzona").append('<option value="' + e[1] + '">' + e[1] + ' | ' + e[3] + ' (' + 'Circ. ' + e[2] +')'+'</option>');
+                $("#distzona").append('<option value="' + e[1] + '">' + e[1] + ' | ' + e[3] +  ' | '  + 'Circ. ' + e[2] + '</option>');
             });
         }
         );

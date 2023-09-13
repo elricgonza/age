@@ -1,4 +1,4 @@
-# Operaciones recintos
+# Operaciones Zonas/Recintos
 
 class Zon:
     idlocreci=0
@@ -10,7 +10,8 @@ class Zon:
         self.cx = cx
         self.cur = cx.cursor()
 
-    def get_zon_all(self, usrdep):        
+
+    def get_zon_allOLD(self, usrdep):        
         s = "select distinct l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona from [GeografiaElectoral_app].[dbo].[RECI] r" + \
             " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
             " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
@@ -27,6 +28,25 @@ class Zon:
             return False
         else:
             return rows
+
+
+    def get_zon_all(self, usrdep):        
+        ''' Obtiene todas las zonas asociadas a un asiento '''
+
+        s = "select l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona " + \
+            " from [GeografiaElectoral_app].[dbo].[ZONA] z" + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on z.Idloczona = l.IdLoc" + \
+            " left join [GeografiaElectoral_app].[dbo].[DIST] d on d.IdLocDist = z.IdLocZona and d.Dist = z.distZona "
+        if usrdep != 0 :
+            s = s + " where isnull(l.IdLoc,0) <> 0 and l.DepLoc = %d order by l.IdLoc, l.NomLoc"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " where isnull(l.IdLoc,0) <> 0 order by l.IdLoc, l.NomLoc"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
 
     def get_zon_idloc(self, idloczona, idzon):
         up_zonadist = idloczona, idzon
@@ -52,12 +72,14 @@ class Zon:
             self.circundist = row[8]
             return True
 
+
     def get_next_zon(self, idloc):
         s = "select isnull(max(zona), 0)+1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
         return row[0]
     
+
     def add_zon(self, idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso):
         new_zona = idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso
         s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
