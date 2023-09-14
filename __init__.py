@@ -2012,8 +2012,6 @@ def get_nomloc():
         return jsonify(nomloc='NO EXISTE ASIENTO')
 
 
-# Zonas #
-
 @app.route('/zonas_list', methods=['GET', 'POST'])
 @login_required
 def zonas_list():
@@ -2053,7 +2051,7 @@ def zona_adm(pidloczona, pzona):
         distzona = request.form['distzona']
 
         if pidloczona == '0' and pzona == '0':  # es New 
-            if nomzona.upper() == 'SIN ZONA':   
+            if nomzona.upper() == 'SIN ZONA':   # asigna cód 0 para SIN ZONA
                 nextzona = 0
             else:
                 nextzona = za.get_next_zon(idloczona)
@@ -2063,41 +2061,47 @@ def zona_adm(pidloczona, pzona):
                 return render_template('zona_adm.html', error=error, load=False, za=za,
                                        distritos=d.get_dists_en_idloc(idloczona),
                                        puede_editar=p, titulo='Adición de Zona')
-            else:
+            else:   # add
                 print('-----------------request distzona')
                 print(request.form['distzona'])
                 nextidzona = za.get_next_zon(idloczona)
                 za.add_zon(idloczona, nextzona, nomzona, distzona, \
-                           request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])     
+                           request.form['fechaIngreso'], request.form['fechaAct'], request.form['usuario'])     
 
             rows = za.get_zon_all(usrdep)
-            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
-                                    puede_editar='Zon - Edición' in permisos_usr
+            return render_template('zonas_list.html', zonas=rows, \
+                                   puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                   puede_editar='Zonas - Edición' in permisos_usr
                                   )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
-            nomdist = request.form['nomdist'].split(':')
-            za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], nomdist[0], fa, usr)
+            print('fa-----')
+            print(fa)
+            print(datetime.datetime.now())
+            print('distzona----split ----0')
+            distzonasp = request.form['distzona'].split(':')
+            print(distzonasp)
+            print(distzonasp[0])
+            print('request-------------distzona')
+            print(distzona)
+
+            #za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], nomdist[0], fa, usr)
+            za.upd_zon(idloczona, zona, nomzona, distzona, fa, usr)
 
             rows = za.get_zon_all(usrdep)
-            return render_template('zonas_list.html', zonas=rows, puede_adicionar='Zon - Adición' in permisos_usr, \
-                                    puede_editar='Zon - Edición' in permisos_usr
+            return render_template('zonas_list.html', zonas=rows, \
+                                   puede_adicionar='Zonas- Adición' in permisos_usr, \
+                                   puede_editar='Zonas - Edición' in permisos_usr
                                   )# render a template
 
-    else: # Viene de <zonas_list>
-        if pidloczona != '0':  # EDIT
-            if za.get_zon_idloc(idloczona, idzon) == True:
-                """if a.docAct == None:
-                    a.docAct = """
-                if za.fechaIngreso == None:
-                    za.fechaIngreso = str(datetime.datetime.now())[:-7]
-                if za.fechaAct == None:
-                    za.fechaAct = str(datetime.datetime.now())[:-7]
-                if za.usuario == None:
-                    za.usuario = usr
-
-                return render_template('zona_adm.html', eload=True, rror=error, dza=za, \
-                                       distritos=rca.get_distritos_all1(idloczona), 
+    else: # Edit - viene de <zonas_list> 
+        if za.get_zona(pidloczona, pzona):
+            print('prev edit -------')
+            print(za.idloczona)
+            print(za.nomzona)
+            print(za.distzona)
+            return render_template('zona_adm.html', load=True, error=error, za=za, \
+                                       distritos=d.get_dists_en_idloc(pidloczona), \
                                        puede_editar=p, titulo='Edición de Zona')
 
     # New

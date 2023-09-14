@@ -1,10 +1,15 @@
 # Operaciones Zonas/Recintos
 
 class Zon:
-    idlocreci=0
-    reci=0
-    nomreci=''
-    idloc=0
+    idloczona = 0
+    zona = 0
+    nomzona = ''
+    distzona = 0
+    fechaingreso = ''
+    fechaact = ''
+    usuario = ''
+
+    _nomloc = ''
 
     def __init__(self, cx):
         self.cx = cx
@@ -49,6 +54,7 @@ class Zon:
 
 
     def get_zon_idloc(self, idloczona, idzon):
+        ''' suprimirrr  '''
         up_zonadist = idloczona, idzon
         s = "select distinct l.IdLoc, l.NomLoc, z.Zona, z.NomZona, z.DistZona, z.fechaIngreso, z.fechaAct, z.usuario, d.CircunDist" + \
             " from [GeografiaElectoral_app].[dbo].[RECI] r" + \
@@ -73,6 +79,28 @@ class Zon:
             return True
 
 
+    def get_zona(self, idloc, zona):
+        ''' obtiene zona '''
+        t = idloc, zona
+        s = "select  z.*, l.nomloc " + \
+            " from [GeografiaElectoral_app].[dbo].[ZONA] z " + \
+            " left join [GeografiaElectoral_app].[dbo].[LOC] l on z.Idloczona = l.IdLoc " + \
+            " left join [GeografiaElectoral_app].[dbo].[DIST] d on d.IdLocDist = z.IdLocZona and d.Dist = z.distZona " + \
+            " where z.IdLocZona = %d and z.Zona = %d"
+        self.cur.execute(s, t)
+        row = self.cur.fetchone()
+        if row:
+            self.idloczona = row[0]
+            self.zona = row[1]
+            self.nomzona = row[2]
+            self.distzona = row[3]
+            self.fechaingreso = row[4]
+            self.fechaact = row[5]
+            self.usuario = row[6]
+            self._nomloc = row[7]
+        return row
+
+
     def get_next_zon(self, idloc):
         s = "select isnull(max(zona), 0)+1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
         self.cur.execute(s, idloc)
@@ -81,24 +109,27 @@ class Zon:
     
 
     def add_zon(self, idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso):
-        new_zona = idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso
+        new_zona = idloczona, zona, nomzona.upper(), distzona, fecharegistro, usuario, fechaingreso
         s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
             " (%s, %s, %s, %s, %s, %s, %s) "
         self.cur.execute(s, new_zona)
         self.cx.commit()
         print("adicionado...")
 
-    def upd_zon(self, idloczona, idzona, nomzona, distzona, fa, usuario):      
-        upd_zona = (nomzona, distzona, fa, usuario, idloczona, idzona)   
+
+    def upd_zon(self, idloczona, zona, nomzona, distzona, fechaact, usuario):      
+        t = nomzona.upper(), distzona, fechaact, usuario, idloczona, zona   
         s = "update GeografiaElectoral_app.dbo.zona " + \
             " set NomZona = %s, DistZona = %s, fechaAct = %s, usuario = %s" + \
             " where IdLocZona = %d and Zona = %d"
         try:
-            self.cur.execute(s, upd_zona)
+            self.cur.execute(s, t)
             self.cx.commit()
             print('Zona actualizada')
-        except:
+        except Exception as e:
             print("Error --UPD-- Zona...")
+            print(e)
+
 
     def get_circundist(self, idloc, idzon):        
         s = "select CircunDist, NombreRecinto from [bdge].[dbo].[GeoRecintos_all] where idEstado in (1, 2, 3, 6, 79, 80, 81, 84) and IdLoc = %d" + \
