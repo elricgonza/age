@@ -22,15 +22,14 @@ import reportes as rep
 import gerencial as ger
 import documentos as docu
 import documentos_pdf as dpdf
-import tipodocs as tdoc
+import distritos as dist
+import distritos as distr
 import exterior as ext
 import exteriorreci as extr
 import recintos 
 import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
-import distritos as dist
-import zon as zon
 import geo as geo
 import sincro as sin
 import img
@@ -41,6 +40,8 @@ import homologacion as homo
 import homologacionPDF as hpdf
 import jurisdiccion as jur
 import jurisd_asi as jua
+import tipodocs as tdoc
+import zon as zon
 
 import paises
 import deptos as deptoss
@@ -1569,8 +1570,6 @@ def get_distritos_all():
     cxms2 = dbcn.get_db_ms()
     rca = recia.Reciasiento(cxms2)
     rows = rca.get_distritos_all(circun, idlocreci) # en circun e idloc
-    print('------------get_distritos_all xxx')
-    print(rows)
     if rows:
         return jsonify(rows)
     else:
@@ -1592,8 +1591,6 @@ def get_dist_by_idloc():
     rca = recia.Reciasiento(cxms2)
     d = dist.Distritos(cxms2)
     rows = d.get_dists_en_idloc(idloc) # 
-    print('------------get_dist_by_idloc  xxx')
-    print(rows)
     if rows:
         return jsonify(rows)
     else:
@@ -1829,7 +1826,7 @@ def dist_adm(pidloc, pdist, pnalext):
     '''     distritos_list - new: idloc= 0, dist= 0  nalext= 'adm'  '''
     '''     distritos_list - edit: idloc= n, dist= n  nalext= 'adm'  '''
 
-    z = dist.Distritos(cxms)
+    da = distr.Distritos(cxms)
     error = None
     p = ('Distritos - Edición' in permisos_usr)  # t/f
 
@@ -1843,49 +1840,49 @@ def dist_adm(pidloc, pdist, pnalext):
             if nomdist.upper() == 'SIN DISTRITO':
                 nextdist = 0
             else:
-                nextdist = z.get_next_dist(request.form['idloc'])
+                nextdist = da.get_next_dist(request.form['idloc'])
 
-            if  z.nomdist_existe(idloc, nomdist):  # valida si err en datos POST
+            if  da.nomdist_existe(idloc, nomdist):  # valida si err en datos POST
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento..."
                 if pnalext == 'nal': # nal
-                    return render_template('dist_adm.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=None)
+                    return render_template('dist_adm.html', error=error, z=da, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=None)
                 if ban == '2': # ext
-                    return render_template('zonareext.html', error=error, z=z, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
+                    return render_template('zonareext.html', error=error, z=da, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else:  # Adiciona distrito 
                 if pnalext == 'nal':  # nal
-                    z.add_dist(idloc, nextdist, circundist, nomdist, \
+                    da.add_dist(idloc, nextdist, circundist, nomdist, \
                                request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
                     dook = 'Distrito Adicionado...'
-                    return render_template('dist_adm.html', error=None, z=z, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
+                    return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
                 if ban == '2':  # ext
                     circundist = 0
-                    z.add_dist(idloc, nextiddist, circundist, nomdist, \
+                    da.add_dist(idloc, nextiddist, circundist, nomdist, \
                                request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
-                    return render_template('zonareext.html', error=error, z=z, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
+                    return render_template('zonareext.html', error=error, z=da, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
         else: # Edit - retorna de <distritos_list> con POST c/datos actualizados
-            if z.nomdist_existe_edit(idloc, dist, nomdist)  :  # en edición actualiza a otro nom existente
+            if da.nomdist_existe_edit(idloc, dist, nomdist)  :  # en edición actualiza a otro nom existente
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento..."
                 if pnalext == 'nal': # nal
-                    z.get_zonadist_idloc(pidloc, pdist)
-                    return render_template('dist_adm.html', error=error, d=z, load=True, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='', circundist=circundist, dook=None)
+                    da.get_zonadist_idloc(pidloc, pdist)
+                    return render_template('dist_adm.html', error=error, d=da, load=True, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='', circundist=circundist, dook=None)
                 if ban == '2': # ext
-                    return render_template('zonareext.html', error=error, z=z, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
+                    return render_template('zonareext.html', error=error, d=da, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else: # upd dist
                 if pnalext == 'nal':
-                    z.upd_dist(idloc, dist, circundist, nomdist, request.form['fechaAct'], usr)
+                    da.upd_dist(idloc, dist, circundist, nomdist, request.form['fechaAct'], usr)
                     dook = 'Distrito Actualizado...'
-                    return render_template('dist_adm.html', error=None, z=z, load=False, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
+                    return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
                 
-            rows = z.get_dist_all(usrdep)
+            rows = da.get_dist_all(usrdep)
             return render_template('distritos_list.html', dists=rows, \
                                     puede_adicionar='Distritos - Adición' in permisos_usr, \
                                     puede_editar='Distritos - Edición' in permisos_usr)
     else: # Viene de <distritos_list> edit
-        if z.get_zonadist_idloc(pidloc, pdist) == True:
-            return render_template('dist_adm.html', error=error, d=z, load=True, puede_editar=p, titulo='Edición de Distrito')
+        if da.get_zonadist_idloc(pidloc, pdist) == True:
+            return render_template('dist_adm.html', error=error, d=da, load=True, puede_editar=p, titulo='Edición de Distrito')
 
     # New - from <distritos_list> 
-    return render_template('dist_adm.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Distrito')
+    return render_template('dist_adm.html', error=error, z=da, load=False, puede_editar=p, titulo='Adición de Distrito')
 
 
 @app.route('/reci_dist_add/<nalext>', methods=['GET', 'POST'])
@@ -2062,8 +2059,6 @@ def zona_adm(pidloczona, pzona):
                                        distritos=d.get_dists_en_idloc(idloczona),
                                        puede_editar=p, titulo='Adición de Zona')
             else:   # add
-                print('-----------------request distzona')
-                print(request.form['distzona'])
                 nextidzona = za.get_next_zon(idloczona)
                 za.add_zon(idloczona, nextzona, nomzona, distzona, \
                            request.form['fechaIngreso'], request.form['fechaAct'], request.form['usuario'])     
@@ -2075,19 +2070,7 @@ def zona_adm(pidloczona, pzona):
                                   )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
-            print('fa-----')
-            print(fa)
-            print(datetime.datetime.now())
-            print('distzona----split ----0')
-            distzonasp = request.form['distzona'].split(':')
-            print(distzonasp)
-            print(distzonasp[0])
-            print('request-------------distzona')
-            print(distzona)
-
-            #za.upd_zon(idloczona, request.form['idzon'], request.form['nomzon'], nomdist[0], fa, usr)
             za.upd_zon(idloczona, zona, nomzona, distzona, fa, usr)
-
             rows = za.get_zon_all(usrdep)
             return render_template('zonas_list.html', zonas=rows, \
                                    puede_adicionar='Zonas- Adición' in permisos_usr, \
@@ -2096,14 +2079,10 @@ def zona_adm(pidloczona, pzona):
 
     else: # Edit - viene de <zonas_list> 
         if za.get_zona(pidloczona, pzona):
-            print('prev edit -------')
-            print(za.idloczona)
-            print(za.nomzona)
-            print(za.distzona)
             return render_template('zona_adm.html', load=True, error=error, za=za, \
                                        distritos=d.get_dists_en_idloc(pidloczona), \
+                                       puede_adicionar='Zonas - Adición' in permisos_usr, \
                                        puede_editar=p, titulo='Edición de Zona')
-
     # New
     return render_template('zona_adm.html', error=error, za=za, load=False, puede_editar=p, titulo='Adición de Zona')
 

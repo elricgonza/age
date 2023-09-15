@@ -51,12 +51,13 @@
                         <div class="col-md-6">
                             <input type="hidden" name="circundist" value="{{ za.circundist }}">
                             <label for="distzona">Nombre del Distrito:</label>
-                            <select id="distzona" name="distzona" class="form-control" onchange="cargar(this.value, 10)" required>
+                            <!-- onchange="cargar(this.value, 10)" -->
+                            <select id="distzona" name="distzona" class="form-control" required>
                                 {% for distrito in distritos %}
                                     {% if load and za.distzona==distrito[1] %}
-                                            <option value = "{{ distrito[1]~':'~za.idzon~':'~distrito[2] }}" selected>{{ distrito[1] ~' - '~ distrito[3] ~'('~ 'Cir ' ~ distrito[2] ~')' }}</option>
+                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[3] }} + '-edit-'</option>
                                     {% else %}
-                                            <option value = "{{ distrito[1]~':'~za.idzon~':'~distrito[2] }}">{{ distrito[1] ~' - '~ distrito[3] ~'('~ 'Cir ' ~ distrito[2] ~')' }}</option>
+                                        <option value = "{{ distrito[1] }}">{{ distrito[1] }}  |  {{ distrito[3] }}  | Circ. {{ distrito[2] }} </option>
                                     {% endif %}                                                                
                                 {% endfor %}
                             </select>
@@ -96,12 +97,12 @@
                                 >
                         </div>                        
                         <div class="col-md-4">
-                            <label for="usuario">Usuario Logueado:</label>
+                            <label for="usuario">Usuario:</label>
                             <input type="text" class="form-control" id="usuario" title="" placeholder="Usuario" name="usuario"  readonly 
                                     {% if load %}
                                         value=" {{ za.usuario }}"
                                     {% else %}
-                                        value="{{ usr }}"
+                                        value=" {{ usuario }} "
                                     {% endif %}
                                 >
                             <div class="invalid-feedback">Debe introducir un nombre válido.</div>
