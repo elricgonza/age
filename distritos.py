@@ -76,15 +76,18 @@ class Distritos:
 
 
     def upd_dist(self, idlocdist, iddist, circundist, nomdist, fa, usuario):        
-        upd_dist = (circundist, nomdist.upper(), fa, usuario, idlocdist, iddist) 
+        upd_dist = circundist, nomdist.upper(), fa, usuario, idlocdist, iddist 
+        print('ddddddddddddddddddddddddddd')
+        print(upd_dist)
         s = "update GeografiaElectoral_app.dbo.dist set CircunDist = %s, NomDist = %s, fechaAct = %s, usuario = %s" + \
             " where IdLocDist = %d and Dist = %d"
         try:
             self.cur.execute(s, upd_dist)
             self.cx.commit()
             print('Distrito actualizado')
-        except:
+        except Exception as e:
             print("Error --UPD-- Distrito...")
+            print(e)
 
 
     def get_zonadist_idloc(self, idloc, iddist):
@@ -103,8 +106,8 @@ class Distritos:
             self.dist = row[2]
             self.circundist = row[3]
             self.nomdist = row[4]
-            self.fechaIngreso = row[5]
-            self.fechaAct = row[6]
+            self.fechaingreso = row[5]
+            self.fechaact = row[6]
             self.usuario = row[7]
             return True
 

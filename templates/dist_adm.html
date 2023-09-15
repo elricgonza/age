@@ -90,7 +90,7 @@
                             <label for="fechaIngreso">Fecha y Hora de Registro:</label>
                             <input type="datetime" class="form-control" id="fechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
                                         {% if load %}
-                                            value="{{ d.fechaIngreso }}"
+                                            value="{{ d.fechaingreso }}"
                                         {% else %}
                                             value="{{ idatetime }}"
                                         {% endif %}
@@ -100,13 +100,21 @@
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
                             <input type="datetime" class="form-control" id="fechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
-                                        value="{{ idatetime }}"
+                                       {% if load %}
+                                           value = " {{ d.fechaact }}"
+                                       {% else %}
+                                           value="{{ idatetime }}"
+                                       {% endif %}
                             >
                         </div>                        
                         <div class="col-md-4">
-                            <label for="usuario">Usuario Logueado:</label>
+                            <label for="usuario">Usuario:</label>
                             <input type="text" class="form-control" id="usuario" title="" placeholder="Usuario" name="usuario"  readonly 
-                                        value="{{ usuario }}"
+                                       {% if load %}
+                                           value = "{{ d.usuario }}"
+                                       {% else %}
+                                           value="{{ usuario }}"
+                                       {% endif %}
                             >
                         </div>
                     </div>
