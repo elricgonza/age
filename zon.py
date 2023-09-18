@@ -125,7 +125,7 @@ class Zon:
         try:
             self.cur.execute(s, t)
             self.cx.commit()
-            print('Zona actualizada')
+            print('Zona actualizada...')
         except Exception as e:
             print("Error --UPD-- Zona...")
             print(e)
@@ -161,11 +161,29 @@ class Zon:
         return row
 
 
+    def nomzona_existe_edit(self, idloc, zona, nomzona):
+        ''' Valida q no se duplique nomZona en asiento por EDIT  '''
+
+        s = "select NomZona from [GeografiaElectoral_app].[dbo].[ZONA]" + \
+            "where IdLocZona= %d and nomzona= %s and zona <> %d"
+        t = idloc, nomzona, zona
+        try:
+            self.cur.execute(s, t)
+            row = self.cur.fetchall()
+            return row
+        except Exception as e:
+            print('Error valid nomzona_existe edit')
+            print(e)
+
+
     def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario):
-        new_zona = idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario
+        new_zona = idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario.strip()
         s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
             " (%s, %s, %s, %s, %s, %s, %s) "
-        self.cur.execute(s, new_zona)
-        self.cx.commit()
-        print("adicionado...")
-
+        try:
+            self.cur.execute(s, new_zona)
+            self.cx.commit()
+            print("zona add ok...")
+        except Exception as e:
+            print("Error zona add")
+            print(e)

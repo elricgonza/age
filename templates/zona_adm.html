@@ -50,12 +50,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <input type="hidden" name="circundist" value="{{ za.circundist }}">
-                            <label for="distzona">Nombre del Distrito:</label>
+                            <label for="distzona">Nombre del Distrito::</label>
                             <!-- onchange="cargar(this.value, 10)" -->
                             <select id="distzona" name="distzona" class="form-control" required>
                                 {% for distrito in distritos %}
                                     {% if load and za.distzona==distrito[1] %}
-                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[3] }} + '-edit-'</option>
+                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[1] }}  |  {{ distrito[3] }}  | Circ. {{ distrito[2] }} </option>
                                     {% else %}
                                         <option value = "{{ distrito[1] }}">{{ distrito[1] }}  |  {{ distrito[3] }}  | Circ. {{ distrito[2] }} </option>
                                     {% endif %}                                                                
@@ -117,6 +117,11 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <button type="submit" class="btn btn-outline-success btn-md btn-block"
+                                {% if error %}
+                                    disabled
+                                {% else %}
+                                    enabled
+                                {% endif %}
                             >Aceptar</button>
                         </div>
                     </div> <!--row-->
@@ -128,7 +133,7 @@
 </div>
 
 <script>  
-    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`  ¿?¡!{}\/<>
+    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96,64, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`@  ¿?¡!{}\/<>
 
     function getNomloc() {
         $.getJSON('/get_nomloc', {

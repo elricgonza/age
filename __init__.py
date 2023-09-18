@@ -1869,8 +1869,8 @@ def dist_adm(pidloc, pdist, pnalext):
                     return render_template('zonareext.html', error=error, d=da, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else: # upd dist
                 if pnalext == 'nal':
-                    #da.upd_dist(idloc, dist, circundist, nomdist, request.form['fechaAct'][:-7], usr)
-                    da.upd_dist(idloc, dist, circundist, nomdist, idatetime, usr)
+                    fa = str(datetime.datetime.now())[:-7]
+                    da.upd_dist(idloc, dist, circundist, nomdist, fa, usr)
                     dook = 'Distrito Actualizado...'
                     return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
                 
@@ -2069,14 +2069,20 @@ def zona_adm(pidloczona, pzona):
                                    puede_adicionar='Zonas - Adición' in permisos_usr, \
                                    puede_editar='Zonas - Edición' in permisos_usr
                                   )# render a template
-        else: # Es Edit
-            fa = str(datetime.datetime.now())[:-7]
-            za.upd_zon(idloczona, zona, nomzona, distzona, fa, usr)
-            rows = za.get_zon_all(usrdep)
-            return render_template('zonas_list.html', zonas=rows, \
-                                   puede_adicionar='Zonas- Adición' in permisos_usr, \
-                                   puede_editar='Zonas - Edición' in permisos_usr
-                                  )# render a template
+        else: # Edit - retorna de <zonas_list> POST c/datos act.
+            if za.nomzona_existe_edit(idloczona, zona, nomzona):
+                error = 'La zona: --' + nomzona + '-- actualizada ya existe en el asiento'
+                return render_template('zona_adm.html', error=error, load=True, za=za,
+                                       distritos=d.get_dists_en_idloc(idloczona),
+                                       puede_editar=p, titulo='Edición de Zona -OBS-')
+            else:
+                fa = str(datetime.datetime.now())[:-7]
+                za.upd_zon(idloczona, zona, nomzona, distzona, fa, usr)
+                rows = za.get_zon_all(usrdep)
+                return render_template('zonas_list.html', zonas=rows, \
+                                       puede_adicionar='Zonas- Adición' in permisos_usr, \
+                                       puede_editar='Zonas - Edición' in permisos_usr
+                                      )# render a template
 
     else: # Edit - viene de <zonas_list> 
         if za.get_zona(pidloczona, pzona):

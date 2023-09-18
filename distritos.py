@@ -57,9 +57,13 @@ class Distritos:
         new_dist = idlocdist, dist, circundist, nomdist.upper(), fecharegistro, usuario, fechaingreso
         s = "insert into GeografiaElectoral_app.dbo.dist (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) values " + \
             " (%s, %s, %s, %s, %s, %s, %s) "
-        self.cur.execute(s, new_dist)
-        self.cx.commit()
-        print("adicionado...")
+        try:
+            self.cur.execute(s, new_dist)
+            self.cx.commit()
+            print("dist add ok")
+        except Exception as e:
+            print('Error --ADD-- Distrito')
+            print(e)
     
 
     def upd_zona(self, idloczona, idzona, nomzona, fa, usuario):        
@@ -77,9 +81,6 @@ class Distritos:
 
     def upd_dist(self, idlocdist, iddist, circundist, nomdist, fa, usuario):        
         upd_dist = circundist, nomdist.upper(), fa, usuario, idlocdist, iddist 
-        upd_dist = circundist, nomdist.upper(), '2023-09-15 21:01:02', usuario, idlocdist, iddist 
-        print('ddddddddddddddddddddddddddd')
-        print(upd_dist)
         s = "update GeografiaElectoral_app.dbo.dist set CircunDist = %s, NomDist = %s, fechaAct = %s, usuario = %s" + \
             " where IdLocDist = %d and Dist = %d"
         try:
