@@ -77,6 +77,7 @@ class Distritos:
 
     def upd_dist(self, idlocdist, iddist, circundist, nomdist, fa, usuario):        
         upd_dist = circundist, nomdist.upper(), fa, usuario, idlocdist, iddist 
+        upd_dist = circundist, nomdist.upper(), '2023-09-15 21:01:02', usuario, idlocdist, iddist 
         print('ddddddddddddddddddddddddddd')
         print(upd_dist)
         s = "update GeografiaElectoral_app.dbo.dist set CircunDist = %s, NomDist = %s, fechaAct = %s, usuario = %s" + \

@@ -1869,7 +1869,8 @@ def dist_adm(pidloc, pdist, pnalext):
                     return render_template('zonareext.html', error=error, d=da, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else: # upd dist
                 if pnalext == 'nal':
-                    da.upd_dist(idloc, dist, circundist, nomdist, request.form['fechaAct'][:-7], usr)
+                    #da.upd_dist(idloc, dist, circundist, nomdist, request.form['fechaAct'][:-7], usr)
+                    da.upd_dist(idloc, dist, circundist, nomdist, idatetime, usr)
                     dook = 'Distrito Actualizado...'
                     return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
                 
