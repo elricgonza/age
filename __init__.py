@@ -1943,7 +1943,7 @@ def reci_zona_add():
     # obtiene cod zona
     if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
         if z.nomzona_existe(idloc, nomzona):
-            return jsonify({'error' : 'Error, el nombre: --SIN ZONA-- ya existe en el asiento, debe complementar nombre.'})
+            return jsonify({'error' : 'Error, el nombre: --SIN ZONA-- ya existe en el asiento, debe verificar/complementar nombre.'})
         else:
             zona = 0
     else:
