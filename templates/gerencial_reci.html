@@ -24,7 +24,7 @@
             <form class="form_bg" action="" novalidate method='POST' id='formbusqueda' name='formbusqueda'>
             	<div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-8 mt-3">
-                        <h5>Busqueda de Recintos:</h5>
+                        <h5>Búsqueda de Recintos:</h5>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -32,7 +32,7 @@
                         <label class="float-right" for="fechadoc">Desde.:</label>
                     </div>
                     <div class="col-md-2 float-left">
-                        <input type="date" class="form-control" id="iinicio" name="inicio" placeholder="Introduzca fecha de Busqueda" name="inicio" min="2012-01-01" max="2025-01-01"
+                        <input type="date" class="form-control" id="iinicio" name="inicio" placeholder="Introduzca fecha de Búsqueda" name="inicio" min="2012-01-01" max="2025-01-01"
                                 {% if load %}
                                     value="{{ inicio }}"  
                                 {% endif %}
@@ -155,6 +155,7 @@
                     </div>
                 </div>
             </form>
+
             <div style="height:20px"></div>
             {% if accion != '2' %}
 	            <div class="table-responsive">
@@ -302,7 +303,7 @@
 	                                <td>{{ recinto[31] }}</td>
 	                                <td>{{ recinto[32] }}</td>
 	                                <td>{{ recinto[33] }}</td>
-	                                <td>{{ recinto[35] }}</td>
+	                                <td>{{ recinto[34] }}</td>
 	                                <td>{{ recinto[36] }}</td>
 	                                <td>{{ recinto[37] }}</td>
 	                                <td>{{ recinto[38] }}</td>
@@ -314,8 +315,8 @@
 	                                <td>{{ recinto[44] }}</td>
 	                                <td>{{ recinto[45] }}</td>
 	                                <td>{{ recinto[46] }}</td>
-	                                <td>{{ recinto[34] }}</td>
 	                                <td>{{ recinto[47] }}</td>
+	                                <td>{{ recinto[35] }}</td>
 	                                <td>{{ recinto[48] }}</td>
 	                                <td>{{ recinto[49] }}</td>
 	                                <td>{{ recinto[50] }}</td>
@@ -331,7 +332,6 @@
 	                                <td>{{ recinto[2] }}</td>
 	                                <td>{{ recinto[3] }}</td>
 	                                <td>{{ recinto[4] }}</td>
-	                                <td>{{ recinto[5] }}</td>
 	                                <td>{{ recinto[7] }}</td>
 	                                <td>{{ recinto[8] }}</td>
 	                                <td>{{ recinto[9] }}</td>

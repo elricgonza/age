@@ -863,7 +863,7 @@ class Gerencial:
                 if usuario != 0: 
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            ''' Asientos Registrados - Nuevos '''
                             lista = usuario, dpto, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1299,7 +1299,7 @@ class Gerencial:
                                 return rows
                     else:
                         return False
-        else:
+        else: #  else fecha != 0 ->  fecha == 0
             if dpto != 0:
                 if usuario != 0: 
                     if accion != 0:
@@ -1657,7 +1657,7 @@ class Gerencial:
                                 return rows                            
 
                         if accion == '2':
-                            '''Recintos Modificados'''                                                                    
+                            ''' Recintos Modificados - 29x2 campos tested '''                                                                    
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
                                 "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
@@ -1732,8 +1732,3 @@ class Gerencial:
                                 return rows
                     else:
                         return False
-
-
-
-            
-    
