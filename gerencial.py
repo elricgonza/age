@@ -1680,7 +1680,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
