@@ -1279,14 +1279,6 @@ def gerencial_reci():
                 else:
                     accion = request.form['accion']
 
-                print('dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd -- inicio, final, depto, usuario, accion)')
-                print(inicio)
-                print(final)
-                print(depto)
-                print(usuario)
-                print(accion)
-
-
                 rows = g.get_gerencial_reci(inicio, final, depto, usuario, accion)
                 if rows:
                     return render_template('gerencial_reci.html', recintos=rows, dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=True, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)  # render a template

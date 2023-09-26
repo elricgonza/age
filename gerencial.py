@@ -857,13 +857,14 @@ class Gerencial:
                     else:
                         return False
 
+
     def get_gerencial_reci(self, inicio, final, dpto, usuario, accion):
         if inicio != "00-00-0000" and final != "00-00-0000":
             if dpto != 0:
                 if usuario != 0: 
                     if accion != 0:
                         if accion == '1':
-                            ''' Asientos Registrados - Nuevos '''
+                            ''' Recintos Registrados - Nuevos '''
                             lista = usuario, dpto, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -892,7 +893,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = usuario, dpto, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -916,7 +917,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -942,7 +943,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''   
+                            '''Recintos Suprimidos'''   
                             lista = usuario, dpto, inicio, final                         
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -974,7 +975,7 @@ class Gerencial:
                 else:
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            '''Recintos Nuevos'''
                             lista = dpto, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1002,7 +1003,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = dpto, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1026,7 +1027,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -1052,7 +1053,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''
+                            '''Recintos Suprimidos'''
                             lista = dpto, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1084,7 +1085,7 @@ class Gerencial:
                 if usuario != 0: 
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            '''Recintos Nuevos'''
                             lista = usuario, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1112,7 +1113,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = usuario, inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1136,7 +1137,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -1162,7 +1163,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''   
+                            '''Recintos Suprimidos'''   
                             lista = usuario, inicio, final                         
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1193,7 +1194,7 @@ class Gerencial:
                 else:
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            '''Recintos Nuevos'''
                             lista = inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1221,7 +1222,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = inicio, final                                                                    
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1245,7 +1246,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -1271,7 +1272,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''
+                            '''Recintos Suprimidos'''
                             lista = inicio, final                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1304,7 +1305,7 @@ class Gerencial:
                 if usuario != 0: 
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            '''Recintos Nuevos'''
                             lista = usuario, dpto                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1332,7 +1333,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = usuario, dpto                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1356,7 +1357,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -1382,7 +1383,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''   
+                            '''Recintos Suprimidos'''   
                             lista = usuario, dpto                         
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1413,7 +1414,7 @@ class Gerencial:
                 else:
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            '''Recintos Nuevos'''
                             lista = dpto                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1441,7 +1442,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = dpto                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1465,7 +1466,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -1490,7 +1491,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''
+                            '''Recintos Suprimidos'''
                             lista = dpto                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1522,7 +1523,7 @@ class Gerencial:
                 if usuario != 0: 
                     if accion != 0:
                         if accion == '1':
-                            '''Asientos Registrados'''
+                            '''Recintos Nuevos'''
                             lista = usuario                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1550,7 +1551,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '2':
-                            '''Asientos Modificados'''
+                            '''Recintos Modificados'''
                             lista = usuario                            
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
@@ -1574,7 +1575,7 @@ class Gerencial:
                                 "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
-                                "INNER JOIN GeografiaElectoral_appA.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+                                "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
                                 "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
                                 "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
@@ -1599,7 +1600,7 @@ class Gerencial:
                                 return rows
 
                         if accion == '3':
-                            '''Asientos Suprimidos'''   
+                            '''Recintos Suprimidos'''   
                             lista = usuario                         
                             s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
                                 "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
