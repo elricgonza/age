@@ -1191,11 +1191,11 @@ def gerencial_asi():
                     final = '00-00-0000'
                 else:
                     final = request.form['final']
-    
+
                 if request.form['dep'] != '0':
                     depto = usrdep
                 else:
-                    if request.form['depto'] == 'Seleccionar':    
+                    if request.form['depto'] == 'Seleccionar':
                         depto = 0
                     else:
                         depto = request.form['depto']
@@ -3873,9 +3873,8 @@ def reciespe_img(idloc, reci, nomreci):
                 resize_save_file1(fpath, name_to_save, (1024, 768))
 
                 os.remove(fpath[1:])   # arch. fuente 
-        
-        return redirect(url_for('reci_espec_list'))
 
+        return redirect(url_for('reci_espec_list'))
     else:
         if with_img:  # Edit
             return render_template('reciespe_img_upd.html', rows=i.get_descripcion(14), nomloc=nomreci,
@@ -3897,6 +3896,7 @@ def resize_save_file(in_file, out_file, size):
     image.close()
     #return(out_file)
 
+
 def resize_save_file1(in_file, out_file, size):
     with open('.' + in_file, 'rb') as fd:
         image = resizeimage.resize_thumbnail(Image.open(fd), size)
@@ -3906,6 +3906,13 @@ def resize_save_file1(in_file, out_file, size):
     image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
     image.close()
     #return(out_file)
+
+'''
+@app.route('/rep_loc_all', methods=['GET', 'POST'])
+@login_required
+def rep_loc_all():
+    
+'''
 
 
 # start the server with the 'run()' method
