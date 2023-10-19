@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Operaciones jurisdicción
 
 class Jurisdiccion:
     idlocreci=0
@@ -244,27 +244,6 @@ class Jurisdiccion:
             self.nomzona2 = row[3]
             self.circun2 = row[4]
             return True
-
-    '''
-    def get_asiento_idloc2(self, idloc):
-        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, AsientoElectoral, tipocircun, TipoCircunscripcion " + \
-            "from [bdge].[dbo].[XeoAsientos_Nacional_all] where IdLoc = %d"   
-        self.cur.execute(s, idloc)
-        row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
-            self.dep2 = row[0]
-            self.prov2 = row[1]
-            self.sec2 = row[2]
-            self.departamento2 = row[3]
-            self.provincia2 = row[4]
-            self.municipio2 = row[5]
-            self.asiento2 = row[6]
-            self.idtipocircun2 = row[7]
-            self.tipocircun2 = row[8]
-            return True
-    '''
 
 
     def get_asiento_idloc2(self, idloc):

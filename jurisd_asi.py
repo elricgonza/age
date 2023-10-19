@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Operaciones Jurisd
 
 class JurisdAsi:
     idlocreci=0
@@ -11,30 +11,7 @@ class JurisdAsi:
         self.cx = cx
         self.cur = cx.cursor()
 
-    ''' 
-    def get_jurisd_asi_all(self, usrdep):        
-        s = "select a.IdLoc, a.NomDep as Departamento, a.NomProv as Provincia, a.NombreMunicipio as Municipio, "  + \
-            "a.AsientoElectoral as Asiento, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen" + \
-            " from [bdge].[dbo].[XeoAsientos_Nacional_all] a" + \
-            " left join [bdge].[dbo].[actJurisd] j on a.IdLoc=j.idLoc"
-        if usrdep != 0 :
-            s = s + " where a.DEP = %d group by a.IdLoc, a.NomDep, a.NomProv, a.NombreMunicipio, "  + \
-                    "a.AsientoElectoral, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen order by a.prov, a.sec"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " group by a.IdLoc, a.NomDep, a.NomProv, a.NombreMunicipio, "  + \
-                    "a.AsientoElectoral, a.TipoCircunscripcion, a.DEP, a.PROV, a.SEC, a.Estado, j.idLoc, j.origen order by a.DEP, a.PROV, a.SEC"
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-    ''' 
-
-
-    def get_jurisd_asi_all(self, usrdep):        
+    def get_jurisd_asi_all(self, usrdep):
         '''  (query actualizado) '''
 
         s = "select a.IdLoc, a.NomDep as Departamento, a.NomProv as Provincia, a.NomMun as Municipio, "  + \
@@ -52,7 +29,7 @@ class JurisdAsi:
 
         rows = self.cur.fetchall()
         return rows
-    
+
 
     def get_jurisd_asi_idloc(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
@@ -104,7 +81,8 @@ class JurisdAsi:
             self.usuario = row[26]
             return True
 
-    def get_circuns_all(self, usrdep):        
+
+    def get_circuns_all(self, usrdep):
         s = "select a.DepLoc, a.ProvLoc, a.SecLoc, d.CircunDist from GeografiaElectoral_app.dbo.LOC a " + \
             "inner join GeografiaElectoral_app.dbo.ZONA z on a.IdLoc=z.IdLocZona " + \
             "inner join GeografiaElectoral_app.dbo.DIST d on a.IdLoc=d.IdLocDist and z.IdLocZona=d.IdLocDist and z.DistZona=d.Dist"
@@ -121,19 +99,21 @@ class JurisdAsi:
         else:
             return rows
 
-    def get_circuns_dps(self, dp, pr, mu):        
+
+    def get_circuns_dps(self, dp, pr, mu):
         s = "select a.DepLoc, a.ProvLoc, a.SecLoc, d.CircunDist from GeografiaElectoral_app.dbo.LOC a " + \
             "inner join GeografiaElectoral_app.dbo.ZONA z on a.IdLoc=z.IdLocZona " + \
             "inner join GeografiaElectoral_app.dbo.DIST d on a.IdLoc=d.IdLocDist and z.IdLocZona=d.IdLocDist and z.DistZona=d.Dist " + \
             "where a.DepLoc=%d and a.ProvLoc=%d and a.SecLoc=%d and a.estado in (16, 17, 75, 76) " + \
             "group by a.DepLoc, a.ProvLoc, a.SecLoc, d.CircunDist order by d.CircunDist"
-        lista = dp, pr, mu    
+        lista = dp, pr, mu
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False
         else:
             return rows
+
 
     def get_zonas_dps(self, dp, pr, mu, id_loc):
         s = "select d.Dist, z.Zona, z.NomZona, d.CircunDist from GeografiaElectoral_app.dbo.DIST d " + \
@@ -141,7 +121,7 @@ class JurisdAsi:
             "inner join GeografiaElectoral_app.dbo.LOC a on d.IdLocDist=a.IdLoc and z.IdLocZona=a.IdLoc " + \
             "where d.IdLocDist=z.IdLocZona and a.idLoc=%d and a.estado in (16, 17, 75, 76) " + \
             "group by d.Dist, z.Zona, z.NomZona, d.CircunDist order by z.NomZona"
-        lista = id_loc    
+        lista = id_loc
         self.cur.execute(s, lista)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
@@ -149,11 +129,12 @@ class JurisdAsi:
         else:
             return rows
 
+
     def get_zonadist_idloc(self, zonade, circun):
         s = "Select d.Dist, z.Zona, d.NomDist, z.NomZona, d.CircunDist from [GeografiaElectoral_app].[dbo].[ZONA] z, " + \
             "[GeografiaElectoral_app].[dbo].[DIST] d where z.DistZona=d.Dist and z.IdLocZona = d.IdLocDist " + \
             "and d.CircunDist=%d and z.Zona=%d group by d.Dist, z.Zona, d.NomDist, z.NomZona, d.CircunDist"
-        lista= circun, zonade        
+        lista= circun, zonade
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
         if  row == None:
@@ -166,8 +147,9 @@ class JurisdAsi:
             self.circun = row[4]
             return True
 
+
     def get_dpto(self, dep):
-        s = "Select NomDep from [GeografiaElectoral_app].[dbo].[DEP] where Dep = %d"        
+        s = "Select NomDep from [GeografiaElectoral_app].[dbo].[DEP] where Dep = %d"
         self.cur.execute(s, dep)
         row = self.cur.fetchone()
         if  row == None:
@@ -292,23 +274,6 @@ class JurisdAsi:
         except Exception as e:
             print("Error - actualización de Distrito...")    
 
-
-    ''' 
-    def get_jurisd_asi_idloc_idjurisd(self, idloc):        
-        s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.XeoAsientos_Nacional_all" + \
-            " left join bdge.dbo.actJurisd on bdge.dbo.XeoAsientos_Nacional_all.IdLoc=bdge.dbo.actJurisd.idLoc" + \
-            " where bdge.dbo.actJurisd.idLoc=%d group by bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2"    
-        self.cur.execute(s, idloc)
-        row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
-            self.idloc = row[0]
-            self.circ = row[1]
-            self.idzona = row[2]
-            self.dist = row[3]
-            return True
-     '''
 
     def get_jurisd_asi_idloc_idjurisd(self, idloc):        
         s = "select bdge.dbo.actJurisd.idLoc, bdge.dbo.actJurisd.circun2, bdge.dbo.actJurisd.zona2, bdge.dbo.actJurisd.dist2 from bdge.dbo.v_loc_nal_all" + \

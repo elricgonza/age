@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Reportes
 
 class Reportes:
     idloc = 0
@@ -12,31 +12,12 @@ class Reportes:
         self.cur = cx.cursor()
 
 
-    '''
-    def get_rep_asientos_all(self, usrdep):        
-        s = "select IdLoc, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NombreMunicipio as Municipio," + \
-            " AsientoElectoral as Asiento, tipoCircunscripcion, estado, etapa, urbanorural, PoblacionElectoral, PoblacionCensal" + \
-            " from [bdge].[dbo].[XeoAsientos_Nacional_all]"
-        if usrdep != 0 :
-            s = s + " where DEP = %d order by prov, sec"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " order by DEP, PROV, SEC"
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-    '''
-
-    def get_rep_asientos_all(self, usrdep):        
+    def get_rep_asientos_all(self, usrdep):
         ''' (query actualizado) '''
 
         s = "select IdLoc, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NomMun as Municipio," + \
             " nomLoc as Asiento, desTipoCircun as tipoCircunscripcion, desEstado, desEtapa, desUrbanorural," + \
-            " PoblacionLoc as PoblacionElectoral, PoblacionElecLoc as PoblacionCensal" + \
+            " PoblacionLoc as PoblacionCensal, PoblacionElecLoc as PoblacionElectoral" + \
             " from [bdge].[dbo].[v_loc_nal_all]"
         if usrdep != 0 :
             s = s + " where dep = %d order by prov, sec"
@@ -49,7 +30,7 @@ class Reportes:
         return rows
 
 
-    def get_rep_recintos_all(self, usrdep):        
+    def get_rep_recintos_all(self, usrdep):
         s = "Select IdLocReci, Reci, DEP, NomDep as Departamento, PROV, NomProv as Provincia, SEC, NombreMunicipio as Municipio," + \
             " NombreRecinto, NomDist, NomZona, CircunDist, TipoCircunscripcion, Estado, MaxMesasReci, ambientesDisp, Direccion," + \
             " latitud, longitud" + \
@@ -67,7 +48,8 @@ class Reportes:
         else:
             return rows
 
-    def get_rep_homologacion_all(self, usrdep):           
+
+    def get_rep_homologacion_all(self, usrdep):
         s = "Select idLoc, reci, nomDep as Departamento, nomLoc, nomReci," + \
             " idloc2, reci2, nomReci2" + \
             " from [bdge].[dbo].[hom]"
@@ -84,7 +66,8 @@ class Reportes:
         else:
             return rows
 
-    def get_rep_homojurisd_all(self, usrdep):           
+
+    def get_rep_homojurisd_all(self, usrdep):
         s = "Select idLoc, reci, nomDep as Departamento, nomLoc, nomReci," + \
             " idloc2, reci2, nomReci2" + \
             " from [bdge].[dbo].[actJurisd]"
@@ -101,7 +84,8 @@ class Reportes:
         else:
             return rows
 
-    def get_rep_jurisdiccion_all(self, usrdep):           
+
+    def get_rep_jurisdiccion_all(self, usrdep):
         s = "Select idLoc, reci, nomDep as Departamento, nomProv, nomSec, nomLoc, nomReci," + \
             " idloc2, reci2, nomDep2, nomProv2, nomSec2, nomReci2, fechaAct, usuario, origen" + \
             " from [bdge].[dbo].[actJurisd]"
@@ -118,7 +102,8 @@ class Reportes:
         else:
             return rows
 
-    def get_rep_logtransaccion_all(self, usrdep):              
+
+    def get_rep_logtransaccion_all(self, usrdep):
         s = "select top(3000) GeografiaElectoral_app.dbo.DEP.Dep, GeografiaElectoral_app.dbo.DEP.NomDep as Departamento," + \
             " GeografiaElectoral_app.dbo.SEC.Sec, GeografiaElectoral_app.dbo.SEC.NomSec as Municipio," + \
             " case when bdge.dbo.logTransacciones.TipoTrn='U' then 'Update'" + \
@@ -149,7 +134,8 @@ class Reportes:
             return False
         else:
             return rows
-    
+
+
     def get_paises_all(self, usrdep):
             s = "select IdPais, NomPais from [GeografiaElectoral_app].[dbo].[PAIS]"
             if usrdep != 0 :
@@ -165,6 +151,7 @@ class Reportes:
                 return False
             else:
                 return rows
+
 
     def get_departamentos_all(self, usrdep):
             s = "select Dep, NomDep, IdPais from [GeografiaElectoral_app].[dbo].[DEP]"
@@ -199,6 +186,7 @@ class Reportes:
         else:
             return rows
 
+
     def get_municipios_all(self, usrdep):
         s = "select DepSec, ProvSec, Sec, NomSec from [GeografiaElectoral_app].[dbo].[SEC]"
         if usrdep != 0 :
@@ -206,7 +194,6 @@ class Reportes:
             self.cur.execute(s, usrdep)
         else:
             s = s + " order by DepSec"
-            print(s)
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
@@ -214,6 +201,7 @@ class Reportes:
             return False
         else:
             return rows
+
 
     def get_rep_ext_asie_all(self):        
         s = "select IdLoc, NomPais, Dep, NomDep, Prov, NomProv, Sec, NomSec, NomLoc, estado, pobElec" + \
@@ -226,6 +214,7 @@ class Reportes:
             return False
         else:
             return rows
+
 
     def get_rep_ext_reci_all(self):        
         s = "select NomPais, Dep, NomDep, Prov, NomProv, Sec, NomSec, IdLoc, NomLoc, Reci, NombreRecinto, estado, pobElec" + \
