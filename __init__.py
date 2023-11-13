@@ -26,7 +26,7 @@ import distritos as dist
 import distritos as distr
 import exterior as ext
 import exteriorreci as extr
-import recintos 
+import recintos
 import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
@@ -1150,147 +1150,6 @@ def exterior(idloc):
                             gj_cir=j.get_cir(9),
                             gj_mun=j.get_mun(9),
                             gj_prov=j.get_prov(9))
-
-
-@app.route('/reportes', methods=['GET', 'POST'])
-@login_required
-def reportes():
-    r = rep.Reportes(cxms)
-    if 'Reportes - Consulta' in permisos_usr:
-        return render_template('reportes.html', asientos=r.get_rep_asientos_all(usrdep), recintos=r.get_rep_recintos_all(usrdep), 
-                                homologaciones=r.get_rep_homologacion_all(usrdep), homojurisds=r.get_rep_homojurisd_all(usrdep),
-                                jurisdicciones=r.get_rep_jurisdiccion_all(usrdep), transacciones=r.get_rep_logtransaccion_all(usrdep), 
-                                extasientos=r.get_rep_ext_asie_all(), extrecintos=r.get_rep_ext_reci_all(), 
-                                puede_consultar='Reportes - Consulta' in permisos_usr)
-    else:
-        return render_template('reportes.html', puede_consultar='Reportes - Consulta' in permisos_usr)
-
-
-@app.route('/gerencial_asi', methods=['GET', 'POST'])
-@login_required
-def gerencial_asi():
-    g = ger.Gerencial(cxms)
-    if 'Gerencial - Consulta' not in permisos_usr:
-        return render_template('gerencial.html', puede_consultar='Gerencial - Consulta' in permisos_usr)
-    else:
-        if request.method == 'POST':
-            if request.form['limpiar'] == 'limpiando':
-                inicio = '00-00-0000'
-                final = '00-00-0000'
-                depto = 0
-                usuario = 0
-                accion = 0
-                return render_template('gerencial.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
-            else:
-                if request.form['inicio'] == "":
-                    inicio = '00-00-0000'
-                else:
-                    inicio = request.form['inicio']
-
-                if request.form['final'] == "":
-                    final = '00-00-0000'
-                else:
-                    final = request.form['final']
-
-                if request.form['dep'] != '0':
-                    depto = usrdep
-                else:
-                    if request.form['depto'] == 'Seleccionar':
-                        depto = 0
-                    else:
-                        depto = request.form['depto']
-
-                if request.form['usua'] != '0':
-                    usuario = current_user.usuario
-                else:
-                    if request.form['usuario'] == 'Seleccionar':    
-                        usuario = 0
-                    else:
-                        user = request.form['usuario']
-                        g.id_usuario(user)
-                        usuario = g.usuario
-
-                if request.form['accion'] == 0:    
-                    accion = 0
-                else:
-                    accion = request.form['accion']
-
-                rows = g.get_gerencial_asi(inicio, final, depto, usuario, accion)
-                if rows:
-                    return render_template('gerencial.html', asientos=rows, dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=True, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)  # render a template
-                else:
-                    print ('Sin registros en Asientos...')
-                    return render_template('gerencial.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)
-        else:
-            inicio = '00-00-0000'
-            final = '00-00-0000'
-            depto = 0
-            usuario = 0
-            accion = 0 
-            return render_template('gerencial.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
-
-
-@app.route('/gerencial_reci', methods=['GET', 'POST'])
-@login_required
-def gerencial_reci():
-    g = ger.Gerencial(cxms)
-    if 'Gerencial - Consulta' not in permisos_usr:
-        return render_template('gerencial_reci.html', puede_consultar='Gerencial - Consulta' in permisos_usr)
-    else:
-        if request.method == 'POST':
-            if request.form['limpiar'] == 'limpiando':
-                inicio = '00-00-0000'
-                final = '00-00-0000'
-                depto = 0
-                usuario = 0
-                accion = 0
-                return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
-            else:
-                if request.form['inicio'] == "":
-                    inicio = '00-00-0000'
-                else:
-                    inicio = request.form['inicio']
-
-                if request.form['final'] == "":
-                    final = '00-00-0000'
-                else:
-                    final = request.form['final']
-
-                if request.form['dep'] != '0':
-                    depto = usrdep
-                else:
-                    if request.form['depto'] == 'Seleccionar':    
-                        depto = 0
-                    else:
-                        depto = request.form['depto']
-
-                if request.form['usua'] != '0':
-                    usuario = current_user.usuario
-                else:
-                    if request.form['usuario'] == 'Seleccionar':    
-                        usuario = 0
-                    else:
-                        user = request.form['usuario']
-                        g.id_usuario(user)
-                        usuario = g.usuario
-
-                if request.form['accion'] == 0:    
-                    accion = 0
-                else:
-                    accion = request.form['accion']
-
-                rows = g.get_gerencial_reci(inicio, final, depto, usuario, accion)
-                if rows:
-                    return render_template('gerencial_reci.html', recintos=rows, dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=True, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)  # render a template
-                else:
-                    return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)
-        else:
-            inicio = '00-00-0000'
-            final = '00-00-0000'
-            depto = 0
-            usuario = 0
-            accion = 0 
-            return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
 @app.route('/get_provincias_all', methods=['GET', 'POST'])
@@ -3907,12 +3766,172 @@ def resize_save_file1(in_file, out_file, size):
     image.close()
     #return(out_file)
 
-'''
+
+@app.route('/reportes', methods=['GET', 'POST'])
+@login_required
+def reportes():
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('reportes.html', asientos=r.get_rep_asientos_all(usrdep), recintos=r.get_rep_recintos_all(usrdep), 
+                                homologaciones=r.get_rep_homologacion_all(usrdep), homojurisds=r.get_rep_homojurisd_all(usrdep),
+                                jurisdicciones=r.get_rep_jurisdiccion_all(usrdep), transacciones=r.get_rep_logtransaccion_all(usrdep), 
+                                extasientos=r.get_rep_ext_asie_all(), extrecintos=r.get_rep_ext_reci_all(), 
+                                puede_consultar='Reportes - Consulta' in permisos_usr)
+    else:
+        return render_template('reportes.html', puede_consultar='Reportes - Consulta' in permisos_usr)
+
+
+@app.route('/rep_loc_habil', methods=['GET', 'POST'])
+@login_required
+def rep_loc_habil():
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('rep_loc_habil.html', asientos=r.view_geoasientos_nacional_ant(usrdep))
+    else:
+        return render_template('home.html')
+
+
+@app.route('/rep_reci_habil', methods=['GET', 'POST'])
+@login_required
+def rep_reci_habil():
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('rep_reci_habil.html', recintos=r.view_georecintos_nacional_ant(usrdep))
+    else:
+        return render_template('home.html')
+
+
 @app.route('/rep_loc_all', methods=['GET', 'POST'])
 @login_required
 def rep_loc_all():
     
-'''
+
+
+@app.route('/gerencial_asi', methods=['GET', 'POST'])
+@login_required
+def gerencial_asi():
+    g = ger.Gerencial(cxms)
+    if 'Gerencial - Consulta' not in permisos_usr:
+        return render_template('gerencial.html', puede_consultar='Gerencial - Consulta' in permisos_usr)
+    else:
+        if request.method == 'POST':
+            if request.form['limpiar'] == 'limpiando':
+                inicio = '00-00-0000'
+                final = '00-00-0000'
+                depto = 0
+                usuario = 0
+                accion = 0
+                return render_template('gerencial.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
+            else:
+                if request.form['inicio'] == "":
+                    inicio = '00-00-0000'
+                else:
+                    inicio = request.form['inicio']
+
+                if request.form['final'] == "":
+                    final = '00-00-0000'
+                else:
+                    final = request.form['final']
+
+                if request.form['dep'] != '0':
+                    depto = usrdep
+                else:
+                    if request.form['depto'] == 'Seleccionar':
+                        depto = 0
+                    else:
+                        depto = request.form['depto']
+
+                if request.form['usua'] != '0':
+                    usuario = current_user.usuario
+                else:
+                    if request.form['usuario'] == 'Seleccionar':    
+                        usuario = 0
+                    else:
+                        user = request.form['usuario']
+                        g.id_usuario(user)
+                        usuario = g.usuario
+
+                if request.form['accion'] == 0:    
+                    accion = 0
+                else:
+                    accion = request.form['accion']
+
+                rows = g.get_gerencial_asi(inicio, final, depto, usuario, accion)
+                if rows:
+                    return render_template('gerencial.html', asientos=rows, dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=True, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)  # render a template
+                else:
+                    print ('Sin registros en Asientos...')
+                    return render_template('gerencial.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)
+        else:
+            inicio = '00-00-0000'
+            final = '00-00-0000'
+            depto = 0
+            usuario = 0
+            accion = 0 
+            return render_template('gerencial.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
+
+
+@app.route('/gerencial_reci', methods=['GET', 'POST'])
+@login_required
+def gerencial_reci():
+    g = ger.Gerencial(cxms)
+    if 'Gerencial - Consulta' not in permisos_usr:
+        return render_template('gerencial_reci.html', puede_consultar='Gerencial - Consulta' in permisos_usr)
+    else:
+        if request.method == 'POST':
+            if request.form['limpiar'] == 'limpiando':
+                inicio = '00-00-0000'
+                final = '00-00-0000'
+                depto = 0
+                usuario = 0
+                accion = 0
+                return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
+            else:
+                if request.form['inicio'] == "":
+                    inicio = '00-00-0000'
+                else:
+                    inicio = request.form['inicio']
+
+                if request.form['final'] == "":
+                    final = '00-00-0000'
+                else:
+                    final = request.form['final']
+
+                if request.form['dep'] != '0':
+                    depto = usrdep
+                else:
+                    if request.form['depto'] == 'Seleccionar':    
+                        depto = 0
+                    else:
+                        depto = request.form['depto']
+
+                if request.form['usua'] != '0':
+                    usuario = current_user.usuario
+                else:
+                    if request.form['usuario'] == 'Seleccionar':    
+                        usuario = 0
+                    else:
+                        user = request.form['usuario']
+                        g.id_usuario(user)
+                        usuario = g.usuario
+
+                if request.form['accion'] == 0:    
+                    accion = 0
+                else:
+                    accion = request.form['accion']
+
+                rows = g.get_gerencial_reci(inicio, final, depto, usuario, accion)
+                if rows:
+                    return render_template('gerencial_reci.html', recintos=rows, dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=True, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)  # render a template
+                else:
+                    return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, inicio=inicio, final=final, depa=depto, us=usuario, accion=accion)
+        else:
+            inicio = '00-00-0000'
+            final = '00-00-0000'
+            depto = 0
+            usuario = 0
+            accion = 0 
+            return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
 # start the server with the 'run()' method

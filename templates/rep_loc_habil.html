@@ -1,0 +1,171 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.4.0/css/searchPanes.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">        
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/1.4.0/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+
+    <style type="text/css">
+        table th{
+            background-color: #17a2b8;
+            color: white;
+        }
+        input[type="text"]{
+            width: 100px;
+        }
+        .nav-tabs{
+            background-color: #e4e4e4;
+            border-radius: 5px;
+        }
+        .nav-item{
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+<div class="container">
+            <div class="container">                        
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="id_dtloc" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                   <th>D</th>
+                                   <th>Depto</th>
+                                   <th>P</th>
+                                   <th>Provincia</th>
+                                   <th>M</th>
+                                   <th>Municipio</th>
+                                   <th>IdLoc</th>
+                                   <th>Asiento</th>
+                                   <th>Circun</th>
+                                   <th>UrbRur</th>
+                                   <th>Estado</th>
+                                   <th>Latitud</th>
+                                   <th>Longitud</th>                           
+                                </tr>
+                            </thead>
+                            <tbody>    
+                                {% for asiento in asientos %}
+                                    <tr style="font-size: 13px;">
+                                        <td>{{ asiento[0] }}</td>
+                                        <td>{{ asiento[3] }}</td>
+                                        <td>{{ asiento[1] }}</td>
+                                        <td>{{ asiento[4] }}</td>
+                                        <td>{{ asiento[2] }}</td>
+                                        <td>{{ asiento[5] }}</td>
+                                        <td>{{ asiento[6] }}</td>
+                                        <td>{{ asiento[7] }}</td>
+                                        <td>{{ asiento[9] }}</td>
+                                        <td>{{ asiento[13] }}</td>
+                                        <td>{{ asiento[15] }}</td>
+                                        <td>{{ asiento[10] }}</td>
+                                        <td>{{ asiento[11] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr style="font-size: 13px;">
+                                   <th>D</th>
+                                   <th>Depto</th>
+                                   <th>P</th>
+                                   <th>Provincia</th>
+                                   <th>M</th>
+                                   <th>Municipio</th>
+                                   <th>IdLoc</th>
+                                   <th>Asiento</th>
+                                   <th>Circun</th>
+                                   <th>UrbRur</th>
+                                   <th>Estado</th>
+                                   <th>Latitud</th>
+                                   <th>Longitud</th>                           
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+       
+    <script>
+        $(document).ready(function() {
+            $('#id_dtloc').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json',
+                    searchPanes: {
+                        "clearMessage": "Borrar-todo",
+                        "collapse": {
+                            "0": "Paneles de búsqueda",
+                            "_": "Paneles de búsqueda (%d)"
+                        },
+                        "count": "{total}",
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Sin paneles de búsqueda",
+                        "loadMessage": "Cargando paneles de búsqueda",
+                        "title": "Filtros Activos - %d"
+                    }
+                },
+                searchPanes: {
+                    columns: [1,3,5,7,8,9],
+                    layout: 'columns-6',
+                    threshold: 9
+                },
+                dom: 'PBfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0, ':visible' ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible',
+                            stripHtml: true
+                        },
+                        pageSize: 'LETTER',
+                        customize: function(doc, config) {
+                          var tableNode;
+                          for (i = 0; i < doc.content.length; ++i) {
+                            if(doc.content[i].table !== undefined){
+                              tableNode = doc.content[i];
+                              break;
+                            }
+                          }
+         
+                          var rowIndex = 0;
+                          var tableColumnCount = tableNode.table.body[rowIndex].length;
+                           
+                          if(tableColumnCount > 5){
+                            doc.pageOrientation = 'landscape';
+                          }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+        });
+    </script>
+</div> <!--main-->
+{% endblock %}

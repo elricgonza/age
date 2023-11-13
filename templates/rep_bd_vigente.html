@@ -1,0 +1,360 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% block js_css %}    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.4.0/css/searchPanes.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">        
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/1.4.0/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+
+    <style type="text/css">
+        table th{
+            background-color: #17a2b8;
+            color: white;
+        }
+        input[type="text"]{
+            width: 100px;
+        }
+        .nav-tabs{
+            background-color: #e4e4e4;
+            border-radius: 5px;
+        }
+        .nav-item{
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+<div class="container">
+    <br>
+    <div class="row">
+        <ul class="nav-tabs nav nav-justified">
+            <li class="nav-item active">                
+                <a href="#asientos" class="nav-link" data-toggle="tab">Asientos</a>                
+            </li>
+            <li class="nav-item">
+                <a href="#recintos" class="nav-link" data-toggle="tab">Recintos</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content container">
+        <div class="tab-pane active" id="asientos">            
+            <div class="container">                        
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="id_dtloc" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                   <th>D</th>
+                                   <th>Depto</th>
+                                   <th>P</th>
+                                   <th>Provincia</th>
+                                   <th>M</th>
+                                   <th>Municipio</th>
+                                   <th>IdLoc</th>
+                                   <th>Asiento</th>
+                                   <th>Circun</th>
+                                   <th>UrbRur</th>
+                                   <th>Estado</th>
+                                   <th>Latitud</th>
+                                   <th>Longitud</th>                           
+                                </tr>
+                            </thead>
+                            <tbody>    
+                                {% for asiento in asientos %}
+                                    <tr style="font-size: 13px;">
+                                        <td>{{ asiento[0] }}</td>
+                                        <td>{{ asiento[3] }}</td>
+                                        <td>{{ asiento[1] }}</td>
+                                        <td>{{ asiento[4] }}</td>
+                                        <td>{{ asiento[2] }}</td>
+                                        <td>{{ asiento[5] }}</td>
+                                        <td>{{ asiento[6] }}</td>
+                                        <td>{{ asiento[7] }}</td>
+                                        <td>{{ asiento[9] }}</td>
+                                        <td>{{ asiento[13] }}</td>
+                                        <td>{{ asiento[15] }}</td>
+                                        <td>{{ asiento[10] }}</td>
+                                        <td>{{ asiento[11] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr style="font-size: 13px;">
+                                   <th>D</th>
+                                   <th>Depto</th>
+                                   <th>P</th>
+                                   <th>Provincia</th>
+                                   <th>M</th>
+                                   <th>Municipio</th>
+                                   <th>IdLoc</th>
+                                   <th>Asiento</th>
+                                   <th>Circun</th>
+                                   <th>UrbRur</th>
+                                   <th>Estado</th>
+                                   <th>Latitud</th>
+                                   <th>Longitud</th>                           
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="recintos">
+            <div class="container">                        
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="id_dtreci" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                    <th>D</th>
+                                    <th>Depto</th>
+                                    <th>P</th>
+                                    <th>Provincia</th>
+                                    <th>M</th>
+                                    <th>Municipio</th>
+                                    <th>IdLoc</th>
+                                    <th>Asiento</th>
+                                    <th>Reci</th>
+                                    <th>Recinto</th>
+                                    <th>Dist</th>
+                                    <th>NomDist</th>
+                                    <th>Zona</th>
+                                    <th>NomZona</th>
+                                    <th>Direccion</th>
+                                    <th>MaxMesas</th>
+                                    <th>CircunDist</th>
+                                    <th>Circun</th>
+                                    <th>latitud</th>
+                                    <th>longitud</th>
+                                    <th>TipoRecinto</th>
+                                    <th>UrbRur</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for recinto in recintos %}
+                                    <tr style="font-size: 13px;">
+                                        <td>{{ recinto[0] }}</td>
+                                        <td>{{ recinto[3] }}</td>
+                                        <td>{{ recinto[1] }}</td>
+                                        <td>{{ recinto[4] }}</td>
+                                        <td>{{ recinto[2] }}</td>
+                                        <td>{{ recinto[5] }}</td>
+                                        <td>{{ recinto[6] }}</td>
+                                        <td>{{ recinto[7] }}</td>
+                                        <td>{{ recinto[8] }}</td>
+                                        <td>{{ recinto[9] }}</td>
+                                        <td>{{ recinto[10] }}</td>
+                                        <td>{{ recinto[11] }}</td>
+                                        <td>{{ recinto[12] }}</td>
+                                        <td>{{ recinto[13] }}</td>
+                                        <td>{{ recinto[14] }}</td>
+                                        <td>{{ recinto[15] }}</td>
+                                        <td>{{ recinto[16] }}</td>
+                                        <td>{{ recinto[18] }}</td>
+                                        <td>{{ recinto[19] }}</td>
+                                        <td>{{ recinto[20] }}</td>
+                                        <td>{{ recinto[22] }}</td>
+                                        <td>{{ recinto[24] }}</td>
+                                        <td>{{ recinto[26] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr style="font-size: 13px;">
+                                    <th>D</th>
+                                    <th>Depto</th>
+                                    <th>P</th>
+                                    <th>Provincia</th>
+                                    <th>M</th>
+                                    <th>Municipio</th>
+                                    <th>IdLoc</th>
+                                    <th>Asiento</th>
+                                    <th>Reci</th>
+                                    <th>Recinto</th>
+                                    <th>Dist</th>
+                                    <th>NomDist</th>
+                                    <th>Zona</th>
+                                    <th>NomZona</th>
+                                    <th>Direccion</th>
+                                    <th>MaxMesas</th>
+                                    <th>CircunDist</th>
+                                    <th>Circun</th>
+                                    <th>latitud</th>
+                                    <th>longitud</th>
+                                    <th>TipoRecinto</th>
+                                    <th>UrbRur</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    <script>
+        $(document).ready(function() {
+            $('#id_dtloc').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json',
+                    searchPanes: {
+                        "clearMessage": "Borrar-todo",
+                        "collapse": {
+                            "0": "Paneles de búsqueda",
+                            "_": "Paneles de búsqueda (%d)"
+                        },
+                        "count": "{total}",
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Sin paneles de búsqueda",
+                        "loadMessage": "Cargando paneles de búsqueda",
+                        "title": "Filtros Activos - %d"
+                    }
+                },
+                searchPanes: {
+                    columns: [1,3,5,7,8,9],
+                    layout: 'columns-6',
+                    threshold: 9
+                },
+                dom: 'PBfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0, ':visible' ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible',
+                            stripHtml: true
+                        },
+                        pageSize: 'LETTER',
+                        customize: function(doc, config) {
+                          var tableNode;
+                          for (i = 0; i < doc.content.length; ++i) {
+                            if(doc.content[i].table !== undefined){
+                              tableNode = doc.content[i];
+                              break;
+                            }
+                          }
+         
+                          var rowIndex = 0;
+                          var tableColumnCount = tableNode.table.body[rowIndex].length;
+                           
+                          if(tableColumnCount > 5){
+                            doc.pageOrientation = 'landscape';
+                          }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+            /* -----------------------------------------------------------------reci*/
+            $('#id_dtreci').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json',
+                    searchPanes: {
+                        "clearMessage": "Borrar-todo",
+                        "collapse": {
+                            "0": "Paneles de búsqueda",
+                            "_": "Paneles de búsqueda (%d)"
+                        },
+                        "count": "{total}",
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Sin paneles de búsqueda",
+                        "LoadMessage": "Cargando paneles de búsqueda",
+                        "title": "Filtros Activos - %d"
+                    }
+                },
+                searchPanes: {
+                    columns: [1,5,7,9,11,13,16,17,20, 21],
+                    layout: 'columns-5',
+                    threshold: 18
+                },
+                dom: 'PBfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0, ':visible' ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible',
+                            stripHtml: true
+                        },
+                        pageSize: 'LETTER',
+                        customize: function(doc, config) {
+                          var tableNode;
+                          for (i = 0; i < doc.content.length; ++i) {
+                            if(doc.content[i].table !== undefined){
+                              tableNode = doc.content[i];
+                              break;
+                            }
+                          }
+         
+                          var rowIndex = 0;
+                          var tableColumnCount = tableNode.table.body[rowIndex].length;
+                           
+                          if(tableColumnCount > 5){
+                            doc.pageOrientation = 'landscape';
+                          }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+
+        });
+    </script>
+
+    <br>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" onclick="pasa_jurisd_asi();" class="btn btn-outline-danger btn-md btn-block">Volver</button>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>Error!</strong> {{ error }} 
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+</div> <!--main-->
+{% endblock %}

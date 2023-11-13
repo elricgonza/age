@@ -1,11 +1,6 @@
 # Reportes
 
 class Reportes:
-    idloc = 0
-    deploc = 0
-    provloc = 0
-    secloc = 0
-    nomloc = ""
 
     def __init__(self, cx):
         self.cx = cx
@@ -79,10 +74,7 @@ class Reportes:
             self.cur.execute(s)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
 
 
     def get_rep_jurisdiccion_all(self, usrdep):
@@ -227,3 +219,53 @@ class Reportes:
             return False
         else:
             return rows
+
+
+    def view_geoasientos_nacional_ant(self, usrdep):
+        ''' Retorna datos de la vista de la bd 'Anterior', equivalente a bd vigente u oficial '''
+
+        s = "select * from GeografiaElectoral_appA.dbo.GeoAsientos_Nacional "
+
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc "
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec, IdLoc "
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
+    def view_georecintos_nacional_ant(self, usrdep):
+        ''' Retorna datos de la vista de la bd 'Anterior', equivalente a bd vigente u oficial '''
+
+        s = "select * from GeografiaElectoral_appA.dbo.GeoRecintos_Nacional "
+
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc, Reci "
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec, IdLoc, Reci "
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
+    def v_loc_nal_all(self, usrdep):
+        ''' Retorna datos de la vista de la bd 'en Proceso' '''
+
+        s = "select * from bdge.dbo.v_loc_nal_all "
+
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc "
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec, IdLoc "
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
