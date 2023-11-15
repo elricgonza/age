@@ -7,11 +7,7 @@ class LatLong:
         self.cur = cx.cursor()
 
     def get_geos(self, lat, long):
-        print('---------------------------------------------')
-        print(lat)
-        print(long)
         s = "select f_crea_geom(%s, %s) as geom"
-        print(s)
         coord = long, lat
         try: 
             self.cur.execute(s, coord)

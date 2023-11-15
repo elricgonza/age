@@ -3136,7 +3136,6 @@ def sincro_reci_list():
         return render_template('sincro_reci.html', titulo = 'Recintos Sincronizado', puede_consultar='Sincronizado - Consulta' in permisos_usr)# render a template
     else:
         return render_template('sincro_reci.html', titulo = 'Sincronizar Recintos', puede_consultar='Sincronizado - Consulta' in permisos_usr)
-""" Final Sincronizacion """
 
 
 @app.route('/paises_list', methods=['GET', 'POST'])
@@ -3801,10 +3800,16 @@ def rep_reci_habil():
         return render_template('home.html')
 
 
-@app.route('/rep_loc_all', methods=['GET', 'POST'])
+@app.route('/rep_loc_proc', methods=['GET', 'POST'])
 @login_required
-def rep_loc_all():
-    
+def rep_loc_proc():
+    ''' vista: v_loc_nal_all de bd en proceso '''
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('rep_loc_proc.html', locs=r.v_loc_nal_all(usrdep))
+    else:
+        return render_template('home.html')
+
 
 
 @app.route('/gerencial_asi', methods=['GET', 'POST'])
