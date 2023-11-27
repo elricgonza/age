@@ -254,9 +254,15 @@ class Reportes:
 
 
     def v_loc_nal_all(self, usrdep):
-        ''' Retorna datos de la vista de la bd 'en Proceso' '''
+        '''
+        Retorna datos de la vista de la bd 'en Proceso'
+        campos idem a GeoAsientos_Nacional + otros orientados para revisión 
+        '''
 
-        s = "select * from bdge.dbo.v_loc_nal_all "
+        s = "select Dep, Prov, Sec, NomDep, NomProv, NomMun, idLoc, " + \
+            " NomLoc as AsientoElectoral, TipoLocLoc, desTipoCircun, latitud, longitud, urbanoRural as idUrbanoRural, desUrbanoRural as descUrbanoRural, " + \
+            " estado as idEstado, desEstado as estado " + \
+            " from bdge.dbo.v_loc_nal_all "
 
         if usrdep != 0 :
             s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc "
@@ -267,5 +273,3 @@ class Reportes:
 
         rows = self.cur.fetchall()
         return rows
-
-
