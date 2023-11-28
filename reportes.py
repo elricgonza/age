@@ -261,7 +261,8 @@ class Reportes:
 
         s = "select Dep, Prov, Sec, NomDep, NomProv, NomMun, idLoc, " + \
             " NomLoc as AsientoElectoral, TipoLocLoc, desTipoCircun, latitud, longitud, urbanoRural as idUrbanoRural, desUrbanoRural as descUrbanoRural, " + \
-            " estado as idEstado, desEstado as estado " + \
+            " estado as idEstado, desEstado as estado, " + \
+            " usuario, desEtapa, desEstado, fechaIngreso, fechaAct " + \
             " from bdge.dbo.v_loc_nal_all "
 
         if usrdep != 0 :
