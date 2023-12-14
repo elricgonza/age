@@ -3811,6 +3811,16 @@ def rep_loc_proc():
         return render_template('home.html')
 
 
+@app.route('/rep_reci_proc', methods=['GET', 'POST'])
+@login_required
+def rep_reci_proc():
+    ''' vista: ...  de ppp bd en proceso '''
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('rep_reci_proc.html', locs=r.v_loc_nal_all(usrdep))
+    else:
+        return render_template('home.html')
+
 
 @app.route('/gerencial_asi', methods=['GET', 'POST'])
 @login_required
