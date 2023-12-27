@@ -66,16 +66,20 @@
                                     <th>TipoRecinto</th>
                                     <th>UrbRur</th>
                                     <th>Estado</th>
+                                    <th>Usuario</th>
+                                    <th>Etapa</th>
+                                    <th>FecIngr</th>
+                                    <th>FecAct</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for recinto in recintos %}
                                     <tr style="font-size: 13px;">
                                         <td>{{ recinto[0] }}</td>
-                                        <td>{{ recinto[3] }}</td>
                                         <td>{{ recinto[1] }}</td>
-                                        <td>{{ recinto[4] }}</td>
                                         <td>{{ recinto[2] }}</td>
+                                        <td>{{ recinto[3] }}</td>
+                                        <td>{{ recinto[4] }}</td>
                                         <td>{{ recinto[5] }}</td>
                                         <td>{{ recinto[6] }}</td>
                                         <td>{{ recinto[7] }}</td>
@@ -88,40 +92,21 @@
                                         <td>{{ recinto[14] }}</td>
                                         <td>{{ recinto[15] }}</td>
                                         <td>{{ recinto[16] }}</td>
+                                        <td>{{ recinto[17] }}</td>
                                         <td>{{ recinto[18] }}</td>
                                         <td>{{ recinto[19] }}</td>
                                         <td>{{ recinto[20] }}</td>
+                                        <td>{{ recinto[21] }}</td>
                                         <td>{{ recinto[22] }}</td>
+                                        <td>{{ recinto[23] }}</td>
                                         <td>{{ recinto[24] }}</td>
+                                        <td>{{ recinto[25] }}</td>
                                         <td>{{ recinto[26] }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr style="font-size: 13px;">
-                                    <th>D</th>
-                                    <th>Depto</th>
-                                    <th>P</th>
-                                    <th>Provincia</th>
-                                    <th>M</th>
-                                    <th>Municipio</th>
-                                    <th>IdLoc</th>
-                                    <th>Asiento</th>
-                                    <th>Reci</th>
-                                    <th>Recinto</th>
-                                    <th>Dist</th>
-                                    <th>NomDist</th>
-                                    <th>Zona</th>
-                                    <th>NomZona</th>
-                                    <th>Direccion</th>
-                                    <th>MaxMesas</th>
-                                    <th>CircunDist</th>
-                                    <th>Circun</th>
-                                    <th>latitud</th>
-                                    <th>longitud</th>
-                                    <th>TipoRecinto</th>
-                                    <th>UrbRur</th>
-                                    <th>Estado</th>
                                 </tr>
                             </tfoot>
                         </table>

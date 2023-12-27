@@ -274,3 +274,28 @@ class Reportes:
 
         rows = self.cur.fetchall()
         return rows
+
+
+    def v_reci_nal_all(self, usrdep):
+        '''
+        Retorna datos de la vista de la bd 'en Proceso'
+        campos idem a GeoRecintos_Nacional + otros orientados para revisión 
+        '''
+
+        s = "select Dep, NomDep, Prov, NomProv, Sec, NomMun, " + \
+            " IdLoc, NomLoc, Reci, NomReci, Dist, " + \
+            " NomDist, Zona, NomZona, Direccion, MaxMesasReci, " + \
+            " CircunDist, NombreTipoLocLoc, latitud, longitud, desTipoRecinto, " + \
+            " desUrbanoRural, desEstado, usuario, desEtapa, fechaIngreso, " + \
+            " fechaAct " + \
+            " from bdge.dbo.v_reci_nal_all "
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc, reci, dist, zona "
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec, IdLoc, reci, dist, zona "
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
