@@ -32,11 +32,11 @@ class Reciasiento:
         s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
         if usrdep != 0 :
             asie = dep, prov, secc, usrdep
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc = 68 order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc in (68, 69) order by AsientoElectoral"
             self.cur.execute(s, asie)
         else:
             asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc = 68 order by AsientoElectoral"
+            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc in (68, 69) order by AsientoElectoral"
             self.cur.execute(s, asie)
 
         rows = self.cur.fetchall()
