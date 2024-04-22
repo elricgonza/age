@@ -12,19 +12,19 @@ class Gerencial:
         self.cur = cx.cursor()
 
     def get_deptos_all(self):
-        s = "select Dep, NomDep from GeografiaElectoral_app.dbo.DEP where Dep>0 and Dep<10"             
-        self.cur.execute(s) 
+        s = "select Dep, NomDep from GeografiaElectoral_app.dbo.DEP where Dep>0 and Dep<10"
+        self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False
         else:
             return rows
-    
+
     def get_usuarios(self):
         s = "select id, usuario from [bdge].[dbo].[usuarios] order by id"
-        self.cur.execute(s) 
+        self.cur.execute(s)
         rows = self.cur.fetchall()
-                
+
         if self.cur.rowcount == 0:
             return False
         else:
@@ -62,14 +62,14 @@ class Gerencial:
 
                         if accion == '2':
                             '''Asientos Modificados'''
-                            lista = usuario, dpto, inicio, final                            
+                            lista = usuario, dpto, inicio, final
                             s = "delete from bdge.dbo.asi_mod"
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -90,7 +90,8 @@ class Gerencial:
                                 "or a.usr <> b.usr or a.idEtapa <> b.idEtapa " + \
                                 "or a.doc_idA <> b.doc_idA or a.doc_idRN <> b.doc_idRN or a.doc_idAF <> b.doc_idAF " + \
                                 "or a.doc_idAT <> b.doc_idAT or a.doc_idRNT <> b.doc_idRNT) and b.usr = %s and b.Dep = %s " + \
-                                "and Convert(char(10), b.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"                                
+                                "and Convert(char(10), b.fechaAct,23) between %d and %d order by a.Dep, a.Prov, a.Sec"
+
                             self.cur.execute(s, lista)
                             rows = self.cur.fetchall()
                             print(rows)
@@ -171,7 +172,7 @@ class Gerencial:
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -267,14 +268,14 @@ class Gerencial:
 
                         if accion == '2':
                             '''Asientos Modificados'''
-                            lista = usuario, inicio, final                            
+                            lista = usuario, inicio, final
                             s = "delete from bdge.dbo.asi_mod"
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -369,14 +370,14 @@ class Gerencial:
 
                         if accion == '2':
                             '''Asientos Modificados'''
-                            lista = inicio, final              
+                            lista = inicio, final
                             s = "delete from bdge.dbo.asi_mod"
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -479,7 +480,7 @@ class Gerencial:
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -573,14 +574,14 @@ class Gerencial:
 
                         if accion == '2':
                             '''Asientos Modificados'''
-                            lista = dpto                            
+                            lista = dpto
                             s = "delete from bdge.dbo.asi_mod"
                             try:
                                 self.cur.execute(s)
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -682,7 +683,7 @@ class Gerencial:
                                 self.cx.commit()
                             except:
                                  print("Error eliminación datos")
-                                       
+
                             s = "select a.Dep, a.Prov, a.Sec, a.NomDep, a.NomProv, a.NombreMunicipio, " + \
                                 "a.AsientoElectoral, a.TipoLocLoc, a.TipoCircunscripcion, a.PoblacionElectoral, a.PoblacionCensal, " + \
                                 "a.latitud, a.longitud, a.idEstado, a.estado, a.idUrbanoRural, a.descUrbanoRural, a.etapa, " + \
@@ -972,7 +973,7 @@ class Gerencial:
                                 return rows
                     else:
                         return False
-                else:
+                else: #especifica usuario
                     if accion != 0:
                         if accion == '1':
                             '''Recintos Nuevos'''
