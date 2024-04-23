@@ -860,6 +860,76 @@ class Gerencial:
 
 
     def get_gerencial_reci(self, inicio, final, dpto, usuario, accion):
+        v_fecha = True if (inicio != "00-00-0000" and final != "00-00-0000")  else False
+        v_dpto = True if dpto != 0 else False
+        v_usuario = True if usuario != 0 else False
+        s2 = ""
+
+        # nuevos - accion = 1
+        s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+            "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
+            "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
+            "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, et.descripcion as Etapa " + \
+            "FROM GeografiaElectoral_app.dbo.RECI a " + \
+            "LEFT OUTER JOIN GeografiaElectoral_appA.dbo.RECI b ON b.IdLocReci = a.IdLocReci and b.Reci = a.Reci " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DEP d ON l.DepLoc = d.Dep " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.PROV p ON l.ProvLoc = p.Prov AND d.Dep = p.DepProv " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.ZonaReci=z.Zona AND l.IdLoc = z.IdLocZona " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON z.DistZona=di.Dist AND l.IdLoc=di.IdLocDist " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tr ON a.tipoRecinto = tr.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
+                        "WHERE b.IdLocReci is NULL"
+
+        print('***************************************************************')
+        print("inicio, final-------------",v_fecha)
+        print(inicio)
+        print(final)
+        print("dpto--------------",v_dpto)
+        print(dpto)
+        print("usuario-----------",v_usuario)
+        print(usuario)
+        print('***************************************************************')
+
+        ''' posibles opciones seleccionadas - total 8
+            0 0 0
+            0 0 1
+            0 1 0
+            0 1 1
+            1 0 0
+            1 0 1
+            1 1 0
+            1 1 1
+        '''
+
+        # 0 0 0
+        if not v_fecha and not v_dpto and not v_usuario: pass
+        # 0 0 1
+        if not v_fecha and not v_dpto and v_usuario:
+            lista = usuario
+            s += " and a.usuario = %s"
+        # 0 1 0
+        if not v_fecha and v_dpto and not v_usuario:
+            lista = dpto
+            s += " and d.dep = %s"
+        # 0 1 1
+        if not v_fecha and v_dpto and v_usuario:
+            lista = dpto, usuario
+            s += " and d.dep = %s and a.usuario = %s"
+
+        print("----------------------------------------------------------------")
+        print(s)
+        print("----------------------------------------------------------------")
+        self.cur.execute(s, lista)
+        rows = self.cur.fetchall()
+        return rows
+
+
+    def get_gerencial_reciOLD(self, inicio, final, dpto, usuario, accion):
         if inicio != "00-00-0000" and final != "00-00-0000":
             if dpto != 0:
                 if usuario != 0: 
