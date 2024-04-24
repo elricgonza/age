@@ -863,7 +863,6 @@ class Gerencial:
         v_fecha = True if (inicio != "00-00-0000" and final != "00-00-0000")  else False
         v_dpto = True if dpto != 0 else False
         v_usuario = True if usuario != 0 else False
-        s2 = ""
 
         # nuevos - accion = 1
         s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
@@ -883,7 +882,68 @@ class Gerencial:
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tr ON a.tipoRecinto = tr.idClasif " + \
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
-                        "WHERE b.IdLocReci is NULL"
+            "WHERE b.IdLocReci is NULL"
+
+        # modificados - accion = 2
+        s2 = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+            "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
+            "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
+            "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, et.descripcion AS Etapa, " + \
+            "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
+            "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
+            "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, ll.TipoLocLoc as TipoLocLocN, " + \
+            "tcc.descripcion as TipoCircunscripcionN, dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
+            "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
+            "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, ett.descripcion AS EtapaN " + \
+            "from GeografiaElectoral_app.dbo.RECI a " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.LOC ll ON b.IdLocReci = ll.IdLoc " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DEP d ON l.DepLoc = d.Dep " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.DEP dd ON ll.DepLoc = dd.Dep " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.PROV p ON l.ProvLoc = p.Prov AND d.Dep = p.DepProv " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.PROV pp ON ll.ProvLoc = pp.Prov AND dd.Dep = pp.DepProv " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.SEC ss ON ll.SecLoc = ss.Sec AND dd.Dep = ss.DepSec AND pp.Prov = ss.ProvSec " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona AND a.IdLocReci = l.IdLoc AND a.ZonaReci = z.Zona " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.ZONA zz ON b.IdLocReci = zz.IdLocZona AND b.IdLocReci = ll.IdLoc AND b.ZonaReci = zz.Zona " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON a.IdLocReci = di.IdLocDist AND a.IdLocReci = l.IdLoc AND z.DistZona = di.Dist " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.DIST dii ON b.IdLocReci = dii.IdLocDist AND b.IdLocReci = ll.IdLoc AND zz.DistZona = dii.Dist " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS tcc ON ll.TipoLocLoc = tcc.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS ess ON b.estado = ess.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tr ON a.tipoRecinto = tr.idClasif " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS trr ON b.tipoRecinto = trr.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS ett ON b.etapa = ett.idClasif " + \
+            "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
+            "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
+            "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
+            "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
+            "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) "
+
+        # suprimidos - accion = 3
+        s3 = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+            "a.Reci, a.NomReci, di.CircunDist, l.TipoLocLoc, tc.descripcion as TipoCircuncripcion, di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
+            "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
+            "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, et.descripcion AS Etapa " + \
+            "from GeografiaElectoral_app.dbo.RECI a " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DEP d ON l.DepLoc = d.Dep " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.PROV p ON l.ProvLoc = p.Prov AND d.Dep = p.DepProv " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona and z.Zona = a.ZonaReci " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON z.IdLocZona = di.IdLocDist and z.DistZona = di.Dist " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON l.TipoLocLoc = tc.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tr ON a.tipoRecinto = tr.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
+            "WHERE (a.estado <> b.estado and a.estado in(4, 5, 82, 83))"
 
         print('***************************************************************')
         print("inicio, final-------------",v_fecha)
@@ -905,26 +965,76 @@ class Gerencial:
             1 1 0
             1 1 1
         '''
+        t = ()  # parámetros query
 
         # 0 0 0
-        if not v_fecha and not v_dpto and not v_usuario: pass
+        if not v_fecha and not v_dpto and not v_usuario:
+            if accion == '1':
+                pass
+            elif accion == '2':
+                s = s2
+            elif accion == '3':
+                s = s3
+            else:
+                pass
         # 0 0 1
         if not v_fecha and not v_dpto and v_usuario:
-            lista = usuario
-            s += " and a.usuario = %s"
+            t = usuario
+            cond =  " and a.usuario = %s"
+            if accion == '1':
+                s += cond
+            elif accion == '2':
+                s = s2 + cond
+            elif accion == '3':
+                s = s3 + cond
+            else:
+                pass
+
         # 0 1 0
         if not v_fecha and v_dpto and not v_usuario:
-            lista = dpto
-            s += " and d.dep = %s"
+            t = dpto
+            cond = " and d.dep = %s"
+            if accion == '1':
+                s += cond
+            elif accion == '2':
+                s = s2 + cond
+            elif accion == '3':
+                s = s3 + cond
+            else:
+                pass
+
+
         # 0 1 1
         if not v_fecha and v_dpto and v_usuario:
-            lista = dpto, usuario
+            t = dpto, usuario
             s += " and d.dep = %s and a.usuario = %s"
+
+        # 1 0 0
+        if v_fecha and not v_dpto and not v_usuario:
+            t = inicio, final
+            s += " and Convert(char(10), a.fechaAct,23) between %d and %d"
+
+        # 1 0 1
+        if v_fecha and not v_dpto and v_usuario:
+            t = inicio, final, usuario
+            s += " and Convert(char(10), a.fechaAct,23) between %d and %d and a.usuario = %s"
+
+        # 1 1 0
+        if v_fecha and v_dpto and not v_usuario:
+            t = inicio, final, dpto
+            s += " and Convert(char(10), a.fechaAct,23) between %d and %d and d.dep = %s"
+
+        # 1 1 1
+        if v_fecha and v_dpto and v_usuario:
+            t = inicio, final, dpto, usuario
+            s += " and Convert(char(10), a.fechaAct,23) between %d and %d and d.dep = %s and a.usuario = %s"
+
+
 
         print("----------------------------------------------------------------")
         print(s)
         print("----------------------------------------------------------------")
-        self.cur.execute(s, lista)
+        self.cur.execute(s, t)
         rows = self.cur.fetchall()
         return rows
 
