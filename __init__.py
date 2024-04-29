@@ -3894,6 +3894,14 @@ def gerencial_reci():
         return render_template('gerencial_reci.html', puede_consultar='Gerencial - Consulta' in permisos_usr)
     else:
         if request.method == 'POST':
+            if request.form['accion'] == '0':    
+                #return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
+                return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(),
+                                       load=False, puede_consultar='Gerencial - Consulta' in permisos_usr,
+                                       error = 'Previamente debe seleccionar la opción LISTADO DE CAMBIOS')
+            else:
+                accion = request.form['accion']
+
             if request.form['limpiar'] == 'limpiando':
                 inicio = '00-00-0000'
                 final = '00-00-0000'
@@ -3929,11 +3937,6 @@ def gerencial_reci():
                         user = request.form['usuario']
                         g.id_usuario(user)
                         usuario = g.usuario
-
-                if request.form['accion'] == 0:    
-                    accion = 0
-                else:
-                    accion = request.form['accion']
 
                 rows = g.get_gerencial_reci(inicio, final, depto, usuario, accion)
                 if rows:

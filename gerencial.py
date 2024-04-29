@@ -1,6 +1,5 @@
-# Reportes proceso actualización
-
 class Gerencial:
+    ''' Reportes de asientos/recintos (tablas) actualizados '''
 
     def __init__(self, cx):
         self.cx = cx
@@ -1087,9 +1086,8 @@ class Gerencial:
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
             "WHERE (a.estado <> b.estado and a.estado in(4, 5, 82, 83))"
 
-
         ''' posibles opciones seleccionadas - total 8
-            sin considerar la variable -accion- que debe  
+            NO considera la variable -accion- que debe estar seleccionada para cualquier consulta
             0 0 0
             0 0 1
             0 1 0
