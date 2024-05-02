@@ -1208,7 +1208,7 @@ def recinto(idreci, idlocreci):
 
     if request.method == 'POST':
         fa = request.form['fechaAct'][:-7]
-        """Valida si el campo docActF esta desactivado"""
+        # Valida si el campo docActF esta desactivado
         if request.form.get('docActF') == None:
             docActF = 0
         else:
@@ -1222,17 +1222,17 @@ def recinto(idreci, idlocreci):
         else:
             docTec = request.form['docTec']
 
-        """Valida si el campo ruereci esta desactivado"""
+        # Valida si el campo ruereci esta desactivado
         if request.form.get('ruereci') == None:
             ruereci = 0
         else:
             ruereci = request.form['ruereci']
-        """Valida si el campo edireci esta desactivado"""
+        # Valida si el campo edireci esta desactivado
         if request.form.get('edireci') == None:
             edireci = 0
         else:
             edireci = request.form['edireci']
-        """Valida si el campo depenreci esta desactivado"""
+        # Valida si el campo depenreci esta desactivado
         if request.form.get('depenreci') == None:
             depenreci = 0
         else:
@@ -1269,15 +1269,15 @@ def recinto(idreci, idlocreci):
                 request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
-    
+                request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci
+
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rc.get_estados(usrdep), etapas=rc.get_etapas_auth(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
             else:
                 rc.upd_recinto(row_to_upd)
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)            
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
                 rows = rc.get_reci_uninom_mixto(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
