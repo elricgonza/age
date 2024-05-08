@@ -586,9 +586,16 @@
       return true;
     }
 
-
     // Below Function Executes On Form Submit
     function Validation(f) {
+        if (f.tiporeci.value == '10') {
+            invalidos = ['1','2','6','79','80','84']; // Estados: Habilitado/Rehabilitado/saturado TED/TSE
+                if (invalidos.includes(f.estado.value)) {
+                    alert('Si el TIPO DE RECINTO es: Cárcel, para su habilitación el ESTADO debe ser: Restringido...');
+                    return false;
+                }
+        } 
+
         if (f.tiporeci.value == '') {
             alert('Debe especificar tipo de Recinto...');
             return false;
@@ -599,13 +606,7 @@
                 return false;    
             }
         } 
-        if (f.tiporeci.value == '10') { // Cárcel
-            invalidos = [1, 2, 6, 79, 80, 84];  // Estados: Habilitado/Rehabilitado/saturado TED/TSE
-            if (invalidos.includes(f.estado.value) {
-                alert('Si el TIPO DE RECINTO es: Cárcel, para su habilitación el ESTADO debe ser: Restringido...');
-                return false;
-            }
-        }
+
         return true;
     }
 
