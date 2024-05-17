@@ -143,6 +143,7 @@ def user_loader(txtusr):
         usrtipo = user.tipo_usr
         usrauth = user.authenticated
         permisos_usr = user.get_permisos_name(usr)
+        print(permisos_usr) #ppp
         return user
 
 
@@ -1184,8 +1185,10 @@ def recintos_list():
     rows = rc.get_reci_uninom_mixto(usrdep)
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
-                                    puede_editar='Recintos - Edición' in permisos_usr
+            return render_template('recintos_list.html', recintos=rows, \
+                                    puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                    puede_editar='Recintos - Edición' in permisos_usr, \
+                                    puede_consultar='Recintos - Consulta' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
@@ -2238,7 +2241,7 @@ def exterior_reci(idreci, idlocreci):
                 0, 0, depenreci, \
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], idlocreci, idreci    
-    
+
             exr.upd_recinto_ext(row_to_upd)
             d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF)            
 
@@ -3659,7 +3662,7 @@ def recinto_img(idloc, reci, nomreci):
         img_ids = list(img_ids_[0].split(","))      # list ok
 
         uploaded_files = request.files.getlist("filelist")
-        
+
         for n in range(len(img_ids)):
             f  = uploaded_files[n]
             if f.filename != '':
@@ -3710,7 +3713,7 @@ def reciespe_img(idloc, reci, nomreci):
         img_ids = list(img_ids_[0].split(","))      # list ok
 
         uploaded_files = request.files.getlist("filelist")
-        
+
         for n in range(len(img_ids)):
             f  = uploaded_files[n]
             if f.filename != '':
