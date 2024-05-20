@@ -1277,7 +1277,7 @@ def recinto(idreci, idlocreci):
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
                 return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas_auth(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
             else:
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
@@ -1300,10 +1300,10 @@ def recinto(idreci, idlocreci):
 
                 if usrauth == 3:    #tmpauth3 - get_etapas_auth
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas_auth(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
                 else:
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
     # New from <recintos_list>
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrtipo), trecintos=rc.get_tiporecintos(), 

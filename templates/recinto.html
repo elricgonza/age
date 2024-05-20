@@ -18,7 +18,7 @@
 {% endif %}
 
 <div class="container">
-    <h2 class="text-center text-blue pt-5" >Recinto Electoral - Uninominal-c</h2>
+    <h2 class="text-center text-blue pt-5" >Recinto Electoral - Uninominal-20m</h2>
     <br>
     <form class="needs-validation" action="{{ url_for('recinto', idreci = rc.reci, idlocreci = rc.idlocreci) }}" novalidate method='POST' onsubmit="return Validation(this)" name="form">
         <div class="form-row">
@@ -742,6 +742,9 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="submit" id="isubmitaceptar" class="btn btn-outline-success btn-md btn-block" 
+                            {% if not puede_editar %}
+                                disabled
+                            {% endif %}
                         >Aceptar</button>
                     </div>
                 </div> <!--row-->

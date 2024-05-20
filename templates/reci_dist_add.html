@@ -115,6 +115,11 @@
                             {% else %}
                                 enabled
                             {% endif %}
+
+                            {% if not puede_editar %}
+                                disabled
+                            {% endif %}
+
                             >Aceptar</button>
                         </div>
                     </div> <!--row-->
