@@ -1306,7 +1306,7 @@ def recinto(idreci, idlocreci):
                                        estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo), dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
     # New from <recintos_list>
-    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados(usrdep), etapas=rc.get_etapas(usrtipo), trecintos=rc.get_tiporecintos(), 
+    return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p, estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo), trecintos=rc.get_tiporecintos(),
                             dependencias=rc.get_dependencias(), titulo='*-*', tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 
@@ -1483,14 +1483,20 @@ def reci_espec_list():
     rows = rce.get_reci_espec(usrdep)
     if rows:
         if 'Especiales - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
-                                    puede_editar='Especiales - Edición' in permisos_usr
+            return render_template('reci_espec_list.html', recintos=rows, \
+                                   puede_adicionar='Especiales - Adición' in permisos_usr, \
+                                   puede_editar='Especiales - Edición' in permisos_usr, \
+                                   puede_consultar='Especiales - Consulta' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos especiales...')
-        return render_template('reci_espec_list.html', puede_adicionar='Especiales - Adición' in permisos_usr)
+        return render_template('reci_espec_list.html', \
+                               puede_adicionar='Especiales - Adición' in permisos_usr, \
+                               puede_editar='Especiales - Edición' in permisos_usr, \
+                               puede_consultar='Especiales - Consulta' in permisos_usr
+                              ) # render a template
 
 
 @app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -1572,7 +1578,7 @@ def reciespe(idreci, idlocreci):
             if usrauth == 3 and rce.upd_reci_esp_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
                 return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
+                                       estados=rce.get_estados_reci(usrtipo), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
             else:    
                 rce.upd_recinto(row_to_upd)
@@ -1595,14 +1601,14 @@ def reciespe(idreci, idlocreci):
 
                 if usrauth == 3:  #tmpauth3 - get_etapas_auth
                     return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                           estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
+                                           estados=rce.get_estados_reci(usrtipo), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(),
                                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
                 else:
                     return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                           estados=rce.get_estados(usrdep), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), trecintos=rce.get_tiporecintos(), 
+                                           estados=rce.get_estados_reci(usrtipo), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), trecintos=rce.get_tiporecintos(),
                                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
     # New from <recintos_list>
-    return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados(usrdep), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
+    return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados_reci(usrtipo), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
                            dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
 

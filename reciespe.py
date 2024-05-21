@@ -306,7 +306,7 @@ class Reciespe:
         row = self.cur.fetchone()
         return row[0]
 
-
+    '''
     def get_estados(self, usrdep):
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif]"
         if usrdep != 0 :
@@ -321,6 +321,21 @@ class Reciespe:
             return False
         else:
             return rows
+    '''
+
+    def get_estados_reci(self, usrtipo):
+        ''' Obtiene estados en función del tipo de usr '''
+
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif]"
+
+        if usrtipo == 116: # dep
+            s = s + " where clasifGrupoId=1 and idClasif in (1, 2, 3, 4, 5, 6)" # estados TED
+        else:
+            s = s + " where clasifGrupoId=1"
+        self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
 
 
     def get_tiporecintos(self):
@@ -358,9 +373,9 @@ class Reciespe:
 
         if usrtipo == 116: # dep
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrtipo == 117: # nal
+        elif usrtipo in (117, 118): # nal, adm
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
-        elif usrtipo == 119: # jefat
+        elif usrtipo in (119, 124): # jefat, consulta
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
 
         self.cur.execute(s)

@@ -751,6 +751,9 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="submit" id="isubmitaceptar" class="btn btn-outline-success btn-md btn-block" 
+                            {% if not puede_editar %}
+                                disabled
+                            {% endif %}
                         >Aceptar</button>
                     </div>
                 </div> <!--row-->

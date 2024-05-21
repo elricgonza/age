@@ -281,23 +281,6 @@ class Recintos:
         return row[0]
 
 
-    def get_estados(self, usrdep):
-        '''ppp reemplaz'''
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif]"
-        if usrdep != 0 :
-            s = s + " where clasifGrupoId=1 and idClasif in (1, 2, 3, 4, 5, 6)"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " where clasifGrupoId=1"
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-
-
     def get_estados_reci(self, usrtipo):
         ''' Obtiene estados en función del tipo de usr '''
 
@@ -360,7 +343,7 @@ class Recintos:
             return rows
 
 
-    def get_recintos_all1(self, usrdep):        
+    def get_recintos_all1(self, usrdep):
         s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, Reci, NombreRecinto, doc_act, fecha_doc_act, " + \
             "cod_dist, NomDist, cod_zona, NomZona, Direccion, CircunDist, tipoCircunscripcion, tipoRecinto, etapa, estado, latitud, longitud, fechaIngreso, " + \
             "fechaAct, usuario " + \
@@ -381,4 +364,3 @@ class Recintos:
 
     def __str__(self):
         return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
-    
