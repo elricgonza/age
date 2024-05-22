@@ -54,7 +54,7 @@
                         <td>{{ zona[4] }}</td>
                         <td>{{ zona[5] }}</td>
                         <td>
-                            {% if puede_editar %}
+                            {% if puede_editar or puede_consultar %}
                                 <a href={{ url_for( 'zona_adm', pidloczona=zona[0], pzona=zona[6]) }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>

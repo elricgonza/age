@@ -52,7 +52,7 @@
                         <td>{{ dist[3] }}</td>
                         <td>{{ dist[4] }}</td>
                         <td>
-                            {% if puede_editar %}
+                            {% if puede_editar or puede_consultar %}
                                 <a href={{ url_for('dist_adm', pidloc = dist[0], pdist = dist[2], pnalext='nal') }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>

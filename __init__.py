@@ -1660,7 +1660,8 @@ def distritos_list():
         if 'Distritos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('distritos_list.html', dists=rows, 
                                     puede_adicionar='Distritos - Adición' in permisos_usr, \
-                                    puede_editar='Distritos - Edición' in permisos_usr
+                                    puede_editar='Distritos - Edición' in permisos_usr, \
+                                    puede_consultar='Distritos - Consulta' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
@@ -1740,7 +1741,7 @@ def dist_adm(pidloc, pdist, pnalext):
                     da.upd_dist(idloc, dist, circundist, nomdist, fa, usr)
                     dook = 'Distrito Actualizado...'
                     return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
-                
+
             rows = da.get_dist_all(usrdep)
             return render_template('distritos_list.html', dists=rows, \
                                     puede_adicionar='Distritos - Adición' in permisos_usr, \
@@ -1886,7 +1887,8 @@ def zonas_list():
         if 'Zonas - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('zonas_list.html', zonas=rows, \
                                     puede_adicionar='Zonas - Adición' in permisos_usr, \
-                                    puede_editar='Zonas - Edición' in permisos_usr
+                                    puede_editar='Zonas - Edición' in permisos_usr, \
+                                    puede_consultar='Zonas - Consulta' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
