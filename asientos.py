@@ -398,14 +398,24 @@ class Asientos:
             return rows
 
 
+    def get_estados_asi(self, usrtipo):  #ppp test   WHAT  USR DEP TIENE ESTADOS  HABILITADO TSE, etc, etc, ...?????
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=3"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        if self.cur.rowcount == 0:
+            return False
+        else:
+            return rows
+
+
     def get_etapas(self, usrtipo):
         ''' Obtiene etapas en función del tipo de usuario '''
 
         if usrtipo == 116: # dep
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrtipo == 117: # nal
+        elif usrtipo in (117, 118): # nal, adm
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
-        elif usrtipo == 119: # jefat
+        elif usrtipo in (119, 124): # jefat, consulta
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
 
         self.cur.execute(s)

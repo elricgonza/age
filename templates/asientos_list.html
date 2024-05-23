@@ -56,27 +56,26 @@
                             <td>{{ asiento[9] }}</td>
                             <td>{{ asiento[10] }}</td>
                             <td>
-                                {% if puede_editar %}
+                                {% if puede_editar or puede_consultar %}
                                     <a href={{ url_for( 'asiento', idloc=asiento[0]) }}><span class="fas fa-edit"></span></a>
                                 {% else %}
                                     <span class="fas fa-edit" style="color: grey"></span>
                                 {% endif%}
                             </td>
                             <td>
-                                {% if puede_editar %}
+                                {% if puede_editar or puede_consultar %}
                                     <a href={{ url_for( 'asiento_img', idloc=asiento[0], nomloc=asiento[4] ) }}><span class="fas fa-camera"></span></a>
                                 {% else %}
                                     <span class="fas fa-camera" style="color: grey"></span>
                                 {% endif%}
                             </td>
                             <td>
-                                {% if puede_editar %}
+                                {% if puede_editar or puede_consultar %}
                                     <a href={{ url_for( 'asiento_indicadores', idloc=asiento[0], nomloc=asiento[4]) }}><span class="fas fa-chart-line"></span></a>
                                 {% else %}
                                     <span class="fas fa-chart-line" style="color: grey"></span>
                                 {% endif%}
                             </td>
-
                         </tr>
                         {% endfor %}
                     </tbody>
