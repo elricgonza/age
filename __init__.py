@@ -681,7 +681,8 @@ def asientos_list():
         if 'Asientos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
                                     puede_editar='Asientos - Edición' in permisos_usr, \
-                                    puede_eliminar='Asientos - Eliminación' in permisos_usr
+                                    puede_eliminar='Asientos - Eliminación' in permisos_usr, \
+                                    puede_consultar='Asientos - Consulta' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
