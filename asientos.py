@@ -388,7 +388,7 @@ class Asientos:
         else:
             return rows
 
-    def get_estados(self):
+    def get_estados(self): #tmp reemplaz ppp
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=3"
         self.cur.execute(s)
         rows = self.cur.fetchall()
@@ -396,6 +396,21 @@ class Asientos:
             return False
         else:
             return rows
+
+
+    def get_estados_asi(self, usrtipo):
+        ''' Obtiene estados en función del tipo de usr '''
+
+        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif]"
+
+        if usrtipo == 116: # dep
+            s += " where clasifGrupoId=3 and idClasif in (16, 17, 18, 19)" # estados TED
+        else:
+            s += " where clasifGrupoId=3"
+        self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
 
 
     def get_estados_asi(self, usrtipo):  #ppp test   WHAT  USR DEP TIENE ESTADOS  HABILITADO TSE, etc, etc, ...?????

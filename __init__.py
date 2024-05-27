@@ -793,7 +793,7 @@ def asiento(idloc):
 
             if usrauth == 3 and a.upd_asi_noauth(row_to_upd):   #tmpauth3 valida act datos no autoriz. show msg si err
                 error = "Intenta actualizar datos NO autorizados."
-                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas_auth(usrdep, usrtipo), \
+                return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas_auth(usrdep, usrtipo), \
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep)
                                       )
             else:
@@ -801,9 +801,11 @@ def asiento(idloc):
                 d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
                 rows = a.get_loc_all(usrdep)
-                return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
+                return render_template('asientos_list.html', asientos=rows, \
+                                        puede_adicionar='Asientos - Adición' in permisos_usr, \
                                         puede_editar='Asientos - Edición' in permisos_usr, \
-                                        puede_eliminar='Asientos - Eliminación' in permisos_usr
+                                        puede_eliminar='Asientos - Eliminación' in permisos_usr, \
+                                        puede_consultar='Asientos - Consulta' \
                                       ) # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
@@ -816,13 +818,13 @@ def asiento(idloc):
                     a.usuario = usr
 
                 if usrauth == 3:  #tmpauth3 
-                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas_auth(usrdep, usrtipo), 
+                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas_auth(usrdep, usrtipo), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
                 else:
-                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrtipo), 
+                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas(usrtipo), 
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados(), etapas=a.get_etapas(usrtipo), 
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas(usrtipo), 
                            tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
