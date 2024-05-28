@@ -388,6 +388,7 @@ class Asientos:
         else:
             return rows
 
+    '''
     def get_estados(self): #tmp reemplaz ppp
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=3"
         self.cur.execute(s)
@@ -396,6 +397,7 @@ class Asientos:
             return False
         else:
             return rows
+    '''
 
 
     def get_estados_asi(self, usrtipo):
@@ -403,24 +405,14 @@ class Asientos:
 
         s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif]"
 
-        if usrtipo == 116: # dep
+        if usrtipo == 116: # usuario dep
             s += " where clasifGrupoId=3 and idClasif in (16, 17, 18, 19)" # estados TED
         else:
             s += " where clasifGrupoId=3"
-        self.cur.execute(s)
 
+        self.cur.execute(s)
         rows = self.cur.fetchall()
         return rows
-
-
-    def get_estados_asi(self, usrtipo):  #ppp test   WHAT  USR DEP TIENE ESTADOS  HABILITADO TSE, etc, etc, ...?????
-        s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=3"
-        self.cur.execute(s)
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
 
 
     def get_etapas(self, usrtipo):

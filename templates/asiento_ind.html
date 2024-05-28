@@ -20,9 +20,11 @@
             <div class="col-xs-12 col-sm-6 col-md-8">
                 <h5>Asiento: {{ nomloc }}</h5>
             </div>
+            {% if puede_editar %}
             <div class="col-xs-6 col-md-4">
                 <button type="button" id="btnNuevo" class="btn btn-light btn-md btn-block" data-toggle="modal" onclick="ins_indicador();"><span class="fas fa-chart-line"></span>Adicionar Indicador</button>
             </div>
+            {% endif %}
         </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}        
@@ -57,10 +59,22 @@
                         <td>{{ ctgoria[4] }}</td>
                         <td>{{ ctgoria[5] }}</td>                    
                         <td>
-                            <button type="button" id="btnEditar" class="btn btn-light btn-md"data-toggle="modal" onclick="edi_indicador('{{ctgoria[1]}}', '{{ctgoria[3]}}', '{{ctgoria[5]}}', '{{ctgoria[6]}}', '{{ctgoria[7]}}', '{{ctgoria[8]}}', '{{ctgoria[9]}}');"><span class="fas fa-edit"></span></button>
+                            <button type="button" id="btnEditar" class="btn btn-light btn-md" data-toggle="modal" 
+                                {% if not puede_editar %}
+                                    disabled
+                                {% endif %}
+                                onclick="edi_indicador('{{ctgoria[1]}}', '{{ctgoria[3]}}', '{{ctgoria[5]}}', '{{ctgoria[6]}}', '{{ctgoria[7]}}', '{{ctgoria[8]}}', '{{ctgoria[9]}}');">
+                                <span class="fas fa-edit"></span>
+                            </button>
                         </td>
                         <td>           
-                            <button type="button" id="btnEliminar" class="btn btn-light btn-md" data-toggle="modal" onclick="del_indicador('{{ctgoria[1]}}', '{{ctgoria[3]}}', '{{ctgoria[5]}}', '{{ctgoria[6]}}', '{{ctgoria[7]}}', '{{ctgoria[8]}}', '{{ctgoria[9]}}');"><i class="far fa-trash-alt"></i></button>    
+                            <button type="button" id="btnEliminar" class="btn btn-light btn-md" data-toggle="modal" 
+                                {% if not puede_editar %}
+                                    disabled
+                                {% endif %}
+                                onclick="del_indicador('{{ctgoria[1]}}', '{{ctgoria[3]}}', '{{ctgoria[5]}}', '{{ctgoria[6]}}', '{{ctgoria[7]}}', '{{ctgoria[8]}}', '{{ctgoria[9]}}');">
+                                <i class="far fa-trash-alt"></i>
+                            </button>    
                         </td>
                     </tr>
                     {% set count.a = count.a + 1 %}

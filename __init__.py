@@ -818,13 +818,13 @@ def asiento(idloc):
                     a.usuario = usr
 
                 if usrauth == 3:  #tmpauth3 
-                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas_auth(usrdep, usrtipo), 
+                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas_auth(usrdep, usrtipo),
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
                 else:
-                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas(usrtipo), 
+                    return render_template('asiento.html', error=error, a=a, load=True, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas(usrtipo),
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
     # New
-    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas(usrtipo), 
+    return render_template('asiento.html', error=error, a=a, load=False, puede_editar=p, estados=a.get_estados_asi(usrtipo), etapas=a.get_etapas(usrtipo),
                            tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
