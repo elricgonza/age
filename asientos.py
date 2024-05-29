@@ -148,7 +148,7 @@ class Asientos:
             print("asiento adicionado...") 
         except:
             print("Error - actualización de asiento...")
-    
+
 
     def upd_asiento(self, asiento):
         '''
@@ -271,7 +271,7 @@ class Asientos:
         vdif = False
 
         if self.nomloc != row_to_upd[0]:
-            print('nom dif -tmpauth3')
+            #print('nom dif -tmpauth3')
             vdif = True
         '''
         if self.poblacionloc != int(row_to_upd[1]):
@@ -286,21 +286,21 @@ class Asientos:
             vdif = True
         '''
         if (self.tipolocloc.strip() != row_to_upd[4]):
-            print('tipolocloc- dif -tmpauth3')
+            #print('tipolocloc- dif -tmpauth3')
             vdif = True
         if (str(self.latitud) != row_to_upd[5]):
-            print('lat - dif -tmpauth3')
-            print(str(self.latitud))
+            #print('lat - dif -tmpauth3')
+            #print(str(self.latitud))
             vdif = True
         if (str(self.longitud) != row_to_upd[6]):
-            print('long - dif -tmpauth3')
+            #print('long - dif -tmpauth3')
             vdif = True
         if (str(self.estado) != row_to_upd[7]):
-            print('estado - dif -tmpauth3')
+            #print('estado - dif -tmpauth3')
             vdif = True
         #a.circunConsulado
         if str(self.etapa) != row_to_upd[9]:
-            print('etapa - dif -tmpauth3')
+            #print('etapa - dif -tmpauth3')
             vdif = True
         '''
         if (self.obsUbicacion != row_to_upd[10]):
@@ -329,7 +329,7 @@ class Asientos:
             vdif = True
         '''
         if (str(self.urural) != row_to_upd[18]):
-            print('urural dif -tmpauth3')
+            #print('urural dif -tmpauth3')
             vdif = True
         '''
         if (str(self.doc_idAT) != row_to_upd[19]):
@@ -350,7 +350,7 @@ class Asientos:
                     latitud, longitud, \
                     estado, circunconsulado, etapa, obsUbicacion, \
                     obs, fechaIngreso, fechaAct, usuario, docAct, docRspNal):
-        
+
         asiento = deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, tipolocloc, \
@@ -372,7 +372,8 @@ class Asientos:
         except Exception as e:
             print("Error - actualización de Asiento...")
             print(e)
-    
+
+
     def get_next_idloc(self):
         self.cur.execute("select max(idloc) + 1 from GeografiaElectoral_app.dbo.loc")
         row = self.cur.fetchone()
