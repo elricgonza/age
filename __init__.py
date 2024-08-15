@@ -2919,6 +2919,27 @@ def jurisd_asi_list():
                               )  # render a template
 
 
+@app.route('/jurisd_asi_list_misma_cir', methods=['GET', 'POST'])
+@login_required
+def jurisd_asi_list_misma_cir():
+    ''' Lista asientos para cambio de Jurisdicción de un asiento a otro municipio con la misma circun '''
+
+    ja = jua.JurisdAsi(cxms)
+    rows = ja.get_jurisd_asi_all(usrdep)
+    if rows:
+        if 'Jurisd_asi - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('jurisd_asi_list_misma_cir.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
+                                    puede_editar='Jurisd_asi - Edición' in permisos_usr
+                                  )  # render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin Asientos...')
+        return render_template('jurisd_asi_list_misma_cir.html', puede_adicionar='Juriss_asi - Adición' in permisos_usr, \
+                                puede_editar='Jurisd_asi - Edición' in permisos_usr
+                              )  # render a template
+
+
 @app.route('/jurisd_asi/<idloc>', methods=['GET', 'POST'])
 @login_required
 def jurisd_asi(idloc):
@@ -2983,6 +3004,76 @@ def jurisd_asi(idloc):
 
     rows = ja.get_jurisd_asi_all(usrdep)
     return render_template('jurisd_asi_list.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
+                            puede_editar='Jurisd_asi - Edición' in permisos_usr
+                          )  # render a template
+
+
+@app.route('/jurisd_asi_misma_cir/<idloc>', methods=['GET', 'POST'])
+@login_required
+def jurisd_asi_misma_cir(idloc):
+    ''' Habilita cambio de Jurisdicción de un asiento a otro municipio con la misma circun
+        -sólo actualizará tablas: LOC y bdge.dbo.actJurisd (NO requiere homologación)
+    '''
+
+    ja = jua.JurisdAsi(cxms)
+    rces = recies.Reciespeciales(cxms)
+    d = docu.Documentos(cxms)
+    error = None
+
+    if request.method == 'POST':
+        f_ingreso = str(datetime.datetime.now())[:-7]
+        f_actual = str(datetime.datetime.now())[:-7]
+        dep2 = request.form['deploc']
+        prov2 = request.form['provloc']
+        sec2 = request.form['secloc']
+        ja.get_dpto(dep2)
+        departamento2 = ja.nomdep
+        ja.get_prov(dep2, prov2)
+        provincia2 = ja.nomprov
+        ja.get_sec(dep2, prov2, sec2)
+        municipio2 = ja.nomsec
+        circun = request.form['circu']
+        zonade = request.form['zonade']
+        idocact = request.form['docact']
+        ja.get_zonadist_idloc(zonade, circun)
+        if ja.add_llenado_recintos(idloc, dep2, prov2, sec2, departamento2, provincia2, municipio2, ja.dist, ja.zona, ja.nomdist, \
+                                   ja.nomzona, ja.circun, f_ingreso, f_actual, usr, idocact):
+            #Actualiza el asiento y sus recintos
+            ja.upd_asiento_juriasi(idloc, dep2, prov2, sec2, idocact, usr)
+            ja.upd_recinto_juriasi(idloc, ja.zona)
+            ja.verifica_circun(idloc)
+            if ja.circun_a != ja.circun:
+                ja.upd_dist_juriasi_usr(idloc, ja.dist, ja.circun, usr)
+            else:
+                ja.upd_dist_juriasi(idloc, ja.dist, ja.circun)
+        else:
+            flash("El Asiento No Tiene Recintos", 'alert-warning')
+            dptos=rces.get_depaespeciales_all(usrdep)
+            provincias=rces.get_provespeciales_all(usrdep)
+            municipios=rces.get_muniespeciales_all(usrdep)
+            if ja.get_jurisd_asi_idloc(idloc):
+                rows = ja.get_circuns_all(usrdep)
+                zonasd = ja.get_zonasd_all(usrdep)
+            
+            if ja.get_jurisd_asi_idloc_idjurisd(idloc): # Modificar Asiento
+                return render_template('jurisd_asi_misma_cir.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
+            else:
+                return render_template('jurisd_asi_misma_cir.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')
+    else:
+        dptos=rces.get_depaespeciales_all(usrdep)
+        provincias=rces.get_provespeciales_all(usrdep)
+        municipios=rces.get_muniespeciales_all(usrdep)
+        if ja.get_jurisd_asi_idloc(idloc):
+            rows = ja.get_circuns_all(usrdep)
+            zonasd = ja.get_zonasd_all(usrdep)
+        
+        if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
+            return render_template('jurisd_asi_misma_cir.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
+        else:
+            return render_template('jurisd_asi_misma_cir.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=False, titulo='Asiento a Actualizar Jurisdicción', boton='Asignar')    
+
+    rows = ja.get_jurisd_asi_all(usrdep)
+    return render_template('jurisd_asi_list_misma_cir.html', jurisd_asis=rows, puede_adicionar='Jurisd_asi - Adición' in permisos_usr, \
                             puede_editar='Jurisd_asi - Edición' in permisos_usr
                           )  # render a template
 
