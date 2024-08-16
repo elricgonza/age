@@ -197,7 +197,8 @@
                     </div>
                     <div class="col-lg-1">
                         <label for="circu" class="col-form-label">Circuns:</label>
-                        <select id="icircu" name="circu" class="form-control" onchange="cargarjuri_a(this.value, 3)" required>
+                        <select id="icircu" name="circu" class="form-control" onchange="cargarjuri_a(this.value, 3)">
+                            <!--<select id="icircu" name="circu" class="form-control" onchange="cargarjuri_a(this.value, 3)" required>-->
                             <option></option>
                             {% for circun in circuns %}
                                 {% if ja.deploc == circun[0] and ja.provloc == circun[1] and ja.secloc == circun[2] %}
@@ -217,7 +218,8 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label for="zonade" class="col-form-label">Lista de Zonas:</label>
-                            <select id="izonade" name="zonade" class="form-control" required>
+                            <select id="izonade" name="zonade" class="form-control">
+                                <!--<select id="izonade" name="zonade" class="form-control" required>-->
                                 {% for zonad in zonasd %}
                                     {% if ja.deploc == zonad[4] and ja.provloc == zonad[5] and ja.secloc == zonad[6] %}
                                         {% if ban %}
@@ -239,7 +241,8 @@
                     <div class="col-lg-5">
                         <div class="form-group">
                             <label for="docact" class="col-form-label">Doc. Actualización:</label>
-                            <select id="idocact" name="docact" class="form-control" required>                          
+                            <select id="idocact" name="docact" class="form-control">
+                                <!--<select id="idocact" name="docact" class="form-control" required>-->
                                 <option></option>
                                 {% for tpdfA in tpdfsA %}
                                     {% if load and ja.doc_idA==tpdfA[0] %}                                  

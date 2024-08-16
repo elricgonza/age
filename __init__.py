@@ -3081,6 +3081,8 @@ def jurisd_asi_misma_cir(idloc):
 @app.route('/jurisd_asi_m/<idloc>', methods=['GET', 'POST'])
 @login_required
 def jurisd_asi_m(idloc):
+    ''' invocado por  opción: "modificación" form: jurisd_asi  '''
+
     ja = jua.JurisdAsi(cxms)
     rces = recies.Reciespeciales(cxms)
     error = None
