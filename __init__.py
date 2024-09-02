@@ -3287,9 +3287,12 @@ def provs_list():
     else:
         print ('Sin provincias...')
 
-@app.route('/provsABC/<dep_id>/<prov_id>', methods=['GET', 'POST'])
+@app.route('/provs_abc/<dep_id>/<prov_id>', methods=['GET', 'POST'])
 @login_required
-def provsABC(dep_id, prov_id):
+def provs_abc(dep_id, prov_id):
+    ''' Adiciona/Edita provincias, 
+    si código vacio asigna código secuencial (en el campo prov) en función al departamento  
+    '''
     s = provs.Prov(cxms)
     error = None
     p = ('Provincias - Edición' in permisos_usr)  # t/f
@@ -3299,11 +3302,16 @@ def provsABC(dep_id, prov_id):
             if False:   # valida si neces POST
                 print('msg-err')
             else:
-                nextid = s.get_next_idprov(request.form['depto'])
-                if nextid == None:
-                    nextid =1
+                prov = request.form['prov'].strip()
+                if prov == '':    # asignar correlativo
+                    prov = s.get_next_idprov(request.form['depto'])
+                    if prov == None:
+                        prov = 1
+                    codprov = request.form['depto'].strip() + str(prov).strip()
+                else:
+                    codprov = request.form['depto'].strip() + request.form['prov'].strip()
 
-                s.add_prov(request.form['depto'], nextid, request.form['NomProv'], request.form['codprov'], request.form['descNivelId'],
+                s.add_prov(request.form['depto'], prov, request.form['NomProv'], codprov, request.form['descNivelId'],
                            str(request.form['fechaIngreso'])[:-8],
                            fa, usr)
 
@@ -3331,9 +3339,9 @@ def provsABC(dep_id, prov_id):
                 if s.usuario == None:
                     s.usuario = usr
 
-                return render_template('provsABC.html', error=error, s=s, load=True, titulo='Edicion de Datos de Provincias', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
+                return render_template('provs_abc.html', error=error, s=s, load=True, titulo='Edicion de Datos de Provincias', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
     # New
-    return render_template('provsABC.html', error=error, s=s, load=False, titulo='Registro de Nueva Provincia', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
+    return render_template('provs_abc.html', error=error, s=s, load=False, titulo='Registro de Nueva Provincia', tpaises=s.get_combo_paises(usrdep), tdeptos=s.get_combo_deptos(usrdep), tdescNivel=s.get_combo_desc_nivel(usrdep), puede_editar=p)
 
 
 @app.route('/get_desc_nivel_prov_all', methods=['GET', 'POST'])

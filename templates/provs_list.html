@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-xs-6 col-md-4">
                     {% if puede_adicionar %}
-                        <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('provsABC', dep_id = 0, prov_id=0) }} >Adicionar Provincias</a></button>
+                        <button type="button" class="btn btn-light btn-md btn-block "><span class="fas fa-user-plus"></span> <a href = {{ url_for('provs_abc', dep_id = 0, prov_id=0) }} >Adicionar Provincias</a></button>
                     {% endif %}
                 </div>
             </div>
@@ -42,7 +42,7 @@
                             <td>{{ provi[4] }}</td>
                             <td>
                                 {% if puede_editar %}
-                                    <a href={{ url_for( 'provsABC', dep_id=provi[2], prov_id=provi[3]) }}><span class="fas fa-edit"></span></a>
+                                    <a href={{ url_for( 'provs_abc', dep_id=provi[2], prov_id=provi[3]) }}><span class="fas fa-edit"></span></a>
                                 {% else %}
                                     <span class="fas fa-edit" style="color: grey"></span>
                                 {% endif %}
