@@ -1664,7 +1664,8 @@ def distritos_list():
             return render_template('distritos_list.html', dists=rows, 
                                     puede_adicionar='Distritos - Adición' in permisos_usr, \
                                     puede_editar='Distritos - Edición' in permisos_usr, \
-                                    puede_consultar='Distritos - Consulta' in permisos_usr
+                                    puede_consultar='Distritos - Consulta' in permisos_usr, \
+                                    puede_eliminar='Distritos - Eliminación' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
@@ -1690,12 +1691,18 @@ def reci_dist_send():
         return render_template('reci_dist_add.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Nuevo Distrito', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
 
 
+@app.route('/dist_elim/<pidloc>/<pdist>', methods=['GET', 'POST'])
+@login_required
+def dist_elim(pidloc, pdist):
+    ''' Elimina distrito seleccionado en distritos_list '''
+
+
 @app.route('/dist_adm/<pidloc>/<pdist>/<pnalext>', methods=['GET', 'POST'])
 @login_required
 def dist_adm(pidloc, pdist, pnalext):
     ''' Adm de distritos - desde distritos_list '''
-    '''     distritos_list - new: idloc= 0, dist= 0  nalext= 'adm'  '''
-    '''     distritos_list - edit: idloc= n, dist= n  nalext= 'adm'  '''
+    '''     distritos_list - new: idloc= 0, dist= 0  nalext= 'nal'  '''
+    '''     distritos_list - edit: idloc= n, dist= n  nalext= 'nal'  '''
 
     da = distr.Distritos(cxms)
     error = None
@@ -2043,7 +2050,7 @@ def reciespeciales(idreci, idlocreci):
                 docTec = 0
         else:
             docTec = request.form['docTec']
-            
+
         """Valida si el campo ruereci esta desactivado"""
         if request.form.get('ruereci') == None:
             ruereci = 0

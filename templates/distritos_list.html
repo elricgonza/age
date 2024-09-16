@@ -40,6 +40,7 @@
                            <th>Circunscripción</th>
                            <th>Nombre Distrito</th>
                            <th>Editar</th>
+                           <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,16 @@
                                 <a href={{ url_for('dist_adm', pidloc = dist[0], pdist = dist[2], pnalext='nal') }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>
+                            {% endif%}                
+                        </td>
+                        <td>
+                            {% if puede_eliminar %}
+                                <a href={{ url_for('dist_elim', pidloc = dist[0], pdist = dist[2]) }}><span class="fas fa-trash"></span></a>
+                                <a href="#" data-href={{ url_for('dist_elim', pidloc = dist[0], pdist = dist[2]) }}><span class="fas fa-trash"></span></a>
+                                    data-
+                            {% else %}
+                                <span class="fas fa-trash" style="color: red"></span>
+                                <!--<span class="fas fa-trash" style="color: grey"></span>-->
                             {% endif%}                
                         </td>
                     </tr>
