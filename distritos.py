@@ -179,3 +179,15 @@ class Distritos:
         self.cur.execute(s, idloc)
         rows = self.cur.fetchall()
         return rows
+
+
+    def elimina_dist(self, idloc, dist):
+        ''' Elimina distrito '''
+        s = f"delete from GeografiaElectoral_app.dbo.dist where idLocDist= {idloc} and dist= {dist}"
+        try:
+            self.cur.execute(s)
+            self.cx.commit()
+        except Exception as e:
+            print("Error eliminación dist")
+            print(e)
+

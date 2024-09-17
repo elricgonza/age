@@ -1695,6 +1695,22 @@ def reci_dist_send():
 @login_required
 def dist_elim(pidloc, pdist):
     ''' Elimina distrito seleccionado en distritos_list '''
+    d = dist.Distritos(cxms)
+    d.elimina_dist(pidloc, pdist)
+
+    rows = d.get_dist_all(usrdep)
+    if rows:
+        if 'Distritos - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('distritos_list.html', dists=rows, 
+                                    puede_adicionar='Distritos - Adición' in permisos_usr, \
+                                    puede_editar='Distritos - Edición' in permisos_usr, \
+                                    puede_consultar='Distritos - Consulta' in permisos_usr, \
+                                    puede_eliminar='Distritos - Eliminación' in permisos_usr
+                                  )# render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin distritos...')
 
 
 @app.route('/dist_adm/<pidloc>/<pdist>/<pnalext>', methods=['GET', 'POST'])
