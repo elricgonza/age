@@ -187,3 +187,15 @@ class Zon:
         except Exception as e:
             print("Error zona add")
             print(e)
+
+
+    def elimina_zona(self, idloc, dist):
+        ''' Elimina zona '''
+        s = f"delete from GeografiaElectoral_app.dbo.zona where idLocZona= {idloc} and zona= {zona}"
+        try:
+            self.cur.execute(s)
+            self.cx.commit()
+        except Exception as e:
+            print("Error eliminación zona")
+            print(e)
+

@@ -1914,7 +1914,8 @@ def zonas_list():
             return render_template('zonas_list.html', zonas=rows, \
                                     puede_adicionar='Zonas - Adición' in permisos_usr, \
                                     puede_editar='Zonas - Edición' in permisos_usr, \
-                                    puede_consultar='Zonas - Consulta' in permisos_usr
+                                    puede_consultar='Zonas - Consulta' in permisos_usr, \
+                                    puede_eliminar='Zonas - Eliminación' in permisos_usr
                                   )# render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
@@ -1979,14 +1980,37 @@ def zona_adm(pidloczona, pzona):
                                        puede_editar='Zonas - Edición' in permisos_usr
                                       )# render a template
 
-    else: # Edit - viene de <zonas_list> 
-        if za.get_zona(pidloczona, pzona):
-            return render_template('zona_adm.html', load=True, error=error, za=za, \
-                                       distritos=d.get_dists_en_idloc(pidloczona), \
-                                       puede_adicionar='Zonas - Adición' in permisos_usr, \
-                                       puede_editar=p, titulo='Edición de Zona')
-    # New
-    return render_template('zona_adm.html', error=error, za=za, load=False, puede_editar=p, titulo='Adición de Zona')
+    else: # New|Edit - viene de <zonas_list> 
+        if pidloczona == '0' and pzona == '0':  # es New 
+            return render_template('zona_adm.html', error=error, za=za, load=False, puede_editar=p, titulo='Adición de Zona')
+        else: # Edit
+            if za.get_zona(pidloczona, pzona):
+                return render_template('zona_adm.html', load=True, error=error, za=za, \
+                                           distritos=d.get_dists_en_idloc(pidloczona), \
+                                           puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                           puede_editar=p, titulo='Edición de Zona')
+
+
+@app.route('/zona_elim/<pidloc>/<pzona>', methods=['GET', 'POST'])
+@login_required
+def zona_elim(pidloc, pzona):
+    ''' Elimina zona seleccionada en zonas_list'''
+    z = zon.Zon(cxms)
+    z.elimina_zona(pidloc, pzona)
+
+    rows = z.get_zon_all(usrdep)
+    if rows:
+        if 'Zonas - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('zonas_list.html', dists=rows, 
+                                    puede_adicionar='Zonas - Adición' in permisos_usr, \
+                                    puede_editar='Zonas - Edición' in permisos_usr, \
+                                    puede_consultar='Zonas - Consulta' in permisos_usr, \
+                                    puede_eliminar='Zonas - Eliminación' in permisos_usr
+                                  )# render a template
+        else:
+            return render_template('msg.html', l1='Sin permisos asignados !!')
+    else:
+        print ('Sin zonas...')
 
 
 @app.route('/get_distritos_all1', methods=['GET', 'POST'])

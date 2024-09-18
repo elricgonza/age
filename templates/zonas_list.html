@@ -41,6 +41,7 @@
                            <th>Nombre Distrito</th>
                            <th>Circunscripción</th>
                            <th>Editar</th>
+                           <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,15 @@
                                 <span class="fas fa-edit" style="color: grey"></span>
                             {% endif %}                
                         </td>
+                        <td>
+                            {% if puede_eliminar %}
+                                <a href="#" data-href={{ url_for('zona_elim', pidloc=zona[0], pzona=zona[6]) }} 
+                                   data-toggle="modal" data-target="#confirm-delete">
+                                   <span class="fas fa-trash" style="color: red"></span></a>
+                            {% else %}
+                                <span class="fas fa-trash" style="color: red"></span>
+                            {% endif%}                
+                        </td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -69,8 +79,32 @@
     </div>
 </div>
 
-<script>
-</script>
+
+<!--modal-->
+ <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                 <h4 class="modal-title" id="myModalLabel">Confirme Eliminación</h4>
+             </div>
+             <div class="modal-body">
+                 <p>Eliminará una zona...</p>
+                 <p>Esta seguro?</p>
+                 <p class="debug-url"></p>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                 <a class="btn btn-danger btn-ok">Eliminar</a>
+             </div>
+         </div>
+     </div>
+ </div>
+ <script>
+     $('#confirm-delete').on('show.bs.modal', function(e) {
+         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+         $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+     });
+ </script>
 
 {% endblock %}
-
