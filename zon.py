@@ -189,7 +189,7 @@ class Zon:
             print(e)
 
 
-    def elimina_zona(self, idloc, dist):
+    def elimina_zona(self, idloc, zona):
         ''' Elimina zona '''
         s = f"delete from GeografiaElectoral_app.dbo.zona where idLocZona= {idloc} and zona= {zona}"
         try:
