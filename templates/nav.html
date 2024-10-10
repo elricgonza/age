@@ -56,6 +56,14 @@
                          <a class="dropdown-item" href="/zonas_list">Zonas</a>
                          {% if current_user.is_authenticated and usrdep == 0 %}
                          <hr>
+                            <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                Importar Distritos/Zonas de Excel
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/importar_dist">Distritos</a>
+                                <a class="dropdown-item" href="/importar_zona">Zonas</a>
+                            </div>
+                         <hr>
                          <a class="dropdown-item" href="/exterior_reci_list">Exterior</a>
                          <hr>
                          {% endif %}
