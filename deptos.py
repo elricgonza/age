@@ -99,3 +99,9 @@ class Departamento:
             return False
         else:
             return rows 
+
+    def get_deptos_nal(self):
+        ''' Retorna cod y nombre de deptos nacional '''
+        s = "select dep, nomdep from [GeografiaElectoral_app].[dbo].[dep] where dep < 10 order by dep "
+        self.cur.execute(s)
+        return self.cur.fetchall()

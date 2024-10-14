@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row-fluid">
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <h5>Importa Distritos:</h5>
+            </div>
+        </div>
+
+        
+
+        <br>
+        <table class="table table-hover">
+            <thead class="grey lighten-2">
+                <tr>
+                    <th scope="col">Código</th>     
+                    <th scope="col">Departamento</th>     
+                    <th scope="col">Importar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for depto in deptos %}
+                <tr>
+                    <td> {{ depto[0] }} </td>
+                    <td> {{ depto[1] }} </td>
+                    <td>
+                        <a href={{ url_for('import_dist', dep=depto[0]) }}><span class="fas fa-address-card"></span></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
