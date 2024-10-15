@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<form action="" class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="import_form">
+<div class="row-fluid">
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <h4>Importa Distritos:</h4>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label for="idep">Departamento</label>
+                <select id="idep" name="dep" class="form-control" required>
+                    <option value=""></option>
+                    {% for depto in deptos %}
+                        <option value="{{ depto[0] }}">{{ depto[1] }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Debe seleccionar departamento...</div>
+            </div>
+
+            <div class="col-md-8">
+                <label for="ixls">Seleccione Archivo Excel:</label>
+                <div class="custom-file">                                
+                    <input id="ixls" type="file" accept=".xlsx" class="custom-file-input" name="xls" required>
+                    <label for="xls" class="custom-file-label">Seleccione archivo...</label>                             
+                    <div class="invalid-feedback">Debe cargar el archivo EXCEL.</div>                     
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="fecharegistro">Fecha y Hora de Registro:</label>
+                <input type="datetime" class="form-control" id="ifecharegistro" title="" placeholder="Fecha de Registro." name="fecharegistro" readonly
+                            value="{{ idatetime }}"
+                >
+                <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
+            </div>
+            <div class="col-md-4">
+                <label for="fechaingreso">Fecha y Hora Actual:</label>
+                <input type="datetime" class="form-control" id="ifechaingreso" title="" placeholder="Fecha Actual." name="fechaingreso" readonly
+                            value="{{ idatetime }}"
+                >
+                <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
+            </div>                        
+            <div class="col-md-4">
+                <label for="usuario">Usuario Logueado:</label>
+                <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                            value="{{ usuario }}"
+                >
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <button type="button"  onclick="javascript: window.location.href = '/';"  class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+            </div>
+            <div class="col-md-6 mb-3">
+                <button type="submit" class="btn btn-outline-success btn-md btn-block" 
+                >Importar</button>
+            </div>
+        </div> <!--row-->
+    </div>
+</div>
+</form>
+
+<script>
+    $('.custom-file-input').on('change', function() { 
+          let fileName = $(this).val().split('\\').pop(); 
+          $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+    });    
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+
+{% endblock %}

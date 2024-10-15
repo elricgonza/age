@@ -67,6 +67,7 @@ app.config['PATH_APP'] = '/var/www/flasks/age/'
 app.config['IMG_ASIENTOS'] = '/static/imgbd/asi'
 app.config['IMG_RECINTOS'] = '/static/imgbd/reci'
 app.config['SUBIR_PDF'] = '/static/pdfdoc'
+app.config['XLS'] = 'static/xls'
 #app.config['REPORTE_PDF'] = 'file:///var/www/flasks/age/reporteh.pdf'
 #app.config['MODULO_REPORTES'] = 'file:///var/www/flasks/age/reporte.pdf'
 app.config['HELP_DOC'] = 'static/helpdoc/_build/html/index.html'
@@ -4021,7 +4022,6 @@ def gerencial_reci():
             return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
-
 @app.route('/import_dist/<dep>', methods=['GET', 'POST'])
 @login_required
 def import_dist(dep=None):
@@ -4033,38 +4033,16 @@ def import_dist(dep=None):
     error = None
 
     if request.method == 'POST':
-        if request.form.get('tusr') == None:
-            tusr = request.form['tusr1']
-        else:
-            tusr = request.form['tusr']
+        file = request.files['xls']
+        name_save = 'dist' + request.form['dep'] + '.xlsx'
+        path = os.path.join(app.config['XLS'], name_save)
+        print(path)
 
-        if usuario_id == '0':  # es NEW
-            if u.get_usuario(request.form['uname']) == True:   # valida usr
-                error = "El usuario: " + request.form['uname']  + " ya existe...!"
-                return render_template('registro.html', error=error, u=u, load_u=True)
-            else:
-                pw_hash = bcrypt.generate_password_hash(request.form['pswd']).decode('UTF-8')
-                u.add_usuario(request.form['uname'], \
-                            request.form['nombre'], \
-                            request.form['apellidos'], \
-                            request.form['email'], \
-                            pw_hash, \
-                            request.form['dep'], \
-                            1, tusr)
-                return render_template('welcome.html')
-        else: # es EDIT
-            u.upd_usuario(usuario_id, \
-                            request.form['nombre'], \
-                            request.form['apellidos'], \
-                            request.form['email'], \
-                            request.form['dep'], \
-                            1, tusr)
-            if usr == 'admin':
-                return render_template('usuarios.html', usuarios=u.get_usuarios())
-            return render_template('home.html')
+        file.save(path)
 
-    # de list
-    return render_template('import_dist_list.html', error=error, deptos=deptos, load_d=False)
+
+    # de import select dep, file
+    return render_template('import_dist.html', error=error, deptos=deptos, load_d=False)
 
 
 # start the server with the 'run()' method
