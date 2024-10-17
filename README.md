@@ -8,6 +8,8 @@ Resguardo de imágenes en:
 Resguardo de documentos en:
  static/pdfdoc
 
+Resguardo de documentos excel en:
+ static/xls
 
 using:
 -jquery 3.4.1

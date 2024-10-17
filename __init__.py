@@ -4032,13 +4032,19 @@ def import_dist(dep=None):
 
     error = None
 
-    if request.method == 'POST':
+    if request.method == 'POST': 
+        # graba excel en static/xls
         file = request.files['xls']
         name_save = 'dist' + request.form['dep'] + '.xlsx'
         path = os.path.join(app.config['XLS'], name_save)
-        print(path)
-
         file.save(path)
+
+        # importa a dist
+        result = import2(path, 'dist2') # Retorna dict {error:False/True, msg:[]}
+        if result['error']:
+            return result[msg]
+        else:
+            return result[msg]
 
 
     # de import select dep, file
