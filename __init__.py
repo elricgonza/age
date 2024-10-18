@@ -4022,9 +4022,9 @@ def gerencial_reci():
             return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
-@app.route('/import_dist/<dep>', methods=['GET', 'POST'])
+@app.route('/importa_dist/<dep>', methods=['GET', 'POST'])
 @login_required
-def import_dist(dep=None):
+def importa_dist(dep=None):
     ''' Importa a DIST a partir de excel por dep '''
 
     d = deptoss.Departamento(cxms)
@@ -4032,7 +4032,7 @@ def import_dist(dep=None):
 
     error = None
 
-    if request.method == 'POST': 
+    if request.method == 'POST':
         # graba excel en static/xls
         file = request.files['xls']
         name_save = 'dist' + request.form['dep'] + '.xlsx'
@@ -4040,15 +4040,15 @@ def import_dist(dep=None):
         file.save(path)
 
         # importa a dist
-        result = import2(path, 'dist2') # Retorna dict {error:False/True, msg:[]}
+        #result = import2(path, 'dist2') # Retorna dict {error:False/True, msg:[]}
+        result = ''
         if result['error']:
             return result[msg]
         else:
             return result[msg]
 
-
     # de import select dep, file
-    return render_template('import_dist.html', error=error, deptos=deptos, load_d=False)
+    return render_template('importa_dist.html', error=error, deptos=deptos, load_d=False)
 
 
 # start the server with the 'run()' method

@@ -113,20 +113,12 @@ class LocCate:
         vdif = False
 
         if self.cate_id != int(row_to_upd[0]):
-            print('cate_id dif')
-            print(self.cate_id)
-            print(row_to_upd[0])
             vdif = True
         if self.subcate_id != int(row_to_upd[1]):
-            print('subcate_id dif')
             vdif = True
         if self.obs != row_to_upd[2]:
-            print('obs dif')
-            print(self.obs)
-            print(row_to_upd[2])
             vdif = True
         if (self.usuario != row_to_upd[4]):
-            print('usuario dif')
             vdif = True
 
         return vdif
