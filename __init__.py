@@ -56,6 +56,7 @@ import clas_grupo
 import clasificadores
 import clasif_get
 import get_json
+import importa
 
 
 # Create the application object
@@ -4029,6 +4030,7 @@ def importa_dist(dep=None):
 
     d = deptoss.Departamento(cxms)
     deptos = d.get_deptos_nal()
+    i = importa.Importa(cxms)
 
     error = None
 
@@ -4040,12 +4042,11 @@ def importa_dist(dep=None):
         file.save(path)
 
         # importa a dist
-        #result = import2(path, 'dist2') # Retorna dict {error:False/True, msg:[]}
-        result = ''
-        if result['error']:
-            return result[msg]
+        result = i.importa_dist(path, 'dist2', int(request.form['dep'])) #T/F
+        if result: #True
+            return render_template('/', error=error, deptos=deptos, load_d=False)
         else:
-            return result[msg]
+            error = 'Error al importar a DIST'
 
     # de import select dep, file
     return render_template('importa_dist.html', error=error, deptos=deptos, load_d=False)
