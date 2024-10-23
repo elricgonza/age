@@ -30,27 +30,15 @@ class Importa:
                     ' values (%s, %s, %s, %s, %s, %s, %s) '
 
             t = row[0], row[1], row[2], row[3], fecha, fecha, usr  # Cambia según el número de columnas 
-            self.cur.execute(insert_query, t)
-            n += 1
+            try:
+                self.cur.execute(insert_query, t)
+                n += 1
+            except Exception as e:
+                flash(e, 'alert-info')
+                return False
 
         # Confirmar cambios y cerrar la conexión
         self.cx.commit()
         self.cur.close()
-
         msg = f'Proceso concluído, registros importados: {n}'
         flash(msg, 'alert-success')
-
-        '''
-        try:
-            self.cx.commit()
-            self.cur.close()
-            self.cx.close()
-            msg = f'Proceso concluído, registros importados: {n}'
-            flash(msg, 'alert-success')
-            return True
-        except Exception as e:
-            print('Error - Importa Dist, commit')
-            print(e)
-            flash('Error al importar a DIST', 'alert-warning')
-            return False
-        '''
