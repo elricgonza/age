@@ -12,30 +12,12 @@ class Importa:
 
     def importa_dist(self, excel_file, table_name, dep, usr):
         # 1ro elimina dist de departamento
-
         del_query = f'''
             DELETE FROM [GeografiaElectoral_app].[dbo].[{table_name}] WHERE IdLocDist
             IN (SELECT IdLoc from [GeografiaElectoral_app].[dbo].[LOC] 
                 WHERE DepLoc = {dep})
         '''
-
         self.cur.execute(del_query)
-
-        print('-------------------------')
-        print(del_query)
-        print('-------------excel_file')
-        print(excel_file)
-
-        '''
-        try:
-            self.cur.execute(del_query)
-            #self.cx.commit()
-            #self.cx.close()
-            flash('del-query ok')
-        except Exception as e:
-            print(e)
-            flash('Error al importar a DIST del-reinicio', 'alert-warning')
-        '''
 
         # importa
         n = 0
@@ -44,35 +26,20 @@ class Importa:
         fecha = dt.datetime.now()
 
         for row in sheet.iter_rows(min_row=2, values_only=True): # 2 para omitir el encabezado
-            insert_query = f'''
-                INSERT INTO [GeografiaElectoral_app].[dbo].[{table_name}] (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            '''
-            #test
-            insert_query = f'''
-                INSERT INTO [GeografiaElectoral_app].[dbo].[{table_name}] (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario)
-                VALUES ({row[0]}, {row[1]}, {row[2]}, '{row[3]}', '{fecha}', '{fecha}', '{usr}')
-            '''
-            print('=========================')
-            print(insert_query)
-            values = (row[0], row[1], row[2], row[3], row[4], row[5], row[6])  # Cambia según el número de columnas --ok
-            #values = tuple(row)
-            print('/////')
-            print(values)
-            #try:
-            #self.cur.execute(insert_query, values)
-            self.cur.execute(insert_query)
-            #except Exception as e:
-            #    print('Error - Importa Dist')
-            #    print(e)
+            insert_query = f'insert into  [GeografiaElectoral_app].[dbo].[{table_name}] (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) ' \
+                    ' values (%s, %s, %s, %s, %s, %s, %s) '
+
+            t = row[0], row[1], row[2], row[3], fecha, fecha, usr  # Cambia según el número de columnas 
+            self.cur.execute(insert_query, t)
             n += 1
 
-
+        # Confirmar cambios y cerrar la conexión
         self.cx.commit()
         self.cur.close()
 
-        flash('okkk', 'alert-success')
-        # Confirmar cambios y cerrar la conexión
+        msg = f'Proceso concluído, registros importados: {n}'
+        flash(msg, 'alert-success')
+
         '''
         try:
             self.cx.commit()
