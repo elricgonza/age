@@ -4042,7 +4042,7 @@ def importa_dist(dep=None):
         file.save(path)
 
         # importa a dist
-        table_name = 'dist2'
+        table_name = 'dist'
         result = i.importa_dist(path, table_name, int(request.form['dep']), usr) #T/F
         if result: #True
             return render_template('home.html')
