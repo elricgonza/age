@@ -4033,24 +4033,52 @@ def importa_dist(dep=None):
     i = importa.Importa(cxms)
 
     error = None
+    table_name = 'dist'
 
     if request.method == 'POST':
         # graba excel en static/xls
         file = request.files['xls']
-        name_save = 'dist' + request.form['dep'] + '.xlsx'
-        path = os.path.join(app.config['XLS'], name_save)
-        file.save(path)
+        name_save = table_name + request.form['dep'] + '.xlsx'
+        file_path = os.path.join(app.config['XLS'], name_save) # arch con path completo
+        file.save(file_path)
 
-        # importa a dist
-        table_name = 'dist'
-        result = i.importa_dist(path, table_name, int(request.form['dep']), usr) #T/F
-        if result: #True
-            return render_template('home.html')
+        # importa 
+        if i.importa_dist(file_path, table_name, int(request.form['dep']), usr): #T/F
+            error = None
         else:
-            error = 'Error al importar a DIST'
+            error = 'Error al importar ...revise el archivo en formato EXCEL'
 
-    # de import select dep, file
-    return render_template('importa_dist.html', error=error, deptos=deptos, load_d=False)
+    # 1ro.de import con dep y  file seleccionado
+    return render_template('importa_dist.html', deptos=deptos, error=error)
+
+
+@app.route('/importa_zona/<dep>', methods=['GET', 'POST'])
+@login_required
+def importa_zona(dep=None):
+    ''' Importa a DIST a partir de excel por dep '''
+
+    d = deptoss.Departamento(cxms)
+    deptos = d.get_deptos_nal()
+    i = importa.Importa(cxms)
+
+    error = None
+    table_name = 'zona'
+
+    if request.method == 'POST':
+        # graba excel en static/xls
+        file = request.files['xls']
+        name_save = table_name + request.form['dep'] + '.xlsx'
+        file_path = os.path.join(app.config['XLS'], name_save) # arch con path completo
+        file.save(file_path)
+
+        # importa 
+        if i.importa_zona(file_path, table_name, int(request.form['dep']), usr): #T/F
+            error = None
+        else:
+            error = 'Error al importar ...revise el archivo en formato EXCEL'
+
+    # 1ro.de import con dep y  file seleccionado
+    return render_template('importa_zona.html', deptos=deptos, error=error)
 
 
 # start the server with the 'run()' method

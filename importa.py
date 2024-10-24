@@ -20,7 +20,7 @@ class Importa:
         self.cur.execute(del_query)
 
         # importa
-        n = 0
+        c = 0
         workbook = openpyxl.load_workbook(excel_file)
         sheet = workbook.active     #Seleccionar la hoja activa
         fecha = dt.datetime.now()
@@ -32,7 +32,7 @@ class Importa:
             t = row[0], row[1], row[2], row[3], fecha, fecha, usr  # Cambia según el número de columnas 
             try:
                 self.cur.execute(insert_query, t)
-                n += 1
+                c += 1
             except Exception as e:
                 flash(e, 'alert-info')
                 return False
@@ -40,5 +40,5 @@ class Importa:
         # Confirmar cambios y cerrar la conexión
         self.cx.commit()
         self.cur.close()
-        msg = f'Proceso concluído, registros importados: {n}'
-        flash(msg, 'alert-success')
+        flash(f'Importación exitosa !! ... cantidad de registros importados: {c}', 'alert-success')
+        return True
