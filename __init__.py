@@ -4023,9 +4023,9 @@ def gerencial_reci():
             return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
-@app.route('/importa_dist/<dep>', methods=['GET', 'POST'])
+@app.route('/importa_dist/', methods=['GET', 'POST'])
 @login_required
-def importa_dist(dep=None):
+def importa_dist():
     ''' Importa a DIST a partir de excel por dep '''
 
     d = deptoss.Departamento(cxms)
@@ -4049,13 +4049,13 @@ def importa_dist(dep=None):
             error = 'Error al importar ...revise el archivo en formato EXCEL'
 
     # 1ro.de import con dep y  file seleccionado
-    return render_template('importa_dist.html', deptos=deptos, error=error)
+    return render_template('importa.html', deptos=deptos, titulo='Importa Distritos', error=error)
 
 
-@app.route('/importa_zona/<dep>', methods=['GET', 'POST'])
+@app.route('/importa_zona/', methods=['GET', 'POST'])
 @login_required
-def importa_zona(dep=None):
-    ''' Importa a DIST a partir de excel por dep '''
+def importa_zona():
+    ''' Importa a ZONA a partir de excel por dep '''
 
     d = deptoss.Departamento(cxms)
     deptos = d.get_deptos_nal()
@@ -4078,7 +4078,7 @@ def importa_zona(dep=None):
             error = 'Error al importar ...revise el archivo en formato EXCEL'
 
     # 1ro.de import con dep y  file seleccionado
-    return render_template('importa_zona.html', deptos=deptos, error=error)
+    return render_template('importa.html', deptos=deptos, titulo='Importar Zonas', error=error)
 
 
 # start the server with the 'run()' method
