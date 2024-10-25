@@ -4081,6 +4081,35 @@ def importa_zona():
     return render_template('importa.html', deptos=deptos, titulo='Importar Zonas', error=error)
 
 
+@app.route('/upd_zona_reci/', methods=['GET', 'POST'])
+@login_required
+def upd_zona_reci():
+    ''' Actualiza dato zona de RECI, a partir de excel por dep '''
+
+    d = deptoss.Departamento(cxms)
+    deptos = d.get_deptos_nal()
+    i = importa.Importa(cxms)
+
+    error = None
+    table_name = 'reci'
+
+    if request.method == 'POST':
+        # graba excel en static/xls
+        file = request.files['xls']
+        name_save = table_name + request.form['dep'] + '.xlsx'
+        file_path = os.path.join(app.config['XLS'], name_save) # arch con path completo
+        file.save(file_path)
+
+        # actualiza zonas en reci
+        if i.upd_zona_reci(file_path, table_name, int(request.form['dep']), usr): #T/F
+            error = None
+        else:
+            error = 'Error en el proceso de actualización ...revise el archivo en formato EXCEL'
+
+    # 1ro.de upd_zona_reci con dep y  file seleccionado
+    return render_template('upd_zona_reci.html', deptos=deptos, titulo='Actualiza zona en recintos electorales', error=error)
+
+
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000', debug=True)
