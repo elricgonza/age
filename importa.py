@@ -40,7 +40,7 @@ class Importa:
         # Confirmar cambios y cerrar la conexión
         self.cx.commit()
         self.cur.close()
-        flash(f'Importación exitosa !! ... cantidad de registros importados: {c}', 'alert-success')
+        flash(f'Proceso concluido !! ... cantidad de registros importados: {c}', 'alert-success')
         return True
 
 
@@ -74,5 +74,35 @@ class Importa:
         # Confirmar cambios y cerrar la conexión
         self.cx.commit()
         self.cur.close()
-        flash(f'Importación exitosa !! ... cantidad de registros importados: {c}', 'alert-success')
+        flash(f'Proceso concluido !! ... cantidad de registros importados: {c}', 'alert-success')
+        return True
+
+
+    def upd_zona_reci(self, excel_file, table_name, dep, usr):
+        ''' actualiza ZONA de tabla RECI a partir de archivo excel '''
+
+        # importa
+        c = 0
+        workbook = openpyxl.load_workbook(excel_file)
+        sheet = workbook.active     #Seleccionar la hoja activa
+        fecha = dt.datetime.now()
+
+        for row in sheet.iter_rows(min_row=2, values_only=True): # 2 para omitir el encabezado
+            upd_query = f'update [GeografiaElectoral_app].[dbo].[{table_name}] ' \
+                    ' set zonaReci = %s, fechaAct = %s, usuario = %s ' \
+                    ' where idlocreci = %s and reci =  %s '
+
+            t = row[2], fecha, usr, row[0], row[1]  # Cambia según el número de columnas 
+            try:
+                self.cur.execute(upd_query, t)
+                c += 1
+            except Exception as e:
+                flash(e, 'alert-info')
+                return False
+
+
+        # Confirmar cambios y cerrar la conexión
+        self.cx.commit()
+        self.cur.close()
+        flash(f'Proceso concluido !! ... cantidad de registros actualizados: {c}', 'alert-success')
         return True

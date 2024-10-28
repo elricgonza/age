@@ -4107,7 +4107,7 @@ def upd_zona_reci():
             error = 'Error en el proceso de actualización ...revise el archivo en formato EXCEL'
 
     # 1ro.de upd_zona_reci con dep y  file seleccionado
-    return render_template('upd_zona_reci.html', deptos=deptos, titulo='Actualiza zona en recintos electorales', error=error)
+    return render_template('importa.html', deptos=deptos, titulo='Actualiza zona en recintos electorales', error=error)
 
 
 # start the server with the 'run()' method
