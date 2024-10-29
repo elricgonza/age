@@ -4046,7 +4046,7 @@ def importa_dist():
         if i.importa_dist(file_path, table_name, int(request.form['dep']), usr): #T/F
             error = None
         else:
-            error = 'Error al importar ...revise el archivo en formato EXCEL'
+            error = 'Error en el proceso de actualización ...revise el archivo en formato EXCEL'
 
     # 1ro.de import con dep y  file seleccionado
     return render_template('importa.html', deptos=deptos, titulo='Importa Distritos', error=error)
@@ -4075,7 +4075,7 @@ def importa_zona():
         if i.importa_zona(file_path, table_name, int(request.form['dep']), usr): #T/F
             error = None
         else:
-            error = 'Error al importar ...revise el archivo en formato EXCEL'
+            error = 'Error en el proceso de actualización ...revise el archivo en formato EXCEL'
 
     # 1ro.de import con dep y  file seleccionado
     return render_template('importa.html', deptos=deptos, titulo='Importar Zonas', error=error)
