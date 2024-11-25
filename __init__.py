@@ -4023,6 +4023,57 @@ def gerencial_reci():
             return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
+def progress_dist(self, excel_file, table_name, dep, usr):
+    ''' Actualiza DIST a partir de archivo excel '''
+    # 1ro elimina dist de departamento
+    del_query = f'''
+        DELETE FROM [GeografiaElectoral_app].[dbo].[{table_name}] WHERE IdLocDist
+        IN (SELECT IdLoc from [GeografiaElectoral_app].[dbo].[LOC] 
+            WHERE DepLoc = {dep})
+    '''
+    self.cur.execute(del_query)
+
+    c = 0
+    workbook = openpyxl.load_workbook(excel_file)
+    sheet = workbook.active     #Seleccionar la hoja activa
+    fecha = dt.datetime.now()
+
+    for row in sheet.iter_rows(min_row=2, values_only=True): # 2 para omitir el encabezado
+
+        # verifica si existe
+        verif_query =  f'select * from [GeografiaElectoral_app].[dbo].LOC ' \
+                ' where idloc = %s and deploc = %s'
+
+        verif = row[0], dep
+        self.cur.execute(verif_query, verif)
+        existe = self.cur.fetchone()
+        if not existe:
+            flash(f'IdLocReci: {row[0]}  Asiento No encontrado en departamento seleccionado - ({dep}) !!! ...debe corregir este dato...', 'alert-info')
+            return False
+
+        # Inserta
+        insert_query = f'insert into  [GeografiaElectoral_app].[dbo].[{table_name}] (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) ' \
+                ' values (%s, %s, %s, %s, %s, %s, %s) '
+
+        t = row[0], row[1], row[2], row[3], fecha, fecha, usr  # Cambia según el número de columnas 
+        try:
+            self.cur.execute(insert_query, t)
+            c += 1
+        except Exception as e:
+            flash(e, 'alert-info')
+            return False
+
+    # Confirmar cambios y cerrar la conexión
+    self.cx.commit()
+    self.cur.close()
+    flash(f'Proceso concluido !! ... cantidad de registros importados: {c}', 'alert-success')
+    return True
+
+
+
+
+
+
 @app.route('/importa_dist/', methods=['GET', 'POST'])
 @login_required
 def importa_dist():
