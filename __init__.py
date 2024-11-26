@@ -4023,18 +4023,19 @@ def gerencial_reci():
             return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
 
 
-def progress_dist(self, excel_file, table_name, dep, usr):
+#def progress_dist(self, excel_file, table_name, dep, usr):
+def progress_dist():
     ''' Actualiza DIST a partir de archivo excel '''
     # 1ro elimina dist de departamento
     del_query = f'''
-        DELETE FROM [GeografiaElectoral_app].[dbo].[{table_name}] WHERE IdLocDist
+        DELETE FROM [GeografiaElectoral_app].[dbo].[{dist_table}] WHERE IdLocDist
         IN (SELECT IdLoc from [GeografiaElectoral_app].[dbo].[LOC] 
-            WHERE DepLoc = {dep})
+            WHERE DepLoc = {dist_dep})
     '''
     self.cur.execute(del_query)
 
     c = 0
-    workbook = openpyxl.load_workbook(excel_file)
+    workbook = openpyxl.load_workbook(dist_excel)
     sheet = workbook.active     #Seleccionar la hoja activa
     fecha = dt.datetime.now()
 
@@ -4084,20 +4085,27 @@ def importa_dist():
     i = importa.Importa(cxms)
 
     error = None
-    table_name = 'dist'
+    global dist_excel
+    global dist_table
+    global dist_dep
+    
+    dist_table = 'dist'
 
     if request.method == 'POST':
         # graba excel en static/xls
         file = request.files['xls']
         name_save = table_name + request.form['dep'] + '.xlsx'
-        file_path = os.path.join(app.config['XLS'], name_save) # arch con path completo
-        file.save(file_path)
+        #file_path = os.path.join(app.config['XLS'], name_save) # arch con path completo
+        dist_excel = os.path.join(app.config['XLS'], name_save) # arch con path completo
+        file.save(dist_excel)
 
-        # importa 
-        if i.importa_dist(file_path, table_name, int(request.form['dep']), usr): #T/F
-            error = None
-        else:
-            error = 'Error en el proceso de actualización ...revise el archivo en formato EXCEL'
+        # importa
+        #if i.importa_dist(file_path, table_name, int(request.form['dep']), usr): #T/F
+        dist_dep =  int(request.form['dep'])
+        #if progress_dist(): #T/F
+         #   error = None
+        #else:
+         #   error = 'Error en el proceso de actualización ...revise el archivo en formato EXCEL'
 
     # 1ro.de import con dep y  file seleccionado
     return render_template('importa.html', deptos=deptos, titulo='Importa Distritos', error=error)

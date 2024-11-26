@@ -9,7 +9,7 @@ import psycopg2.extras
 
 def get_db_ms():
     #pms = ("10.100.15.54","appgeo","appgeo54","bdge")
-    pms = ("localhost","sa","123qweAS","bdge")
+    pms = ("localhost","sa","123qweASD","bdge")
 
     try:
         cx = mss.connect(*pms)
