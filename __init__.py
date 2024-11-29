@@ -12,6 +12,7 @@ import datetime
 from werkzeug.utils import secure_filename
 from PIL import Image
 from resizeimage import resizeimage
+import openpyxl
 
 import dbcn
 import usuarios
@@ -4034,22 +4035,26 @@ def progress_dist():
     '''
     self.cur.execute(del_query)
 
+    # abre excel
     c = 0
     workbook = openpyxl.load_workbook(dist_excel)
     sheet = workbook.active     #Seleccionar la hoja activa
+    count_dist = sheet.max_row
+    print('----sheet.max_row')
+    print(count_dist)
+    print('----sheet.max_row>>')
     fecha = dt.datetime.now()
 
     for row in sheet.iter_rows(min_row=2, values_only=True): # 2 para omitir el encabezado
-
         # verifica si existe
         verif_query =  f'select * from [GeografiaElectoral_app].[dbo].LOC ' \
                 ' where idloc = %s and deploc = %s'
-
         verif = row[0], dep
         self.cur.execute(verif_query, verif)
         existe = self.cur.fetchone()
         if not existe:
             flash(f'IdLocReci: {row[0]}  Asiento No encontrado en departamento seleccionado - ({dep}) !!! ...debe corregir este dato...', 'alert-info')
+            c = count_dist # para concluir event
             return False
 
         # Inserta
@@ -4069,10 +4074,6 @@ def progress_dist():
     self.cur.close()
     flash(f'Proceso concluido !! ... cantidad de registros importados: {c}', 'alert-success')
     return True
-
-
-
-
 
 
 @app.route('/importa_dist/', methods=['GET', 'POST'])
