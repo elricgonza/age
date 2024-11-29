@@ -17,7 +17,7 @@ Jinja2==2.11.3
 MarkupSafe==1.1.1
 packaging==21.3
 pdfkit==0.6.1
-Pillow==8.1.2
+Pillow==9.3.0
 psycopg2-binary==2.8.6
 pycparser==2.20
 Pygments==2.10.0
