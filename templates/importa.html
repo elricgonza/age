@@ -2,7 +2,38 @@
 
 {% block content %}
 
-<form action="" class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="import_form">
+
+    <script type="text/javascript">
+        function startProgress() {
+            var eventSource = new EventSource("/progress_dist");
+            eventSource.onmessage = function(event) {
+                document.getElementById("progress").style.width = event.data + "%";
+                document.getElementById("progress").innerText = event.data + "%";
+                if (event.data == "100") {
+                    eventSource.close();
+                }
+            };
+            //alert('en js start post evetSource...');
+            //document.getElementById("myForm").submit();
+        }
+    </script>
+    <style>
+        #progress-container {
+            width: 100%;
+            background-color: #f3f3f9;
+        }
+        #progress {
+            width: 0;
+            height: 30px;
+            background-color: #4cafa9;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+
+
+<form id= 'myForm' action="" class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="import_form">
 <div class="row-fluid">
     <br>
     <div class="container">
@@ -25,13 +56,20 @@
                 <div class="invalid-feedback">Debe seleccionar departamento...</div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-4">
                 <label for="ixls">Seleccione Archivo Excel:</label>
                 <div class="custom-file">                                
                     <input id="ixls" type="file" accept=".xlsx" class="custom-file-input" name="xls" required>
                     <label for="xls" class="custom-file-label">Seleccione archivo...</label>                             
                     <div class="invalid-feedback">Debe cargar el archivo EXCEL.</div>                     
                 </div>
+            </div>
+            <div class="col-md-2">
+               <button id="btn1">btn1</button>
+            </div>
+            <div class="col-md-2">
+                <!--<button id="btn2">btn2</button>-->
+               <button id="btn2" onclick="startProgress()">btn2</button>
             </div>
         </div>
 
@@ -60,6 +98,7 @@
         </div>
         <br>
 
+        <!--
         <div class="row">
             <div class="col-md-6 mb-3">
                 <button type="button"  onclick="javascript: window.location.href = '/';"  class="btn btn-outline-danger btn-md btn-block">Salir</button>
@@ -69,6 +108,8 @@
                 >Procesar</button>
             </div>
         </div> <!--row-->
+        -->
+
         {% if error %}
         <br>
         <div class="alert alert-danger alert-dismissible fade show">
@@ -78,6 +119,11 @@
         {% endif %}
     </div>
 </div>
+
+<div id="progress-container">
+    <div id="progress">0%</div>
+</div>
+
 </form>
 
 
@@ -86,25 +132,41 @@
           let fileName = $(this).val().split('\\').pop(); 
           $(this).next('.custom-file-label').addClass("selected").html(fileName); 
     });    
-    // Disable form submissions if there are invalid fields
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Get the forms we want to add validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
 </script>
 
 
 {% endblock %}
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(e) {
+
+      var elBotones = document.querySelectorAll("button");
+      console.log(elBotones);
+
+      /*Asignamos  función para escuchar*/
+      for (var i = 0; i < elBotones.length; i++) {
+        elBotones[i].addEventListener("click", manejarBotones, false)
+      }
+
+    });
+
+    /*Podremos usar  this.id  para identificar cada botón*/
+    function manejarBotones(e) {
+      e.preventDefault();
+      //alert("Has pulsado el botón: " + this.id);
+        //if (this.id == 'btnSub') {
+        if (this.id == 'btn1') {
+            alert('btn1');
+            console.log('btn1 press');
+            document.getElementById("myForm").submit();
+        }
+        if (this.id == 'btn2') {
+            //document.getElementById("myForm").submit();
+            alert('b2 - starp');
+            console.log('btn2 press');
+            startProgress();
+        }
+    }
+</script>

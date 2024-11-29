@@ -1,0 +1,10 @@
+ 2007  git commit -m 'hasta aqui llegamos... PRIORIZAR validaciones REALES, sin progress funciona igual la migración'
+ queda:
+ 		-aumentar boton en html  que obtenga las variables globales (arch excel, depa)
+ 		-modificar html invocar a progress de dist  (con evento) .... funcionaraaaaa...!!!
+
+
+aplicado PERO...
+no funciona el click de startprogress desde el  html --- ashhhh que podría ser?
+
+

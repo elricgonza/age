@@ -4025,15 +4025,31 @@ def gerencial_reci():
 
 
 #def progress_dist(self, excel_file, table_name, dep, usr):
+@app.route('/progress_dist')    
 def progress_dist():
     ''' Actualiza DIST a partir de archivo excel '''
     # 1ro elimina dist de departamento
-    del_query = f'''
-        DELETE FROM [GeografiaElectoral_app].[dbo].[{dist_table}] WHERE IdLocDist
-        IN (SELECT IdLoc from [GeografiaElectoral_app].[dbo].[LOC] 
-            WHERE DepLoc = {dist_dep})
+    cxmsp = dbcn.get_db_ms()
+    cur = cxmsp.cursor()
+
+    del_query=""
+
     '''
-    self.cur.execute(del_query)
+    del_query = f
+        DELETE FROM [GeografiaElectoral_app].[dbo].[dist}] WHERE IdLocDist
+        IN (SELECT IdLoc from [GeografiaElectoral_app].[dbo].[LOC] 
+            WHERE DepLoc =  9 {dist_dep})
+    '''
+
+    del_query = "DELETE FROM [GeografiaElectoral_app].[dbo].[dist] WHERE IdLocDist " + \
+        " IN (SELECT IdLoc from [GeografiaElectoral_app].[dbo].[LOC]   " + \
+        "    WHERE DepLoc =  9 ) "
+    cur.execute(del_query)
+
+    print('================del_query')
+    print(del_query)
+    print(dist_excel)
+
 
     # abre excel
     c = 0
@@ -4043,35 +4059,39 @@ def progress_dist():
     print('----sheet.max_row')
     print(count_dist)
     print('----sheet.max_row>>')
-    fecha = dt.datetime.now()
+    fecha = datetime.datetime.now()
 
-    for row in sheet.iter_rows(min_row=2, values_only=True): # 2 para omitir el encabezado
-        # verifica si existe
-        verif_query =  f'select * from [GeografiaElectoral_app].[dbo].LOC ' \
-                ' where idloc = %s and deploc = %s'
-        verif = row[0], dep
-        self.cur.execute(verif_query, verif)
-        existe = self.cur.fetchone()
-        if not existe:
-            flash(f'IdLocReci: {row[0]}  Asiento No encontrado en departamento seleccionado - ({dep}) !!! ...debe corregir este dato...', 'alert-info')
-            c = count_dist # para concluir event
-            return False
+    def generate():
+        for row in sheet.iter_rows(min_row=2, values_only=True): # 2 para omitir el encabezado
+            # verifica si existe
+            verif_query =  f'select * from [GeografiaElectoral_app].[dbo].LOC ' \
+                    ' where idloc = %s and deploc = %s'
+            verif = row[0], dist_dep
+            cur.execute(verif_query, verif)
+            existe = cur.fetchone()
+            if not existe:
+                flash(f'IdLocReci: {row[0]}  Asiento No encontrado en departamento seleccionado - ({dep}) !!! ...debe corregir este dato...', 'alert-info')
+                c = count_dist # para concluir event
+                return False
 
-        # Inserta
-        insert_query = f'insert into  [GeografiaElectoral_app].[dbo].[{table_name}] (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) ' \
-                ' values (%s, %s, %s, %s, %s, %s, %s) '
+            # Inserta
+            insert_query = f'insert into  [GeografiaElectoral_app].[dbo].[{table_name}] (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) ' \
+                    ' values (%s, %s, %s, %s, %s, %s, %s) '
 
-        t = row[0], row[1], row[2], row[3], fecha, fecha, usr  # Cambia según el número de columnas 
-        try:
-            self.cur.execute(insert_query, t)
-            c += 1
-        except Exception as e:
-            flash(e, 'alert-info')
-            return False
+            t = row[0], row[1], row[2], row[3], fecha, fecha, usr  # Cambia según el número de columnas 
+            try:
+                cur.execute(insert_query, t)
+                c += 1
+            except Exception as e:
+                flash(e, 'alert-info')
+                return False
+
+            yield f"data:{int((c + 1) / count_dist * 100)}\n\n"
+    return app.response_class(generate(), mimetype='text/event-stream')
 
     # Confirmar cambios y cerrar la conexión
-    self.cx.commit()
-    self.cur.close()
+    cxmsp.commit()
+    cur.close()
     flash(f'Proceso concluido !! ... cantidad de registros importados: {c}', 'alert-success')
     return True
 
@@ -4095,14 +4115,17 @@ def importa_dist():
     if request.method == 'POST':
         # graba excel en static/xls
         file = request.files['xls']
-        name_save = table_name + request.form['dep'] + '.xlsx'
+        name_save = dist_table + request.form['dep'] + '.xlsx'
         #file_path = os.path.join(app.config['XLS'], name_save) # arch con path completo
         dist_excel = os.path.join(app.config['XLS'], name_save) # arch con path completo
         file.save(dist_excel)
 
         # importa
-        #if i.importa_dist(file_path, table_name, int(request.form['dep']), usr): #T/F
-        dist_dep =  int(request.form['dep'])
+        #if i.importa_dist(file_path, dist_table, int(request.form['dep']), usr): #T/F
+        dist_dep =  request.form['dep']
+
+        print('-----------------en POST - dist_excel')
+        print(dist_excel)
         #if progress_dist(): #T/F
          #   error = None
         #else:
