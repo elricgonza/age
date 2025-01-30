@@ -313,9 +313,7 @@ class Asi_excep:
 
         if usrtipo == 116: # dep
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrtipo == 117: # nal
-            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
-        elif usrtipo == 119: # jefat
+        elif usrtipo in (117, 118, 119, 124): # nal, adm, jefat, consulta
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
 
         self.cur.execute(s)

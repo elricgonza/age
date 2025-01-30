@@ -311,9 +311,7 @@ class Recintos:
 
         if usrtipo == 116: # dep
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71)"
-        elif usrtipo in (117, 118): # nal, adm
-            s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8 and idClasif in (70, 71, 72)"
-        elif usrtipo in (119, 124): # jefat, consulta
+        elif usrtipo in (117, 118, 119, 124): # nal, adm, jefat, consulta
             s = "select idClasif, descripcion from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=8"
 
         self.cur.execute(s)
