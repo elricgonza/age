@@ -106,7 +106,7 @@ class Importa:
 
 
     def upd_zona_reci(self, excel_file, table_name, dep, usr):
-        ''' actualiza ZONA de tabla RECI a partir de archivo excel '''
+        ''' actualiza ZONA de tabla RECI a partir de archivo excel - omite usr '''
 
         c = 0
         workbook = openpyxl.load_workbook(excel_file)
@@ -126,9 +126,9 @@ class Importa:
 
             # actualiza
             upd_query = f'update [GeografiaElectoral_app].[dbo].[{table_name}] ' \
-                    ' set zonaReci = %s, fechaAct = %s, usuario = %s ' \
+                    ' set zonaReci = %s ' \
                     ' where idlocreci = %s and reci =  %s '
-            t = row[2], fecha, usr, row[0], row[1]  # Cambia según el número de columnas 
+            t = row[2], row[0], row[1]  # Cambia según el número de columnas 
             try:
                 self.cur.execute(upd_query, t)
                 c += 1
