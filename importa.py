@@ -126,9 +126,9 @@ class Importa:
 
             # actualiza
             upd_query = f'update [GeografiaElectoral_app].[dbo].[{table_name}] ' \
-                    ' set zonaReci = %s ' \
+                    ' set zonaReci = %s, idCircun = %s ' \
                     ' where idlocreci = %s and reci =  %s '
-            t = row[2], row[0], row[1]  # Cambia según el número de columnas 
+            t = row[2], row[3], row[0], row[1]  # Cambia según el número de columnas 
             try:
                 self.cur.execute(upd_query, t)
                 c += 1
