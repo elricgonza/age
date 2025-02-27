@@ -253,6 +253,39 @@ class Reportes:
         return rows
 
 
+    def view_geoasientos_nacional_previo(self, usrdep):
+        ''' Retorna datos de la vista de la bd 'Actual', previo para revisión '''
+
+        s = "select * from GeografiaElectoral_app.dbo.GeoAsientos_Nacional "
+
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc "
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec, IdLoc "
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
+    def view_georecintos_nacional_previo(self, usrdep):
+        ''' Retorna datos de la vista de la bd 'Actual', previo para revisión '''
+
+        s = "select * from GeografiaElectoral_app.dbo.GeoRecintos_Nacional "
+
+        if usrdep != 0 :
+            s = s + " where Dep = %d order by Dep, Prov, Sec, IdLoc, Reci "
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec, IdLoc, Reci "
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
+
     def v_loc_nal_all(self, usrdep):
         '''
         Retorna datos de la vista de la bd 'en Proceso'

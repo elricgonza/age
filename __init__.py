@@ -3871,6 +3871,26 @@ def rep_reci_habil():
         return render_template('home.html')
 
 
+@app.route('/rep_loc_previo', methods=['GET', 'POST'])
+@login_required
+def rep_loc_previo():
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('rep_loc_previo.html', asientos=r.view_geoasientos_nacional_previo(usrdep))
+    else:
+        return render_template('home.html')
+
+
+@app.route('/rep_reci_previo', methods=['GET', 'POST'])
+@login_required
+def rep_reci_previo():
+    r = rep.Reportes(cxms)
+    if 'Reportes - Consulta' in permisos_usr:
+        return render_template('rep_reci_previo.html', recintos=r.view_georecintos_nacional_previo(usrdep))
+    else:
+        return render_template('home.html')
+
+
 @app.route('/rep_loc_proc', methods=['GET', 'POST'])
 @login_required
 def rep_loc_proc():
