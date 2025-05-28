@@ -1187,7 +1187,7 @@ def get_municipios_all():
 def recintos_list():
     ''' Recintos uninom y mixtos '''
     rc = recintos.Recintos(cxms)
-    rows = rc.get_reci_uninom_mixto(usrdep)
+    rows = rc.get_reci_uninom(usrdep)
     if rows:
         if 'Recintos - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('recintos_list.html', recintos=rows, \
@@ -1205,7 +1205,7 @@ def recintos_list():
 @app.route('/recinto/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def recinto(idreci, idlocreci):
-    ''' Uninominales y mixtos '''
+    ''' Uninominales '''
     rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
     z = dist.Distritos(cxms)
@@ -1259,11 +1259,12 @@ def recinto(idreci, idlocreci):
                                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                                ruereci, edireci, depenreci, \
                                request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
-                               request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], request.form['docTec'])
+                               request.form['etapa'], request.form['docAct'], docActF, request.form['ambientes'], \
+                               request.form['docTec'], request.form['circun'], request.form['obs'])
 
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rc.get_reci_uninom_mixto(usrdep)
+                rows = rc.get_reci_uninom(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
                                         puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
@@ -1287,7 +1288,7 @@ def recinto(idreci, idlocreci):
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rc.get_reci_uninom_mixto(usrdep)
+                rows = rc.get_reci_uninom(usrdep)
                 return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
                                         puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
