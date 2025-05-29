@@ -99,27 +99,22 @@ class Recintos:
         return row
 
 
-    def add_recinto(self, idlocreci, reci, nomreci, zonareci, \
-                    maxmesasreci, direccion, latitud, longitud, \
-                    estado, tiporecinto, codrue, \
-                    codrueedif, depend, \
-                    cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, ambientes, docTec):
-
-        new_recinto = idlocreci, reci, nomreci, '', '', zonareci, \
-            maxmesasreci, direccion, latitud, longitud, \
-            estado, tiporecinto, codrue, codrueedif, \
-            depend, cantpisos, fechaIngreso, fechaAct, usuario, etapa, docAct, docActF, '0', ambientes, docTec
-
-        s = "insert into [GeografiaElectoral_app].[dbo].[RECI] (IdLocReci, Reci, NomReci, SupReci, ApoyoReci, " + \
-            " ZonaReci, MaxMesasReci, Direccion, latitud, " + \
-            " longitud, estado, tipoRecinto, codRue, codRueEdif, " + \
-            " depend, cantPisos, fechaIngreso, fechaAct, usuario, etapa, doc_idA, doc_idAF, nacionId, ambientesDisp, doc_idT) VALUES " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    def add_recinto(self, datos):
+        s = "insert into [GeografiaElectoral_app].[dbo].[RECI] " + \
+                " (IdLocReci, Reci, NomReci, ZonaReci, MaxMesasReci, " + \
+                " direccion, latitud, longitud, estado, tipoRecinto, " + \
+                " codRue, codRueEdif, depend, cantPisos, fechaIngreso, " + \
+                " fechaAct, usuario, etapa, doc_idA, doc_idAF, " + \
+                " ambientesDisp, doc_idT, idcircun, obs) VALUES " + \
+                " (%s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, " + \
+                " %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, " + \
+                " %s, %s, %s, %s)"
         try:
-            self.cur.execute(s, new_recinto)
+            self.cur.execute(s, datos)
             self.cx.commit()
             print("recinto adicionado...") 
-        except:
+        except Exception as e:
+            print(e)
             print("Error - actualización de recinto...")
 
 

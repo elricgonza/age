@@ -114,10 +114,10 @@
                     >
             </div>
             <div class="col-md-1">
-                <label for="circun">CIR:</label>
+                <label for="circun">CIRCUN:</label>
                 <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
                         {% if load %}
-                            value="{{ rc.circundist }}"
+                            value="{{ rc.idcircun }}"
                         {% endif %}
                     >
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
