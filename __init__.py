@@ -1202,9 +1202,9 @@ def recintos_list():
         return render_template('recintos_list.html', puede_adicionar='Recintos - Adición' in permisos_usr)
 
 
-@app.route('/recinto/<idreci>/<idlocreci>', methods=['GET', 'POST'])
+@app.route('/recinto/<idlocreci>/<reci>', methods=['GET', 'POST'])
 @login_required
-def recinto(idreci, idlocreci):
+def recinto(idlocreci, reci):
     ''' Uninominales '''
     rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
@@ -1246,7 +1246,7 @@ def recinto(idreci, idlocreci):
         else:
             depenreci = request.form['depenreci']
 
-        if idreci == '0':  # es NEW
+        if reci == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
                 #return render_template('asiento.html', error=error, u=u, load_u=True)
@@ -1260,13 +1260,13 @@ def recinto(idreci, idlocreci):
                     fa, request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, \
                     request.form['ambientes'], request.form['docTec'], request.form['circun'], request.form['obs']
 
-                rc.add_recinto(datos)
-
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
+                if rc.add_recinto(datos):
+                    d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
                 rows = rc.get_reci_uninom(usrdep)
-                return render_template('recintos_list.html', recintos=rows, puede_adicionar='Recintos - Adición' in permisos_usr, \
-                                        puede_editar='Recintos - Edición' in permisos_usr
+                return render_template('recintos_list.html', recintos=rows, 
+                                       puede_adicionar='Recintos - Adición' in permisos_usr, \
+                                       puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
         else: # Es Edit
             fa = str(datetime.datetime.now())[:-7]
@@ -1279,7 +1279,7 @@ def recinto(idreci, idlocreci):
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, \
-                request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci
+                request.form['ambientes'], request.form['docTec'], idlocreci[1], reci
 
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
@@ -1298,8 +1298,8 @@ def recinto(idreci, idlocreci):
                                        puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
     else: # Viene de <recintos_list>
-        if idreci != '0':  # EDIT
-            if rc.get_recinto_idreci(idreci, idlocreci):
+        if reci != '0':  # EDIT
+            if rc.get_recinto_key(idlocreci, reci):
                 """if a.docAct == None:
                     a.docAct = """
                 if rc.fechaIngreso == None:

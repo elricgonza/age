@@ -42,12 +42,13 @@ class Recintos:
         return rows
 
 
-    def get_recinto_idreci(self, idreci, idlocreci):
+    def get_recinto_key(self, idlocreci, reci):
         s = "select a.IdLocReci, a.Reci, g.CircunDist, b.DepLoc, c.NomDep, b.ProvLoc, " + \
             "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
             "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
-            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp, a.doc_idT, j.ruta as rutaT " + \
+            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp, " + \
+            "a.doc_idT, j.ruta as rutaT, a.obs " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -59,13 +60,15 @@ class Recintos:
             "left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id " + \
             "left join [bdge].[dbo].[doc] j on a.doc_idT=j.id " + \
             "where a.IdLocReci = %d and a.Reci = %d"
-        mod_recinto = idlocreci, idreci
-        self.cur.execute(s, mod_recinto)
+        key = idlocreci, reci
+        self.cur.execute(s, key)
         row = self.cur.fetchone()
+        print('========================================================================row')
+        print(row)
         if  row:
             self.idlocreci = row[0]
             self.reci = row[1]
-            self.circundist = row[2]
+            self.idcircun = row[2]
             self.deploc = row[3]
             self.nomdep = row[4]
             self.provloc = row[5]
@@ -96,6 +99,7 @@ class Recintos:
             self.ambientes = row[30]
             self.doc_idT = row[31]
             self.rutaT = row[32]
+            self.obs = row[33]
         return row
 
 
@@ -113,6 +117,7 @@ class Recintos:
             self.cur.execute(s, datos)
             self.cx.commit()
             print("recinto adicionado...") 
+            return True
         except Exception as e:
             print(e)
             print("Error - actualización de recinto...")
@@ -135,7 +140,7 @@ class Recintos:
 
 
     def diff_old_new_reci(self, row_to_upd):
-        rc = self.get_recinto_idreci(row_to_upd[20], row_to_upd[19])  #19 -> idreci, #20 -> idlocreci
+        rc = self.get_recinto_key(row_to_upd[19], row_to_upd[20])  #19 -> idreci, #20 -> idlocreci
         vdif = False
         if self.nomreci != row_to_upd[0]:
             #print('nom dif')
