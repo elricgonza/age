@@ -129,18 +129,23 @@ class Recintos:
                 " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
                 " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
                 " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
-                " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s, doc_idT= %s " + \
+                " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s, doc_idT= %s, " + \
+                " obs= %s" + \
                 " where IdLocReci = %s and Reci = %s"
+            print('-------------------------------------s')
+            print(s)
             try:
                 self.cur.execute(s, recinto)
                 self.cx.commit()
                 print('Recinto actualizado')
             except Exception as e:
+                print(e)
                 print("Error - actualización de Recinto...")
 
 
     def diff_old_new_reci(self, row_to_upd):
-        rc = self.get_recinto_key(row_to_upd[19], row_to_upd[20])  #19 -> idreci, #20 -> idlocreci
+        #upd 2jun2025 - add obs
+        rc = self.get_recinto_key(row_to_upd[20], row_to_upd[21])  #19 -> idreci, #20 -> idlocreci
         vdif = False
         if self.nomreci != row_to_upd[0]:
             #print('nom dif')
@@ -202,9 +207,10 @@ class Recintos:
         if ((self.doc_idT) != (0 if row_to_upd[18]=="" else int(row_to_upd[18]) )):
             #print('doc_idT dif')
             vdif = True
+        if (self.obs.strip() != row_to_upd[19].strip()):
+            vdif = True
 
         return vdif
-
 
     def upd_reci_noauth(self, row_to_upd):
         '''tmpauth3 valida que no se modifiquen datos no autorizados'''
@@ -272,8 +278,8 @@ class Recintos:
             print('doc_idT dif')
             vdif = True
         '''
-
         return vdif
+
 
     def get_next_reci(self):
         self.cur.execute("select max(reci) + 1 from GeografiaElectoral_app.dbo.reci")
