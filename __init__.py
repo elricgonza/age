@@ -891,8 +891,8 @@ def recinto_vs(idloc, reci):
     ''' Coordenada en visor '''
 
     r = recintos.Recintos(cxms)
-    r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
-     
+    r.get_recinto_key(idloc, reci)    # siempre debiera existir
+
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs.html', 
                             gj_reci=j.get_reci(r.deploc), 
@@ -913,7 +913,7 @@ def recinto_vs_ext(idloc, reci):
 
     r = recintos.Recintos(cxms)
     r.get_recinto_idreci(reci, idloc)    # siempre debiera existir
-     
+
     j = get_json.GetJson(cxpg)
     return render_template('coord_vs_ext.html', 
                             gj_reci=j.get_reci(10), 
