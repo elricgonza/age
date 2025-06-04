@@ -1,11 +1,6 @@
 # Operaciones asientos
 
 class Reciasiento:
-    deploc = 0
-    provloc = 0
-    secloc = 0
-    nomloc = ""
-
 
     def __init__(self, cx):
         self.cx = cx

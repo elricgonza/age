@@ -19,10 +19,10 @@ function getgeoreci1(event) {
     var idloc = document.getElementById("ireci_idasiento").value;
     if (x == 27 || x == 9 || 'undefined') {
         if($('input[name="load"]').val()=='True'){
-            asiento_reci(idloc, $('input[name="circun"]').val());            
+            asiento_reci(idloc, $('input[name="circun"]').val());
         }else{
             asientosReci1($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
-        };             
+        };
     };
 }
 
