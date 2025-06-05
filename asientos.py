@@ -53,7 +53,7 @@ class Asientos:
         return rows
 
 
-    def get_asiento_idloc(self, idloc):
+    def get_loc_key(self, idloc):
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
             " a.PoblacionLoc, a.PoblacionElecLoc, Convert(CHAR(10),a.FechaCensoLoc,23), a.TipoLocLoc, a.fechaBaseLegLoc," + \
             " a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \
@@ -119,7 +119,7 @@ class Asientos:
             self.rutaRNT = row[36]
         return row
 
-    
+
     def add_asiento(self, idloc, deploc, provloc, \
                     secloc, nomloc, poblacionloc, \
                     poblacionelecloc, fechacensoloc, tipolocloc, \
@@ -178,7 +178,7 @@ class Asientos:
         Verif. si existe dif. en registro editado
         '''
 
-        a = self.get_asiento_idloc(row_to_upd[21])  #21 -> idloc
+        a = self.get_loc_key(row_to_upd[21])  #21 -> idloc
         vdif = False
 
         if self.nomloc != row_to_upd[0]:
@@ -267,7 +267,7 @@ class Asientos:
     def upd_asi_noauth(self, row_to_upd):
         '''tmpauth3 valida q no grabe si datos no autorizados fueron modificados'''
 
-        a = self.get_asiento_idloc(row_to_upd[21])  #21 -> idloc
+        a = self.get_loc_key(row_to_upd[21])  #21 -> idloc
         vdif = False
 
         if self.nomloc != row_to_upd[0]:
@@ -471,7 +471,7 @@ class Asientos:
             "from v_loc_nal_all a " + \
             "left join bdge.dbo.doc b " + \
             "   on a.doc_idA = b.id"
-        
+
         if usrdep != 0 :
             s = s + " where a.dep = %d order by a.prov, a.sec, a.idloc"
             self.cur.execute(s, usrdep)
@@ -485,4 +485,3 @@ class Asientos:
 
     def __str__(self):
         return str(self.idloc) + '--' + self.nomloc
-    

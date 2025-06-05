@@ -1,5 +1,6 @@
 // Para visor en asientos/recintos a partir de coordenadas
 // -ric 
+
 function getgeoreci(event) {
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
@@ -152,17 +153,6 @@ function asientosReci_ext(event) {
     };
 }
 
-function asientoZona(event) {
-    var x = event.keyCode;
-    //alert(x)
-    if (x == 27 || x == 9 || 'undefined') {
-            $.getJSON('/asientoz', {
-                azona: $('input[name="idloc"]').val()
-            }, function(data) {
-                document.getElementById("inomloc").setAttribute("value", data.nomasi)
-            });
-    };
-} 
 
 function getNomloc() {
     $.getJSON('/get_nomloc', {
@@ -170,4 +160,4 @@ function getNomloc() {
     }, function(data) {
         document.getElementById("nomloc").setAttribute("value", data.nomloc)
     });
-} 
+}

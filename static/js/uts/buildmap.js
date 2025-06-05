@@ -1,9 +1,23 @@
-// Para visor en asientos/recintos a partir de coordenadas
+// Genera visor en asientos/recintos a partir de coordenadas
 // -ric
-function getgeoext(event) {
+
+function getgeo(event) {
     var x = event.keyCode;
     //alert(x)
-    if (x == 27 || x == 9 || 'undefined') {          
+    if (x == 27 || x == 9 || 'undefined') {
+            $.getJSON('/get_geo', {
+                latitud: $('input[name="latitud"]').val(),
+                longitud: $('input[name="longitud"]').val()
+            }, function(data) {
+                document.getElementById("ideploc").setAttribute("value", data.dep)
+                document.getElementById("idepartamento").setAttribute("value", data.departamento)
+                document.getElementById("iprovloc").setAttribute("value", data.prov)
+                document.getElementById("iprovincia").setAttribute("value", data.provincia)
+                document.getElementById("isecloc").setAttribute("value", data.sec)
+                document.getElementById("imunicipio").setAttribute("value", data.municipio)
+                document.getElementById("icircun").setAttribute("value", data.nrocircun)
+            });
+          
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
 } //getgeo
@@ -70,29 +84,8 @@ function getgeoesp(event) {
             });
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
-} //getgeo
+} //getgeoesp
 
-
-function getgeo(event) {
-    var x = event.keyCode;
-    //alert(x)
-    if (x == 27 || x == 9 || 'undefined') {
-            $.getJSON('/get_geo', {
-                latitud: $('input[name="latitud"]').val(),
-                longitud: $('input[name="longitud"]').val()
-            }, function(data) {
-                document.getElementById("ideploc").setAttribute("value", data.dep)
-                document.getElementById("idepartamento").setAttribute("value", data.departamento)
-                document.getElementById("iprovloc").setAttribute("value", data.prov)
-                document.getElementById("iprovincia").setAttribute("value", data.provincia)
-                document.getElementById("isecloc").setAttribute("value", data.sec)
-                document.getElementById("imunicipio").setAttribute("value", data.municipio)
-                document.getElementById("icircun").setAttribute("value", data.nrocircun)
-            });
-          
-        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
-    };
-} //getgeo
 
 function getgeoespecial(event) {
     var x = event.keyCode;
@@ -158,7 +151,17 @@ function getgeoespecial(event) {
 
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
-} 
+} //getgeoespecial
+
+
+function getgeoext(event) {
+    var x = event.keyCode;
+    //alert(x)
+    if (x == 27 || x == 9 || 'undefined') {          
+        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
+    };
+} //getgeoext sin uso 20250605 /?
+
 
 function buildMap(lat,lon)  {
     document.getElementById('dmap').innerHTML = "<div id='map' style='width: 100%; height: 100%;'></div>";

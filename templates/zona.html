@@ -3,11 +3,8 @@
 {% block content %}
 
 {% block js_css %}
-    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
-
-    <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
 {% endblock %}
+
 <div class="container">
     <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
     <br>    
@@ -19,7 +16,7 @@
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
                             <input type="hidden" name="idloc1" value="{{ z.idloc }}">
-                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required onkeydown="asientoZona(event)" 
+                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required onkeydown="getNomloc(event)" 
                                     {% if load %}
                                         disabled 
                                         value="{{ z.idloc }}"
@@ -125,7 +122,17 @@
 
 </div>
 
+
 <script>
+    function getNomloc() {
+        $.getJSON('/get_nomloc', {
+            idloc: $('input[name="idloc"]').val()
+        }, function(data) {
+            document.getElementById("inomloc").setAttribute("value", data.nomloc)
+        });
+    } 
+
+
     $('.custom-file-input').on('change', function() { 
           let fileName = $(this).val().split('\\').pop(); 
           $(this).next('.custom-file-label').addClass("selected").html(fileName); 

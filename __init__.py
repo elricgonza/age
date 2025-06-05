@@ -811,7 +811,7 @@ def asiento(idloc):
                                       ) # render a template
     else: # Viene de <asientos_list>
         if idloc != '0':  # EDIT
-            if a.get_asiento_idloc(idloc):
+            if a.get_loc_key(idloc):
                 if a.fechaIngreso == None:
                     a.fechaIngreso = str(datetime.datetime.now())[:-7]
                 if a.fechaAct == None:
@@ -847,17 +847,17 @@ def asiento_vs(idloc):
     ''' Coordenada en visor '''
 
     a = asi.Asientos(cxms)
-    a.get_asiento_idloc(idloc)    # siempre debiera existir
-     
+    a.get_loc_key(idloc)    # siempre debiera existir
+
     j = get_json.GetJson(cxpg)
 
-    return render_template('coord_vs.html', 
-                            gj_reci=j.get_reci(a.deploc), 
-                            gj_asi=j.get_asi(a.deploc), 
+    return render_template('coord_vs.html',
+                            gj_reci=j.get_reci(a.deploc),
+                            gj_asi=j.get_asi(a.deploc),
                             gj_cir=j.get_cir(a.deploc),
                             gj_mun=j.get_mun(a.deploc),
                             gj_prov=j.get_prov(a.deploc),
-                            latitud=a.latitud, 
+                            latitud=a.latitud,
                             longitud=a.longitud,
                             nombre=a.nomloc
                           )
@@ -869,8 +869,8 @@ def asiento_vs_ext(idloc):
     ''' Coordenada en visor '''
 
     a = asi.Asientos(cxms)
-    a.get_asiento_idloc(idloc)    # siempre debiera existir
-     
+    a.get_loc_key(idloc)    # siempre debiera existir
+
     j = get_json.GetJson(cxpg)
 
     return render_template('coord_vs.html', 
@@ -1901,17 +1901,6 @@ def zonasre_ext():
             print('Otra Cosa')
         else:
             return render_template('zonareext.html', error=error, z=z, load=False, puede_editar=p, titulo='Registro de Distritos del Exterior', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
-
-
-@app.route('/asientoz', methods=['GET', 'POST'])
-def asientoz():
-    azona = request.args.get('azona', 0, type=int)
-
-    z = dist.Distritos(cxms)
-    if z.asientoz(azona):
-        return jsonify(nomasi=z.nomloc)
-    else:
-        return jsonify(nomasi='NO EXISTE ASIENTO')
 
 
 @app.route('/get_nomloc', methods=['GET', 'POST'])

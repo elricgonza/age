@@ -8,7 +8,7 @@ class Reciasiento:
 
 
     def get_loc_all(self, usrdep):
-        ''' Obtiene datos bàsicos de asiento para - recintos '''
+        ''' Obtiene datos bàsicos de asiento para - recintos por dep y nal '''
         s = "select Dep, Prov, Sec, IdLoc, nomloc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
         if usrdep != 0 :
             s = s + " where Dep = %d order by AsientoElectoral"
