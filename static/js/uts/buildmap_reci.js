@@ -152,12 +152,3 @@ function asientosReci_ext(event) {
             });
     };
 }
-
-
-function getNomloc() {
-    $.getJSON('/get_nomloc', {
-        idloc: $('input[name="idloc"]').val()
-    }, function(data) {
-        document.getElementById("nomloc").setAttribute("value", data.nomloc)
-    });
-}

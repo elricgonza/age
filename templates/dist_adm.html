@@ -2,10 +2,6 @@
 
 {% block content %}
 {% block js_css %}
-    <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
-
-    <script src="{{ url_for('static', filename='js/uts/buildmap_reci.js') }}"></script>
 {% endblock %}
 
 <div class="container">
@@ -46,7 +42,7 @@
                         </div>
                         <div class="col-md-9">
                             <label for="nomloc">Nombre Asiento:</label>
-                            <input type="text" class="form-control" id="nomloc" title="" placeholder="Asiento" name="nomloc" required readonly
+                            <input type="text" class="form-control" id="inomloc" title="" placeholder="Asiento" name="nomloc" required readonly
                                         {% if load %}
                                             value="{{ d.nomloc }}"
                                         {% endif %}
@@ -156,6 +152,15 @@
 
 <script>
     char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96,64, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`@  ¿?¡!{}\/<>
+
+    function getNomloc() {
+        $.getJSON('/get_nomloc', {
+            idloc: $('input[name="idloc"]').val()
+        }, function(data) {
+            document.getElementById("inomloc").setAttribute("value", data.nomloc)
+        });
+    } 
+
 
     $('.custom-file-input').on('change', function() { 
           let fileName = $(this).val().split('\\').pop(); 

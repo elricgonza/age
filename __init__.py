@@ -1905,12 +1905,13 @@ def zonasre_ext():
 
 @app.route('/get_nomloc', methods=['GET', 'POST'])
 def get_nomloc():
-    ''' invocado desde dist_adm, zona_adm - ajax'''
+    ''' Get nombre de asiento, invocado desde: dist_adm, zona_adm, zona - ajax'''
 
     idloc = request.args.get('idloc', 0, type=int)
-    z = dist.Distritos(cxms)
-    if z.asientoz(idloc):
-        return jsonify(nomloc=z.nomloc)
+
+    loc = asi.Asientos(cxms)
+    if loc.get_loc_key(idloc):
+        return jsonify(nomloc=loc.nomloc)
     else:
         return jsonify(nomloc='NO EXISTE ASIENTO')
 

@@ -54,6 +54,7 @@ class Asientos:
 
 
     def get_loc_key(self, idloc):
+        ''' Obtiene datos de asiento '''
         s = "select a.IdLoc, a.DepLoc, a.ProvLoc, a.SecLoc, a.NomLoc," + \
             " a.PoblacionLoc, a.PoblacionElecLoc, Convert(CHAR(10),a.FechaCensoLoc,23), a.TipoLocLoc, a.fechaBaseLegLoc," + \
             " a.MarcaLoc, a.latitud, a.longitud, a.estado, a.circunConsulado," + \

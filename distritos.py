@@ -114,19 +114,6 @@ class Distritos:
             return True
 
 
-    def asientoz(self, azona):
-        s = "select IdLoc, NomLoc from [GeografiaElectoral_app].[dbo].[LOC]" + \
-            "where IdLoc= %d"
-        self.cur.execute(s, azona)
-        row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
-            self.idloc = row[0]
-            self.nomloc = row[1]
-            return True
-
-
     def get_nomdist(self, idloc, nomdist):
         con = idloc, nomdist
         s = "select NomDist from [GeografiaElectoral_app].[dbo].[DIST]" + \
