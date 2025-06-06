@@ -1350,13 +1350,36 @@ def get_asientos_all1():
 
     cxms2.close()
 
-
+# para eliminar/reemplazar
 @app.route('/get_asientos_all2', methods=['GET', 'POST'])
 def get_asientos_all2():
     dp = request.args.get('dpto')
     pro = request.args.get('provi')
     se = request.args.get('secci')
     cxms2 = dbcn.get_db_ms()
+    rca = recia.Reciasiento(cxms2)
+    rows = rca.get_asientos_all2(usrdep, dp, pro, se)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(departamento='COORDENADA',
+                       provincia='INCORRECTA !!!',
+                       municipio='INTENTE NUEVAMENTE....')
+
+
+@app.route('/get_loc_en_municipio', methods=['GET', 'POST'])
+def get_loc_uninom_munic():
+    ''' Get asientos uninom habilitados en municipio '''
+
+    dep = request.args.get('dpto')
+    prov = request.args.get('provi')
+    sec = request.args.get('secci')
+
+    cxms2 = dbcn.get_db_ms()
+    a = asi.Asientos(cxms2)
+
+    rows = a.
+
     rca = recia.Reciasiento(cxms2)
     rows = rca.get_asientos_all2(usrdep, dp, pro, se)
     if rows:

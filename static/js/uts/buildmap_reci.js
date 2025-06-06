@@ -14,7 +14,7 @@ function getgeoreci(event) {
 } 
 
 function getgeoreci1(event) {
-  // Invocado por recinto/evento click: Ver "Asientos / Zonas"
+  // Invocado por recinto.html/evento click: Ver "Asientos / Zonas"
 
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
