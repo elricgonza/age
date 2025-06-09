@@ -484,25 +484,22 @@ class Asientos:
         return rows
 
 
-    def get_loc_municipio(dep, prov, sec, tipo_cir):
-        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE y TipoCircun UNINOM y MIXTO (actualizado query) '''
+    def get_loc_municipio(self, dep, prov, sec, tipo_cir):
+        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE sg  TipoCircun 'uninominal/mixto' || 'especial' '''
 
         param = dep, prov, sec
-        s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
-        s = s + " where Dep = %d and Prov = %d and Sec = %d and estado in (16, 17, 75, 76) and tipoLocLoc in (67, 69) order by AsientoElectoral"
-
+        cod_tipo_cir = " (67,69) " if tipo_cir=="uninominal/mixto" else " (68) "
 
         s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral" + \
                 " from [bdge].[dbo].[v_loc_nal_all]" + \
                 " where Dep = %d and Prov = %d and Sec = %d " + \
-                " and estado in (16, 17, 75, 76) and tipoLocLoc in (67, 69)" + \
+                " and estado in (16, 17, 75, 76) and tipoLocLoc in " + cod_tipo_cir + \
                 " order by nomLoc"
-        try
-            self.cur.execute(s, asie)
-        else:
-            asie = dep, prov, secc
-            s = s + " where Dep = %d and Prov = %d and Sec = %d and estado  in (16, 17, 75, 76) and tipoLocLoc in (67, 69) order by AsientoElectoral"
-            self.cur.execute(s, asie)
+        try:
+            self.cur.execute(s, param)
+        except Exception as e:
+            print(e)
+            print('error - get_loc_municipio')
 
         rows = self.cur.fetchall()
         return rows

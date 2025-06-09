@@ -13,19 +13,35 @@ function getgeoreci(event) {
     };
 } 
 
-function getgeoreci1(event) {
-  // Invocado por recinto.html/evento click: Ver "Asientos / Zonas"
+
+function getLocMunicipio(event) {
+  // Invocado por recinto.html/evento click: get "Asientos"
 
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
     if (x == 27 || x == 9 || 'undefined') {
-        if($('input[name="load"]').val()=='True'){
+        if($('input[name="load"]').val()=='True'){ // EDIT
             asiento_reci(idloc, $('input[name="circun"]').val());
-        }else{
-            asientosReci1($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
+        }else{ // NEW
+            //loadLocMunicipio($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="tipoCir"]'));
+            $('#iasiento').html('');
+            $.getJSON("/get_loc_municipio", { 
+                    dep: $('input[name="deploc"]').val(),
+                    prov: $('input[name="provloc"]').val(),
+                    sec: $('input[name="secloc"]').val(),
+                    tipoCir: $('input[name="tipoCir"]'),
+                tipoCir: 'uninominal/mixto'
+                }, function(datos){
+                $("#iasiento").append('<option></option>');
+                    $.each(datos, function(index, obj){
+                        $("#iasiento").append('<option value=' + obj[3]'>' + obj[4] + '</option>');
+                        alert(obj[3] + "---" + obj[4])
+                    });
+                });
         };
     };
 }
+
 
 function getgeoreci2(event) {
     var x = event.keyCode;
@@ -80,6 +96,7 @@ function asientosReci(dep, prov, sec, cir) {
     };
 }
 
+/*
 // invocado x get asientos (recinto.html)
 function asientosReci1(dep, prov, sec, cir) {
     var x = event.keyCode;
@@ -97,9 +114,11 @@ function asientosReci1(dep, prov, sec, cir) {
             });
     };
 }
+*/
 
-// invocado x get asientos (recinto.html) - recodificado
-function asientosReci1(dep, prov, sec, cir) {
+// invocado x get asientos (recinto.html) new recinto - recodificado
+// invocado cuando recinto es new 
+function loadLocMunicipio(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
         $('#iasiento').html('');
@@ -107,11 +126,13 @@ function asientosReci1(dep, prov, sec, cir) {
                 dep: $('input[name="deploc"]').val(),
                 prov: $('input[name="provloc"]').val(),
                 sec: $('input[name="secloc"]').val(),
-            tipo_cir: 'uninominal/mixto'
+                tipoCir: $('input[name="tipoCir"]'),
+            tipoCir: 'uninominal/mixto'
             }, function(datos){
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
                     $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                    alert(obj[3] + "---" + obj[4])
                 });
             });
     };

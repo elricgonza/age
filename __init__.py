@@ -1367,21 +1367,20 @@ def get_asientos_all2():
                        municipio='INTENTE NUEVAMENTE....')
 
 
-@app.route('/get_loc_en_municipio', methods=['GET', 'POST'])
-def get_loc_uninom_munic():
-    ''' Get asientos uninom habilitados en municipio '''
+@app.route('/get_loc_municipio', methods=['GET', 'POST'])
+def get_loc_municipio():
+    ''' Get asientos habilitados en municipio '''
 
-    dep = request.args.get('dpto')
-    prov = request.args.get('provi')
-    sec = request.args.get('secci')
+    dep = request.args.get('dep')
+    prov = request.args.get('prov')
+    sec = request.args.get('sec')
+    tipo_cir = request.args.get('tipoCir') # 'uninominal/mixto' || 'especial'
 
     cxms2 = dbcn.get_db_ms()
+
     a = asi.Asientos(cxms2)
+    rows = a.get_loc_municipio(dep, prov, sec, tipo_cir)
 
-    rows = a.
-
-    rca = recia.Reciasiento(cxms2)
-    rows = rca.get_asientos_all2(usrdep, dp, pro, se)
     if rows:
         return jsonify(rows)
     else:
@@ -3045,7 +3044,7 @@ def jurisd_asi(idloc):
             if ja.get_jurisd_asi_idloc(idloc):
                 rows = ja.get_circuns_all(usrdep)
                 zonasd = ja.get_zonasd_all(usrdep)
-            
+
             if ja.get_jurisd_asi_idloc_idjurisd(idloc): # Modificar Asiento
                 return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
             else:
@@ -3057,7 +3056,7 @@ def jurisd_asi(idloc):
         if ja.get_jurisd_asi_idloc(idloc):
             rows = ja.get_circuns_all(usrdep)
             zonasd = ja.get_zonasd_all(usrdep)
-        
+
         if ja.get_jurisd_asi_idloc_idjurisd(idloc): # LISTA
             return render_template('jurisd_asi.html', ja=ja, circuns=rows, zonasd=zonasd, tpdfsA=d.get_tipo_documentos_pdfA(usrdep), dptos=dptos, provincias=provincias, municipios=municipios, load=True, ban=True, titulo='Asiento a Modificar Jurisdicción', boton='Modificar')
         else:
@@ -3075,7 +3074,7 @@ def jurisd_asi_m(idloc):
     ja = jua.JurisdAsi(cxms)
     rces = recies.Reciespeciales(cxms)
     error = None
-    
+
     if request.method == 'POST':
         f_actual = str(datetime.datetime.now())[:-7]
         dep2 = request.form['deploc']
@@ -3160,7 +3159,7 @@ def sincro_asi_list():
            else:
                latitud = asie[15]
                longitud = asie[16]
-                          
+
            situacion = 'Antiguo'       
            s.get_geos(latitud, longitud)
            if rowas_n != False:

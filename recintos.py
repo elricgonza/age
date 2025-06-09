@@ -63,8 +63,6 @@ class Recintos:
         key = idlocreci, reci
         self.cur.execute(s, key)
         row = self.cur.fetchone()
-        print('========================================================================row')
-        print(row)
         if  row:
             self.idlocreci = row[0]
             self.reci = row[1]
