@@ -80,6 +80,7 @@ function asientosReci(dep, prov, sec, cir) {
     };
 }
 
+// invocado x get asientos (recinto.html)
 function asientosReci1(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
@@ -96,6 +97,26 @@ function asientosReci1(dep, prov, sec, cir) {
             });
     };
 }
+
+// invocado x get asientos (recinto.html) - recodificado
+function asientosReci1(dep, prov, sec, cir) {
+    var x = event.keyCode;
+    if (x == 27 || x == 9 || 'undefined') {
+        $('#iasiento').html('');
+        $.getJSON("/get_loc_municipio", { 
+                dep: $('input[name="deploc"]').val(),
+                prov: $('input[name="provloc"]').val(),
+                sec: $('input[name="secloc"]').val(),
+            tipo_cir: 'uninominal/mixto'
+            }, function(datos){
+            $("#iasiento").append('<option></option>');
+                $.each(datos, function(index, obj){
+                    $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                });
+            });
+    };
+}
+
 
 function asientosReci2(dep, prov, sec, cir) {
     var x = event.keyCode;

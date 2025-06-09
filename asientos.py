@@ -484,7 +484,7 @@ class Asientos:
         return rows
 
 
-    def get_loc_uninom_munic(dep, prov, sec):
+    def get_loc_municipio(dep, prov, sec, tipo_cir):
         ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE y TipoCircun UNINOM y MIXTO (actualizado query) '''
 
         param = dep, prov, sec
