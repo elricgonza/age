@@ -23,7 +23,9 @@ function getLocMunicipio(event) {
         if($('input[name="load"]').val()=='True'){ // EDIT
             asiento_reci(idloc, $('input[name="circun"]').val());
         }else{ // NEW
+            loadLocMunicipio();
             //loadLocMunicipio($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="tipoCir"]'));
+            /*
             $('#iasiento').html('');
             $.getJSON("/get_loc_municipio", { 
                     dep: $('input[name="deploc"]').val(),
@@ -38,6 +40,7 @@ function getLocMunicipio(event) {
                         alert(obj[3] + "---" + obj[4])
                     });
                 });
+            */
         };
     };
 }
@@ -118,7 +121,8 @@ function asientosReci1(dep, prov, sec, cir) {
 
 // invocado x get asientos (recinto.html) new recinto - recodificado
 // invocado cuando recinto es new 
-function loadLocMunicipio(dep, prov, sec, cir) {
+//function loadLocMunicipio(dep, prov, sec, cir) {
+function loadLocMunicipio() {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
         $('#iasiento').html('');
