@@ -141,19 +141,17 @@
                     {% endif %}
                 >
                     {% for asientoReci in asientoRecis %}
-                        {% if rc.deploc==asientoReci[0] and rc.provloc==asientoReci[1] and rc.secloc==asientoReci[2] %}
-                            {% if load %}
-                                {% if rc.idlocreci==asientoReci[3] %}
-                                        <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
-                                {% endif %}
-                            {% else %}
-                                {% if rc.idlocreci==asientoReci[3] %}
-                                        <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
-                                {% else %}
-                                        <option value = "{{ rc.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
-                                {% endif %}
+                        {% if load %}
+                            {% if rc.idlocreci==asientoReci[3] %}
+                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
                             {% endif %}
-                       {% endif %}                                                     
+                        {% else %}
+                            {% if rc.idlocreci==asientoReci[3] %}
+                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                            {% else %}
+                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}        
                 </select>
 

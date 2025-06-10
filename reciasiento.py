@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Datos complementarios recintos
 
 class Reciasiento:
 
