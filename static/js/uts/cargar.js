@@ -1,5 +1,46 @@
 // Para visor en asientos/recintos a partir de coordenadas
 // -ric
+
+function zonasFill(idloc) {
+    var ek = event.keyCode;
+    alert('event keyC:' + ek);
+    alert('IDLOC: ' + idloc);
+
+    if (ek == 27 || ek == 9 || 'undefined') {
+        alert('dentro: ' + ek);
+    }
+
+    var ia = document.getElementById("iasiento").value;    // circun:idloc
+    var cir = ia.split(':');    // circun,idloc
+    document.getElementById('iidloc').value = cir[1];
+    document.getElementById('iidlocreci').value = cir[1];
+    document.getElementById('inrodist').value = cir[0];
+    document.getElementById('iidlocreci1').value = cir[1];
+    document.getElementById('inrodist1').value = cir[0];
+
+    $('#izonareci').html('');
+    $.getJSON("/get_zonas_all1", {
+        idloc: cir[1],
+        circun: cir[0]
+    }, function(datos5){
+        $("#izonareci").append('<option></option>');                
+        $.each(datos5, function(index5, obj5){       
+            $("#izonareci").append('<option value="' + obj5[1] + '">' + obj5[2] +' - '+ obj5[3] + '('+ 'Cir ' + cir[0] +')'+'</option>');
+        });
+    });
+
+    $('#inomdist').html('');
+    $.getJSON("/get_distritos_all", {
+        circun: cir[0]
+    }, function(datos6){
+        $("#inomdist").append('<option></option>');                
+        $.each(datos6, function(index6, obj6){           
+            $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Cir ' + obj6[2] +')'+'</option>');
+        });
+    });
+
+}
+
 function cargar(valor, data) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
@@ -46,7 +87,8 @@ function cargar(valor, data) {
                     }
                 });
             });
-        }else if(data==5){
+
+        }else if(data==5){ // change loc in recinto
             var ia = document.getElementById("iasiento").value;    // circun:idloc
             var cir = ia.split(':');    // circun,idloc
             document.getElementById('iidloc').value = cir[1];
@@ -64,6 +106,7 @@ function cargar(valor, data) {
                     $("#izonareci").append('<option value="' + obj5[1] + '">' + obj5[2] +' - '+ obj5[3] + '('+ 'Cir ' + cir[0] +')'+'</option>');
                 });
             });
+
             $('#inomdist').html('');
             $.getJSON("/get_distritos_all", {
                 circun: cir[0]
@@ -73,6 +116,7 @@ function cargar(valor, data) {
                     $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Cir ' + obj6[2] +')'+'</option>');
                 });
             });
+
         }else if(data==7){
             var circun = document.getElementById("inrodist").value;
             var idlocreci = document.getElementById("iidlocreci").value;
@@ -154,6 +198,3 @@ function cargar(valor, data) {
         } 
     };
 } 
-
-
-

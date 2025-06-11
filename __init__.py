@@ -1284,10 +1284,11 @@ def recinto(idlocreci, reci):
 
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
-                return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p, 
-                                       asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo), 
-                                       dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(), 
+                return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
+                                       asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                       zonasRecis=rca.get_zonas_all(usrdep),
+                                       estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
+                                       dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
             else:  # Edit/Save
                 rc.upd_recinto(row_to_upd)
@@ -1312,14 +1313,14 @@ def recinto(idlocreci, reci):
 
                 if usrauth == 3:    #tmpauth3 - get_etapas_auth
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
-                                    asientos=asi.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
                                     zonasRecis=rca.get_zonas_all(usrdep),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
                 else:
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
-                                    asientos=asi.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
                                     zonasRecis=rca.get_zonas_all(usrdep),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
@@ -1433,24 +1434,26 @@ def get_asiento_one():
         return jsonify(datos='NO ENCONTRADO')
 
 
-
 @app.route('/get_loc_nom', methods=['GET', 'POST'])
 def get_loc_nom():
-    ''' retorna nom recintos -  invocado x recinto.html/reciasiento.py '''
+    ''' retorna nom recintos -  invocado x recinto.html '''
     idloc = request.args.get('idloc')
+
     cxms2 = dbcn.get_db_ms()
     a = asi.Asientos(cxms2)
     row = a.get_loc_nom(idloc)
     if row:
-        return jsonify(rows)
+        return jsonify(row)
     else:
         return jsonify(datos='NO ENCONTRADO')
 
 
 @app.route('/get_zonas_all1', methods=['GET', 'POST'])
 def get_zonas_all1():
+    ''' call by cargar.js  '''
     idloc = request.args.get('idloc')
     circun = request.args.get('circun')
+
     cxms2 = dbcn.get_db_ms()
     rca = recia.Reciasiento(cxms2)
     rows = rca.get_zonas_all1(usrdep, idloc, circun)

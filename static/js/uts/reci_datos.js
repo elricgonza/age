@@ -1,5 +1,5 @@
-// Para visor en asientos/recintos a partir de coordenadas
-// -ric 
+// call new/upd recinto datos complementarios 
+// -ric parc/recodif
 
 function getgeoreci(event) {
     var x = event.keyCode;
@@ -15,32 +15,15 @@ function getgeoreci(event) {
 
 
 function getLocMunicipio(event) {
-  // Invocado por recinto.html/evento click: get "Asientos"
+  // Invocado por recinto.html/evento click: get "Asientos" en combo
 
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
     if (x == 27 || x == 9 || 'undefined') {
         if($('input[name="load"]').val()=='True'){ // EDIT
-            asiento_reci(idloc, $('input[name="circun"]').val());
+            getLocNom(idloc);  // reload combo humm
         }else{ // NEW
             loadLocMunicipio();
-            //loadLocMunicipio($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="tipoCir"]'));
-            /*
-            $('#iasiento').html('');
-            $.getJSON("/get_loc_municipio", { 
-                    dep: $('input[name="deploc"]').val(),
-                    prov: $('input[name="provloc"]').val(),
-                    sec: $('input[name="secloc"]').val(),
-                    tipoCir: $('input[name="tipoCir"]'),
-                tipoCir: 'uninominal/mixto'
-                }, function(datos){
-                $("#iasiento").append('<option></option>');
-                    $.each(datos, function(index, obj){
-                        $("#iasiento").append('<option value=' + obj[3]'>' + obj[4] + '</option>');
-                        alert(obj[3] + "---" + obj[4])
-                    });
-                });
-            */
         };
     };
 }
@@ -83,19 +66,18 @@ function asiento_reci(idloc, cir) {
 }
 
 
-function getNomAsiento(idloc) {
+// call by: recinto.html
+function getLocNom(idloc) {
     $('#iasiento').html('');
-    $.getJSON("/get_nom_asiento", {
+    $.getJSON("/get_loc_nom", {
             idloc: idloc
         }, function(datos){
         $("#iasiento").append('<option></option>');
             $.each(datos, function(index, obj){
-                //$("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
                 $("#iasiento").append('<option value="' + obj[3] + '">' + obj[4] + '</option>');
             });
         });
 }
-
 
 
 function asientosReci(dep, prov, sec, cir) {
@@ -115,29 +97,8 @@ function asientosReci(dep, prov, sec, cir) {
     };
 }
 
-/*
-// invocado x get asientos (recinto.html)
-function asientosReci1(dep, prov, sec, cir) {
-    var x = event.keyCode;
-    if (x == 27 || x == 9 || 'undefined') {
-        $('#iasiento').html('');
-        $.getJSON("/get_asientos_all2", { 
-                dpto: $('input[name="deploc"]').val(),
-                provi: $('input[name="provloc"]').val(),
-                secci: $('input[name="secloc"]').val()
-            }, function(datos){
-            $("#iasiento").append('<option></option>');
-                $.each(datos, function(index, obj){
-                    $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
-                });
-            });
-    };
-}
-*/
 
-// invocado x get asientos (recinto.html) new recinto - recodificado
-// invocado cuando recinto es new 
-//function loadLocMunicipio(dep, prov, sec, cir) {
+// call by (recinto.html) si NEW 
 function loadLocMunicipio() {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
@@ -151,7 +112,7 @@ function loadLocMunicipio() {
             }, function(datos){
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
-                    $("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                    $("#iasiento").append('<option value=" + obj[3] +">' + obj[4] + '</option>');
                     alert(obj[3] + "---" + obj[4])
                 });
             });
