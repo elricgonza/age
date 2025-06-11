@@ -505,5 +505,15 @@ class Asientos:
         return rows
 
 
+    def get_loc_nom(self, idloc):
+        ''' Invocado por ajax getJSON - Obtiene asiento por idLoc  (query actualizado) '''
+
+        s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral from [bdge].[dbo].[v_loc_nal_all]"
+        s = s + " where IdLoc = %d "
+        self.cur.execute(s, idloc)
+
+        rows = self.cur.fetchall()
+        return rows
+
     def __str__(self):
         return str(self.idloc) + '--' + self.nomloc

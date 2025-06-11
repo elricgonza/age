@@ -82,6 +82,22 @@ function asiento_reci(idloc, cir) {
         });
 }
 
+
+function getNomAsiento(idloc) {
+    $('#iasiento').html('');
+    $.getJSON("/get_nom_asiento", {
+            idloc: idloc
+        }, function(datos){
+        $("#iasiento").append('<option></option>');
+            $.each(datos, function(index, obj){
+                //$("#iasiento").append('<option value="' + cir+':'+obj[3] + '">' + obj[4] + '</option>');
+                $("#iasiento").append('<option value="' + obj[3] + '">' + obj[4] + '</option>');
+            });
+        });
+}
+
+
+
 function asientosReci(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {

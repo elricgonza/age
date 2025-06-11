@@ -140,16 +140,16 @@
                         readonly
                     {% endif %}
                 >
-                    {% for asientoReci in asientoRecis %}
+                    {% for asiento in asientos %}
                         {% if load %}
-                            {% if rc.idlocreci==asientoReci[3] %}
-                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                            {% if rc.idlocreci==asiento[3] %}
+                                    <option value = "{{ asiento[3] }}" selected>{{ asiento[4] }}</option>
                             {% endif %}
                         {% else %}
-                            {% if rc.idlocreci==asientoReci[3] %}
-                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}" selected>{{ asientoReci[4] }}</option>
+                            {% if rc.idlocreci==asiento[3] %}
+                                    <option value = "{{ asiento[3] }}" selected>{{ asiento[4] }}</option>
                             {% else %}
-                                    <option value = "{{ rc.circundist~':'~asientoReci[3] }}">{{ asientoReci[4] }}</option>
+                                    <option value = "{{ asiento[3] }}">{{ asiento[4] }}</option>
                             {% endif %}
                         {% endif %}
                     {% endfor %}        

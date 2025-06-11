@@ -1208,7 +1208,7 @@ def recinto(idlocreci, reci):
     ''' Uninominales '''
     rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
-    asi = asi.Asientos(cxms)
+    loc = asi.Asientos(cxms)
     z = dist.Distritos(cxms)
     d = docu.Documentos(cxms)
 
@@ -1312,14 +1312,15 @@ def recinto(idlocreci, reci):
 
                 if usrauth == 3:    #tmpauth3 - get_etapas_auth
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
-                                    asientoRecis=asi.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    asientos=asi.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
                                     zonasRecis=rca.get_zonas_all(usrdep),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
                 else:
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
-                                    asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
+                                    asientos=asi.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    zonasRecis=rca.get_zonas_all(usrdep),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
@@ -1427,6 +1428,20 @@ def get_asiento_one():
     rca = recia.Reciasiento(cxms2)
     rows = rca.get_asiento_one(usrdep, idloc)
     if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(datos='NO ENCONTRADO')
+
+
+
+@app.route('/get_loc_nom', methods=['GET', 'POST'])
+def get_loc_nom():
+    ''' retorna nom recintos -  invocado x recinto.html/reciasiento.py '''
+    idloc = request.args.get('idloc')
+    cxms2 = dbcn.get_db_ms()
+    a = asi.Asientos(cxms2)
+    row = a.get_loc_nom(idloc)
+    if row:
         return jsonify(rows)
     else:
         return jsonify(datos='NO ENCONTRADO')
