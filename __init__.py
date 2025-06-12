@@ -41,7 +41,7 @@ import homologacionPDF as hpdf
 import jurisdiccion as jur
 import jurisd_asi as jua
 import tipodocs as tdoc
-import zon as zon
+import zona
 
 import paises
 import deptos as deptoss
@@ -1465,6 +1465,23 @@ def get_zonas_all1():
     cxms2.close()
 
 
+@app.route('/get_zonas_idloc', methods=['GET', 'POST'])
+def get_zonas_idloc():
+    ''' call by cargar.js - reemplz get_zonas_all1 '''
+
+    idloc = request.args.get('idloc')
+
+    cxms2 = dbcn.get_db_ms()
+    z = zona.Zona(cxms2)
+    rows = z.get_zonas_idloc(idloc)
+
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+    cxms2.close()
+
+
 @app.route('/get_zonas_all2', methods=['GET', 'POST'])
 def get_zonas_all2():
     idloc = request.args.get('idloc')
@@ -1886,7 +1903,7 @@ def reci_zona_add():
 
     d = dist.Distritos(cxms)
     cxms_z = dbcn.get_db_ms()
-    z = zon.Zon(cxms_z)   
+    z = zona.Zona(cxms_z)   
 
     idloc = request.form['idloc']
     nomzona = request.form['nomzona'].upper()
@@ -1955,8 +1972,8 @@ def get_nomloc():
 @app.route('/zonas_list', methods=['GET', 'POST'])
 @login_required
 def zonas_list():
-    za = zon.Zon(cxms)
-    rows = za.get_zon_all(usrdep)
+    z = zona.Zona(cxms)
+    rows = z.get_zon_all(usrdep)
     if rows:
         if 'Zonas - Consulta' in permisos_usr:    # tiene pemisos asignados
             return render_template('zonas_list.html', zonas=rows, \
@@ -1979,7 +1996,7 @@ def zona_adm(pidloczona, pzona):
         zonas_list - new: pidloczona= 0, pzona= 0
         zonas_list - edit: pidloczona= n, pzona= n
     '''
-    za = zon.Zon(cxms)
+    za = zona.Zona(cxms)
     cxms2 = dbcn.get_db_ms()
     rca = recia.Reciasiento(cxms2) # p elim
     d = dist.Distritos(cxms2)
@@ -2043,7 +2060,7 @@ def zona_adm(pidloczona, pzona):
 @login_required
 def zona_elim(pidloc, pzona):
     ''' Elimina zona seleccionada en zonas_list'''
-    z = zon.Zon(cxms)
+    z = zona.Zona(cxms)
     z.elimina_zona(pidloc, pzona)
 
     rows = z.get_zon_all(usrdep)
@@ -2079,7 +2096,7 @@ def get_distritos_all1():
 def get_circundist():
     idloc = request.args.get('idloc')
     circd = request.args.get('circd')
-    za = zon.Zon(cxms)
+    z = zona.Zona(cxms)
     rows = za.get_circundist(idloc, circd)
     if rows:
         return jsonify(rows)

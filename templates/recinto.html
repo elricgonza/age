@@ -135,7 +135,7 @@
                 <input type="hidden" name="reci_idasiento" id="ireci_idasiento" value="{{ rc.idlocreci }}">
                 <input type="hidden" name="load" id="iload" value="{{ load }}">
                 
-                <select id="iasiento" name="asiento" class="form-control" onchange="zonasFill(this.value);" onBlur="getNomLoc();" required
+                <select id="iasiento" name="asiento" class="form-control" onchange="getZonasIdloc(this.value);" onBlur="getNomLoc();" required
                     {% if usrauth == 3 %}
                         readonly
                     {% endif %}

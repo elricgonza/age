@@ -1,7 +1,7 @@
 // Para visor en asientos/recintos a partir de coordenadas
 // -ric
 
-function zonasFill(idloc) {
+function getZonasIdloc(idloc) {
     var ek = event.keyCode;
     alert('event keyC:' + ek);
     alert('IDLOC: ' + idloc);
@@ -10,25 +10,22 @@ function zonasFill(idloc) {
         alert('dentro: ' + ek);
     }
 
-    var ia = document.getElementById("iasiento").value;    // circun:idloc
-    var cir = ia.split(':');    // circun,idloc
-    document.getElementById('iidloc').value = cir[1];
-    document.getElementById('iidlocreci').value = cir[1];
-    document.getElementById('inrodist').value = cir[0];
-    document.getElementById('iidlocreci1').value = cir[1];
-    document.getElementById('inrodist1').value = cir[0];
+    document.getElementById('iidloc').value = idloc;
+    document.getElementById('iidlocreci').value = idloc;
+    document.getElementById('inrodist').value = 0 //cir[0];
+    document.getElementById('iidlocreci1').value = idloc;
+    document.getElementById('inrodist1').value = 0 //cir[0];
 
     $('#izonareci').html('');
-    $.getJSON("/get_zonas_all1", {
-        idloc: cir[1],
-        circun: cir[0]
-    }, function(datos5){
+    $.getJSON("/get_zonas_idloc", {
+        idloc: idloc
+    }, function(zonas){
         $("#izonareci").append('<option></option>');                
-        $.each(datos5, function(index5, obj5){       
-            $("#izonareci").append('<option value="' + obj5[1] + '">' + obj5[2] +' - '+ obj5[3] + '('+ 'Cir ' + cir[0] +')'+'</option>');
+        $.each(zonas, function(index, obj){       
+            $("#izonareci").append('<option value="' + obj[1] + '">' + obj[2] +' - '+ obj[4] +'</option>');
         });
     });
-
+    /*
     $('#inomdist').html('');
     $.getJSON("/get_distritos_all", {
         circun: cir[0]
@@ -38,7 +35,7 @@ function zonasFill(idloc) {
             $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Cir ' + obj6[2] +')'+'</option>');
         });
     });
-
+    */
 }
 
 function cargar(valor, data) {

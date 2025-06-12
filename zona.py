@@ -1,6 +1,6 @@
 # Operaciones Zonas/Recintos
 
-class Zon:
+class Zona:
     idloczona = 0
     zona = 0
     nomzona = ''
@@ -53,32 +53,6 @@ class Zon:
         return rows
 
 
-    def get_zon_idloc(self, idloczona, idzon):
-        ''' suprimirrr  '''
-        up_zonadist = idloczona, idzon
-        s = "select distinct l.IdLoc, l.NomLoc, z.Zona, z.NomZona, z.DistZona, z.fechaIngreso, z.fechaAct, z.usuario, d.CircunDist" + \
-            " from [GeografiaElectoral_app].[dbo].[RECI] r" + \
-            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
-            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
-            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist" + \
-            " where z.IdLocZona= %d and z.Zona= %d"
-        self.cur.execute(s, up_zonadist)
-        row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
-            self.idloc = row[0]
-            self.nomloc = row[1]
-            self.idzon = row[2]
-            self.nomzona = row[3]
-            self.distzona = row[4]
-            self.fechaIngreso = row[5]
-            self.fechaAct = row[6]
-            self.usuario = row[7]
-            self.circundist = row[8]
-            return True
-
-
     def get_zona(self, idloc, zona):
         ''' obtiene zona '''
         t = idloc, zona
@@ -101,12 +75,30 @@ class Zon:
         return row
 
 
+    def get_zonas_idloc(self, idloc):
+        ''' Retorna zonas en idLoc '''
+
+        s = "select l.IdLoc, z.Zona, z.NomZona, d.dist, d.NomDist, l.nomloc" + \
+            " from [GeografiaElectoral_app].[dbo].[ZONA] z" + \
+            " inner join [GeografiaElectoral_app].[dbo].[DIST] d on z.DistZona=d.Dist and z.IdLocZona=d.IdLocDist" + \
+            " inner join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=z.IdLocZona and l.IdLoc=d.IdLocDist "
+        s = s + " where l.Idloc = %d order by z.NomZona"
+
+        try:
+            self.cur.execute(s, idloc)
+        except Exception as e:
+            print(e)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
     def get_next_zon(self, idloc):
         s = "select isnull(max(zona), 0)+1 from GeografiaElectoral_app.dbo.zona where IdLocZona = %d"
         self.cur.execute(s, idloc)
         row = self.cur.fetchone()
         return row[0]
-    
+
 
     def add_zon(self, idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso):
         new_zona = idloczona, zona, nomzona.upper(), distzona, fecharegistro, usuario, fechaingreso
