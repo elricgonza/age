@@ -3,12 +3,16 @@
 
 function getZonasIdloc(idloc) {
     var ek = event.keyCode;
-    alert('event keyC:' + ek);
-    alert('IDLOC: ' + idloc);
+    alert('event keyC  :' + ek);
+    alert('IDLOC:: ' + idloc);
 
     if (ek == 27 || ek == 9 || 'undefined') {
         alert('dentro: ' + ek);
     }
+
+
+    var ia = document.getElementById("iasiento").value;    // circun:idloc
+    alert('es idloc? ' + ia);
 
     document.getElementById('iidloc').value = idloc;
     document.getElementById('iidlocreci').value = idloc;

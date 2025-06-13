@@ -112,8 +112,9 @@ function loadLocMunicipio() {
             }, function(datos){
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
-                    $("#iasiento").append('<option value=" + obj[3] +">' + obj[4] + '</option>');
-                    alert(obj[3] + "---" + obj[4])
+                    //$("#iasiento").append('<option value=" + obj[3] +">' + obj[4] + '</option>');  //ok pero NO PARA NEW
+                    $("#iasiento").append('<option value="' + obj[3] + '">' + obj[4] + '</option>');  
+                    alert(obj[3] + "---" + obj[4]);
                 });
             });
     };
