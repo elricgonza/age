@@ -1517,19 +1517,18 @@ def get_distritos_all():
     cxms2.close()
 
 
-@app.route('/get_dist_by_idloc', methods=['GET', 'POST'])
-def get_dist_by_idloc():
+@app.route('/get_dists_idloc', methods=['GET', 'POST'])
+def get_dists_idloc():
     ''' 
-    (ajax) invocado por zona_adm.html / getDistByIdloc  (idloc) 
-    ret: list(tupla) [(IdLocDist, Dist, CircunDist, NomDist), ...]
+    (ajax) invocado por zona_adm.html, recinto.html (modal zona)
+    ret: list(tupla) [(IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario, distGeo), ...]
     '''
 
     idloc = request.args.get('idloc')
 
     cxms2 = dbcn.get_db_ms()
-    rca = recia.Reciasiento(cxms2)
     d = dist.Distritos(cxms2)
-    rows = d.get_dists_en_idloc(idloc) # 
+    rows = d.get_dists_idloc(idloc) # 
     if rows:
         return jsonify(rows)
     else:

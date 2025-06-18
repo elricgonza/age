@@ -149,7 +149,7 @@
     function getDistByIdloc(pidloc) {
         $('#distzona').html('');    // reset
 
-        $.getJSON("/get_dist_by_idloc", {
+        $.getJSON("/get_dists_idloc", {
             idloc: pidloc
         }, function(retlist) {
             $.each(retlist, function(index, e){

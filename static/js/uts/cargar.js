@@ -2,18 +2,7 @@
 // -ric
 
 function getZonasIdloc(idloc) {
-    var ek = event.keyCode;
-    alert('event keyC  :' + ek);
-    alert('IDLOC:: ' + idloc);
-
-    if (ek == 27 || ek == 9 || 'undefined') {
-        alert('dentro: ' + ek);
-    }
-
-
-    var ia = document.getElementById("iasiento").value;    // circun:idloc
-    alert('es idloc? ' + ia);
-
+    // carga cbo zonas en asiento
     document.getElementById('iidloc').value = idloc;
     document.getElementById('iidlocreci').value = idloc;
     document.getElementById('inrodist').value = 0 //cir[0];
@@ -29,18 +18,24 @@ function getZonasIdloc(idloc) {
             $("#izonareci").append('<option value="' + obj[1] + '">' + obj[2] +' - '+ obj[4] +'</option>');
         });
     });
-    /*
+
+    getDistsIdloc();
+}
+
+function getDistsIdloc() {
+    // carga dists en asiento
     $('#inomdist').html('');
-    $.getJSON("/get_distritos_all", {
-        circun: cir[0]
-    }, function(datos6){
+    $.getJSON("/get_dists_idloc", {
+        idloc: document.getElementById("iidlocreci").value
+    }, function(datos7){
         $("#inomdist").append('<option></option>');                
-        $.each(datos6, function(index6, obj6){           
-            $("#inomdist").append('<option value="' + obj6[1] + '">' + obj6[3] + '('+ 'Cir ' + obj6[2] +')'+'</option>');
+        $.each(datos7, function(index7, obj7){           
+            $("#inomdist").append('<option value="' + obj7[1] + '">' + obj7[3] +'</option>');
         });
     });
-    */
 }
+
+
 
 function cargar(valor, data) {
     var x = event.keyCode;

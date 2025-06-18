@@ -161,8 +161,9 @@ class Distritos:
             print(e)
 
 
-    def get_dists_en_idloc(self, idloc):        
-        s = "select IdLocDist, Dist, CircunDist, NomDist from [GeografiaElectoral_app].[dbo].[DIST] where IdLocDist = %d order by Dist"
+    def get_dists_idloc(self, idloc):
+        ''' retorna tupla(s) con estructura de DIST '''
+        s = "select * from [GeografiaElectoral_app].[dbo].[DIST] where IdLocDist = %d order by Dist"
         self.cur.execute(s, idloc)
         rows = self.cur.fetchall()
         return rows

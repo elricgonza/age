@@ -14,20 +14,16 @@ function getgeoreci(event) {
 } 
 
 
-function getLocMunicipio(event) {
-  // Invocado por recinto.html/evento click: get "Asientos" en combo
+function getLocMunicipio() {
+  // Invocado por recinto.html/evento click: get "Asientos/Zonas" en combo
 
-    var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
-    if (x == 27 || x == 9 || 'undefined') {
-        if($('input[name="load"]').val()=='True'){ // EDIT
-            getLocNom(idloc);  // reload combo humm
-        }else{ // NEW
-            loadLocMunicipio();
-        };
+    if($('input[name="load"]').val()=='True'){ // EDIT
+        getLocNom(idloc);  // reload combo humm
+    }else{ // NEW
+        loadLocMunicipio();
     };
 }
-
 
 function getgeoreci2(event) {
     var x = event.keyCode;
@@ -112,9 +108,8 @@ function loadLocMunicipio() {
             }, function(datos){
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
-                    //$("#iasiento").append('<option value=" + obj[3] +">' + obj[4] + '</option>');  //ok pero NO PARA NEW
                     $("#iasiento").append('<option value="' + obj[3] + '">' + obj[4] + '</option>');  
-                    alert(obj[3] + "---" + obj[4]);
+                    //alert(obj[3] + "---" + obj[4]);
                 });
             });
     };
