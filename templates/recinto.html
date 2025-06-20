@@ -22,7 +22,8 @@
     <br>
     <form class="needs-validation" action="{{ url_for('recinto', idlocreci = rc.idlocreci, reci = rc.reci) }}" novalidate method='POST' onsubmit="return Validation(this)" name="form">
         <div class="form-row">
-            <div class="col-md-3">
+            <!--<div class="col-md-2">-->
+            <div class="col" style="flex: 0 0 11%; max-width: 12.5%;">
                 <label for="latitud">Latitud:</label>
                 <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud"  
                     required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onfocusout="getgeo(event)"
@@ -36,7 +37,8 @@
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
             </div>
-            <div class="col-md-3">
+            <!--<div class="col-md-2">-->
+            <div class="col" style="flex: 0 0 11%; max-width: 12.5%;">
                 <label for="longitud">Longitud:</label>
                 <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud"
                     required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeo(event)" onfocusout="getgeo(event)"
@@ -50,16 +52,9 @@
                     >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
             </div>
-            <div class="col-md-2">
-            </div>
-            <div class="col-md-4">
-                <label for="">.</label>
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-1">
+
+            <!--<div class="col-md-1">-->
+            <div class="col" style="flex: 0 0 5%; max-width: 12.5%;">
                 <label for="dep">COD:</label>
                 <input type="text" class="form-control" id="ideploc" title="" placeholder="DEP" name="deploc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
@@ -77,7 +72,8 @@
                     >
             </div>
 
-            <div class="col-md-1">
+            <!--<div class="col-md-1">-->
+            <div class="col" style="flex: 0 0 6%; max-width: 12.5%;">
                 <label for="prov">COD:</label>
                 <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
@@ -95,7 +91,8 @@
                     >
             </div>
 
-            <div class="col-md-1">
+            <!--<div class="col-md-1">-->
+            <div class="col" style="flex: 0 0 6%; max-width: 12.5%;">
                 <label for="sec">COD:</label>
                 <input type="text" class="form-control" id="isecloc" title="" placeholder="SEC" name="secloc"  readonly required pattern="[0-9]{1}"
                         {% if load %}
@@ -104,7 +101,8 @@
                     >
                 <div class="invalid-feedback">Debe introducir SEC.</div>
             </div>
-            <div class="col-md-4">
+            <!--<div class="col-md-3">-->
+            <div class="col" style="flex: 0 0 27%; max-width: 50%;">
                 <label for="municipio">3er. Nivel:</label>
                 <input type="hidden" name="muni" id="imuni" value="{{ rc.nomsec }}">
                 <input type="text" class="form-control" id="imunicipio" title="" placeholder="3er. Nivel" name="municipio" disabled
@@ -124,6 +122,18 @@
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
             </div>
         </div> <!--row-->
+
+        <br>
+        <div class="row">
+        </div> <!--row-->
+
+        <div class="row">
+            <div class="col-md-4">
+                <label for="">.</label>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
+            </div>
+        </div>
+
         <br>
         <div class="row">
             <div class="col-md-3">
