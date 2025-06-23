@@ -109,8 +109,10 @@ def before_request_func():
 
     global cxms
     global cxpg
+    global cxgs
     cxms = dbcn.get_db_ms()
     cxpg = dbcn.get_db_pg()
+    cxgs = dbcn.get_db_gs()
 
 
 @app.teardown_request
@@ -123,6 +125,7 @@ def teardown_request_func(error=None):
 
     cxpg.close()
     cxms.close()
+    cxgs.close()
 
     if error:
         # Log the error
@@ -193,6 +196,24 @@ def get_geo():
                        provincia='INCORRECTA !!!',
                        sec='---',
                        municipio='INTENTE NUEVAMENTE....')
+
+
+@app.route('/get_dist_zona', methods=['GET', 'POST'])
+def get_dist_zona():
+    lat = request.args.get('latitud', 0, type=float)
+    long = request.args.get('longitud', 0, type=float)
+
+    g = geo.LatLong(cxgs)
+    if g.get_dist_zona(lat, long):
+        return jsonify(cod_dist=g.cod_dist,
+                       distrito=g.distrito,
+                       cod_zona=g.cod_zona,
+                       zona=g.zona)
+    else:
+        return jsonify(cod_dist='---',
+                       distrito='COORDENADA',
+                       cod_zona='---',
+                       zona='INCORRECTA !!!')
 
 
 @app.route('/get_json_ptos', methods=['GET', 'POST'])

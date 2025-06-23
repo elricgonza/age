@@ -111,6 +111,30 @@
                         {% endif %}
                     >
             </div>
+        </div> <!--row-->
+
+        <br>
+        <div class="row">
+        </div> <!--row-->
+
+        <div class="row">
+            <div class="col-md-4">
+                <label for="distrito">Distrito:</label>
+                <input type="text" class="form-control" id="idistrito" title="" placeholder="Distrito" name="distrito"  readonly required "
+                        {% if load %}
+                            value="{{ rc.distrito}}"
+                        {% endif %}
+                    >
+            </div>
+            <div class="col-md-4">
+                <label for="zona">Zona:</label>
+                <input type="text" class="form-control" id="izona" title="" placeholder="Zona" name="zona"  readonly required "
+                        {% if load %}
+                            value="{{ rc.zona}}"
+                        {% endif %}
+                    >
+            </div>
+
             <div class="col-md-1">
                 <label for="circun">CIRCUN:</label>
                 <input type="hidden" name="tipoCir" id="itipoCir" value="uninominal/mixto">
@@ -121,18 +145,11 @@
                     >
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
             </div>
-        </div> <!--row-->
-
-        <br>
-        <div class="row">
-        </div> <!--row-->
-
-        <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="">.</label>
                 <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
             </div>
-        </div>
+        </div> <!--end row-->
 
         <br>
         <div class="row">

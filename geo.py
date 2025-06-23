@@ -22,8 +22,8 @@ class LatLong:
             self.circunscripcion = row[7]
         return row
 
-    def get_zona_dist(self, lat, long):
-        s = "select * from f_get_zona_dist(%s, %s)"
+    def get_dist_zona(self, lat, long):
+        s = "select * from f_get_dist_zona(%s, %s)"
         coord = lat, long
         self.cur.execute(s, coord)
         row = self.cur.fetchone()
