@@ -205,6 +205,8 @@ def get_dist_zona():
 
     g = geo.LatLong(cxgs)
     if g.get_dist_zona(lat, long):
+        print('-------------------g.distrito')
+        print(g.distrito)
         return jsonify(cod_dist=g.cod_dist,
                        distrito=g.distrito,
                        cod_zona=g.cod_zona,
@@ -1923,7 +1925,10 @@ def reci_zona_add():
 
     d = dist.Distritos(cxms)
     cxms_z = dbcn.get_db_ms()
+    print('-----------------------------------------------')
+    print(cxms_z)
     z = zona.Zona(cxms_z)   
+    zz = 
 
     idloc = request.form['idloc']
     nomzona = request.form['nomzona'].upper()

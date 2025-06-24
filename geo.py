@@ -28,9 +28,8 @@ class LatLong:
         self.cur.execute(s, coord)
         row = self.cur.fetchone()
         if row:
-            self.cod_zona = row[0]
-            self.zona = row[1]
-            self.cod_dist = row[2]
-            self.distrito = row[3]
+            self.cod_dist = row[0]
+            self.distrito = row[1]
+            self.cod_zona = row[2]
+            self.zona = row[3]
         return row
-

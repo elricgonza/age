@@ -18,6 +18,14 @@ function getgeo(event) {
                 document.getElementById("icircun").setAttribute("value", data.nrocircun)
             });
           
+            $.getJSON('/get_dist_zona', {
+                latitud: $('input[name="latitud"]').val(),
+                longitud: $('input[name="longitud"]').val()
+            }, function(dat) {
+                document.getElementById("idistrito").setAttribute("value", dat.distrito)
+                document.getElementById("izona").setAttribute("value", dat.zona)
+            });
+
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
 } //getgeo

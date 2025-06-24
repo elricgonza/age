@@ -35,3 +35,21 @@ def get_db_pg():
         print("Error en conexión... Postgres -bdgeo-")
         print(e)
         sys.exit()
+
+
+def get_db_gs():
+    ppg = {'host': '10.100.15.54',  \
+        'user': 'appgeo', \
+        'password': 'appgeo', \
+        'port': '5432', \
+        'dbname': 'geoser'}
+    try:
+        cx = pg.connect(**ppg)
+        #cx.set_isolation_level(0)  # Avoid transactions, autocommit
+        #self.cur = cx.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        print("cnx postgres ok -bdgeo-")
+        return cx
+    except pg.DatabaseError as e:
+        print("Error en conexión... Postgres -geoser-")
+        print(e)
+        sys.exit()
