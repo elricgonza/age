@@ -203,14 +203,12 @@ def get_dist_zona():
     lat = request.args.get('latitud', 0, type=float)
     long = request.args.get('longitud', 0, type=float)
 
-    g = geo.LatLong(cxgs)
-    if g.get_dist_zona(lat, long):
-        print('-------------------g.distrito')
-        print(g.distrito)
-        return jsonify(cod_dist=g.cod_dist,
-                       distrito=g.distrito,
-                       cod_zona=g.cod_zona,
-                       zona=g.zona)
+    gdz = geo.LatLong(cxgs)
+    if gdz.get_dist_zona(lat, long):
+        return jsonify(cod_dist=gdz.cod_dist,
+                       distrito=gdz.distrito,
+                       cod_zona=gdz.cod_zona,
+                       zona=gdz.zona)
     else:
         return jsonify(cod_dist='---',
                        distrito='COORDENADA',
@@ -1925,10 +1923,7 @@ def reci_zona_add():
 
     d = dist.Distritos(cxms)
     cxms_z = dbcn.get_db_ms()
-    print('-----------------------------------------------')
-    print(cxms_z)
     z = zona.Zona(cxms_z)   
-    zz = 
 
     idloc = request.form['idloc']
     nomzona = request.form['nomzona'].upper()

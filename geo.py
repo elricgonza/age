@@ -6,11 +6,13 @@ class LatLong:
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_geo(self, lat, long):
         s = "select * from f_get_geo(%s, %s)"
         coord = lat, long
         self.cur.execute(s, coord)
         row = self.cur.fetchone()
+
         if row:
             self.dep = row[0]
             self.departamento = row[1]
@@ -22,11 +24,21 @@ class LatLong:
             self.circunscripcion = row[7]
         return row
 
+
+    def open_cursor(self):
+        if self.cur is None or self.cur.closed:
+            self.cur = self.cx.cursor()
+        return self.cur
+
+
     def get_dist_zona(self, lat, long):
         s = "select * from f_get_dist_zona(%s, %s)"
         coord = lat, long
-        self.cur.execute(s, coord)
-        row = self.cur.fetchone()
+        cursor = self.open_cursor()
+        #print('--------------ppp  closed?')
+        #print(cursor.closed)
+        cursor.execute(s, coord)
+        row = cursor.fetchone()
         if row:
             self.cod_dist = row[0]
             self.distrito = row[1]
