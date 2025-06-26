@@ -31,6 +31,7 @@ import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
 import geo as geo
+import geogs as geogs
 import sincro as sin
 import img
 import loc_img
@@ -188,22 +189,29 @@ def get_geo():
                        provincia=g.provincia,
                        sec=g.sec,
                        municipio=g.municipio,
-                       nrocircun=g.nrocircun)
+                       nrocircun=g.nrocircun,
+                       cod_dist=g.cod_dist,
+                       distrito=g.distrito,
+                       cod_zona=g.cod_zona,
+                       zona=g.zona)
     else:
         return jsonify(dep='---',
                        departamento='COORDENADA',
                        prov='---',
                        provincia='INCORRECTA !!!',
                        sec='---',
-                       municipio='INTENTE NUEVAMENTE....')
+                       municipio='INTENTE NUEVAMENTE....',
+                       distrito='------------------',
+                       zona='------------------')
 
 
+# ppp supr
 @app.route('/get_dist_zona', methods=['GET', 'POST'])
 def get_dist_zona():
     lat = request.args.get('latitud', 0, type=float)
     long = request.args.get('longitud', 0, type=float)
 
-    gdz = geo.LatLong(cxgs)
+    gdz = geogs.LatLongGS(cxgs)
     if gdz.get_dist_zona(lat, long):
         return jsonify(cod_dist=gdz.cod_dist,
                        distrito=gdz.distrito,

@@ -22,7 +22,7 @@
             <div class="col-md-4">                
                 <label for="latitud">Latitud:</label>
                 <input type="text" class="form-control" id="ilatitud" title="" placeholder="Introduzca latitud" name="latitud" 
-                    required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onfocusout="getgeo(event)"
+                    required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onfocusout="getGeoLoc(event)"
                         {% if load %}
                             value="{{ a.latitud }}"
                         {% endif %}
@@ -35,7 +35,7 @@
             <div class="col-md-4">
                 <label for="longitud">Longitud:</label>
                 <input type="text" class="form-control" id="ilongitud" title="" placeholder="Introduzca longitud" name="longitud" 
-                    required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getgeo(event)" onfocusout="getgeo(event)"
+                    required pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" onkeydown="getGeoLoc(event)" onfocusout="getGeoLoc(event)"
                         {% if load %}
                             value="{{ a.longitud }}"
                         {% endif %}
@@ -47,7 +47,6 @@
             </div>
             <div class="col-md-4">
                 <label for="">.</label>
-                <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="getgeo(event)" >Visualizar imágen Satelital</button>-->
                 <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
 
             </div>
@@ -623,6 +622,26 @@ function mostrarMapa(){
         }
     });
 }
+
+
+function getGeoLoc(event) {
+    var x = event.keyCode;
+    if (x == 27 || x == 9 || 'undefined') {
+            $.getJSON('/get_geo', {
+                latitud: $('input[name="latitud"]').val(),
+                longitud: $('input[name="longitud"]').val()
+            }, function(data) {
+                document.getElementById("ideploc").setAttribute("value", data.dep)
+                document.getElementById("idepartamento").setAttribute("value", data.departamento)
+                document.getElementById("iprovloc").setAttribute("value", data.prov)
+                document.getElementById("iprovincia").setAttribute("value", data.provincia)
+                document.getElementById("isecloc").setAttribute("value", data.sec)
+                document.getElementById("imunicipio").setAttribute("value", data.municipio)
+            });
+        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
+    };
+} //getGeoLoc
+
 
 </script>
 

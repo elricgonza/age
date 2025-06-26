@@ -1,9 +1,8 @@
 // Genera visor en asientos/recintos a partir de coordenadas
 // -ric
 
-function getgeo(event) {
+function getGeo(event) {
     var x = event.keyCode;
-    //alert(x)
     if (x == 27 || x == 9 || 'undefined') {
             $.getJSON('/get_geo', {
                 latitud: $('input[name="latitud"]').val(),
@@ -16,16 +15,10 @@ function getgeo(event) {
                 document.getElementById("isecloc").setAttribute("value", data.sec)
                 document.getElementById("imunicipio").setAttribute("value", data.municipio)
                 document.getElementById("icircun").setAttribute("value", data.nrocircun)
+                document.getElementById("idistrito").setAttribute("value", data.distrito)
+                document.getElementById("izona").setAttribute("value", data.zona)
+                alert(data.municipio)  //ppp
             });
-          
-            $.getJSON('/get_dist_zona', {
-                latitud: $('input[name="latitud"]').val(),
-                longitud: $('input[name="longitud"]').val()
-            }, function(dat) {
-                document.getElementById("idistrito").setAttribute("value", dat.distrito)
-                document.getElementById("izona").setAttribute("value", dat.zona)
-            });
-
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
 } //getgeo
@@ -160,15 +153,6 @@ function getgeoespecial(event) {
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
 } //getgeoespecial
-
-
-function getgeoext(event) {
-    var x = event.keyCode;
-    //alert(x)
-    if (x == 27 || x == 9 || 'undefined') {          
-        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
-    };
-} //getgeoext sin uso 20250605 /?
 
 
 function buildMap(lat,lon)  {

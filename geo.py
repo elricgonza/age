@@ -1,4 +1,4 @@
-# sql - espacial
+# sql - espacial -
 
 class LatLong:
 
@@ -10,38 +10,23 @@ class LatLong:
     def get_geo(self, lat, long):
         s = "select * from f_get_geo(%s, %s)"
         coord = lat, long
-        self.cur.execute(s, coord)
-        row = self.cur.fetchone()
-
-        if row:
-            self.dep = row[0]
-            self.departamento = row[1]
-            self.prov = row[2]
-            self.provincia = row[3]
-            self.sec = row[4]
-            self.municipio = row[5]
-            self.nrocircun = row[6]
-            self.circunscripcion = row[7]
-        return row
-
-
-    def open_cursor(self):
-        if self.cur is None or self.cur.closed:
-            self.cur = self.cx.cursor()
-        return self.cur
-
-
-    def get_dist_zona(self, lat, long):
-        s = "select * from f_get_dist_zona(%s, %s)"
-        coord = lat, long
-        cursor = self.open_cursor()
-        #print('--------------ppp  closed?')
-        #print(cursor.closed)
-        cursor.execute(s, coord)
-        row = cursor.fetchone()
-        if row:
-            self.cod_dist = row[0]
-            self.distrito = row[1]
-            self.cod_zona = row[2]
-            self.zona = row[3]
-        return row
+        try:
+            self.cur.execute(s, coord)
+            row = self.cur.fetchone()
+            if row:
+                self.dep = row[0]
+                self.departamento = row[1]
+                self.prov = row[2]
+                self.provincia = row[3]
+                self.sec = row[4]
+                self.municipio = row[5]
+                self.nrocircun = row[6]
+                self.circunscripcion = row[7]
+                self.cod_dist = row[8]
+                self.distrito = row[9]
+                self.cod_zona = row[10]
+                self.zona = row[11]
+            return row
+        except Exception as e:
+            print(e)
+            print('Error - get_geo: ')
