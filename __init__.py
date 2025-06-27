@@ -31,7 +31,6 @@ import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
 import geo as geo
-import geogs as geogs
 import sincro as sin
 import img
 import loc_img
@@ -110,10 +109,10 @@ def before_request_func():
 
     global cxms
     global cxpg
-    global cxgs
+    #global cxgs
     cxms = dbcn.get_db_ms()
     cxpg = dbcn.get_db_pg()
-    cxgs = dbcn.get_db_gs()
+    #cxgs = dbcn.get_db_gs()
 
 
 @app.teardown_request
@@ -126,7 +125,7 @@ def teardown_request_func(error=None):
 
     cxpg.close()
     cxms.close()
-    cxgs.close()
+    #cxgs.close()
 
     if error:
         # Log the error
@@ -1930,11 +1929,12 @@ def reci_zona_add():
     ''' Invocado por ajax - adición de zonas (recinto.html) '''
 
     d = dist.Distritos(cxms)
+
     cxms_z = dbcn.get_db_ms()
-    z = zona.Zona(cxms_z)   
+    z = zona.Zona(cxms_z)
 
     idloc = request.form['idloc']
-    nomzona = request.form['nomzona'].upper()
+    nomzona = request.form['nomzona']
     nomdist = request.form['nomdist']    # cod. DIST 
 
     # obtiene cod zona
@@ -1942,16 +1942,16 @@ def reci_zona_add():
         if z.nomzona_existe(idloc, nomzona):
             return jsonify({'error' : 'Error, el nombre: --SIN ZONA-- ya existe en el asiento, debe verificar/complementar nombre.'})
         else:
-            zona = 0
+            v_cod_zona = 0
     else:
-        zona = z.get_next_zona(idloc)
+        v_cod_zona = z.get_next_zona(idloc)
 
     if z.nomzona_existe(idloc, nomzona):
         return jsonify({'error' : 'Error, el nombre: --' + nomzona + '-- ya existe en el asiento, debe verificar/complementar nombre'})
 
     ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc'])
-    
-    z.add_zona(idloc, zona, nomzona, ultimodist, \
+
+    z.add_zona(idloc, v_cod_zona, nomzona, ultimodist, \
                request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
 
     return jsonify({'name' : 'Zona adicionada...'})

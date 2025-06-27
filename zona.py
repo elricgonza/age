@@ -1,15 +1,6 @@
 # Operaciones Zonas/Recintos
 
 class Zona:
-    idloczona = 0
-    zona = 0
-    nomzona = ''
-    distzona = 0
-    fechaingreso = ''
-    fechaact = ''
-    usuario = ''
-
-    _nomloc = ''
 
     def __init__(self, cx):
         self.cx = cx
@@ -169,7 +160,7 @@ class Zona:
 
 
     def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario):
-        new_zona = idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario.strip()
+        new_zona = idloczona, zona, nomzona.strip(), distzona, fechaingreso, fechaact, usuario.strip()
         s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
             " (%s, %s, %s, %s, %s, %s, %s) "
         try:
@@ -190,4 +181,3 @@ class Zona:
         except Exception as e:
             print("Error eliminación zona")
             print(e)
-

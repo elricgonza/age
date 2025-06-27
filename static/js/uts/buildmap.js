@@ -17,7 +17,6 @@ function getGeo(event) {
                 document.getElementById("icircun").setAttribute("value", data.nrocircun)
                 document.getElementById("idistrito").setAttribute("value", data.distrito)
                 document.getElementById("izona").setAttribute("value", data.zona)
-                alert(data.municipio)  //ppp
             });
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
