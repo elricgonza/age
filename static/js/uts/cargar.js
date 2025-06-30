@@ -5,7 +5,6 @@ function getZonasIdloc(idloc) {
     // carga cbo zonas en asiento
     document.getElementById('iidloc').value = idloc;
     document.getElementById('iidlocreci').value = idloc;
-    document.getElementById('inrodist').value = 0 //cir[0];
     document.getElementById('iidlocreci1').value = idloc;
     document.getElementById('inrodist1').value = 0 //cir[0];
 
@@ -34,7 +33,6 @@ function getDistsIdloc() {
         });
     });
 }
-
 
 
 function cargar(valor, data) {
@@ -89,7 +87,6 @@ function cargar(valor, data) {
             var cir = ia.split(':');    // circun,idloc
             document.getElementById('iidloc').value = cir[1];
             document.getElementById('iidlocreci').value = cir[1];
-            document.getElementById('inrodist').value = cir[0];
             document.getElementById('iidlocreci1').value = cir[1];
             document.getElementById('inrodist1').value = cir[0];
             $('#izonareci').html('');
@@ -114,7 +111,6 @@ function cargar(valor, data) {
             });
 
         }else if(data==7){
-            var circun = document.getElementById("inrodist").value;
             var idlocreci = document.getElementById("iidlocreci").value;
             $('#inomdist').html('');
             $.getJSON("/get_distritos_all", {

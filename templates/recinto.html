@@ -683,8 +683,15 @@
           <h3 class="text-center text-blue pt-3" >Adición de nueva Zona</h3> 
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
-            <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align: center;"></div>    
-            <form id="myForm" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
+            <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align:center;">
+            </div>    
+            <form id="formZona" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="checkbox" id="ichkNomZonaOk" name="chkNombreOk" style="display: none;">
+                        <label for="ichkNomZonaOk" style="display: none;">El nombre de Zona es CORRECTO: </label>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-3">
                         <label for="idloc">IdLoc:</label>
@@ -693,11 +700,9 @@
                                     value="{{ rc.idlocreci }}"
                                 {% endif %}
                             >
-                        <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                     </div>
                     <div class="col-md-6">
                         <label for="nomzona">Refresh  - Nombres Distrito:</label>
-                        <!--<button type="button" class="btn btn-light btn-block"><a onclick="cargar(this.value, 7)"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>-->
                         <button type="button" class="btn btn-light btn-block"><a onclick="getDistsIdloc()"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>
                     </div>
                     <div class="col-md-3">
@@ -709,23 +714,14 @@
                         <label for="nomzona">Nombre de la Zona:</label>
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
                                 onkeypress="return !char_restringidos.includes(event.charCode)"
-                                value="SIN ZONA"        
+                                value="Sin nombre de zona"        
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
                     </div>
                 </div>
-                <h5 class="text-left text-blue pt-5">Datos del Distrito (Circunscripción):</h5>
+                <h5 class="text-left text-blue pt-5">Datos del Distrito:</h5>
                 <div class="row">
-                    <div class="col-md-2">
-                        <label for="nrodist">Circun.:</label>
-                        <input type="text" class="form-control" id="inrodist" placeholder="Nro." name="nrodist" required readonly
-                            {% if load %}
-                                value="{{ rc.circundist }}"        
-                            {% endif %}
-                        >
-                        <div class="invalid-feedback">Por favor ingrese Nro. de Circun...</div>
-                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-9">
                         <label for="nomdist">Nombre del Distrito:</label>
                         <select id="inomdist" name="nomdist" class="form-control" required>
                         </select>
@@ -776,7 +772,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <button type="button" id="cerrar" onclick="cerrarmodal();" 
+                        <button type="button" id="cerrar" onclick="cerrarModalZona();" 
                             class="btn btn-outline-danger btn-md btn-block" data-dismiss="modal">Cerrar</button>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -796,7 +792,8 @@
 </div>
 
 <script type="text/javascript">
-    function enviar(){
+
+    function enviar(){  // onsubmit formZona
         // valida nomzona
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
@@ -810,7 +807,7 @@
 
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
-        var circundist = document.getElementById('inrodist').value;
+        var circundist = 0;
         var nomdist = document.getElementById('inomdist').value;
         var fingreso = document.getElementById('ifechaIngresoM').value;
         var factual = document.getElementById('ifechaActM').value;
@@ -827,15 +824,19 @@
             if (data.error) {
                 $('#errorAlert').text(data.error).show();
                 $('#successAlert').hide();
+                $('#ichkNomZona').style.display = 'block';
+                const label = document.querySelector('label[for="chkNomZona"]');
+                label.style.display = 'block';
             }
             else {
-                $('#successAlert').text(data.name).show();
                 $('#errorAlert').hide();
+                $('#successAlert').text(data.msgok).show();
                 document.getElementById('isubmitaceptar').disabled = true;
             }
         });
     }
-    function cerrarmodal(){
+
+    function cerrarModalZona(){
         $("#iasiento").val('0');
         $('#izonareci').html('');
         $("#izonareci").append('<option></option>');

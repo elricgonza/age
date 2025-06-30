@@ -1954,7 +1954,7 @@ def reci_zona_add():
     z.add_zona(idloc, v_cod_zona, nomzona, ultimodist, \
                request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
 
-    return jsonify({'name' : 'Zona adicionada...'})
+    return jsonify({'msgok' : 'Zona adicionada...'})
 
 
 @app.route('/zonasre_ext', methods=['GET', 'POST'])
