@@ -687,11 +687,22 @@
             </div>    
             <form id="formZona" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
                 <div class="row">
-                    <div class="col-md-12">
-                        <input type="checkbox" id="ichkNomZonaOk" name="chkNombreOk" style="display: none;">
-                        <label for="ichkNomZonaOk" style="display: none;">El nombre de Zona es CORRECTO: </label>
+                    <div class="col-md-9">
+                        <label for="ichkNomZonaOk" id="ilblNomZonaOk" style="display: none;">El nombre de Zona es CORRECTO?: </label>
                     </div>
+                    <div class="col-md-3">
+                        <input type="checkbox" id="ichkNomZonaOk" name="chkNomZonaOk" style="display: none;" value="ok">
+                        </div>
+                    <!--
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" name="chkNomZonaOk" id="ichkNomZonaOk" style="display: none;" >
+  <label class="form-check-label" for="ichkNomZonaOk">
+    Default checkbox Es correcto?
+  </label>
+</div>
+                    -->
                 </div>
+                <br>
                 <div class="row">
                     <div class="col-md-3">
                         <label for="idloc">IdLoc:</label>
@@ -792,7 +803,6 @@
 </div>
 
 <script type="text/javascript">
-
     function enviar(){  // onsubmit formZona
         // valida nomzona
         var valor = document.getElementById("inomzona").value;
@@ -812,8 +822,10 @@
         var fingreso = document.getElementById('ifechaIngresoM').value;
         var factual = document.getElementById('ifechaActM').value;
         var usuario = document.getElementById('iusuario_zona').value;
+        var chknomzonaok = document.getElementById('ichkNomZonaOk').value;
+        alert(chknomzonaok);
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
-                      '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario;
+                      '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&chknomzonaok='+ chknomzonaok;
 
         $.ajax({
             type: 'POST',
@@ -824,9 +836,8 @@
             if (data.error) {
                 $('#errorAlert').text(data.error).show();
                 $('#successAlert').hide();
-                $('#ichkNomZona').style.display = 'block';
-                const label = document.querySelector('label[for="chkNomZona"]');
-                label.style.display = 'block';
+                document.getElementById('ilblNomZonaOk').style.display = 'block';
+                document.getElementById('ichkNomZonaOk').style.display = 'block';
             }
             else {
                 $('#errorAlert').hide();
@@ -843,6 +854,7 @@
         window.close();
     }
 </script>
+
 
 <!-- Otro Modal -->
 
