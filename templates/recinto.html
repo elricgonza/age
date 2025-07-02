@@ -686,21 +686,12 @@
             <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align:center;">
             </div>    
             <form id="formZona" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
-                <div class="row">
-                    <div class="col-md-9">
-                        <label for="ichkNomZonaOk" id="ilblNomZonaOk" style="display: none;">El nombre de Zona es CORRECTO?: </label>
+                <div id='divZonaDup' style="display: none;" class="row">
+                    <div class="col-md-12">
+                        <label>El nombre de Zona duplicado es Correcto?: </label>
+                        <input type="radio" name="zonaDupOk" id="izonaDupOkSi" value="SI"> SI
+                        <input type="radio" name="zonaDupOk" id="izonaDupOkNo" value="NO" checked> NO
                     </div>
-                    <div class="col-md-3">
-                        <input type="checkbox" id="ichkNomZonaOk" name="chkNomZonaOk" style="display: none;" value="ok">
-                        </div>
-                    <!--
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" name="chkNomZonaOk" id="ichkNomZonaOk" style="display: none;" >
-  <label class="form-check-label" for="ichkNomZonaOk">
-    Default checkbox Es correcto?
-  </label>
-</div>
-                    -->
                 </div>
                 <br>
                 <div class="row">
@@ -724,8 +715,7 @@
                     <div class="col-md-12">
                         <label for="nomzona">Nombre de la Zona:</label>
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
-                                onkeypress="return !char_restringidos.includes(event.charCode)"
-                                value="Sin nombre de zona"        
+                                onkeypress="return !char_restringidos.includes(event.charCode)" value="Sin nombre de zona"        
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
                     </div>
@@ -822,10 +812,12 @@
         var fingreso = document.getElementById('ifechaIngresoM').value;
         var factual = document.getElementById('ifechaActM').value;
         var usuario = document.getElementById('iusuario_zona').value;
-        var chknomzonaok = document.getElementById('ichkNomZonaOk').value;
-        alert(chknomzonaok);
+        let v = document.querySelector(
+            'input[name="zonaDupOk"]:checked');
+        let confirmaZonaDup = v.value
+        alert(confirmaZonaDup);
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
-                      '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&chknomzonaok='+ chknomzonaok;
+                      '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup;
 
         $.ajax({
             type: 'POST',
@@ -836,8 +828,9 @@
             if (data.error) {
                 $('#errorAlert').text(data.error).show();
                 $('#successAlert').hide();
-                document.getElementById('ilblNomZonaOk').style.display = 'block';
-                document.getElementById('ichkNomZonaOk').style.display = 'block';
+                //document.getElementById('ilblNomZonaOk').style.display = 'block';
+                //document.getElementById('ichkNomZonaOk').style.display = 'block';
+                document.getElementById('divZonaDup').style.display = 'block';
             }
             else {
                 $('#errorAlert').hide();

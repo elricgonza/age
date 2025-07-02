@@ -1936,9 +1936,7 @@ def reci_zona_add():
     idloc = request.form['idloc']
     nomzona = request.form['nomzona']
     nomdist = request.form['nomdist']    # cod. DIST 
-    chknomzonaok = request.form['chknomzonaok']
-    print('---------------------chknomz o')
-    print(chknomzonaok)
+    confirmaZonaDup = request.form['confirmaZonaDup']  #SI/NO
 
     # obtiene cod zona
     if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
