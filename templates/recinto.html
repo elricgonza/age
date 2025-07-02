@@ -680,6 +680,7 @@
     <div class="modal-content">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
+          <br>
           <h3 class="text-center text-blue pt-3" >Adición de nueva Zona</h3> 
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
@@ -688,10 +689,11 @@
             <form id="formZona" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
                 <div id='divZonaDup' style="display: none;" class="row">
                     <div class="col-md-12">
-                        <label>El nombre de Zona duplicado es Correcto?: </label>
-                        <input type="radio" name="zonaDupOk" id="izonaDupOkSi" value="SI"> SI
-                        <input type="radio" name="zonaDupOk" id="izonaDupOkNo" value="NO" checked> NO
+                        <label style="color:red; font-size:15px; font-weight:bold">El nombre de Zona duplicado es Correcto?: </label>
+                        <input type="radio" name="zonaDupOk" id="iDupSi" value="SI"> SI
+                        <input type="radio" name="zonaDupOk" id="iDupNo" value="NO" checked> NO
                     </div>
+                    <hr>
                 </div>
                 <br>
                 <div class="row">
@@ -703,11 +705,9 @@
                                 {% endif %}
                             >
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <label for="nomzona">Refresh  - Nombres Distrito:</label>
                         <button type="button" class="btn btn-light btn-block"><a onclick="getDistsIdloc()"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>
-                    </div>
-                    <div class="col-md-3">
                     </div>
                 </div> <!--row-->
                 <br>
@@ -815,7 +815,6 @@
         let v = document.querySelector(
             'input[name="zonaDupOk"]:checked');
         let confirmaZonaDup = v.value
-        alert(confirmaZonaDup);
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup;
 
@@ -828,8 +827,6 @@
             if (data.error) {
                 $('#errorAlert').text(data.error).show();
                 $('#successAlert').hide();
-                //document.getElementById('ilblNomZonaOk').style.display = 'block';
-                //document.getElementById('ichkNomZonaOk').style.display = 'block';
                 document.getElementById('divZonaDup').style.display = 'block';
             }
             else {

@@ -1936,19 +1936,19 @@ def reci_zona_add():
     idloc = request.form['idloc']
     nomzona = request.form['nomzona']
     nomdist = request.form['nomdist']    # cod. DIST 
-    confirmaZonaDup = request.form['confirmaZonaDup']  #SI/NO
+    confirmaZonaDup = request.form['confirmaZonaDup']  # SI/NO
 
     # obtiene cod zona
     if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
         if z.nomzona_existe(idloc, nomzona):
-            return jsonify({'error' : 'Error, el nombre: --SIN ZONA-- ya existe en el asiento, debe verificar/complementar nombre.'})
+            return jsonify({'error' : 'El nombre: --SIN ZONA-- ya existe en el asiento, debe revisar y confirmar el nombre.'})
         else:
             v_cod_zona = 0
     else:
         v_cod_zona = z.get_next_zona(idloc)
 
-    if z.nomzona_existe(idloc, nomzona):
-        return jsonify({'error' : 'Error, el nombre: --' + nomzona + '-- ya existe en el asiento, debe verificar/complementar nombre'})
+    if z.nomzona_existe(idloc, nomzona) and confirmaZonaDup == "NO":
+        return jsonify({'error' : 'El nombre: --' + nomzona + '-- ya existe en el asiento, debe revisar y confirmar el nombre'})
 
     ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc'])
 
