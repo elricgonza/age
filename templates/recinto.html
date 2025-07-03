@@ -681,7 +681,8 @@
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
           <br>
-          <h3 class="text-center text-blue pt-3" >Adición de nueva Zona</h3> 
+          <!--<h3 class="text-center text-blue pt-3" >Adición de nueva Zona</h3> -->
+          <h3 class="text-center text-blue pt-3" style="font-weight: bold;" >Adición de nueva Zona</h3> 
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
             <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align:center;">
@@ -689,7 +690,7 @@
             <form id="formZona" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
                 <div id='divZonaDup' style="display: none;" class="row">
                     <div class="col-md-12">
-                        <label style="color:red; font-size:15px; font-weight:bold">El nombre de Zona duplicado es Correcto?: </label>
+                        <label style="color:purple; font-size:15px; font-weight:bold">Es CORRECTO el nombre de Zona duplicado?: </label>
                         <input type="radio" name="zonaDupOk" id="iDupSi" value="SI"> SI
                         <input type="radio" name="zonaDupOk" id="iDupNo" value="NO" checked> NO
                     </div>
@@ -705,7 +706,7 @@
                                 {% endif %}
                             >
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         <label for="nomzona">Refresh  - Nombres Distrito:</label>
                         <button type="button" class="btn btn-light btn-block"><a onclick="getDistsIdloc()"><i class="fas fa-sync-alt" style="font-size: 25px;"></i></a></button>
                     </div>
@@ -713,14 +714,14 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="nomzona">Nombre de la Zona:</label>
+                        <label for="nomzona">Nombre de la Zona (debe confirmar ó corregir) : </label>
                         <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
                                 onkeypress="return !char_restringidos.includes(event.charCode)" value="Sin nombre de zona"        
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
                     </div>
                 </div>
-                <h5 class="text-left text-blue pt-5">Datos del Distrito:</h5>
+                <br>
                 <div class="row">
                     <div class="col-md-9">
                         <label for="nomdist">Nombre del Distrito:</label>
