@@ -34,7 +34,7 @@
                         {% if usrauth == 3 %}
                             readonly
                         {% endif %}
-                    >
+                >
                 <div class="invalid-feedback">Debe introducir una coordenada válida.</div>
             </div>
             <!--<div class="col-md-2">-->
@@ -185,7 +185,7 @@
                 <div class="invalid-feedback">Debe Seleccionar un Asiento...</div>
             </div>
             <div class="col-md-4">
-                <label for="zonareci">Zona del Recinto:</label>
+                <label for="zonareci">Zona del Recinto (Zonas Registradas en BD):</label>
                 <input type="hidden" name="reci_idzona" value="{{ rc.zonareci }}">
                 <select id="izonareci" name="zonareci" class="form-control" required
                     {% if usrauth == 3 %}
@@ -207,7 +207,7 @@
             </div>
             <div class="col-md-2">
                 <label for="zonareci">Zona y Distrito:</label>
-                <button type="button" class="btn btn-info btn-block openBtn">Registrar...</button>
+                <button type="button" class="btn btn-info btn-block openBtn">Adicionar...</button>
             </div>
         </div> <!--row-->
 
@@ -520,10 +520,9 @@
                 >Aceptar</button>
             </div>
         </div> <!--row-->
-
     </form>
-
 </div> <!--main-->
+
 
 <script>
     char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96,64, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`@  ¿?¡!{}\/<>
@@ -674,14 +673,13 @@
     }
 </script>
 
-<!-- MODAL ZONA -->
+<!-- Modal Zona -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-11">  
           <br>
-          <!--<h3 class="text-center text-blue pt-3" >Adición de nueva Zona</h3> -->
           <h3 class="text-center text-blue pt-3" style="font-weight: bold;" >Adición de nueva Zona</h3> 
           <div class="modal-body">
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
@@ -782,7 +780,7 @@
                             {% if not puede_editar %}
                                 disabled
                             {% endif %}
-                        >Aceptar</button>
+                        >Aceptar**</button>
                     </div>
                 </div> <!--row-->
             </form>
@@ -791,10 +789,30 @@
       </div>
     </div>
   </div>
-</div>
+</div> <!-- End Modal Zona -->
+
 
 <script type="text/javascript">
     function enviar(){  // onsubmit formZona
+        let distElement = document.getElementById('inomdist');
+        let distValue = distElement.value;
+        let distText = distElement.options[distElement.selectedIndex].text;  // get txt visible
+        alert('de modal value: ' + distValue);
+        alert('de modal text: ' + distText);
+        console.log('toy en enviar..')
+        console.log('----------------------');
+        console.log(distValue);
+        console.log(distText);
+
+        alert('distrito shp:' + document.getElementById('idistrito').value);
+        if (distText != document.getElementById('idistrito').value) {
+            alert('Zona NO pertenece a Distrito Seleccionado...!!')
+            return false;
+        }
+
+        
+
+
         // valida nomzona
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
@@ -802,9 +820,12 @@
         }
         
         var indice = document.getElementById("inomdist").selectedIndex;
-        if( indice == null || indice == 0 ) {
+        if( indice == null || indice == 0 || indice == -1 ) {
           return false;
         }
+
+
+
 
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
@@ -815,7 +836,11 @@
         var usuario = document.getElementById('iusuario_zona').value;
         let v = document.querySelector(
             'input[name="zonaDupOk"]:checked');
-        let confirmaZonaDup = v.value
+        let confirmaZonaDup = v.value;
+        alert('====');
+        alert(confirmaZonaDup);
+        console.log(confirmaZonaDup);
+
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup;
 
@@ -848,7 +873,6 @@
 
 
 <!-- Otro Modal -->
-
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
         <input type="hidden" id="idnomlocmodal" name="nomloc" >
@@ -864,7 +888,6 @@
         >
     </form>
 </div>
-
 
 {% endblock %}
 
