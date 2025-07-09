@@ -780,7 +780,7 @@
                             {% if not puede_editar %}
                                 disabled
                             {% endif %}
-                        >Aceptar**</button>
+                        >Aceptar</button>
                     </div>
                 </div> <!--row-->
             </form>
@@ -797,20 +797,19 @@
         let distElement = document.getElementById('inomdist');
         let distValue = distElement.value;
         let distText = distElement.options[distElement.selectedIndex].text;  // get txt visible
-        alert('de modal value: ' + distValue);
-        alert('de modal text: ' + distText);
+        //alert('de modal value: ' + distValue);
+        //alert('de modal text: ' + distText);
         console.log('toy en enviar..')
         console.log('----------------------');
         console.log(distValue);
         console.log(distText);
 
-        alert('distrito shp:' + document.getElementById('idistrito').value);
+        //alert('distrito shp:' + document.getElementById('idistrito').value);
         if (distText != document.getElementById('idistrito').value) {
             alert('Zona NO pertenece a Distrito Seleccionado...!!')
             return false;
         }
 
-        
 
 
         // valida nomzona

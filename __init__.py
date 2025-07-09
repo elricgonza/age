@@ -1282,8 +1282,7 @@ def recinto(idlocreci, reci):
                 print('msg-err')
             else:
                 nextid = rc.get_next_reci()
-                idlocreci = request.form['asiento'].split(':')
-                datos = idlocreci[1], nextid, request.form['nomreci'], request.form['zonareci'], request.form['mesasreci'], \
+                datos = request.form['asiento'], nextid, request.form['nomreci'], request.form['zonareci'], request.form['mesasreci'], \
                     request.form['dirreci'], request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                     ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
                     fa, request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, \
