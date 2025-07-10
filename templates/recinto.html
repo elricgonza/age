@@ -193,14 +193,12 @@
                     {% endif %}
                 >                          
                     <option></option>
-                    {% for zonasreci in zonasRecis %}
-                        {% if rc.idlocreci==zonasreci[0] and rc.circundist==zonasreci[3] %}
-                            {% if load and rc.zonareci==zonasreci[1] %}
-                                    <option value = "{{ zonasreci[1] }}" selected>{{ zonasreci[2]~' - '~zonasreci[3]~'('~'Cir '~zonasreci[3]~')' }}</option>
-                            {% else %}
-                                    <option value = "{{ zonasreci[1] }}">{{ zonasreci[2]~' - '~zonasreci[3]~'('~'Cir '~zonasreci[3]~')' }}</option>
-                            {% endif %}
-                        {% endif %}                                                                
+                    {% for zonareci in zonas %}
+                        {% if load and rc.zonareci == zonareci[1] %}
+                            <option value="{{ zonareci[1] }}" selected>{{ zonareci[2] + ' - ' + zonareci[4] }}</option>
+                        {% else %}
+                            <option value="{{ zonareci[1] }}">{{ zonareci[2] + ' - ' + zonareci[4] }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 <div class="invalid-feedback">Debe Seleccionar la Zona del Recinto...</div>
@@ -794,24 +792,6 @@
 
 <script type="text/javascript">
     function enviar(){  // onsubmit formZona
-        let distElement = document.getElementById('inomdist');
-        let distValue = distElement.value;
-        let distText = distElement.options[distElement.selectedIndex].text;  // get txt visible
-        //alert('de modal value: ' + distValue);
-        //alert('de modal text: ' + distText);
-        console.log('toy en enviar..')
-        console.log('----------------------');
-        console.log(distValue);
-        console.log(distText);
-
-        //alert('distrito shp:' + document.getElementById('idistrito').value);
-        if (distText != document.getElementById('idistrito').value) {
-            alert('Zona NO pertenece a Distrito Seleccionado...!!')
-            return false;
-        }
-
-
-
         // valida nomzona
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
@@ -823,9 +803,6 @@
           return false;
         }
 
-
-
-
         var idloc = document.getElementById('iidlocreci').value;
         var nomzona = document.getElementById('inomzona').value;
         var circundist = 0;
@@ -836,9 +813,15 @@
         let v = document.querySelector(
             'input[name="zonaDupOk"]:checked');
         let confirmaZonaDup = v.value;
-        alert('====');
-        alert(confirmaZonaDup);
-        console.log(confirmaZonaDup);
+
+        let distElement = document.getElementById('inomdist');
+        let distValue = distElement.value;
+        let distText = distElement.options[distElement.selectedIndex].text;  // get txt visible
+
+        if (distText != document.getElementById('idistrito').value) {
+            alert('La Zona NO pertenece al Distrito que seleccionó: --' + distText + '--, según la información espacial de Distritos y Zonas...!!')
+            return false;
+        }
 
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
                       '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup;

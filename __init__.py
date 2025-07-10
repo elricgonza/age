@@ -1237,8 +1237,8 @@ def recinto(idlocreci, reci):
     rc = recintos.Recintos(cxms)
     rca = recia.Reciasiento(cxms)
     loc = asi.Asientos(cxms)
-    z = dist.Distritos(cxms)
     d = docu.Documentos(cxms)
+    zo = zona.Zona(cxms)
 
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
@@ -1329,8 +1329,6 @@ def recinto(idlocreci, reci):
     else: # Viene de <recintos_list>
         if reci != '0':  # EDIT
             if rc.get_recinto_key(idlocreci, reci):
-                """if a.docAct == None:
-                    a.docAct = """
                 if rc.fechaIngreso == None:
                     rc.fechaIngreso = str(datetime.datetime.now())[:-7]
                 if rc.fechaAct == None:
@@ -1341,14 +1339,14 @@ def recinto(idlocreci, reci):
                 if usrauth == 3:    #tmpauth3 - get_etapas_auth
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
                                     asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
-                                    zonasRecis=rca.get_zonas_all(usrdep),
+                                    zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
                 else:
                     return render_template('recinto.html', error=error, rc=rc, load=True, puede_editar=p,
                                     asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
-                                    zonasRecis=rca.get_zonas_all(usrdep),
+                                    zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))

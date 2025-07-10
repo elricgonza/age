@@ -1,38 +1,6 @@
 // Para visor en asientos/recintos a partir de coordenadas
 // -ric
 
-function getZonasIdloc(idloc) {
-    // carga cbo zonas en asiento
-    document.getElementById('iidloc').value = idloc;
-    document.getElementById('iidlocreci').value = idloc;
-    document.getElementById('iidlocreci1').value = idloc;
-    document.getElementById('inrodist1').value = 0 //cir[0];
-
-    $('#izonareci').html('');
-    $.getJSON("/get_zonas_idloc", {
-        idloc: idloc
-    }, function(zonas){
-        $("#izonareci").append('<option></option>');                
-        $.each(zonas, function(index, obj){       
-            $("#izonareci").append('<option value="' + obj[1] + '">' + obj[2] +' - '+ obj[4] +'</option>');
-        });
-    });
-
-    getDistsIdloc();
-}
-
-function getDistsIdloc() {
-    // carga dists en asiento
-    $('#inomdist').html('');
-    $.getJSON("/get_dists_idloc", {
-        idloc: document.getElementById("iidlocreci").value
-    }, function(datos7){
-        $("#inomdist").append('<option></option>');                
-        $.each(datos7, function(index7, obj7){           
-            $("#inomdist").append('<option value="' + obj7[1] + '">' + obj7[3] +'</option>');
-        });
-    });
-}
 
 
 function cargar(valor, data) {
