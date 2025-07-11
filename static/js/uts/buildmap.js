@@ -16,7 +16,9 @@ function getGeo(event) {
                 document.getElementById("imunicipio").setAttribute("value", data.municipio)
                 document.getElementById("icircun").setAttribute("value", data.nrocircun)
                 document.getElementById("idistrito").setAttribute("value", data.distrito)
+                document.getElementById("icod_dist").setAttribute("value", data.cod_dist)
                 document.getElementById("izona").setAttribute("value", data.zona)
+                document.getElementById("icod_zona").setAttribute("value", data.cod_zona)   // -> zonaGeo
 
                 //document.getElementById("inomdist").setAttribute("value", data.distrito)
                 document.getElementById("inomzona").setAttribute("value", data.zona) // Modal Zona

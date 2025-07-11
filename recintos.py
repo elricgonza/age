@@ -1,24 +1,6 @@
 # Operaciones recintos
 
 class Recintos:
-    idlocreci=0
-    reci=0
-    nomreci=''
-    zonareci=0
-    maxmesasreci=0
-    ambientes=0
-    direccion=''
-    latitud=0
-    longitud=0
-    estado=0
-    tiporecinto=0
-    codrue=''
-    codrueedif=''
-    depend=0
-    cantpisos=''
-    fechaIngreso=''
-    fechaAct=''
-    usuario=''
 
     def __init__(self, cx):
         self.cx = cx
@@ -43,12 +25,12 @@ class Recintos:
 
 
     def get_recinto_key(self, idlocreci, reci):
-        s = "select a.IdLocReci, a.Reci, g.CircunDist, b.DepLoc, c.NomDep, b.ProvLoc, " + \
+        s = "select a.IdLocReci, a.Reci, a.idCircun, b.DepLoc, c.NomDep, b.ProvLoc, " + \
             "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
             "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
             "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp, " + \
-            "a.doc_idT, j.ruta as rutaT, a.obs " + \
+            "a.doc_idT, j.ruta as rutaT, a.obs, f.zonaGeo, g.distGeo " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -98,6 +80,8 @@ class Recintos:
             self.doc_idT = row[31]
             self.rutaT = row[32]
             self.obs = row[33]
+            self.zonaGeo = row[34]
+            self.distGeo = row[35]
         return row
 
 

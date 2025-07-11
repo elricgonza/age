@@ -20,7 +20,8 @@
 <div class="container">
     <h2 class="text-center text-blue pt-5" >Recinto Electoral - Uninominal</h2>
     <br>
-    <form class="needs-validation" action="{{ url_for('recinto', idlocreci = rc.idlocreci, reci = rc.reci) }}" novalidate method='POST' onsubmit="return Validation(this)" name="form">
+    <form class="needs-validation" action="{{ url_for('recinto', idlocreci = rc.idlocreci, reci = rc.reci) }}" 
+            novalidate method='POST' onsubmit="return Validation(this)" name="form">
         <div class="form-row">
             <!--<div class="col-md-2">-->
             <div class="col" style="flex: 0 0 11%; max-width: 12.5%;">
@@ -119,6 +120,7 @@
 
         <div class="row">
             <div class="col-md-4">
+                <input type="hidden" name="cod_dist" id="icod_dist" value>
                 <label for="distrito">Distrito:</label>
                 <input type="text" class="form-control" id="idistrito" title="" placeholder="Distrito" name="distrito"  readonly required "
                         {% if load %}
@@ -329,7 +331,8 @@
         <div class="row">
             <div class="col-md-2">
                 <label for="pisosreci">Cantidad de Pisos:</label>
-                <input type="text" class="form-control" id="ipisosreci" title="" placeholder="Introduzca cantidad de pisos" name="pisosreci"  required pattern="^ *\d[\d ]*$" onkeypress="return validacionPisos(event)"
+                <input type="text" class="form-control" id="ipisosreci" title="" placeholder="Introduzca cantidad de pisos" 
+                        name="pisosreci"  required pattern="^ *\d[\d ]*$" onkeypress="return validacionPisos(event)"
                         {% if load %}
                             value="{{ rc.cantpisos }}"
                         {% endif %}
