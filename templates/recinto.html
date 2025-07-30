@@ -831,7 +831,8 @@
         }
 
         var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
-                      '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup;
+            '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup + 
+            '&distvalue=' + distvalue;
 
         $.ajax({
             type: 'POST',
