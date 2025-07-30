@@ -129,6 +129,7 @@
                     >
             </div>
             <div class="col-md-4">
+                <input type="hidden" name="cod_zona" id="icod_zona" value>
                 <label for="zona">Zona:</label>
                 <input type="text" class="form-control" id="izona" title="" placeholder="Zona" name="zona"  readonly required "
                         {% if load %}
@@ -714,8 +715,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label for="nomzona">Nombre de la Zona (debe confirmar ó corregir) : </label>
-                        <input type="text" class="form-control" id="inomzona" placeholder="Introduzca la Zona" name="nomzona" required
-                                onkeypress="return !char_restringidos.includes(event.charCode)" value="Sin nombre de zona"        
+                        <input type="text" class="form-control" id="inomzona" name="nomzona" placeholder="Introduzca la Zona" required
+                                onkeypress="return !char_restringidos.includes(event.charCode)"
                         >
                         <div class="invalid-feedback">Por favor ingrese la Zona...</div>
                     </div>
@@ -821,8 +822,11 @@
         let distValue = distElement.value;
         let distText = distElement.options[distElement.selectedIndex].text;  // get txt visible
 
+        let zonaGeo = document.getElementById(icod_zona).value
+
         if (distText != document.getElementById('idistrito').value) {
-            alert('La Zona NO pertenece al Distrito que seleccionó: --' + distText + '--, según la información espacial de Distritos y Zonas...!!')
+            alert('La Zona NO pertenece al Distrito que seleccionó: \n\n\t\t ' + distText + '\n\n\t\t 
+                    Según la información espacial de Distritos y Zonas...!!')
             return false;
         }
 

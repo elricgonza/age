@@ -124,6 +124,7 @@ class Distritos:
 
 
     def get_ultimodist(self, nomdist, idloc):
+        # ERROR ELIMINAR ppp
         con1 = nomdist, idloc
         s = "select max(dist) from GeografiaElectoral_app.dbo.dist where Dist = %d and IdLocDist = %d"
         self.cur.execute(s, con1)

@@ -1921,6 +1921,7 @@ def reci_dist_add(nalext):
 
 
 @app.route('/reci_zona_add', methods=['POST'])
+
 @login_required
 def reci_zona_add():
     ''' Invocado por ajax - adición de zonas (recinto.html) '''
@@ -1947,10 +1948,10 @@ def reci_zona_add():
     if z.nomzona_existe(idloc, nomzona) and confirmaZonaDup == "NO":
         return jsonify({'error' : 'El nombre: --' + nomzona + '-- ya existe en el asiento, debe revisar y confirmar el nombre'})
 
-    ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc'])
+    #ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc'])
 
-    z.add_zona(idloc, v_cod_zona, nomzona, ultimodist, \
-               request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'])
+    z.add_zona(idloc, v_cod_zona, nomzona, nomdist, \
+               request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'], request.form['cod_zona'])
 
     return jsonify({'msgok' : 'Zona adicionada...'})
 
