@@ -687,7 +687,9 @@
             <div id="successAlert" class="alert alert-success" role="alert" style="display:none; text-align: center;"></div>
             <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none; text-align:center;">
             </div>    
-            <form id="formZona" class="needs-validation" novalidate method="POST" action="javascript:void();" onsubmit="return enviar();">                
+            <form id="formZona" class="needs-validation" novalidate method="POST" 
+                    action="javascript:void();" 
+                    onsubmit="return enviar(event)">
                 <div id='divZonaDup' style="display: none;" class="row">
                     <div class="col-md-12">
                         <label style="color:purple; font-size:15px; font-weight:bold">Es CORRECTO el nombre de Zona duplicado?: </label>
@@ -795,8 +797,9 @@
 
 
 <script type="text/javascript">
-    function enviar(){  // onsubmit formZona
+    function enviar(event) {  // onsubmit formZona
         // valida nomzona
+        alert(event);
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
           return false;
@@ -822,17 +825,17 @@
         let distValue = distElement.value;
         let distText = distElement.options[distElement.selectedIndex].text;  // get txt visible
 
-        let zonaGeo = document.getElementById(icod_zona).value
+        let zonaGeo = document.getElementById('icod_zona').value;
 
         if (distText != document.getElementById('idistrito').value) {
             alert('La Zona NO pertenece al Distrito que seleccionó: \n\n\t\t ' + distText + '\n\n\t\t 
-                    Según la información espacial de Distritos y Zonas...!!')
+                    Según la información espacial de Distritos y Zonas...!!');
             return false;
         }
 
-        var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist +
-            '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup + 
-            '&distvalue=' + distvalue;
+        var dataenv = 'idloc='+idloc +'&nomzona='+nomzona +'&circundist='+circundist +'&nomdist='+nomdist+
+            '&fingreso='+fingreso +'&factual='+factual + '&usuario='+usuario + '&confirmaZonaDup='+ confirmaZonaDup+
+            '&zonaGeo='+zonaGeo;
 
         $.ajax({
             type: 'POST',
