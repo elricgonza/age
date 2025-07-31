@@ -1935,12 +1935,6 @@ def reci_zona_add():
     nomdist = request.form['nomdist']    # cod. DIST 
     confirmaZonaDup = request.form['confirmaZonaDup']  # SI/NO
     zonaGeo = request.form['zonaGeo']
-    
-    print('---------------------------------------zonaGeo----------------------------------')
-    print(zonaGeo)
-    print('---------------------------------------zonaGeo----------------------------------')
-    return
-    print('postreturn----')
 
     # obtiene cod zona
     if nomzona == 'SIN ZONA':   # se debe asignar ZONA = 0
@@ -1957,7 +1951,7 @@ def reci_zona_add():
     #ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc']) #ppp lapsus grov
 
     z.add_zona(idloc, v_cod_zona, nomzona, nomdist, \
-               request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'], request.form['cod_zona'])
+               request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'], zonaGeo)
 
     return jsonify({'msgok' : 'Zona adicionada...'})
 

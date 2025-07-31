@@ -159,10 +159,10 @@ class Zona:
             print(e)
 
 
-    def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario):
-        new_zona = idloczona, zona, nomzona.strip(), distzona, fechaingreso, fechaact, usuario.strip()
-        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s) "
+    def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario, zonaGeo):
+        new_zona = idloczona, zona, nomzona.strip(), distzona, fechaingreso, fechaact, usuario.strip(), zonaGeo
+        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario, zonaGeo) values " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s) "
         try:
             self.cur.execute(s, new_zona)
             self.cx.commit()

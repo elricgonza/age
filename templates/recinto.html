@@ -799,7 +799,6 @@
 <script type="text/javascript">
     function enviar(event) {  // onsubmit formZona
         // valida nomzona
-        alert(event);
         var valor = document.getElementById("inomzona").value;
         if( valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
           return false;
@@ -828,8 +827,9 @@
         let zonaGeo = document.getElementById('icod_zona').value;
 
         if (distText != document.getElementById('idistrito').value) {
-            alert('La Zona NO pertenece al Distrito que seleccionó: \n\n\t\t ' + distText + '\n\n\t\t 
-                    Según la información espacial de Distritos y Zonas...!!');
+            alert('\nLa Zona NO pertenece al Distrito que seleccionó: \n\n\t\t ' + distText + '\n\n' +
+                'Según la información espacial de Distritos y Zonas. \n' +
+                'Revise coordenadas y la información de Zona y distrito...');
             return false;
         }
 
