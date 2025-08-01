@@ -1781,16 +1781,16 @@ def reci_dist_send():
     error = None
 
     if request.method == 'POST':
-        #idloc = request.form.get('idlocreci1', 0) #ppp
-        idloc = request.form['idlocreci1']
+        idloc = request.form['idlocDist']
         nomloc = request.form.get('nomloc', 0)
-        nrodist = request.form['nrodist1']
+        nomdist = request.form['newNomDist']
+        distgeo = request.form['distGeo']
 
         return render_template('reci_dist_add.html', error=error, z=z,
                                load=False,
                                puede_editar= 'Distritos - Edición' in permisos_usr,
                                titulo='Adición de Nuevo Distrito',
-                               idloc=idloc, nomloc=nomloc, nrodist=nrodist)
+                               idloc=idloc, nomloc=nomloc, nomdist, distgeo=distgeo)
 
 
 @app.route('/dist_elim/<pidloc>/<pdist>', methods=['GET', 'POST'])

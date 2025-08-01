@@ -36,54 +36,58 @@
                     <div class="row">
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
-                            <input type="text" class="form-control" id="iidloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required readonly 
+                            <input type="text" class="form-control" id="iidloc"  name="idloc" 
+                                        placeholder="Instroduzca IdLoc" required readonly 
                                         value="{{ idloc }}"
                                 >
                             <div class="invalid-feedback">Ingrese codigo IdLoc...</div>
                         </div>
                         <div class="col-md-9">
                             <label for="nomloc">Nombre Asiento:</label>
-                            <input type="text" class="form-control" id="inomloc" title="" placeholder="Instroduzca Nombre del Asiento" name="nomloc" required readonly
+                            <input type="text" class="form-control" id="inomloc" name="nomloc" 
+                                        placeholder="Instroduzca Nombre del Asiento" required readonly
                                         value="{{ nomloc }}"
                                 >
                             <div class="invalid-feedback">Ingrese Nombre Asiento...</div>
                         </div>
                     </div> <!--row-->
-                    <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
+                    <br>
                     <div class="row">
-                        <div class="col-md-2">
-                            <label for="nrodist">Circun.:</label>
-                            <input type="text" class="form-control" maxlength="2" id="inrodist" placeholder="Nro." name="nrodist" required readonly
-                                    value="{{ nrodist }}"          
-                            >
-                            <div class="invalid-feedback">Por favor ingrese Nro. de Circunscripción...</div>
-                        </div>
                         <div class="col-md-10">
                             <label for="nomdist">Nombre del Distrito::</label>
-                            <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
+                            <input type="text" class="form-control" id="inomdist" name="nomdist" 
+                                placeholder="Introduzca el Nombre del Distrito" required 
                                 onkeypress="return !char_restringidos.includes(event.charCode)"
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="distgeo">id(Espacial):</label>
+                            <input type="text" class="form-control"  id="idistgeo" name="distgeo" required readonly
+                                    value="{{ distGeo }}"          
+                            >
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-4">
                             <label for="fechaIngreso">Fecha y Hora de Registro:</label>
-                            <input type="datetime" class="form-control" id="ifechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
+                            <input type="datetime" class="form-control" id="ifechaIngreso" 
+                                        placeholder="Fecha de Registro." name="fechaIngreso" readonly
                                         value="{{ idatetime }}"
                             >
-                            <div class="invalid-feedback" id="v_fechaIngreso">Debe introducir una fecha válida.</div>
                         </div>
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
-                            <input type="datetime" class="form-control" id="ifechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                            <input type="datetime" class="form-control" id="ifechaAct" name="fechaAct" 
+                                        placeholder="Fecha Actual." readonly
                                         value="{{ idatetime }}"
                             >
                         </div>                        
                         <div class="col-md-4">
                             <label for="usuario">Usuario Logueado:</label>
-                            <input type="text" class="form-control" id="iusuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                            <input type="text" class="form-control" id="iusuario" name="usuario" 
+                                        placeholder="Usuario" readonly 
                                         value="{{ usuario }}"
                             >
                         </div>

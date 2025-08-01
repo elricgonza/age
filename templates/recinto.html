@@ -866,14 +866,15 @@
 
 <form id="formDist" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
     <input type="hidden" id="idnomloc" name="nomloc" >
-    <input type="text" id="iidlocreci1"  name="idlocreci1"  
+    <input type="hidden" id="idnomdistNew" name="nomdist_new" >
+    <input type="text" id="idlocDist"  name="idloc_dist">
             {% if load %}
                 value="{{ rc.idlocreci }}"
             {% endif %}
     >
-    <input type="text" id="inrodist1"  name="nrodist1" 
+    <input type="text" id="iddistGeo"  name="dist_geo"
             {% if load %}
-                value="{{ rc.circundist }}"        
+                value="{{ rc.distGeo }}"
             {% endif %}
     >
 </form>
