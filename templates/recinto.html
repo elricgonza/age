@@ -671,7 +671,7 @@
     function getNomLoc(){
         var combo = document.getElementById('iasiento')
         var selected = combo.options[combo.selectedIndex].text;
-        document.getElementById('idnomlocmodal').value = selected;  // nomloc
+        document.getElementById('idnomloc').value = selected;  // nomloc
     }
 </script>
 
@@ -734,7 +734,7 @@
                     <div class="col-md-3">
                         <label for="nomdist">Nuevo Dist.</label>
                         <button type="button" class="btn btn-light btn-block">
-                            <a href="javascript:void();" onclick="document.getElementById('form1').submit();">
+                            <a href="javascript:void();" onclick="document.getElementById('formDist').submit();">
                                 <span class="fas fa-university" style="font-size:25px;"></span></a></button>
                     </div>
                 </div>
@@ -864,23 +864,19 @@
     }
 </script>
 
-
-<!-- Otro Modal -->
-<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form id="form1" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
-        <input type="hidden" id="idnomlocmodal" name="nomloc" >
-        <input type="text" id="iidlocreci1"  name="idlocreci1"  
-                {% if load %}
-                    value="{{ rc.idlocreci }}"
-                {% endif %}
-        >
-        <input type="text" id="inrodist1"  name="nrodist1" 
-                {% if load %}
-                    value="{{ rc.circundist }}"        
-                {% endif %}
-        >
-    </form>
-</div>
+<form id="formDist" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
+    <input type="hidden" id="idnomloc" name="nomloc" >
+    <input type="text" id="iidlocreci1"  name="idlocreci1"  
+            {% if load %}
+                value="{{ rc.idlocreci }}"
+            {% endif %}
+    >
+    <input type="text" id="inrodist1"  name="nrodist1" 
+            {% if load %}
+                value="{{ rc.circundist }}"        
+            {% endif %}
+    >
+</form>
 
 {% endblock %}
 

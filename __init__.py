@@ -1779,15 +1779,18 @@ def reci_dist_send():
 
     z = dist.Distritos(cxms)
     error = None
-    p = ('Distritos - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
-        #idloc = request.form.get('idlocreci1', 0)
+        #idloc = request.form.get('idlocreci1', 0) #ppp
         idloc = request.form['idlocreci1']
-        nomloc = request.form.get('nomloc', 0)     
+        nomloc = request.form.get('nomloc', 0)
         nrodist = request.form['nrodist1']
 
-        return render_template('reci_dist_add.html', error=error, z=z, load=False, puede_editar=p, titulo='Adición de Nuevo Distrito', idloc=idloc, nomloc=nomloc, nrodist=nrodist)
+        return render_template('reci_dist_add.html', error=error, z=z,
+                               load=False,
+                               puede_editar= 'Distritos - Edición' in permisos_usr,
+                               titulo='Adición de Nuevo Distrito',
+                               idloc=idloc, nomloc=nomloc, nrodist=nrodist)
 
 
 @app.route('/dist_elim/<pidloc>/<pdist>', methods=['GET', 'POST'])
@@ -1882,12 +1885,11 @@ def dist_adm(pidloc, pdist, pnalext):
 @app.route('/reci_dist_add/<nalext>', methods=['GET', 'POST'])
 @login_required
 def reci_dist_add(nalext):
-    ''' Adición de Distrito desde form. recinto/zona '''
+    ''' Adición de Distrito desde form. recinto/zona/ - Nuevo Dist. '''
     ''' desde url_for param: nalext='nal'  '''
 
     z = dist.Distritos(cxms)
     error = None
-    p = ('Distritos - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
             idloc = request.form['idloc']
@@ -1904,7 +1906,10 @@ def reci_dist_add(nalext):
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento debe verificar/complementar nombre..."
 
                 if nalext == 'nal': # nal
-                    return render_template('reci_dist_add.html', error=error, load=False, puede_editar=p, titulo='Adición de Nuevo Distrito', idloc=idloc, nomloc=nomloc, nrodist=circundist, dook=None)
+                    return render_template('reci_dist_add.html', error=error, load=False, \
+                                           puede_editar= 'Distritos - Edición' in permisos_usr, \
+                                           titulo='Adición de Nuevo Distrito', \
+                                           idloc=idloc, nomloc=nomloc, nrodist=circundist, dook=None)
                 if nalext == 'ext': # ext
                     return render_template('zonareext.html', error=error, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else:  # Adiciona distrito 
@@ -1912,7 +1917,10 @@ def reci_dist_add(nalext):
                     z.add_dist(idloc, nextiddist, circundist, nomdist, \
                                request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
                     dook = 'Distrito Adicionado...'
-                    return render_template('reci_dist_add.html', error=None, load=False, puede_editar=p, titulo='Adición de Nuevo Distrito', idloc=idloc, nomloc=nomloc, nrodist=circundist, dook=dook)
+                    return render_template('reci_dist_add.html', error=None, load=False, \
+                                           puede_editar= 'Distritos - Edición' in permisos_usr, \
+                                           titulo='Adición de Nuevo Distrito', \
+                                           idloc=idloc, nomloc=nomloc, nrodist=circundist, dook=dook)
                 if nalext == 'ext':  # ext
                     circundist = 0
                     z.add_dist(idloc, nextiddist, circundist, nomdist, \
@@ -1947,8 +1955,6 @@ def reci_zona_add():
 
     if z.nomzona_existe(idloc, nomzona) and confirmaZonaDup == "NO":
         return jsonify({'error' : 'El nombre: --' + nomzona + '-- ya existe en el asiento, debe revisar y confirmar el nombre'})
-
-    #ultimodist = d.get_ultimodist(request.form['nomdist'], request.form['idloc']) #ppp lapsus grov
 
     z.add_zona(idloc, v_cod_zona, nomzona, nomdist, \
                request.form['fingreso'][:-7], request.form['factual'][:-7], request.form['usuario'], zonaGeo)
