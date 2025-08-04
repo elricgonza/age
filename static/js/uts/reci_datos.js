@@ -6,8 +6,7 @@ function getZonasIdloc(idloc) {
     // carga cbo zonas de asiento - recinto.html 
     document.getElementById('iidloc').value = idloc;
     document.getElementById('iidlocreci').value = idloc;
-    document.getElementById('iidlocreci1').value = idloc;
-    document.getElementById('inrodist1').value = 0 //cir[0];
+    document.getElementById('idlocDist').value = idloc;
 
     $('#izonareci').html('');
     $.getJSON("/get_zonas_idloc", {

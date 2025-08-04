@@ -54,17 +54,18 @@
                     <br>
                     <div class="row">
                         <div class="col-md-10">
-                            <label for="nomdist">Nombre del Distrito::</label>
+                            <label for="nomdist">Nombre del Distrito (Confirme Nombre):</label>
                             <input type="text" class="form-control" id="inomdist" name="nomdist" 
                                 placeholder="Introduzca el Nombre del Distrito" required 
                                 onkeypress="return !char_restringidos.includes(event.charCode)"
+                                value="{{ nomdist }}"
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
                         </div>
                         <div class="col-md-2">
                             <label for="distgeo">id(Espacial):</label>
                             <input type="text" class="form-control"  id="idistgeo" name="distgeo" required readonly
-                                    value="{{ distGeo }}"          
+                                    value="{{ distgeo }}"          
                             >
                         </div>
                     </div>

@@ -1760,7 +1760,7 @@ def distritos_list():
     rows = z.get_dist_all(usrdep)
     if rows:
         if 'Distritos - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('distritos_list.html', dists=rows, 
+            return render_template('distritos_list.html', dists=rows,
                                     puede_adicionar='Distritos - Adición' in permisos_usr, \
                                     puede_editar='Distritos - Edición' in permisos_usr, \
                                     puede_consultar='Distritos - Consulta' in permisos_usr, \
@@ -1781,16 +1781,20 @@ def reci_dist_send():
     error = None
 
     if request.method == 'POST':
-        idloc = request.form['idlocDist']
+        idloc = request.form['idloc_dist']
         nomloc = request.form.get('nomloc', 0)
-        nomdist = request.form['newNomDist']
-        distgeo = request.form['distGeo']
+        nomdist = request.form['nomdist_new']
+        distgeo = request.form['distgeo_new']
+
+        print('-------------------nomdist')
+        print(nomdist)
+        print(distgeo)
 
         return render_template('reci_dist_add.html', error=error, z=z,
-                               load=False,
-                               puede_editar= 'Distritos - Edición' in permisos_usr,
-                               titulo='Adición de Nuevo Distrito',
-                               idloc=idloc, nomloc=nomloc, nomdist, distgeo=distgeo)
+                               load=False, \
+                               puede_editar= 'Distritos - Edición' in permisos_usr, \
+                               titulo='Adición de Nuevo Distrito', \
+                               idloc=idloc, nomloc=nomloc, nomdist=nomdist, distgeo=distgeo)
 
 
 @app.route('/dist_elim/<pidloc>/<pdist>', methods=['GET', 'POST'])
@@ -1803,7 +1807,7 @@ def dist_elim(pidloc, pdist):
     rows = d.get_dist_all(usrdep)
     if rows:
         if 'Distritos - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('distritos_list.html', dists=rows, 
+            return render_template('distritos_list.html', dists=rows,
                                     puede_adicionar='Distritos - Adición' in permisos_usr, \
                                     puede_editar='Distritos - Edición' in permisos_usr, \
                                     puede_consultar='Distritos - Consulta' in permisos_usr, \
@@ -1894,7 +1898,7 @@ def reci_dist_add(nalext):
     if request.method == 'POST':
             idloc = request.form['idloc']
             nomdist = request.form['nomdist']
-            circundist = request.form['nrodist']
+            #circundist = request.form['nrodist'] ppp
             nomloc = request.form['nomloc']
 
             if nomdist.upper() == 'SIN DISTRITO':
@@ -1909,18 +1913,18 @@ def reci_dist_add(nalext):
                     return render_template('reci_dist_add.html', error=error, load=False, \
                                            puede_editar= 'Distritos - Edición' in permisos_usr, \
                                            titulo='Adición de Nuevo Distrito', \
-                                           idloc=idloc, nomloc=nomloc, nrodist=circundist, dook=None)
+                                           idloc=idloc, nomloc=nomloc, dook=None)
                 if nalext == 'ext': # ext
                     return render_template('zonareext.html', error=error, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else:  # Adiciona distrito 
                 if nalext == 'nal':  # nal
-                    z.add_dist(idloc, nextiddist, circundist, nomdist, \
+                    z.add_dist(idloc, nextiddist, 0, nomdist, \
                                request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
                     dook = 'Distrito Adicionado...'
                     return render_template('reci_dist_add.html', error=None, load=False, \
                                            puede_editar= 'Distritos - Edición' in permisos_usr, \
                                            titulo='Adición de Nuevo Distrito', \
-                                           idloc=idloc, nomloc=nomloc, nrodist=circundist, dook=dook)
+                                           idloc=idloc, nomloc=nomloc, dook=dook)
                 if nalext == 'ext':  # ext
                     circundist = 0
                     z.add_dist(idloc, nextiddist, circundist, nomdist, \

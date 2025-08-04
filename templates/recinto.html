@@ -865,9 +865,10 @@
 </script>
 
 <form id="formDist" action="{{ url_for('reci_dist_send') }}" target="_blank" method="POST">
+    <input type="text" id="idlocDist"  name="idloc_dist">
     <input type="hidden" id="idnomloc" name="nomloc" >
     <input type="hidden" id="idnomdistNew" name="nomdist_new" >
-    <input type="text" id="idlocDist"  name="idloc_dist">
+    <input type="hidden" id="iddistGeo" name="distgeo_new" >
             {% if load %}
                 value="{{ rc.idlocreci }}"
             {% endif %}

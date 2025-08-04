@@ -22,6 +22,8 @@ function getGeo(event) {
 
                 //document.getElementById("inomdist").setAttribute("value", data.distrito)
                 document.getElementById("inomzona").setAttribute("value", data.zona) // Modal Zona
+                document.getElementById("idnomdistNew").setAttribute("value", data.distrito) // form Dist
+                document.getElementById("iddistGeo").setAttribute("value", data.cod_dist) // form Dist
             });
         buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
     };
