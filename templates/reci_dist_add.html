@@ -32,7 +32,7 @@
     <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
-                <form action="{{ url_for('reci_dist_add', nalext = 'nal') }}" class="needs-validation" novalidate method="POST">                
+                <form action="{{ url_for('reci_dist_add', nalext = 'nal') }}" class="needs-validation" novalidate method="POST">
                     <div class="row">
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
@@ -54,7 +54,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-10">
-                            <label for="nomdist">Nombre del Distrito (Confirme Nombre):</label>
+                            <label for="nomdist">Nombre del Distrito (Confirme Nombre)::</label>
                             <input type="text" class="form-control" id="inomdist" name="nomdist" 
                                 placeholder="Introduzca el Nombre del Distrito" required 
                                 onkeypress="return !char_restringidos.includes(event.charCode)"

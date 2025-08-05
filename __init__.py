@@ -1786,11 +1786,11 @@ def reci_dist_send():
         nomdist = request.form['nomdist_new']
         distgeo = request.form['distgeo_new']
 
-        print('-------------------nomdist')
+        print('-------------------nomdist ppp')
         print(nomdist)
         print(distgeo)
 
-        return render_template('reci_dist_add.html', error=error, z=z,
+        return render_template('reci_dist_add.html', error=error, 
                                load=False, \
                                puede_editar= 'Distritos - Edición' in permisos_usr, \
                                titulo='Adición de Nuevo Distrito', \
@@ -1892,21 +1892,21 @@ def reci_dist_add(nalext):
     ''' Adición de Distrito desde form. recinto/zona/ - Nuevo Dist. '''
     ''' desde url_for param: nalext='nal'  '''
 
-    z = dist.Distritos(cxms)
+    di = dist.Distritos(cxms)
     error = None
 
     if request.method == 'POST':
             idloc = request.form['idloc']
             nomdist = request.form['nomdist']
-            #circundist = request.form['nrodist'] ppp
             nomloc = request.form['nomloc']
+            distgeo = request.form['distgeo']
 
             if nomdist.upper() == 'SIN DISTRITO':
                 nextiddist = 0
             else:
-                nextiddist = z.get_next_dist(request.form['idloc'])
+                nextiddist = di.get_next_dist(request.form['idloc'])
 
-            if z.nomdist_existe(idloc, nomdist):  # valida si err en datos POST
+            if di.nomdist_existe(idloc, nomdist):  # valida si err en datos POST
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento debe verificar/complementar nombre..."
 
                 if nalext == 'nal': # nal
@@ -1918,16 +1918,16 @@ def reci_dist_add(nalext):
                     return render_template('zonareext.html', error=error, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else:  # Adiciona distrito 
                 if nalext == 'nal':  # nal
-                    z.add_dist(idloc, nextiddist, 0, nomdist, \
-                               request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
+                    di.add_dist(idloc, nextiddist, 0, nomdist, \
+                               request.form['fechaIngreso'][:-7], request.form['fechaAct'], \
+                               request.form['usuario'], distgeo)
                     dook = 'Distrito Adicionado...'
                     return render_template('reci_dist_add.html', error=None, load=False, \
                                            puede_editar= 'Distritos - Edición' in permisos_usr, \
                                            titulo='Adición de Nuevo Distrito', \
                                            idloc=idloc, nomloc=nomloc, dook=dook)
                 if nalext == 'ext':  # ext
-                    circundist = 0
-                    z.add_dist(idloc, nextiddist, circundist, nomdist, \
+                    di.add_dist(idloc, nextiddist, 0, nomdist, \
                                request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
                     return render_template('zonareext.html', error=error, load_d=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
 

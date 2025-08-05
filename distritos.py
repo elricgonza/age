@@ -53,10 +53,11 @@ class Distritos:
         return row[0]
 
 
-    def add_dist(self, idlocdist, dist, circundist, nomdist, fecharegistro, usuario, fechaingreso):
-        new_dist = idlocdist, dist, circundist, nomdist.upper(), fecharegistro, usuario, fechaingreso
-        s = "insert into GeografiaElectoral_app.dbo.dist (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s) "
+    def add_dist(self, idlocdist, dist, circundist, nomdist, fecharegistro, usuario, fechaingreso, distgeo):
+        new_dist = idlocdist, dist, circundist, nomdist.upper(), fecharegistro, usuario, fechaingreso, distgeo
+        s = "insert into GeografiaElectoral_app.dbo.dist " + \
+                " (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario, distgeo) values " + \
+                " (%s, %s, %s, %s, %s, %s, %s, %s) "
         try:
             self.cur.execute(s, new_dist)
             self.cx.commit()
@@ -64,7 +65,7 @@ class Distritos:
         except Exception as e:
             print('Error --ADD-- Distrito')
             print(e)
-    
+
 
     def upd_zona(self, idloczona, idzona, nomzona, fa, usuario):        
         upd_zona = (idloczona, nomzona, fa, usuario, idzona)   
