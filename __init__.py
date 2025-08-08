@@ -148,7 +148,6 @@ def user_loader(txtusr):
         usrtipo = user.tipo_usr
         usrauth = user.authenticated
         permisos_usr = user.get_permisos_name(usr)
-        #print(permisos_usr) #ppp
         return user
 
 
@@ -204,31 +203,12 @@ def get_geo():
                        zona='------------------')
 
 
-# ppp supr
-@app.route('/get_dist_zona', methods=['GET', 'POST'])
-def get_dist_zona():
-    lat = request.args.get('latitud', 0, type=float)
-    long = request.args.get('longitud', 0, type=float)
-
-    gdz = geogs.LatLongGS(cxgs)
-    if gdz.get_dist_zona(lat, long):
-        return jsonify(cod_dist=gdz.cod_dist,
-                       distrito=gdz.distrito,
-                       cod_zona=gdz.cod_zona,
-                       zona=gdz.zona)
-    else:
-        return jsonify(cod_dist='---',
-                       distrito='COORDENADA',
-                       cod_zona='---',
-                       zona='INCORRECTA !!!')
-
-
 @app.route('/get_json_ptos', methods=['GET', 'POST'])
 def get_json_ptos():
     lat = request.args.get('latitud', 0, type=float)
     long = request.args.get('longitud', 0, type=float)
 
-    j = get_json.GetJson(cxpg)    
+    j = get_json.GetJson(cxpg)
     gj_ptos = j.get_reci_mts(lat, long, 650)
     print(gj_ptos)
     return {'gj_ptos' : gj_ptos}
@@ -240,9 +220,9 @@ def vs(dep):
 
     dep=int(dep)
     #geo_json = j.get_loc(dep)
-    return render_template('vs.html', 
+    return render_template('vs.html',
                             gj_reci=j.get_reci(dep),
-                            gj_asi=j.get_asi(dep), 
+                            gj_asi=j.get_asi(dep),
                             gj_cir=j.get_cir(dep),
                             gj_mun=j.get_mun(dep),
                             gj_prov=j.get_prov(dep))
@@ -250,12 +230,12 @@ def vs(dep):
 
 @app.route('/ftwms/', methods=['GET', 'POST'])
 def ftwms():
-    return render_template('twms.html') 
+    return render_template('twms.html')
 
 
 @app.route('/ftwms2/', methods=['GET', 'POST'])
 def ftwms2():
-    return render_template('twms2.html') 
+    return render_template('twms2.html')
 
 
 @app.route('/ftwms3/', methods=['GET', 'POST'])
@@ -1777,7 +1757,6 @@ def distritos_list():
 def reci_dist_send():
     ''' Invocado por recinto.html/zona/Nuevo Dist. SEND variables '''
 
-    z = dist.Distritos(cxms)
     error = None
 
     if request.method == 'POST':
@@ -1786,11 +1765,7 @@ def reci_dist_send():
         nomdist = request.form['nomdist_new']
         distgeo = request.form['distgeo_new']
 
-        print('-------------------nomdist ppp')
-        print(nomdist)
-        print(distgeo)
-
-        return render_template('reci_dist_add.html', error=error, 
+        return render_template('reci_dist_add.html', error=error,
                                load=False, \
                                puede_editar= 'Distritos - Edición' in permisos_usr, \
                                titulo='Adición de Nuevo Distrito', \
