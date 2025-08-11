@@ -1287,7 +1287,7 @@ def recinto(idlocreci, reci):
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, \
-                request.form['ambientes'], request.form['docTec'], request.form['obs'], idlocreci[1], reci
+                request.form['ambientes'], request.form['docTec'], request.form['obs'], idlocreci, reci
 
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'

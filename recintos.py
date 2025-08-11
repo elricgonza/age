@@ -189,8 +189,25 @@ class Recintos:
         if ((self.doc_idT) != (0 if row_to_upd[18]=="" else int(row_to_upd[18]) )):
             #print('doc_idT dif')
             vdif = True
-        if (self.obs.strip() != row_to_upd[19].strip()):
+
+        #obs
+        if type(self.obs == 'NoneType') and type(row_to_upd[19] == 'str') and (row_to_upd[19].strip() != 'None' and row_to_upd[19].strip != ''):
             vdif = True
+            print('dif grabar1 -log')
+        if type(self.obs == 'str') and type(row_to_upd[19] == 'str') and row_to_upd[19].strip() != 'None':
+            if self.obs.strip() != row_to_upd[19].strip():
+                print('dif grabar2 -log')
+                vdif = True
+
+
+        print('===========================================')
+        if type(self.obs == 'NoneType'):
+            print('self.obs es NoneType')
+
+        if type(row_to_upd[19] == 'str'):
+            print('row es str')
+        print('===========================================')
+
 
         return vdif
 
