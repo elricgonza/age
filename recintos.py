@@ -191,23 +191,19 @@ class Recintos:
             vdif = True
 
         #obs
-        if type(self.obs == 'NoneType') and type(row_to_upd[19] == 'str') and (row_to_upd[19].strip() != 'None' and row_to_upd[19].strip != ''):
+        print('valor self.obs--------------------------row19')
+        print(self.obs)
+        print(row_to_upd[19])
+        print('-------------------------------------')
+
+        print('==========================types  self.obs -- row19')
+        print(type(self.obs))
+        print(type(row_to_upd[19]))
+        print('=================================================')
+
+        if self.obs.strip() != row_to_upd[19].strip():
+            print('dif...... ambos son STR')
             vdif = True
-            print('dif grabar1 -log')
-        if type(self.obs == 'str') and type(row_to_upd[19] == 'str') and row_to_upd[19].strip() != 'None':
-            if self.obs.strip() != row_to_upd[19].strip():
-                print('dif grabar2 -log')
-                vdif = True
-
-
-        print('===========================================')
-        if type(self.obs == 'NoneType'):
-            print('self.obs es NoneType')
-
-        if type(row_to_upd[19] == 'str'):
-            print('row es str')
-        print('===========================================')
-
 
         return vdif
 
