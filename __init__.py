@@ -1215,6 +1215,9 @@ def recintos_list():
 def recinto(idlocreci, reci):
     ''' Uninominales '''
     rc = recintos.Recintos(cxms)
+
+    #print(rc.idlocreci)
+
     rca = recia.Reciasiento(cxms)
     loc = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
@@ -1223,7 +1226,12 @@ def recinto(idlocreci, reci):
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
 
+
+    print('--------------------ppp - en recinto ')
+
+
     if request.method == 'POST':
+        print('--------------------ppp - en recinto POST')
         fa = request.form['fechaAct'][:-7]
         # Valida si el campo docActF esta desactivado
         if request.form.get('docActF') == None:
@@ -1255,7 +1263,9 @@ def recinto(idlocreci, reci):
         else:
             depenreci = request.form['depenreci']
 
+
         if reci == '0':  # es NEW
+            print('--------------------ppp - en recinto POST y NEW =================')
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
                 #return render_template('asiento.html', error=error, u=u, load_u=True)
@@ -1332,6 +1342,10 @@ def recinto(idlocreci, reci):
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
     # New from <recintos_list>
+    print('ppp/////// new recintos_list')
+    print(rc)
+    #print(rc.idlocreci)
+    print('ppp/////// new recintos_list --------------------')
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p,
                             estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                             dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),

@@ -360,6 +360,5 @@ class Recintos:
         else:
             return rows
 
-
-    def __str__(self):
-        return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
+    #def __str__(self):
+    #    return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
