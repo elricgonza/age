@@ -213,10 +213,10 @@ class Asientos:
             #print(self.etapa)
             #print(row_to_upd[9])
             vdif = True
-        if (self.obsUbicacion != row_to_upd[10]):
+        if (self.obsUbicacion.strip() != row_to_upd[10].strip()):
             #print('obsUbicacion dif')
             vdif = True
-        if (self.obs != row_to_upd[11]):
+        if (self.obs.strip() != row_to_upd[11].strip()):
             #print('obs dif')
             vdif = True
         #a.fechaIngreso

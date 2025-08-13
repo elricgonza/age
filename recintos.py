@@ -114,8 +114,6 @@ class Recintos:
                 " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s, doc_idT= %s, " + \
                 " obs= %s" + \
                 " where IdLocReci = %s and Reci = %s"
-            print('-------------------------------------s')
-            print(s)
             try:
                 self.cur.execute(s, recinto)
                 self.cx.commit()
@@ -191,21 +189,12 @@ class Recintos:
             vdif = True
 
         #obs
-        print('valor self.obs--------------------------row19')
-        print(self.obs)
-        print(row_to_upd[19])
-        print('-------------------------------------')
-
-        print('==========================types  self.obs -- row19')
-        print(type(self.obs))
-        print(type(row_to_upd[19]))
-        print('=================================================')
-
         if self.obs.strip() != row_to_upd[19].strip():
-            print('dif...... ambos son STR')
+            #print('dif...... (ambos son STR)')
             vdif = True
 
         return vdif
+
 
     def upd_reci_noauth(self, row_to_upd):
         '''tmpauth3 valida que no se modifiquen datos no autorizados'''

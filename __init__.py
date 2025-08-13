@@ -772,14 +772,15 @@ def asiento(idloc):
             else:
                 nextid = a.get_next_idloc()
                 a.add_asiento(nextid, request.form['deploc'], request.form['provloc'], \
-                              request.form['secloc'], request.form['nomloc'], request.form['poblacionloc'], \
+                              request.form['secloc'], request.form['nomloc'].strip(), request.form['poblacionloc'], \
                               request.form['poblacionelecloc'], request.form['fechacensoloc'], request.form['tipolocloc'], \
                               request.form['latitud'], request.form['longitud'], request.form['estado'], '', \
-                              request.form['etapa'], request.form['obsUbicacion'], request.form['obs'].strip(), \
+                              request.form['etapa'], request.form['obsUbicacion'].strip(), request.form['obs'].strip(), \
                               request.form['fechaIngreso'][:-7], fa, request.form['usuario'], request.form['docAct'], docRspNal, \
                               docActF, urural, request.form['docActT'], docRspNalT)
 
-                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT, docActT, docRspNalT)
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], \
+                          docActF, request.form['docActT'], docRspNalT, docActT, docRspNalT)
 
                 rows = a.get_loc_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, puede_adicionar='Asientos - Adición' in permisos_usr, \
@@ -793,11 +794,11 @@ def asiento(idloc):
                 fcl = None
 
             row_to_upd = \
-                request.form['nomloc'], request.form['poblacionloc'], \
+                request.form['nomloc'].strip(), request.form['poblacionloc'], \
                 request.form['poblacionelecloc'], fcl, request.form['tipolocloc'], \
                 request.form['latitud'], request.form['longitud'], \
                 request.form['estado'], '', request.form['etapa'], \
-                request.form['obsUbicacion'], request.form['obs'].strip(), \
+                request.form['obsUbicacion'].strip(), request.form['obs'].strip(), \
                 str(request.form['fechaIngreso']), fa, usr, request.form['docAct'], docRspNal, \
                 docActF, urural, request.form['docActT'], docRspNalT, idloc
 
@@ -808,7 +809,8 @@ def asiento(idloc):
                                       )
             else:
                 a.upd_asiento(row_to_upd)
-                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
+                d.upd_doc(request.form['docAct'], docRspNal, request.form['doc_idAct'], request.form['doc_idRspNal'], \
+                          docActF, request.form['docActT'], docRspNalT,  docActT, docRspNalT)
 
                 rows = a.get_loc_all(usrdep)
                 return render_template('asientos_list.html', asientos=rows, \
@@ -1223,12 +1225,7 @@ def recinto(idlocreci, reci):
     error = None
     p = ('Recintos - Edición' in permisos_usr)  # t/f
 
-
-    print('--------------------ppp - en recinto ')
-
-
     if request.method == 'POST':
-        print('--------------------ppp - en recinto POST')
         fa = request.form['fechaAct'][:-7]
         # Valida si el campo docActF esta desactivado
         if request.form.get('docActF') == None:
@@ -1262,7 +1259,6 @@ def recinto(idlocreci, reci):
 
 
         if reci == '0':  # es NEW
-            print('--------------------ppp - en recinto POST y NEW =================')
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
                 #return render_template('asiento.html', error=error, u=u, load_u=True)
@@ -1339,16 +1335,7 @@ def recinto(idlocreci, reci):
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
 
     # New from <recintos_list>
-    print('ppp/////// new recintos_list')
-    print(rc)
-    #print(rc.idlocreci)
-    rc.idlocreci, rc.reci = 0, 0
-    #rc.reci = 0 # para url new
-    print(rc.idlocreci)
-    print(rc.reci)
-    print('ppp/////// new recintos_list --------------------')
-    #
-    #return render_template('recinto.html', error=error, rc=rc,
+    rc.idlocreci, rc.reci = 0, 0  #para url recinto new
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p,
                             estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                             dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
