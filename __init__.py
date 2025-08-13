@@ -1215,9 +1215,6 @@ def recintos_list():
 def recinto(idlocreci, reci):
     ''' Uninominales '''
     rc = recintos.Recintos(cxms)
-
-    #print(rc.idlocreci)
-
     rca = recia.Reciasiento(cxms)
     loc = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
@@ -1272,8 +1269,8 @@ def recinto(idlocreci, reci):
                 print('msg-err')
             else:
                 nextid = rc.get_next_reci()
-                datos = request.form['asiento'], nextid, request.form['nomreci'], request.form['zonareci'], request.form['mesasreci'], \
-                    request.form['dirreci'], request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                datos = request.form['asiento'], nextid, request.form['nomreci'].strip(), request.form['zonareci'], request.form['mesasreci'], \
+                    request.form['dirreci'].strip(), request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                     ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
                     fa, request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, \
                     request.form['ambientes'], request.form['docTec'], request.form['circun'], request.form['obs'].strip()
@@ -1345,7 +1342,13 @@ def recinto(idlocreci, reci):
     print('ppp/////// new recintos_list')
     print(rc)
     #print(rc.idlocreci)
+    rc.idlocreci, rc.reci = 0, 0
+    #rc.reci = 0 # para url new
+    print(rc.idlocreci)
+    print(rc.reci)
     print('ppp/////// new recintos_list --------------------')
+    #
+    #return render_template('recinto.html', error=error, rc=rc,
     return render_template('recinto.html', error=error, rc=rc, load=False, puede_editar=p,
                             estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                             dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
