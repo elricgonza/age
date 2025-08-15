@@ -3241,7 +3241,7 @@ def sincro_reci_list():
     cont = 0
     if request.method == 'POST':
         s.del_geo_recinto()
-        rows = rc.get_recintos_all1(0)
+        rows = rc.get_recintos_sincro(0)
         rowas_n = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '1')
         rowas_m = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '2')
         rowas_s = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '3')

@@ -331,7 +331,8 @@ class Recintos:
             return rows
 
 
-    def get_recintos_all1(self, usrdep):
+    def get_recintos_sincro(self, usrdep):
+        '''Used en opc sincroniza'''
         s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, Reci, NombreRecinto, doc_act, fecha_doc_act, " + \
             "cod_dist, NomDist, cod_zona, NomZona, Direccion, CircunDist, tipoCircunscripcion, tipoRecinto, etapa, estado, latitud, longitud, fechaIngreso, " + \
             "fechaAct, usuario " + \
@@ -344,10 +345,7 @@ class Recintos:
             self.cur.execute(s, usrdep)
 
         rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
+        return rows
 
     #def __str__(self):
     #    return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
