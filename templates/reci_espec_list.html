@@ -23,7 +23,8 @@
             </div>
             {% if puede_adicionar %}
             <div class="col-xs-6 col-md-4">
-                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href= {{ url_for('reciespe', idreci=0, idlocreci=0) }} >Adicionar Recinto Especial</a></button>
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> 
+                    <a href= {{ url_for('reci_espec', idlocreci=0, reci=0) }} >Adicionar Nuevo Recinto Especial</a></button>
             </div>
             {% endif %}
         </div>

@@ -347,5 +347,23 @@ class Recintos:
         rows = self.cur.fetchall()
         return rows
 
+
+    def get_reci_espec(self, usrdep):        
+        ''' Obtiene recintos especiales (indígenas) '''
+
+        s = "Select IdLoc as IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio, " + \
+            " NomReci as NombreRecinto, TipoCircun as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
+            " from [bdge].[dbo].[v_reci_nal_all]"
+        if usrdep != 0:
+            s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') and DEP = %d order by prov, sec"  
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') order by Dep, Prov, Sec"
+            self.cur.execute(s, usrdep)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
     #def __str__(self):
     #    return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
