@@ -2,6 +2,8 @@
 // -ric
 
 function getGeo(event) {
+    const inputTipoCir = document.getElementById('itipoCir');
+    const paramTipoCir = inputTipoCir.value;   // uninominal|especial
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
             $.getJSON('/get_geo', {
@@ -14,7 +16,11 @@ function getGeo(event) {
                 document.getElementById("iprovincia").setAttribute("value", data.provincia)
                 document.getElementById("isecloc").setAttribute("value", data.sec)
                 document.getElementById("imunicipio").setAttribute("value", data.municipio)
-                document.getElementById("icircun").setAttribute("value", data.nrocircun)
+                if (paramTipoCir == 'especial') {
+                    document.getElementById("icircun").setAttribute("value", CircunEspecDep(data.dep));
+                } else {
+                    document.getElementById("icircun").setAttribute("value", data.nrocircun);
+                }
                 document.getElementById("idistrito").setAttribute("value", data.distrito)
                 document.getElementById("icod_dist").setAttribute("value", data.cod_dist)   // -> distGeo
                 document.getElementById("izona").setAttribute("value", data.zona)
@@ -30,68 +36,42 @@ function getGeo(event) {
 } //getgeo
 
 
-function getgeoesp(event) {
-    var x = event.keyCode;
-    //alert(x)
-    var ban=0;
-    if (x == 27 || x == 9 || 'undefined') {
-            $.getJSON('/get_geo_esp', {
-                latitud: $('input[name="latitud"]').val(),
-                longitud: $('input[name="longitud"]').val()
-            }, function(data) {
-                document.getElementById("ideploc").setAttribute("value", data.dep)
-                document.getElementById("idepartamento").setAttribute("value", data.departamento)
-                document.getElementById("iprovloc").setAttribute("value", data.prov)
-                document.getElementById("iprovincia").setAttribute("value", data.provincia)
-                document.getElementById("isecloc").setAttribute("value", data.sec)
-                document.getElementById("imunicipio").setAttribute("value", data.municipio)
-                //document.getElementById("icircun").setAttribute("value", data.dep);
-                //document.getElementById("icircun").setAttribute("value", circun(3));
-                switch(data.dep){
-                    case 2:{
-                        document.getElementById("icircun").setAttribute("value", '1');
-                        $('#icircun').css('color', 'black');
-                    }
-                    break;
-                    case 3:{
-                        document.getElementById("icircun").setAttribute("value", '2');
-                        $('#icircun').css('color', 'black');   
-                    }
-                    break;
-                    case 4:{
-                        document.getElementById("icircun").setAttribute("value", '3');
-                        $('#icircun').css('color', 'black');   
-                    }
-                    break;
-                    case 6:{
-                        document.getElementById("icircun").setAttribute("value", '4');
-                        $('#icircun').css('color', 'black');   
-                    }
-                    break;
-                    case 7:{
-                        document.getElementById("icircun").setAttribute("value", '5');   
-                    }
-                    break;
-                    case 8:{
-                        document.getElementById("icircun").setAttribute("value", '6');
-                        $('#icircun').css('color', 'black');  
-                    }
-                    break;
-                    case 9:{
-                        document.getElementById("icircun").setAttribute("value", '7');
-                        $('#icircun').css('color', 'black');  
-                    }
-                    break;
-                    default:{ 
-                        document.getElementById("icircun").setAttribute("value", 'No Hay');
-                        $('#icircun').css('color', 'red');
-                    } 
-                    break;
-                }
-            });
-        buildMap($('input[name="latitud"]').val(),   $('input[name="longitud"]').val());
-    };
-} //getgeoesp
+function CircunEspecDep(paramDep) {
+    switch(paramDep){
+        case 2:{
+            $('#icircun').css('color', 'blue');
+            return 1;
+        }
+        case 3:{
+            $('#icircun').css('color', 'blue');
+            return 2;
+        }
+        case 4:{
+            $('#icircun').css('color', 'blue');
+            return 3;
+        }
+        case 6:{
+            $('#icircun').css('color', 'blue');
+            return 4;
+        }
+        case 7:{
+            $('#icircun').css('color', 'blue');
+            return 5;
+        }
+        case 8:{
+            $('#icircun').css('color', 'blue');
+            return 6;
+        }
+        case 9:{
+            $('#icircun').css('color', 'blue');
+            return 7;
+        }
+        default:{ 
+            $('#icircun').css('color', 'red');
+            return 's/dato';
+        } 
+    }
+}
 
 
 function getgeoespecial(event) {

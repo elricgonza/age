@@ -5,7 +5,8 @@
 {% include "geo_libs.html" %}
 {% block js_css %}
     <script src="{{ url_for('static', filename='js/uts/viewmap.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/uts/reci_datos.js') }}"></script>
+    <!--<script src="{{ url_for('static', filename='js/uts/reci_datos.js') }}"></script>-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/reci_datos.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/buildmap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
 {% endblock %}
@@ -119,16 +120,16 @@
         </div> <!--row-->
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="hidden" name="cod_dist" id="icod_dist" value>
                 <label for="distrito">Distrito:</label>
                 <input type="text" class="form-control" id="idistrito" title="" placeholder="Distrito" name="distrito"  readonly required "
                         {% if load %}
                             value="{{ rc.distrito}}"
                         {% endif %}
-                    >
+                >
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="hidden" name="cod_zona" id="icod_zona" value>
                 <label for="zona">Zona:</label>
                 <input type="text" class="form-control" id="izona" title="" placeholder="Zona" name="zona"  readonly required "
@@ -139,7 +140,7 @@
             </div>
 
             <div class="col-md-1">
-                <label for="circun">CIRCUN:</label>
+                <label for="circun">Circun.:</label>
                 <input type="hidden" name="tipoCir" id="itipoCir" value="especial">
                 <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
                         {% if load %}
@@ -148,9 +149,34 @@
                 >
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-1">
                 <label for="">.</label>
-                <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Visualizar imágen Satelital</button>
+                <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="cargar(this.value,8);" >Ver</button>-->
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="loadPueblos();" >Ver</button>
+            </div>
+
+
+            <div class="col-md-2">
+                <label for="pueblo">Pueblos Indígenas:</label>
+                <select id="ipueblo" name="pueblo" class="form-control">
+                    <option></option>
+                    {% for nacion in naciones %}
+                        {% if rce.deploc == nacion[2] %}
+                            {% if load and rce.nacionId==nacion[0] %}
+                                    <option value = "{{ nacion[0] }}" selected>{{ nacion[1] }}</option>
+                            {% else %}
+                                    <option value = "{{ nacion[0] }}">{{ nacion[1] }}</option>
+                            {% endif %}
+                        {% endif %}                                                                
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Debe Seleccionar el Pueblo Indigena...</div>
+            </div>
+
+
+            <div class="col-md-2">
+                <label for="">.</label>
+                <button type='button' class="btn btn-info btn-md btn-block" onclick="mostrarMapa();" >Ver Img. Satelital</button>
             </div>
         </div> <!--end row-->
 

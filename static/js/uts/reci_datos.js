@@ -50,13 +50,8 @@ function getLocMunicipio() {
 function loadLocMunicipio() {
     // call by (recinto.html) si NEW 
     var x = event.keyCode;
-    //alert($('input[name="itipoCir"]').value);
-                //tipoCir: 'uninominal/mixto'
-                //tipoCir: 'uninominal/mixto'
-    alert('param tipoCir');
     const inputTipoCir = document.getElementById('itipoCir');
     const paramTipoCir = inputTipoCir.value;
-    alert(paramTipoCir);
     if (x == 27 || x == 9 || 'undefined') {
         $('#iasiento').html('');
         $.getJSON("/get_loc_municipio", { 
@@ -64,39 +59,6 @@ function loadLocMunicipio() {
                 prov: $('input[name="provloc"]').val(),
                 sec: $('input[name="secloc"]').val(),
                 tipoCir: paramTipoCir
-            }, function(datos){
-            $("#iasiento").append('<option></option>');
-                $.each(datos, function(index, obj){
-                    $("#iasiento").append('<option value="' + obj[3] + '">' + obj[4] + '</option>');  
-                });
-            });
-    };
-}
-
-
-function getLocMunicipioEspec() {
-  // Invocado por recinto.html/evento click: get "Asientos/Zonas" en combo
-
-    var idloc = document.getElementById("ireci_idasiento").value;
-    if($('input[name="load"]').val()=='True'){ // EDIT
-        getLocNom(idloc);  // reload combo humm
-    }else{ // NEW
-        loadLocMunicipioEspec();
-    };
-}
-
-
-function loadLocMunicipioEspec() {
-    // call by (reci_espec.html) si NEW 
-    var x = event.keyCode;
-    if (x == 27 || x == 9 || 'undefined') {
-        $('#iasiento').html('');
-        $.getJSON("/get_loc_municipio", { 
-                dep: $('input[name="deploc"]').val(),
-                prov: $('input[name="provloc"]').val(),
-                sec: $('input[name="secloc"]').val(),
-                tipoCir: $('input[name="tipoCir"]'),
-                tipoCir: 'especial'
             }, function(datos){
             $("#iasiento").append('<option></option>');
                 $.each(datos, function(index, obj){
@@ -119,6 +81,20 @@ function getLocNom(idloc) {
             });
         });
 }
+
+
+function loadPueblos() {
+    var dep = document.getElementById("ideploc").value;
+    $('#ipueblo').html('');
+    $.getJSON("/get_pueblos_all", {
+        dep: dep
+    }, function(datos8){
+        $("#ipueblo").append('<option></option>');                
+        $.each(datos8, function(index8, obj8){           
+            $("#ipueblo").append('<option value="' + obj8[0] + '">' + obj8[1] + '</option>');
+        });
+    });
+
 
 
 // -------------------------------------------------------------------------------------------//

@@ -1565,7 +1565,6 @@ def get_distritos_all2():
 def reci_espec_list():
     ''' Recintos Especiales / Indígenas list '''
 
-    #ppp rce = recie.Reciespe(cxms)
     rce = recintos.Recintos(cxms)
     rows = rce.get_reci_espec(usrdep)
 

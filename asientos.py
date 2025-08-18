@@ -485,12 +485,11 @@ class Asientos:
 
 
     def get_loc_municipio(self, dep, prov, sec, tipo_cir):
-        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE sg  TipoCircun 'uninominal/mixto' || 'especial' '''
+        ''' Obtiene asientos con ESTADO habilitado/rehabilitado TED y TSE 
+            según  TipoCircun uninominal/mixto || especial/mixto '''
 
         param = dep, prov, sec
         cod_tipo_cir = " (67,69) " if tipo_cir=="uninominal/mixto" else " (68,69) "
-        print('ppp - tipo_cir -------------------------------')
-        print(cod_tipo_cir)
 
         s = "select Dep, Prov, Sec, IdLoc, nomLoc as AsientoElectoral" + \
                 " from [bdge].[dbo].[v_loc_nal_all]" + \
