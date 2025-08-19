@@ -8,7 +8,6 @@
     <!--<script src="{{ url_for('static', filename='js/uts/reci_datos.js') }}"></script>-->
     <script type="text/javascript" src="{{ url_for('static', filename='js/uts/reci_datos.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/buildmap.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
 {% endblock %}
 
 {% if error %}
@@ -21,7 +20,7 @@
 <div class="container">
     <h2 class="text-center text-blue pt-5" >Recinto Electoral - Especial / Indígena</h2>
     <br>
-    <form class="needs-validation" action="{{ url_for('recinto', idlocreci = rc.idlocreci, reci = rc.reci) }}" 
+    <form class="needs-validation" action="{{ url_for('reci_espec', idlocreci = rc.idlocreci, reci = rc.reci) }}" 
             novalidate method='POST' onsubmit="return Validation(this)" name="form">
         <div class="form-row">
             <!--<div class="col-md-2">-->
@@ -155,7 +154,6 @@
 
             <div class="col-md-1">
                 <label for="">.</label>
-                <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="cargar(this.value,8);" >Ver</button>-->
                 <button type='button' class="btn btn-info btn-md btn-block" onclick="loadPueblos();" >Ver</button>
             </div>
 
@@ -173,7 +171,7 @@
                         {% endif %}                                                                
                     {% endfor %}
                 </select>
-                <div class="invalid-feedback">Debe Seleccionar el Pueblo Indigena...</div>
+                <div class="invalid-feedback">Debe Seleccionar el Pueblo Indígena...</div>
             </div>
 
 

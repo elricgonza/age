@@ -1269,7 +1269,7 @@ def recinto(idlocreci, reci):
                     request.form['dirreci'].strip(), request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                     ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
                     fa, request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, \
-                    request.form['ambientes'], request.form['docTec'], request.form['circun'], request.form['obs'].strip()
+                    request.form['ambientes'], request.form['docTec'], request.form['circun'], request.form['obs'].strip(), 0
 
                 if rc.add_recinto(datos):
                     d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
@@ -1631,7 +1631,6 @@ def reci_espec(idlocreci, reci):
         else:
             depenreci = request.form['depenreci']
 
-
         if reci == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
@@ -1639,17 +1638,19 @@ def reci_espec(idlocreci, reci):
                 print('msg-err')
             else:
                 nextid = rc.get_next_reci()
+                idcircun = int(request.form['circun']) + 63 # id especial
+
                 datos = request.form['asiento'], nextid, request.form['nomreci'].strip(), request.form['zonareci'], request.form['mesasreci'], \
                     request.form['dirreci'].strip(), request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                     ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
                     fa, request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, \
-                    request.form['ambientes'], request.form['docTec'], request.form['circun'], request.form['obs'].strip()
+                    request.form['ambientes'], request.form['docTec'], idcircun, request.form['obs'].strip(), request.form['pueblo']
 
                 if rc.add_recinto(datos):
                     d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rc.get_reci_uninom(usrdep)
-                return render_template('recintos_list.html', recintos=rows, 
+                rows = rc.get_reci_espec(usrdep)
+                return render_template('reci_espec_list.html', recintos=rows, 
                                        puede_adicionar='Recintos - Adición' in permisos_usr, \
                                        puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
@@ -1679,7 +1680,7 @@ def reci_espec(idlocreci, reci):
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
                 rows = rc.get_reci_uninom(usrdep)
-                return render_template('recintos_list.html', recintos=rows, \
+                return render_template('reci_espec_list.html', recintos=rows, \
                                        puede_adicionar='Recintos - Adición' in permisos_usr, \
                                        puede_editar='Recintos - Edición' in permisos_usr
                                       )# render a template
