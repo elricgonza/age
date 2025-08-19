@@ -123,7 +123,8 @@
             <div class="col-md-3">
                 <input type="hidden" name="cod_dist" id="icod_dist" value>
                 <label for="distrito">Distrito:</label>
-                <input type="text" class="form-control" id="idistrito" title="" placeholder="Distrito" name="distrito"  readonly required "
+                <input type="text" class="form-control" id="idistrito" title="" placeholder="Distrito" name="distrito"
+                        readonly required "
                         {% if load %}
                             value="{{ rc.distrito}}"
                         {% endif %}
@@ -132,29 +133,31 @@
             <div class="col-md-3">
                 <input type="hidden" name="cod_zona" id="icod_zona" value>
                 <label for="zona">Zona:</label>
-                <input type="text" class="form-control" id="izona" title="" placeholder="Zona" name="zona"  readonly required "
+                <input type="text" class="form-control" id="izona" title="" placeholder="Zona" name="zona"
+                        readonly required "
                         {% if load %}
                             value="{{ rc.zona}}"
                         {% endif %}
-                    >
+                >
             </div>
 
             <div class="col-md-1">
                 <label for="circun">Circun.:</label>
                 <input type="hidden" name="tipoCir" id="itipoCir" value="especial">
-                <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
+                <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"
+                        readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ rc.idcircun }}"
                         {% endif %}
                 >
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
             </div>
+
             <div class="col-md-1">
                 <label for="">.</label>
                 <!--<button type='button' class="btn btn-info btn-md btn-block" onclick="cargar(this.value,8);" >Ver</button>-->
                 <button type='button' class="btn btn-info btn-md btn-block" onclick="loadPueblos();" >Ver</button>
             </div>
-
 
             <div class="col-md-2">
                 <label for="pueblo">Pueblos Indígenas:</label>
