@@ -1640,6 +1640,9 @@ def reci_espec(idlocreci, reci):
                 nextid = rc.get_next_reci()
                 idcircun = int(request.form['circun']) + 63 # id especial
 
+                print('ppp----reci---post--new--------------------------')
+                print(request.form['pueblo'])
+                print('-------------------------------------------')
                 datos = request.form['asiento'], nextid, request.form['nomreci'].strip(), request.form['zonareci'], request.form['mesasreci'], \
                     request.form['dirreci'].strip(), request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                     ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
@@ -1674,7 +1677,8 @@ def reci_espec(idlocreci, reci):
                                        zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                        dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                       naciones=rc.get_naciones())
             else:  # Edit/Save
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
@@ -1694,20 +1698,28 @@ def reci_espec(idlocreci, reci):
                 if rc.usuario == None:
                     rc.usuario = usr
 
+
+                print('ppp-----------------get_naciones')
+                print('rc.deploc -----' + str(rc.deploc))
+                print('rc.nacionId -----' + str(rc.nacionId))
+                print(rc.get_naciones())
+                print('------------------------------------')
                 if usrauth == 3:    #tmpauth3 - get_etapas_auth
                     return render_template('reci_espec.html', error=error, rc=rc, load=True, puede_editar=p,
                                     asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
                                     zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
-                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                    naciones=rc.get_naciones())
                 else:
                     return render_template('reci_espec.html', error=error, rc=rc, load=True, puede_editar=p,
                                     asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
                                     zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
-                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                    naciones=rc.get_naciones())
 
     # New from <recintos_list>
     rc.idlocreci, rc.reci = 0, 0  #para url recinto new

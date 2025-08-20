@@ -30,7 +30,7 @@ class Recintos:
             "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
             "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
             "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp, " + \
-            "a.doc_idT, j.ruta as rutaT, a.obs, f.zonaGeo, g.distGeo " + \
+            "a.doc_idT, j.ruta as rutaT, a.obs, f.zonaGeo, g.distGeo, a.nacionId " + \
             "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
@@ -82,6 +82,7 @@ class Recintos:
             self.obs = row[33]
             self.zonaGeo = row[34]
             self.distGeo = row[35]
+            self.nacionId = row[36]
         return row
 
 
@@ -319,6 +320,13 @@ class Recintos:
             return False
         else:
             return rows
+
+
+    def get_naciones(self):
+        s = "select idClasif, descripcion, clasifSubGrupo from [GeografiaElectoral_app].[dbo].[clasif] where clasifGrupoId=5"
+        self.cur.execute(s)
+        rows = self.cur.fetchall()
+        return rows
 
 
     def get_dependencias(self):

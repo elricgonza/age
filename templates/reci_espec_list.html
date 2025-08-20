@@ -63,7 +63,7 @@
                         <td>{{ recinto[11] }}</td>
                         <td>
                             {% if puede_editar or puede_consultar %}
-                                <a href={{ url_for('reciespe', idreci=recinto[1], idlocreci=recinto[0]) }}><span class="fas fa-edit"></span></a>
+                                <a href= {{ url_for('reci_espec', idlocreci=recinto[0], reci=recinto[1]) }}><span class="fas fa-edit"></span></a>
                             {% else %}
                                 <span class="fas fa-edit" style="color: grey"></span>
                             {% endif %}                

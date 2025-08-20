@@ -162,8 +162,8 @@
                 <select id="ipueblo" name="pueblo" class="form-control">
                     <option></option>
                     {% for nacion in naciones %}
-                        {% if rce.deploc == nacion[2] %}
-                            {% if load and rce.nacionId==nacion[0] %}
+                        {% if rc.deploc == nacion[2] %}
+                            {% if load and rc.nacionId==nacion[0] %}
                                     <option value = "{{ nacion[0] }}" selected>{{ nacion[1] }}</option>
                             {% else %}
                                     <option value = "{{ nacion[0] }}">{{ nacion[1] }}</option>
