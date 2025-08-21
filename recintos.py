@@ -113,7 +113,7 @@ class Recintos:
                 " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
                 " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
                 " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s, doc_idT= %s, " + \
-                " obs= %s" + \
+                " obs= %s, nacionId= %s" + \
                 " where IdLocReci = %s and Reci = %s"
             try:
                 self.cur.execute(s, recinto)
@@ -125,8 +125,8 @@ class Recintos:
 
 
     def diff_old_new_reci(self, row_to_upd):
-        #upd 2jun2025 - add obs
-        rc = self.get_recinto_key(row_to_upd[20], row_to_upd[21])  #19 -> idreci, #20 -> idlocreci
+        #upd 21ago2025 - add obs, nacionId
+        rc = self.get_recinto_key(row_to_upd[21], row_to_upd[22]) 
         vdif = False
         if self.nomreci != row_to_upd[0]:
             #print('nom dif')
@@ -194,6 +194,8 @@ class Recintos:
             #print('dif...... (ambos son STR)')
             vdif = True
 
+        if self.nacionId != row_to_upd[20]:
+            vdif = True
         return vdif
 
 
@@ -361,12 +363,15 @@ class Recintos:
 
         s = "Select IdLoc as IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio, " + \
             " NomReci as NombreRecinto, TipoCircun as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
-            " from [bdge].[dbo].[v_reci_nal_all]"
+            " from [bdge].[dbo].[v_reci_nal_all] " 
         if usrdep != 0:
-            s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') and DEP = %d order by prov, sec"
+            s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') and DEP = %d and DEP not in (1,5) " + \
+                " order by TipoCircun desc, prov, sec"
             self.cur.execute(s, usrdep)
         else:
-            s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') order by Dep, Prov, Sec"
+            s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') and DEP not in (1,5) " + \
+                " order by TipoCircun desc, Dep, Prov, Sec"
+            print(s)
             self.cur.execute(s, usrdep)
 
         rows = self.cur.fetchall()

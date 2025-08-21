@@ -1290,7 +1290,8 @@ def recinto(idlocreci, reci):
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, \
-                request.form['ambientes'], request.form['docTec'], request.form['obs'].strip(), idlocreci, reci
+                request.form['ambientes'], request.form['docTec'], request.form['obs'].strip(), \
+                0, idlocreci, reci
 
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
@@ -1640,9 +1641,6 @@ def reci_espec(idlocreci, reci):
                 nextid = rc.get_next_reci()
                 idcircun = int(request.form['circun']) + 63 # id especial
 
-                print('ppp----reci---post--new--------------------------')
-                print(request.form['pueblo'])
-                print('-------------------------------------------')
                 datos = request.form['asiento'], nextid, request.form['nomreci'].strip(), request.form['zonareci'], request.form['mesasreci'], \
                     request.form['dirreci'].strip(), request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
                     ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
@@ -1668,12 +1666,13 @@ def reci_espec(idlocreci, reci):
                 ruereci, edireci, depenreci, \
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, \
-                request.form['ambientes'], request.form['docTec'], request.form['obs'].strip(), idlocreci, reci
+                request.form['ambientes'], request.form['docTec'], request.form['obs'].strip(), \
+                request.form['pueblo'], idlocreci, reci
 
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
                 return render_template('reci_espec.html', error=error, rc=rc, load=True, puede_editar=p,
-                                       asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                       asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'especial/mixto'),
                                        zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                        dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
@@ -1683,7 +1682,7 @@ def reci_espec(idlocreci, reci):
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
 
-                rows = rc.get_reci_uninom(usrdep)
+                rows = rc.get_reci_espec(usrdep)
                 return render_template('reci_espec_list.html', recintos=rows, \
                                        puede_adicionar='Recintos - Adición' in permisos_usr, \
                                        puede_editar='Recintos - Edición' in permisos_usr
@@ -1697,16 +1696,11 @@ def reci_espec(idlocreci, reci):
                     rc.fechaAct = str(datetime.datetime.now())[:-7]
                 if rc.usuario == None:
                     rc.usuario = usr
+                rc.idcircun = rc.idcircun - 63 if (rc.idcircun != None and rc.idcircun > 63) else 0 #para visualización NroCircun
 
-
-                print('ppp-----------------get_naciones')
-                print('rc.deploc -----' + str(rc.deploc))
-                print('rc.nacionId -----' + str(rc.nacionId))
-                print(rc.get_naciones())
-                print('------------------------------------')
                 if usrauth == 3:    #tmpauth3 - get_etapas_auth
                     return render_template('reci_espec.html', error=error, rc=rc, load=True, puede_editar=p,
-                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'especial/mixto'),
                                     zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
@@ -1714,7 +1708,7 @@ def reci_espec(idlocreci, reci):
                                     naciones=rc.get_naciones())
                 else:
                     return render_template('reci_espec.html', error=error, rc=rc, load=True, puede_editar=p,
-                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'especial/mixto'),
                                     zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
