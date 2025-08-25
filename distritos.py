@@ -1,10 +1,6 @@
 # Operaciones Zonas / Distritos / Recintos
 
 class Distritos:
-    idlocreci=0
-    reci=0
-    nomreci=''
-    idloc=0
 
     def __init__(self, cx):
         self.cx = cx
@@ -56,7 +52,7 @@ class Distritos:
     def add_dist(self, idlocdist, dist, circundist, nomdist, fecharegistro, usuario, fechaingreso, distgeo):
         new_dist = idlocdist, dist, circundist, nomdist.upper(), fecharegistro, usuario, fechaingreso, distgeo
         s = "insert into GeografiaElectoral_app.dbo.dist " + \
-                " (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario, distgeo) values " + \
+                " (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario, distGeo) values " + \
                 " (%s, %s, %s, %s, %s, %s, %s, %s) "
         try:
             self.cur.execute(s, new_dist)
@@ -94,8 +90,9 @@ class Distritos:
 
 
     def get_zonadist_idloc(self, idloc, iddist):
+        ''' ppp rev en jurisd_asi.py +133 que tb lo invoca y eliminar '''
         up_zonadist = idloc, iddist
-        s = "select l.IdLoc, l.NomLoc, d.Dist, d.CircunDist, d.NomDist, d.fechaIngreso, d.fechaAct, d.usuario " + \
+        s = "select l.IdLoc, l.NomLoc, d.Dist, d.CircunDist, d.NomDist, d.fechaIngreso, d.fechaAct, d.usuario, d.distGeo " + \
             "from [GeografiaElectoral_app].[dbo].[DIST] d " + \
             "inner join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist " + \
             "where d.IdLocDist= %d and d.Dist= %d"
@@ -114,6 +111,26 @@ class Distritos:
             self.usuario = row[7]
             return True
 
+    def get_dist_key(self, idloc, dist):
+        ''' retorna dist '''
+        dist_key = idloc, dist
+        s = "select l.IdLoc, l.NomLoc, d.Dist, d.CircunDist, d.NomDist, d.fechaIngreso, d.fechaAct, d.usuario, d.distGeo " + \
+            "from [GeografiaElectoral_app].[dbo].[DIST] d " + \
+            "inner join [GeografiaElectoral_app].[dbo].[LOC] l on l.IdLoc=d.IdLocDist " + \
+            "where d.IdLocDist= %d and d.Dist= %d"
+        self.cur.execute(s, dist_key)
+        row = self.cur.fetchone()
+        if  row:
+            self.idloc = row[0]
+            self.nomloc = row[1]
+            self.dist = row[2]
+            self.circundist = row[3]
+            self.nomdist = row[4]
+            self.fechaingreso = row[5]
+            self.fechaact = row[6]
+            self.usuario = row[7]
+            self.distgeo = row[8]
+            return True
 
     def get_nomdist(self, idloc, nomdist):
         con = idloc, nomdist

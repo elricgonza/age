@@ -1816,7 +1816,7 @@ def dist_adm(pidloc, pdist, pnalext):
         idloc = request.form['idloc']
         dist = request.form['dist']
         nomdist = request.form['nomdist']
-        circundist = request.form['circundist']
+        distgeo = request.form['distGeo']
 
         if pidloc == '0' and pdist == '0':  # es NEW
             if nomdist.upper() == 'SIN DISTRITO':
@@ -1827,15 +1827,20 @@ def dist_adm(pidloc, pdist, pnalext):
             if  da.nomdist_existe(idloc, nomdist):  # valida si err en datos POST
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento..."
                 if pnalext == 'nal': # nal
-                    return render_template('dist_adm.html', error=error, z=da, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=None)
+                    return render_template('dist_adm.html', error=error, z=da, load=False, puede_editar=p,
+                                           titulo='Adición de Distrito', idloc=idloc, nomloc='_',
+                                           distgeo=distgeo, dook=None)
                 if ban == '2': # ext
                     return render_template('zonareext.html', error=error, z=da, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else:  # Adiciona distrito 
                 if pnalext == 'nal':  # nal
-                    da.add_dist(idloc, nextdist, circundist, nomdist, \
-                               request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'])
+                    da.add_dist(idloc, nextdist, 0, nomdist, \
+                               request.form['fechaIngreso'][:-7], request.form['fechaAct'], request.form['usuario'],
+                               distgeo)
                     dook = 'Distrito Adicionado...'
-                    return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Adición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
+                    return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p,
+                                           titulo='Adición de Distrito', idloc=idloc, nomloc='_',
+                                           distgeo=distgeo, dook=dook)
                 if ban == '2':  # ext
                     circundist = 0
                     da.add_dist(idloc, nextiddist, circundist, nomdist, \
@@ -1846,15 +1851,19 @@ def dist_adm(pidloc, pdist, pnalext):
                 error = "El distrito: --" + nomdist + "-- ya existe en el asiento..."
                 if pnalext == 'nal': # nal
                     da.get_zonadist_idloc(pidloc, pdist)
-                    return render_template('dist_adm.html', error=error, d=da, load=True, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='', circundist=circundist, dook=None)
+                    return render_template('dist_adm.html', error=error, d=da, load=True, puede_editar=p,
+                                           titulo='Edición de Distrito', idloc=idloc, nomloc='',
+                                           distgeo=distgeo, dook=None)
                 if ban == '2': # ext
                     return render_template('zonareext.html', error=error, d=da, load=True, puede_editar=p, titulo='Registro de Distritos del Exterior')
             else: # upd dist
                 if pnalext == 'nal':
                     fa = str(datetime.datetime.now())[:-7]
-                    da.upd_dist(idloc, dist, circundist, nomdist, fa, usr)
+                    da.upd_dist(idloc, dist, 0, nomdist, fa, usr, distgeo)
                     dook = 'Distrito Actualizado...'
-                    return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p, titulo='Edición de Distrito', idloc=idloc, nomloc='_', circundist=circundist, dook=dook)
+                    return render_template('dist_adm.html', error=None, z=da, load=False, puede_editar=p,
+                                           titulo='Edición de Distrito', idloc=idloc, nomloc='_',
+                                           distgeo=circundist, dook=dook)
 
             rows = da.get_dist_all(usrdep)
             return render_template('distritos_list.html', dists=rows, \

@@ -49,7 +49,7 @@
                             >
                         </div>
                     </div> <!--row-->
-                    <h5 class="text-left text-blue pt-5" >Datos del Distrito (Circunscripción):</h5>
+                    <br>
                     <div class="row">
                         <div class="col-md-2">
                             <label for="dist">Dist.:</label>
@@ -60,15 +60,6 @@
                             >
                             <div class="invalid-feedback">Código parcial - distrito ...</div>
                         </div>
-                        <div class="col-md-2">
-                            <label for="circundist">Circun.:</label>
-                            <input type="text" class="form-control" maxlength="2" id="circundist" placeholder="No. Circ." name="circundist" required
-                                        {% if load %}
-                                            value="{{ d.circundist }}"
-                                        {% endif %}
-                            >
-                            <div class="invalid-feedback">Por favor ingrese No. de Circunscripción...</div>
-                        </div>
                         <div class="col-md-8">
                             <label for="nomdist">Nombre del Distrito::</label>
                             <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
@@ -78,6 +69,16 @@
                                         {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre del Distrito...</div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="distGeo">ID GEO:</label>
+                            <input type="text" class="form-control" maxlength="5" id="id_distGeo" 
+                                    placeholder="Id de distrito - Espacial" name="distGeo" required
+                                        {% if load %}
+                                            value="{{ d.distGeo }}"
+                                        {% endif %}
+                            >
+                            <div class="invalid-feedback">Por favor ingrese Código (id) de distrito Espacial</div>
                         </div>
                     </div>
                     <br>
