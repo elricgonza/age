@@ -97,21 +97,6 @@ function loadPueblos() {
 }
 
 
-// -------------------------------------------------------------------------------------------//
-function getgeoreci(event) {
-    // hummm ...invocado sólo x reciespe.html
-    var x = event.keyCode;
-    var idloc = document.getElementById("ireci_idasiento").value;
-    if (x == 27 || x == 9 || 'undefined') {
-        if($('input[name="load"]').val()=='True'){
-            asiento_reci(idloc, $('input[name="circun"]').val());            
-        }else{
-            asientosReci($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
-        };             
-    };
-} 
-
-
 function getgeoreci2(event) {
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;

@@ -1,4 +1,4 @@
-# Operaciones recintos
+# Operaciones recintos - Uninominales/Especiales
 
 class Recintos:
 
@@ -359,19 +359,22 @@ class Recintos:
 
 
     def get_reci_espec(self, usrdep):
-        ''' Obtiene recintos especiales (indígenas) '''
+        ''' Obtiene recintos especiales (indígenas) 
+        condic idloc not in (729, 820, 821, 2059, 2680, 2234) --asientos capitales: lpz, ea, cbba, or, tja, scz
+        '''
 
         s = "Select IdLoc as IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio, " + \
             " NomReci as NombreRecinto, TipoCircun as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
             " from [bdge].[dbo].[v_reci_nal_all] " 
         if usrdep != 0:
             s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') and DEP = %d and DEP not in (1,5) " + \
-                " order by TipoCircun desc, prov, sec"
+                " and idloc not in (729, 820, 821, 2059, 2680, 2234) " + \
+                " order by Estado, prov, sec"
             self.cur.execute(s, usrdep)
         else:
             s = s + " where (TipoCircun= 'Especial' or isnull(TipoCircun,'')='') and DEP not in (1,5) " + \
-                " order by TipoCircun desc, Dep, Prov, Sec"
-            print(s)
+                " and idloc not in (729, 820, 821, 2059, 2680, 2234) " + \
+                " order by Estado, Dep, Prov, Sec"
             self.cur.execute(s, usrdep)
 
         rows = self.cur.fetchall()

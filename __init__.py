@@ -27,7 +27,6 @@ import distritos as distr
 import exterior as ext
 import exteriorreci as extr
 import recintos
-import reciespe as recie
 import reciespeciales as recies
 import reciasiento as recia
 import geo as geo
@@ -1568,6 +1567,7 @@ def reci_espec_list():
 
     rce = recintos.Recintos(cxms)
     rows = rce.get_reci_espec(usrdep)
+    #rows = sorted(rowsinit, key=lambda item: item[10])
 
     if rows:
         if 'Especiales - Consulta' in permisos_usr:    # tiene pemisos asignados
@@ -1723,142 +1723,6 @@ def reci_espec(idlocreci, reci):
                             tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                             titulo='*-*')
 
-
-@app.route('/reciespe/<idreci>/<idlocreci>', methods=['GET', 'POST'])
-@login_required
-def reciespe(idreci, idlocreci):
-    ''' ppp supr OLD  Recintos Especiales/Indigenas '''
-    rce = recie.Reciespe(cxms)
-    rca = recia.Reciasiento(cxms)
-    z = dist.Distritos(cxms)
-    d = docu.Documentos(cxms)
-
-    error = None
-    p = ('Especiales - Edición' in permisos_usr)  # t/f
-
-    if request.method == 'POST':
-        fa = request.form['fechaAct'][:-7]
-        """Valida si el campo docActF esta desactivado"""
-        if request.form.get('docActF') == None:
-            docActF = 0
-        else:
-            docActF = request.form['docActF']
-
-        if request.form.get('docTec') == None:
-            if request.form.get('doc_idTec') != None:
-                docTec = request.form['doc_idTec']    
-            else:
-                docTec = 0
-        else:
-            docTec = request.form['docTec']
-
-        """Valida si el campo ruereci esta desactivado"""
-        if request.form.get('ruereci') == None:
-            ruereci = 0
-        else:
-            ruereci = request.form['ruereci']
-        """Valida si el campo edireci esta desactivado"""
-        if request.form.get('edireci') == None:
-            edireci = 0
-        else:
-            edireci = request.form['edireci']
-        """Valida si el campo depenreci esta desactivado"""
-        if request.form.get('depenreci') == None:
-            depenreci = 0
-        else:
-            depenreci = request.form['depenreci']
-
-        if idreci == '0':  # es NEW
-            if False:   # valida si neces POST
-                #error = "El usuario: " + request.form['uname']  + " ya existe...!"
-                #return render_template('asiento.html', error=error, u=u, load_u=True)
-                print('msg-err')
-            else:
-                nextid = rce.get_next_reci()
-                idlocreci = request.form['asiento'].split(':')
-                rce.add_recinto(idlocreci[1], nextid, request.form['nomreci'], request.form['zonareci'], \
-                               request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
-                               request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                               ruereci, edireci, depenreci, \
-                               request.form['pisosreci'], request.form['fechaIngreso'][:-7], fa, request.form['usuario'], \
-                               request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'])
-
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
-
-                rows = rce.get_reci_espec(usrdep)
-                return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
-                                        puede_editar='Especiales - Edición' in permisos_usr)  # render a template
-        else: # Es Edit
-            fa = str(datetime.datetime.now())[:-7]
-            idlocreci = request.form['asiento'].split(':')
-
-            row_to_upd = \
-                request.form['nomreci'], request.form['zonareci'], \
-                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
-                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
-                ruereci, edireci, depenreci, \
-                request.form['pisosreci'], fa, usr, \
-                request.form['etapa'], request.form['docAct'], docActF, request.form['pueblo'], request.form['ambientes'], request.form['docTec'], idlocreci[1], idreci    
-
-            if usrauth == 3 and rce.upd_reci_esp_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
-                error = 'Intenta actualizar datos NO autorizados.'
-                return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                       estados=rce.get_estados_reci(usrtipo), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(), 
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
-            else:    
-                rce.upd_recinto(row_to_upd)
-                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
-
-                rows = rce.get_reci_espec(usrdep)
-                return render_template('reci_espec_list.html', recintos=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
-                                        puede_editar='Especiales - Edición' in permisos_usr)  # render a template
-    else: # Viene de <recintos_list>
-        if idreci != '0':  # EDIT
-            if rce.get_recinto_idreci(idreci, idlocreci) == True:
-                """if a.docAct == None:
-                    a.docAct = """
-                if rce.fechaIngreso == None:
-                    rce.fechaIngreso = str(datetime.datetime.now())[:-7]
-                if rce.fechaAct == None:
-                    rce.fechaAct = str(datetime.datetime.now())[:-7]
-                if rce.usuario == None:
-                    rce.usuario = usr
-
-                if usrauth == 3:  #tmpauth3 - get_etapas_auth
-                    return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                           estados=rce.get_estados_reci(usrtipo), dependencias=rce.get_dependencias(), etapas=rce.get_etapas_auth(usrdep, usrtipo), trecintos=rce.get_tiporecintos(),
-                                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
-                else:
-                    return render_template('reciespe.html', error=error, rce=rce, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
-                                           estados=rce.get_estados_reci(usrtipo), dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), trecintos=rce.get_tiporecintos(),
-                                           tpdfsA=d.get_tipo_documentos_pdfA(usrdep), naciones=rce.get_naciones())
-    # New from <recintos_list>
-    return render_template('reciespe.html', error=error, rce=rce, load=False, puede_editar=p, estados=rce.get_estados_reci(usrtipo), trecintos=rce.get_tiporecintos(), titulo='Registro de Zonas y Distritos',
-                           dependencias=rce.get_dependencias(), etapas=rce.get_etapas(usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
-
-
-@app.route('/get_geo_esp', methods=['GET', 'POST'])
-def get_geo_esp():
-    lat = request.args.get('latitud', 0, type=float)
-    long = request.args.get('longitud', 0, type=float)
-    g = geo.LatLong(cxpg)
-    rows = g.get_geo(lat, long)
-    if rows:
-        return jsonify(dep=g.dep,
-                       departamento=g.departamento,
-                       prov=g.prov,
-                       provincia=g.provincia,
-                       sec=g.sec,
-                       municipio=g.municipio,
-                       nrocircun=g.nrocircun)
-    else:
-        return jsonify(dep='---',
-                       departamento='CIRCUNSCRIPCION',
-                       prov='---',
-                       provincia='INCORRECTA !!!',
-                       sec='---',
-                       municipio='PUEBLO INDIGENA NO EXISTE',
-                       nrocircun='NO EXISTE....')
 
 @app.route('/get_pueblos_all', methods=['GET', 'POST'])
 def get_pueblos_all():
@@ -3982,9 +3846,9 @@ def recinto_img(idloc, reci, nomreci):
                                 puede_editar='Recintos - Edición' in permisos_usr)
 
 
-@app.route('/reciespe_img/<idloc>/<reci>/<string:nomreci>', methods=['GET', 'POST'])
+@app.route('/reci_espec_img/<idloc>/<reci>/<string:nomreci>', methods=['GET', 'POST'])
 @login_required
-def reciespe_img(idloc, reci, nomreci):
+def reci_espec_img(idloc, reci, nomreci):
     ''' Gestiona imágenes Recintos - Especiales (Indígenas) '''
 
     i = clasif_get.ClasifGet(cxms)  # conecta a la BD
@@ -4024,11 +3888,11 @@ def reciespe_img(idloc, reci, nomreci):
         return redirect(url_for('reci_espec_list'))
     else:
         if with_img:  # Edit
-            return render_template('reciespe_img_upd.html', rows=i.get_descripcion(14), nomloc=nomreci,
+            return render_template('reci_espec_img_upd.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Especiales - Edición' in permisos_usr,
                                 imgs_loaded=with_img)
         else:  # New
-            return render_template('reciespe_img.html', rows=i.get_descripcion(14), nomloc=nomreci,
+            return render_template('reci_espec_img.html', rows=i.get_descripcion(14), nomloc=nomreci,
                                 puede_editar='Especiales - Edición' in permisos_usr)
 
 
