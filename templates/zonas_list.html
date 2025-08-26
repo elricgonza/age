@@ -19,11 +19,12 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-8">
-                <h5>Zonas</h5>
+                <h4>Zonas</h4>
             </div>
             {% if puede_adicionar %}
             <div class="col-xs-6 col-md-4">
-                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> <a href={{ url_for('zona_adm', pidloczona='0', pzona='0') }} >Adicionar Zona</a></button>
+                <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> 
+                    <a href={{ url_for('zona_adm', pidloczona='0', pzona='0') }} >Adicionar Zona Nueva</a></button>
             </div>
             {% endif %}
         </div>
@@ -39,7 +40,7 @@
                            <th>Zona</th>
                            <th>Dist</th>
                            <th>Nombre Distrito</th>
-                           <th>Circunscripción</th>
+                           <th>Id.Geo Zona</th>
                            <th>Editar</th>
                            <th>Eliminar</th>
                         </tr>

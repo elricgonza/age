@@ -7,29 +7,10 @@ class Zona:
         self.cur = cx.cursor()
 
 
-    def get_zon_allOLD(self, usrdep):        
-        s = "select distinct l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona from [GeografiaElectoral_app].[dbo].[RECI] r" + \
-            " left join [GeografiaElectoral_app].[dbo].[LOC] l on r.IdLocReci=l.IdLoc" + \
-            " left join [GeografiaElectoral_app].[dbo].[ZONA] z on r.IdLocReci= z.IdLocZona and r.ZonaReci = z.Zona" + \
-            " left join [GeografiaElectoral_app].[dbo].[DIST] d on r.IdLocReci= d.IdLocDist and z.DistZona = d.Dist"
-        if usrdep != 0 :
-            s = s + " where r.estado in (1, 2, 3, 6, 79, 80, 81, 84) and l.DepLoc = %d order by l.IdLoc, l.NomLoc"
-            self.cur.execute(s, usrdep)
-        else:
-            s = s + " where r.estado in (1, 2, 3, 6, 79, 80, 81, 84) order by l.IdLoc, l.NomLoc"
-            self.cur.execute(s)
-
-        rows = self.cur.fetchall()
-        if self.cur.rowcount == 0:
-            return False
-        else:
-            return rows
-
-
-    def get_zon_all(self, usrdep):        
+    def get_zon_all(self, usrdep):
         ''' Obtiene todas las zonas asociadas a un asiento '''
 
-        s = "select l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, d.CircunDist, z.Zona " + \
+        s = "select l.IdLoc, l.NomLoc, z.NomZona, d.Dist, d.NomDist, z.zonaGeo, z.Zona " + \
             " from [GeografiaElectoral_app].[dbo].[ZONA] z" + \
             " left join [GeografiaElectoral_app].[dbo].[LOC] l on z.Idloczona = l.IdLoc" + \
             " left join [GeografiaElectoral_app].[dbo].[DIST] d on d.IdLocDist = z.IdLocZona and d.Dist = z.distZona "
@@ -161,8 +142,9 @@ class Zona:
 
     def add_zona(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaact, usuario, zonaGeo):
         new_zona = idloczona, zona, nomzona.strip(), distzona, fechaingreso, fechaact, usuario.strip(), zonaGeo
-        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario, zonaGeo) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s, %s) "
+        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario, zonaGeo)" + \
+            " values " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s)"
         try:
             self.cur.execute(s, new_zona)
             self.cx.commit()

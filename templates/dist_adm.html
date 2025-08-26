@@ -5,6 +5,7 @@
 {% endblock %}
 
 <div class="container">
+    <br>    
     <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
     <br>    
     
@@ -31,7 +32,8 @@
                     <div class="row">
                         <div class="col-md-3">
                             <label for="idloc">IdLoc:</label>
-                            <input type="text" class="form-control" id="idloc" title="" placeholder="Instroduzca IdLoc" name="idloc" required 
+                            <input type="text" class="form-control" id="idloc" title="" name="idloc" required  
+                                        placeholder="Instroduzca IdLoc" 
                                         onblur="getNomloc();" 
                                         {% if load %}
                                             value="{{ d.idloc }}"
@@ -42,7 +44,8 @@
                         </div>
                         <div class="col-md-9">
                             <label for="nomloc">Nombre Asiento:</label>
-                            <input type="text" class="form-control" id="inomloc" title="" placeholder="Asiento" name="nomloc" required readonly
+                            <input type="text" class="form-control" id="inomloc" title="" name="nomloc" 
+                                        placeholder="Asiento" required readonly
                                         {% if load %}
                                             value="{{ d.nomloc }}"
                                         {% endif %}
@@ -53,7 +56,8 @@
                     <div class="row">
                         <div class="col-md-2">
                             <label for="dist">Dist.:</label>
-                            <input type="text" class="form-control" maxlength="2" id="dist" placeholder="Cod" name="dist" readonly
+                            <input type="text" class="form-control" maxlength="2" id="dist" placeholder="Cod" 
+                                        name="dist" readonly
                                         {% if load %}
                                             value="{{ d.dist }}"
                                         {% endif %}
@@ -62,7 +66,8 @@
                         </div>
                         <div class="col-md-8">
                             <label for="nomdist">Nombre del Distrito::</label>
-                            <input type="text" class="form-control" id="inomdist" placeholder="Introduzca el Nombre del Distrito" name="nomdist" required 
+                            <input type="text" class="form-control" id="inomdist" name="nomdist" required 
+                                        placeholder="Introduzca el Nombre del Distrito" 
                                         onkeypress="return !char_restringidos.includes(event.charCode)"
                                         {% if load %}
                                             value="{{ d.nomdist }}"
@@ -75,7 +80,7 @@
                             <input type="text" class="form-control" maxlength="5" id="id_distGeo" 
                                     placeholder="Id de distrito - Espacial" name="distGeo" required
                                         {% if load %}
-                                            value="{{ d.distGeo }}"
+                                            value="{{ d.distgeo }}"
                                         {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese Código (id) de distrito Espacial</div>
@@ -85,7 +90,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label for="fechaIngreso">Fecha y Hora de Registro:</label>
-                            <input type="datetime" class="form-control" id="fechaIngreso" title="" placeholder="Fecha de Registro." name="fechaIngreso" readonly
+                            <input type="datetime" class="form-control" id="fechaIngreso" title="" 
+                                        placeholder="Fecha de Registro." name="fechaIngreso" readonly
                                         {% if load %}
                                             value="{{ d.fechaingreso }}"
                                         {% else %}
@@ -96,7 +102,8 @@
                         </div>
                         <div class="col-md-4">
                             <label for="fechaAct">Fecha y Hora Actual:</label>
-                            <input type="datetime" class="form-control" id="fechaAct" title="" placeholder="Fecha Actual." name="fechaAct" readonly
+                            <input type="datetime" class="form-control" id="fechaAct" title="" 
+                                       placeholder="Fecha Actual." name="fechaAct" readonly
                                        {% if load %}
                                            value = " {{ d.fechaact }}"
                                        {% else %}
@@ -106,7 +113,8 @@
                         </div>                        
                         <div class="col-md-4">
                             <label for="usuario">Usuario:</label>
-                            <input type="text" class="form-control" id="usuario" title="" placeholder="Usuario" name="usuario"  readonly 
+                            <input type="text" class="form-control" id="usuario" title="" 
+                                       placeholder="Usuario" name="usuario"  readonly 
                                        {% if load %}
                                            value = "{{ d.usuario }}"
                                        {% else %}

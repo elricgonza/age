@@ -20,11 +20,12 @@
    <div id="login-row" class="row justify-content-center align-items-center">
         <div id="login-column" class="col-md-8">
             <div id="login-box" class="col-md-12">
-                <form action="" class="needs-validation" novalidate method="POST" onsubmit="return Validation(this)" name="form">                
+                <form action="" class="needs-validation" novalidate method="POST" onsubmit="return Validation(this)" name="form">
                     <div class="row">
                         <div class="col-md-2">
                             <label for="idloc">IdLoc:</label>
-                            <input type="text" class="form-control" id="idloczona" title="" placeholder="Instroduzca IdLoc" name="idloczona" required 
+                            <input type="text" class="form-control" id="idloczona" 
+                                    title="" placeholder="Instroduzca IdLoc" name="idloczona" required 
                                     onblur="getNomloc()" 
                                     onchange="getDistByIdloc(this.value)"
                                     {% if load %}
@@ -37,7 +38,8 @@
                         </div>
                         <div class="col-md-10">
                             <label for="nomloc">Nombre Asiento::</label>
-                            <input type="text" class="form-control" id="nomloc" title="" placeholder="Introduzca Nombre del Asiento" name="nomloc" readonly 
+                            <input type="text" class="form-control" id="nomloc" title="" 
+                                    placeholder="Introduzca Nombre del Asiento" name="nomloc" readonly 
                                     {% if load %}
                                         value="{{ za._nomloc }}"
                                         readonly
@@ -55,9 +57,9 @@
                             <select id="distzona" name="distzona" class="form-control" required>
                                 {% for distrito in distritos %}
                                     {% if load and za.distzona==distrito[1] %}
-                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[1] }}  |  {{ distrito[3] }}  | Circ. {{ distrito[2] }} </option>
+                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[1] }}  |  {{ distrito[3] }}  }} </option>
                                     {% else %}
-                                        <option value = "{{ distrito[1] }}">{{ distrito[1] }}  |  {{ distrito[3] }}  | Circ. {{ distrito[2] }} </option>
+                                        <option value = "{{ distrito[1] }}">{{ distrito[1] }}  |  {{ distrito[3] }}  }} </option>
                                     {% endif %}                                                                
                                 {% endfor %}
                             </select>
