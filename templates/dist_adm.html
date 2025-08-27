@@ -77,8 +77,9 @@
                         </div>
                         <div class="col-md-2">
                             <label for="distGeo">ID GEO:</label>
-                            <input type="text" class="form-control" maxlength="5" id="id_distGeo" 
+                            <input type="number" class="form-control"  id="id_distGeo" 
                                     placeholder="Id de distrito - Espacial" name="distGeo" required
+                                    min="0" max="99999"
                                         {% if load %}
                                             value="{{ d.distgeo }}"
                                         {% endif %}

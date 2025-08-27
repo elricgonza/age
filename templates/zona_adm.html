@@ -5,9 +5,9 @@
 {% block js_css %}
     <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/uts/cargar.js') }}"></script>
 {% endblock %}
 <div class="container">
+   <br>
    <h2 class="text-center text-blue pt-3" >{{ titulo }}</h2>
    <br>
    {% if error %}
@@ -50,16 +50,14 @@
                     </div> <!--row-->
                     <h5 class="text-left text-blue pt-5" >Datos de la Zona:</h5>
                     <div class="row">
-                        <div class="col-md-6">
-                            <input type="hidden" name="circundist" value="{{ za.circundist }}">
+                        <div class="col-md-4">
                             <label for="distzona">Nombre del Distrito::</label>
-                            <!-- onchange="cargar(this.value, 10)" -->
                             <select id="distzona" name="distzona" class="form-control" required>
                                 {% for distrito in distritos %}
                                     {% if load and za.distzona==distrito[1] %}
-                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[1] }}  |  {{ distrito[3] }}  }} </option>
+                                        <option value = "{{ distrito[1] }}" selected>{{ distrito[1] }}  |  {{ distrito[3] }} </option>
                                     {% else %}
-                                        <option value = "{{ distrito[1] }}">{{ distrito[1] }}  |  {{ distrito[3] }}  }} </option>
+                                        <option value = "{{ distrito[1] }}">{{ distrito[1] }}  |  {{ distrito[3] }} </option>
                                     {% endif %}                                                                
                                 {% endfor %}
                             </select>
@@ -74,6 +72,16 @@
                                 {% endif %}
                             >
                             <div class="invalid-feedback">Por favor ingrese el Nombre de la Zona...</div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="zonaGeo">Id.Geo::</label>
+                            <input type="number" class="form-control" id="idzonageo" placeholder="Id.Geo Zona" name="zonageo" required
+                                min="0" max="99999"
+                                {% if load %}
+                                    value="{{ za.zonageo }}"        
+                                {% endif %}
+                            >
+                            <div class="invalid-feedback">Por favor ingrese el Id. de Zona espacial...</div>
                         </div>
                     </div>
                     <br>
@@ -115,7 +123,8 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <button type="button" onclick="javascript: window.location.href = '/zonas_list';" class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
+                            <button type="button" onclick="javascript: window.location.href = '/zonas_list';"
+                                class="btn btn-outline-danger btn-md btn-block">Cancelar</button>
                         </div>
                         <div class="col-md-6 mb-3">
                             <button type="submit" class="btn btn-outline-success btn-md btn-block"
@@ -156,7 +165,7 @@
         }, function(retlist) {
             $.each(retlist, function(index, e){
                 //$("#distzona").append('<option value="' + e[1] + '">' + e[1] + ' | ' + e[3] + ' (' + 'Circ. ' + e[2] +')'+'</option>');
-                $("#distzona").append('<option value="' + e[1] + '">' + e[1] + ' | ' + e[3] +  ' | '  + 'Circ. ' + e[2] + '</option>');
+                $("#distzona").append('<option value="' + e[1] + '">' + e[1] + '  |  ' + e[3] +  '</option>');
             });
         }
         );

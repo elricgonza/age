@@ -43,7 +43,8 @@ class Zona:
             self.fechaingreso = row[4]
             self.fechaact = row[5]
             self.usuario = row[6]
-            self._nomloc = row[7]
+            self.zonageo = row[7]
+            self._nomloc = row[8]
         return row
 
 
@@ -72,19 +73,24 @@ class Zona:
         return row[0]
 
 
-    def add_zon(self, idloczona, zona, nomzona, distzona, fecharegistro, usuario, fechaingreso):
-        new_zona = idloczona, zona, nomzona.upper(), distzona, fecharegistro, usuario, fechaingreso
-        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario) values " + \
-            " (%s, %s, %s, %s, %s, %s, %s) "
-        self.cur.execute(s, new_zona)
-        self.cx.commit()
-        print("adicionado...")
+    def add_zon(self, idloczona, zona, nomzona, distzona, fechaingreso, fechaAct, usuario, zonageo):
+        new_zona = idloczona, zona, nomzona.strip(), distzona, fechaingreso, fechaact, usuario.strip(), zonageo
+        s = "insert into GeografiaElectoral_app.dbo.zona (IdLocZona, Zona, NomZona, DistZona, fechaIngreso, fechaAct, usuario, zonageo)" + \
+            " values " + \
+            " (%s, %s, %s, %s, %s, %s, %s, %s) "
+        try:
+            self.cur.execute(s, new_zona)
+            self.cx.commit()
+            print("adicionado...")
+        except Exception as e:
+            print("Error --ADD ZONA--")
+            print(e)
 
 
-    def upd_zon(self, idloczona, zona, nomzona, distzona, fechaact, usuario):      
-        t = nomzona.upper(), distzona, fechaact, usuario, idloczona, zona   
+    def upd_zon(self, idloczona, zona, nomzona, distzona, fechaact, usuario, zonageo):
+        t = nomzona.strip(), distzona, fechaact, usuario.strip(), zonageo, idloczona, zona
         s = "update GeografiaElectoral_app.dbo.zona " + \
-            " set NomZona = %s, DistZona = %s, fechaAct = %s, usuario = %s" + \
+            " set NomZona = %s, DistZona = %s, fechaAct = %s, usuario = %s, zonageo = %s " + \
             " where IdLocZona = %d and Zona = %d"
         try:
             self.cur.execute(s, t)

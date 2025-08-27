@@ -50,7 +50,7 @@ class Distritos:
 
 
     def add_dist(self, idlocdist, dist, circundist, nomdist, fecharegistro, usuario, fechaingreso, distgeo):
-        new_dist = idlocdist, dist, circundist, nomdist.upper(), fecharegistro, usuario, fechaingreso, distgeo
+        new_dist = idlocdist, dist, circundist, nomdist.strip().upper(), fecharegistro, usuario.strip(), fechaingreso, distgeo
         s = "insert into GeografiaElectoral_app.dbo.dist " + \
                 " (IdLocDist, Dist, CircunDist, NomDist, fechaIngreso, fechaAct, usuario, distGeo) values " + \
                 " (%s, %s, %s, %s, %s, %s, %s, %s) "
@@ -77,7 +77,7 @@ class Distritos:
 
 
     def upd_dist(self, idlocdist, iddist, circundist, nomdist, fa, usuario, distgeo):
-        upd_dist = circundist, nomdist.upper(), fa, usuario, distgeo, idlocdist, iddist
+        upd_dist = circundist, nomdist.strip().upper(), fa, usuario.strip(), distgeo, idlocdist, iddist
         s = "update GeografiaElectoral_app.dbo.dist set CircunDist = %s, NomDist = %s, fechaAct = %s, usuario = %s, distgeo = %s " + \
             " where IdLocDist = %d and Dist = %d"
         try:

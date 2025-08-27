@@ -1738,8 +1738,6 @@ def get_pueblos_all():
     cxms2.close()
 
 
-#========== Modulo Zonas y Distritos ============#
-
 @app.route('/distritos_list', methods=['GET', 'POST'])
 @login_required
 def distritos_list():
@@ -2029,13 +2027,13 @@ def zona_adm(pidloczona, pzona):
     rca = recia.Reciasiento(cxms2) # p elim
     d = dist.Distritos(cxms2)
     error = None
-    p = ('Zonas - Edición' in permisos_usr)  # t/f
 
     if request.method == 'POST':
         idloczona = request.form['idloczona']
         v_zona = request.form['zona'] #zona es la clase
         nomzona = request.form['nomzona']
         distzona = request.form['distzona']
+        zonageo = request.form['zonageo']
 
         if pidloczona == '0' and pzona == '0':  # es New 
             if nomzona.upper() == 'SIN ZONA':   # asigna cód 0 para SIN ZONA
@@ -2046,42 +2044,46 @@ def zona_adm(pidloczona, pzona):
             if za.nomzona_existe(idloczona, nomzona):   # valida si neces datos POST
                 error = "La zona: --" + nomzona + "-- ya existe en el asiento"
                 return render_template('zona_adm.html', error= error, load= False, za= za,
-                                       distritos= d.get_dists_en_idloc(idloczona),
-                                       puede_editar= p, titulo='Adición de Zona')
+                                       distritos= d.get_dists_idloc(idloczona),
+                                       puede_editar=  'Zonas - Edición' in permisos_usr,
+                                       titulo='Adición de Zona')
             else:   # add
                 nextidzona = za.get_next_zon(idloczona)
                 za.add_zon(idloczona, nextzona, nomzona, distzona, \
-                           request.form['fechaIngreso'], request.form['fechaAct'], request.form['usuario'])
+                           request.form['fechaIngreso'], request.form['fechaAct'], request.form['usuario'], zonageo) 
 
             rows = za.get_zon_all(usrdep)
             return render_template('zonas_list.html', zonas=rows, \
                                    puede_adicionar='Zonas - Adición' in permisos_usr, \
-                                   puede_editar='Zonas - Edición' in permisos_usr
+                                   puede_editar='Zonas - Edición' in permisos_usr \
                                   )# render a template
         else: # Edit - retorna de <zonas_list> POST c/datos act.
             if za.nomzona_existe_edit(idloczona, v_zona, nomzona):
                 error = 'La zona: --' + nomzona + '-- actualizada ya existe en el asiento'
-                return render_template('zona_adm.html', error=error, load=True, za=za,
-                                       distritos=d.get_dists_en_idloc(idloczona),
-                                       puede_editar=p, titulo='Edición de Zona -OBS-')
+                return render_template('zona_adm.html', error=error, load=True, za=za, \
+                                       distritos=d.get_dists_idloc(idloczona), \
+                                       puede_editar=  'Zonas - Edición' in permisos_usr, \
+                                       titulo='Edición de Zona -OBS-')
             else:
                 fa = str(datetime.datetime.now())[:-7]
-                za.upd_zon(idloczona, v_zona, nomzona, distzona, fa, usr)
+                za.upd_zon(idloczona, v_zona, nomzona, distzona, fa, usr, zonageo)
                 rows = za.get_zon_all(usrdep)
                 return render_template('zonas_list.html', zonas=rows, \
                                        puede_adicionar='Zonas- Adición' in permisos_usr, \
-                                       puede_editar='Zonas - Edición' in permisos_usr
+                                       puede_editar='Zonas - Edición' in permisos_usr \
                                       )# render a template
 
     else: # New|Edit - viene de <zonas_list> 
         if pidloczona == '0' and pzona == '0':  # es New 
-            return render_template('zona_adm.html', error=error, za=za, load=False, puede_editar=p, titulo='Adición de Zona')
+            return render_template('zona_adm.html', error=error, za=za, load=False, \
+                                   puede_editar=  'Zonas - Edición' in permisos_usr, \
+                                   titulo='Adición de Zona')
         else: # Edit
             if za.get_zona(pidloczona, pzona):
                 return render_template('zona_adm.html', load=True, error=error, za=za, \
-                                           distritos=d.get_dists_en_idloc(pidloczona), \
-                                           puede_adicionar='Zonas - Adición' in permisos_usr, \
-                                           puede_editar=p, titulo='Edición de Zona')
+                                           distritos=d.get_dists_idloc(pidloczona), \
+                                           puede_editar=  'Zonas - Edición' in permisos_usr, \
+                                           titulo='Edición de Zona')
 
 
 @app.route('/zona_elim/<pidloc>/<pzona>', methods=['GET', 'POST'])
