@@ -97,19 +97,8 @@ function loadPueblos() {
 }
 
 
-function getgeoreci2(event) {
-    var x = event.keyCode;
-    var idloc = document.getElementById("ireci_idasiento").value;
-    if (x == 27 || x == 9 || 'undefined') {
-        if($('input[name="load"]').val()=='True'){
-            asiento_reci(idloc, $('input[name="circun"]').val());            
-        }else{
-            asientosReci2($('input[name="deploc"]').val(), $('input[name="provloc"]').val(), $('input[name="secloc"]').val(), $('input[name="circun"]').val());
-        };             
-    };
-}
-
 function getgeoreci4(event) {
+    // invocado sólo x reciespeciales.html - test supr
     var x = event.keyCode;
     var idloc = document.getElementById("ireci_idasiento").value;
     if (x == 27 || x == 9 || 'undefined') {
@@ -120,6 +109,7 @@ function getgeoreci4(event) {
         };             
     };
 }
+
 
 function asiento_reci(idloc, cir) {
     $('#iasiento').html('');
@@ -152,7 +142,6 @@ function asientosReci(dep, prov, sec, cir) {
 }
 
 
-
 function asientosReci2(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
@@ -170,6 +159,7 @@ function asientosReci2(dep, prov, sec, cir) {
     };
 }
 
+
 function asientosReci4(dep, prov, sec, cir) {
     var x = event.keyCode;
     if (x == 27 || x == 9 || 'undefined') {
@@ -186,6 +176,7 @@ function asientosReci4(dep, prov, sec, cir) {
             });
     };
 }
+
 
 function asientosReci_ext(event) {
     var x = event.keyCode;

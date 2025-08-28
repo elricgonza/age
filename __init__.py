@@ -1392,9 +1392,7 @@ def get_loc_municipio():
     if rows:
         return jsonify(rows)
     else:
-        return jsonify(departamento='COORDENADA',
-                       provincia='INCORRECTA !!!',
-                       municipio='INTENTE NUEVAMENTE....')
+        return jsonify([(0, 0, 0, 0, 'Error - Sin Asientos en el Municipio')])
 
 
 @app.route('/get_asientos_all3', methods=['GET', 'POST'])
