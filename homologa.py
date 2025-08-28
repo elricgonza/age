@@ -74,15 +74,20 @@ class Homologa:
             return True
 
     def ver_homologa_idlocreci(self, idreci, idlocreci, idlocdes):
+
+        ''' rayado elim
         if idlocdes != 0:
             if idlocdes == idlocreci:
                     idlocdes=idlocreci
         else:
             idlocdes = idlocreci
+        '''
+        if idlocdes == 0:
+            idlocdes = idlocreci
 
         s = "Select idLoc2, reci2 from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where idEstado in (4, 5, 82, 83) and IdLocReci = %d and Reci = %d and idLoc2 = %d"
-        lista = idlocreci, idreci, idlocdes    
+        lista = idlocreci, idreci, idlocdes
         self.cur.execute(s, lista)
         row = self.cur.fetchone()
         if  row == None:
@@ -222,10 +227,10 @@ class Homologa:
 
 
     def get_recintos_idloc(self, idlocreci, circun):
-        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
+        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, NroCircun, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
-            " where IdLoc = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
-        circuns = idlocreci, circun    
+            " where IdLoc = %d and NroCircun = %d and estado in (1, 2, 79, 80)"
+        circuns = idlocreci, circun
         self.cur.execute(s, circuns)
         rows = self.cur.fetchall()
         return rows

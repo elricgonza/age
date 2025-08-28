@@ -30,7 +30,8 @@
                         <label class="float-right" for="fechadoc">Desde.:</label>
                     </div>
                     <div class="col-md-3 float-left">
-                        <input type="date" class="form-control" id="iinicio" name="inicio" placeholder="Introduzca fecha de Busqueda" name="inicio" min="2012-01-01" max="2025-01-01"
+                        <input type="date" class="form-control" id="iinicio" name="inicio" 
+                               placeholder="Introduzca fecha de Búsqueda" name="inicio" min="2012-01-01" max="2030-01-01"
                                 {% if load %}
                                     value="{{ inicio }}"  
                                 {% endif %}
@@ -41,7 +42,8 @@
                         <label class="float-right" for="fechadoc">Hasta.:</label>
                     </div>
                     <div class="col-md-3 float-left">
-                        <input type="date" class="form-control" id="ifinal" name="final" placeholder="Introduzca fecha de Busqueda" name="final" min="2012-01-01" max="2025-01-01"
+                        <input type="date" class="form-control" id="ifinal" name="final"
+                               placeholder="Introduzca fecha de Búsqueda" name="final" min="2012-01-01" max="2030-01-01"
                                 {% if load %}
                                     value="{{ final }}"  
                                 {% endif %}
