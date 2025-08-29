@@ -2651,9 +2651,6 @@ def get_subcategorias_excep_all():
     else:
         return jsonify(0)
 
-""" Final de Indicadores Excepcional"""
-
-""" Inicio de Asignar Homologaciones """
 
 @app.route('/homologa_list', methods=['GET', 'POST'])
 @login_required
@@ -2674,15 +2671,18 @@ def homologa_list():
     rows = ahom.get_homologa_all(usrdep, inicio, final)  # ret recintos susp/supr en rango de fechas
     if rows:
         if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
-                                    puede_editar='Homologa - Edición' in permisos_usr
+            return render_template('homologa_list.html', homologas=rows, load=True, \
+                                   ban=True, inicio=inicio, final=final, \
+                                   puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                   puede_editar='Homologa - Edición' in permisos_usr
                                   )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos para Homologación...')
-        return render_template('homologa_list.html', puede_adicionar='Homologa - Adición' in permisos_usr, \
-                                puede_editar='Homologa - Edición' in permisos_usr
+        return render_template('homologa_list.html', \
+                               puede_adicionar='Homologa - Adición' in permisos_usr, \
+                               puede_editar='Homologa - Edición' in permisos_usr
                               )  # render a template)
 
 
@@ -2728,10 +2728,10 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
 
     ahom = hom.Homologa(cxms)
     error = None
-    
-    if idreci != '0' and idlocreci !='0':  # LISTA
+
+    if idreci != '0' and idlocreci !='0':  # viene de LIST
         ahom.get_homologa_idlocreci(idreci, idlocreci)
-        circun = ahom.circun
+        circun = ahom.circun #nroCircun
         dep = ahom.dep
         prov = ahom.prov
         sec = ahom.sec
@@ -2741,8 +2741,9 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
         else:
             if ur == 'Urbano':
                 rtos = ahom.get_recintos_idloc(idlocreci, circun);
-            else:
+            else: #rural
                 rtos = ahom.get_recintos_circun(dep, prov, sec, circun);
+
 
         if ahom.ver_homologa_idlocreci(idreci, idlocreci, idlocdes):
             #print('Modificar')

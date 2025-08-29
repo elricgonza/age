@@ -1,37 +1,33 @@
-# Operaciones asientos
+# Homologaciones
 
 class Homologa:
-    idlocreci=0
-    reci=0
-    nomreci=''
-    estado=0
-    fechaAct=''
-
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_homologa_all(self, usrdep, inicio, final):
+        '''  '''
         if inicio == "00-00-0000" and final == "00-00-0000":
             return False
-        else:           
+        else:
+            susp_supr = " (4, 5, 82, 83) "
+
             s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2, Area" + \
                 " from [bdge].[dbo].[GeoRecintos_Hom_all]"
             if usrdep != 0 :
                 lista = usrdep, inicio, final
                 # suspendidos/suprimidos 
-                s = s + " where idEstado in (4, 5, 82, 83) and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
+                s = s + " where idEstado in " + susp_supr + " and DEP = %d and Convert(CHAR(10),fechaAct,23) between %d and %d order by prov, sec"
                 self.cur.execute(s, lista)
             else:
                 lista = inicio, final
-                s = s + " where idEstado in (4, 5, 82, 83)  and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
+                s = s + " where idEstado in " + susp_supr + " and Convert(CHAR(10),fechaAct,23) between %d and %d order by Dep, Prov, Sec"
                 self.cur.execute(s, lista)
 
             rows = self.cur.fetchall()
-            if self.cur.rowcount == 0:
-                return False
-            else:
-                return rows
+            return rows
+
 
     def get_homologa_idloc(self, idlocreci):   
         s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, idloc2, reci2, nomreci2" + \
@@ -51,27 +47,27 @@ class Homologa:
         else:
             return rows
 
+
     def get_homologa_idlocreci(self, idreci, idlocreci):
-        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, CircunDist, Dep, Prov, Sec" + \
+        susp_supr = " (4, 5, 82, 83) "
+        s = "Select IdLocReci, Reci, NomDep as Departamento, AsientoElectoral, NombreRecinto, Estado, nroCircun, Dep, Prov, Sec" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where idEstado in (4, 5, 82, 83) and IdLocReci = %d and Reci = %d"
-        lista = idlocreci, idreci    
-        self.cur.execute(s, lista)
+            " where idEstado in " + susp_supr + " and IdLocReci = %d and Reci = %d"
+        t = idlocreci, idreci
+        self.cur.execute(s, t)
         row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
+        if  row:
             self.idlocreci = row[0]
             self.idreci = row[1]
             self.departamento = row[2]
             self.asiento = row[3]
             self.recinto = row[4]
             self.estado = row[5]
-            self.circun = row[6]
+            self.circun = row[6] #nroCircun
             self.dep = row[7]
             self.prov = row[8]
             self.sec = row[9]
-            return True
+
 
     def ver_homologa_idlocreci(self, idreci, idlocreci, idlocdes):
 
@@ -97,6 +93,7 @@ class Homologa:
             self.reci2 = row[1]
             return True
 
+
     def verificar_homologa_idlocreci(self, idloc, reci, idloc2, reci2):
         s = "Select id from [bdge].[dbo].[hom]" + \
             " where idLoc = %d and reci = %d and idLoc2 = %d and reci2 = %d"
@@ -108,6 +105,7 @@ class Homologa:
         else:
             self.idhom = row[0]
             return True
+
 
     def get_homologa_idlocreci_origen(self, idloc, reci):
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona, NombreRecinto," + \
@@ -146,7 +144,9 @@ class Homologa:
             self.doc1 = row[23]
             return True
 
+
     def get_homologa_idlocreci_destino(self, idloc2, reci2):
+        # destino - excepto suspendidos y suprimidos
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona, NombreRecinto," + \
             " Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
@@ -181,6 +181,7 @@ class Homologa:
             self.longitud2 = row[21]
             return True
 
+
     def add_homologa(self, dep, prov, sec, idloc, dist, zona, reci, departamento, provincia, municipio, \
                      asiento, nomdist, nomzona, recinto, direccion, circun, idtipocircun, tipocircun, \
                      idtiporecinto, tiporecinto, latitud, longitud, doc, doc1, dep2, prov2, sec2, \
@@ -203,9 +204,10 @@ class Homologa:
         try:
             self.cur.execute(s, new_homologa)
             self.cx.commit()
-            print("homologa adicionado...") 
+            print("homologa adicionado...")
         except:
             print("Error - actualización de homologa...")
+
 
     def upd_homologa(self, dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, provincia2, municipio2, asiento2, nomdist2, \
                      nomzona2, recinto2, direccion2, circun2, idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, latitud2, longitud2, \
@@ -223,15 +225,17 @@ class Homologa:
             self.cx.commit()
             print('Homologa actualizado')
         except Exception as e:
-            print("Error - actualización de Homologa...")        
+            print("Error - actualización de Homologa...")
 
 
     def get_recintos_idloc(self, idlocreci, circun):
+        # hab/rehab TED TSE - (1,2,79,80)
+
         s = "select IdLoc, Reci, NomReci, NomZona, NomDist, NroCircun, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
             " where IdLoc = %d and NroCircun = %d and estado in (1, 2, 79, 80)"
-        circuns = idlocreci, circun
-        self.cur.execute(s, circuns)
+        t = idlocreci, circun
+        self.cur.execute(s, t)
         rows = self.cur.fetchall()
         return rows
 
@@ -240,7 +244,7 @@ class Homologa:
         s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
             " where Dep = %d and Prov = %d and Sec = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
-        circuns = dep, prov, sec, circun    
+        circuns = dep, prov, sec, circun
         self.cur.execute(s, circuns)
         rows = self.cur.fetchall()
         return rows
@@ -249,10 +253,10 @@ class Homologa:
     def get_recintos_dep(self, dep):
         ''' Obtiene recintos destino para casos excepcionales (cualquier recinto del dep) '''
 
+        # hab/rehab TED TSE - (1,2,79,80)
         s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
             " where Dep = %d  and estado in (1, 2, 79, 80)"
         self.cur.execute(s, dep)
         rows = self.cur.fetchall()
         return rows
-
