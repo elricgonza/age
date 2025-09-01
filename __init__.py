@@ -2730,30 +2730,30 @@ def a_homologa(idreci, idlocreci, inicio, final, ur, idlocdes):
     error = None
 
     if idreci != '0' and idlocreci !='0':  # viene de LIST
-        ahom.get_homologa_idlocreci(idreci, idlocreci)
+        ahom.get_homologa_idlocreci(idreci, idlocreci) # recupera supr/susp específico
         circun = ahom.circun #nroCircun
         dep = ahom.dep
         prov = ahom.prov
         sec = ahom.sec
 
+        # get rtos - destino
         if hom_excep:  # si homolog excep: get all from dep p
             rtos = ahom.get_recintos_dep(dep)
         else:
             if ur == 'Urbano':
-                rtos = ahom.get_recintos_idloc(idlocreci, circun);
+                rtos = ahom.get_recintos_idloc_cir(idlocreci, circun);
             else: #rural
                 rtos = ahom.get_recintos_circun(dep, prov, sec, circun);
 
-
-        if ahom.ver_homologa_idlocreci(idreci, idlocreci, idlocdes):
-            #print('Modificar')
-            return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=False)
+        if ahom.si_ya_homologado(idlocreci, idreci, idlocdes):
+            #print('Modificar/Editar')
+            return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, asignar=False)
         else:
             if rtos != False:
                 #print('Asignar')
-                return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, ban=True)
+                return render_template('asigna_homologa.html', ho=ahom, inicio=inicio, final=final, recis=rtos, load=True, asignar=True)
             else:
-                return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False , ban=True)
+                return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False , asignar=True)
 
 
 @app.route('/a_homologa_m', methods=['GET', 'POST'])
@@ -2795,11 +2795,8 @@ def a_homologa_m():
                                 puede_editar='Homologa - Edición' in permisos_usr
                               )  # render a template 
     else: # Viene de <homologa_list>
-        return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False, ban=True)
+        return render_template('asigna_homologa.html', inicio=inicio, final=final, load=False, asignar=True)
 
-""" Final de Asignar Homologaciones """
-
-""" Inicio de Listar Homologaciones """
 
 @app.route('/homologacion_list', methods=['GET', 'POST'])
 @login_required

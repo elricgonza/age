@@ -24,7 +24,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12 col-sm-offset-3 myform-cont">
-                        {% if ban %}
+                        {% if asignar %}
                             <input type="hidden" id="iinicio" name="inicio" value="{{ inicio }}">
                             <input type="hidden" id="ifinal" name="final" value="{{ final }}">
                             <input type="hidden" id="iidloc2" name="idloc2">
@@ -139,9 +139,13 @@
                                     <td>{{ reci[5] }}</td>
                                     <td>{{ reci[6] }}</td>
                                     {% if reci[0] == ho.idloc2 and reci[1] == ho.reci2 %}
-                                            <td style="text-align: center; font-size: 18px;"><input class="form-check-input" type="radio" name="asignar" value="{{ reci[0]~':'~reci[1] }}" checked></td>
+                                        <td style="text-align: center; font-size: 18px;">
+                                            <input class="form-check-input" type="radio" name="asignar" value="{{ reci[0]~':'~reci[1] }}" checked>
+                                        </td>
                                     {% else %}
-                                            <td style="text-align: center; font-size: 18px;"><input class="form-check-input" type="radio" name="asignar" value="{{ reci[0]~':'~reci[1] }}"></td>
+                                        <td style="text-align: center; font-size: 18px;">
+                                            <input class="form-check-input" type="radio" name="asignar" value="{{ reci[0]~':'~reci[1] }}">
+                                        </td>
                                     {% endif %}        
                                 </tr>
                                 {% endfor %}
@@ -154,10 +158,12 @@
                     <div class="col-md-3">
                     </div>
                     <div class="col-md-3">
-                        <button type="submit" id="boton" onclick="guardar_homologa();" class="btn btn-outline-primary btn-md btn-block">Asignar</button>
+                        <button type="submit" id="boton" onclick="guardar_homologa();" 
+                            class="btn btn-outline-primary btn-md btn-block">Asignar</button>
                     </div>
                     <div class="col-md-3">
-                        <button type="submit" onclick="pasa_homologa();" class="btn btn-outline-danger btn-md btn-block">Volver</button>
+                        <button type="submit" onclick="pasa_homologa();" 
+                            class="btn btn-outline-danger btn-md btn-block">Volver</button>
                     </div>
                     <div class="col-md-3">
                     </div>
@@ -165,6 +171,7 @@
             </div>
         </div>
     </form>
+
     <script type="text/javascript">
         function pasa_homologa(){
             $("#iinicio").val();
@@ -176,9 +183,10 @@
             $("#ifinal").val();
             if($("#formhomologa input[name='asignar']:radio").is(':checked')){
                 var i = $('input:radio[name=asignar]:checked').val();
+                alert(i)
                 var ir = i.split(':');
-                $("#iidloc2").val(ir[0]);
-                $("#iidlocreci2").val(ir[1]);
+                $("#iidloc2").val(ir[0]);       // idloc seleccionado destino
+                $("#iidlocreci2").val(ir[1]);   // reci seleccionado destino
                 $("#iidloc21").val();
                 $("#iidlocreci21").val();
                 $("#iidloc").val();
@@ -189,14 +197,7 @@
             }
         }
     </script>
-    {% if error %}
-    <br>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!</strong> {{ error }} 
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    {% endif %}
+
 </div> <!--main-->
 
 {% endblock %}
-

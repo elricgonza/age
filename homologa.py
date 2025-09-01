@@ -69,7 +69,8 @@ class Homologa:
             self.sec = row[9]
 
 
-    def ver_homologa_idlocreci(self, idreci, idlocreci, idlocdes):
+    def si_ya_homologado(self, idlocreci, idreci, idlocdes):
+        ''' Determina con idlocdes - si existe idlocdes '''
 
         ''' rayado elim
         if idlocdes != 0:
@@ -81,17 +82,17 @@ class Homologa:
         if idlocdes == 0:
             idlocdes = idlocreci
 
+        susp_supr = " (4, 5, 82, 83) "
+
         s = "Select idLoc2, reci2 from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where idEstado in (4, 5, 82, 83) and IdLocReci = %d and Reci = %d and idLoc2 = %d"
-        lista = idlocreci, idreci, idlocdes
-        self.cur.execute(s, lista)
+            " where idEstado in " + susp_supr + " and IdLocReci = %d and Reci = %d and idLoc2 = %d"
+        t = idlocreci, idreci, idlocdes
+        self.cur.execute(s, t)
         row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
+        if  row:
             self.idloc2 = row[0]
             self.reci2 = row[1]
-            return True
+        return row
 
 
     def verificar_homologa_idlocreci(self, idloc, reci, idloc2, reci2):
@@ -228,7 +229,8 @@ class Homologa:
             print("Error - actualización de Homologa...")
 
 
-    def get_recintos_idloc(self, idlocreci, circun):
+    def get_recintos_idloc_cir(self, idlocreci, circun):
+        ''' Recintos destino para asignar homolog. si urb en asiento y misma circun '''
         # hab/rehab TED TSE - (1,2,79,80)
 
         s = "select IdLoc, Reci, NomReci, NomZona, NomDist, NroCircun, Direccion" + \
@@ -241,11 +243,14 @@ class Homologa:
 
 
     def get_recintos_circun(self, dep, prov, sec, circun):
+        ''' Recintos destino para asignar homolog. '''
+        # hab/rehab TED TSE - (1,2,79,80)
+
         s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
             " where Dep = %d and Prov = %d and Sec = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
-        circuns = dep, prov, sec, circun
-        self.cur.execute(s, circuns)
+        t = dep, prov, sec, circun
+        self.cur.execute(s, t)
         rows = self.cur.fetchall()
         return rows
 
