@@ -95,30 +95,29 @@ class Homologa:
         return row
 
 
-    def verificar_homologa_idlocreci(self, idloc, reci, idloc2, reci2):
+    def existe_homologacion(self, idloc, reci, idloc2, reci2):
         s = "Select id from [bdge].[dbo].[hom]" + \
             " where idLoc = %d and reci = %d and idLoc2 = %d and reci2 = %d"
-        lista = idloc, reci, idloc2, reci2    
-        self.cur.execute(s, lista)
+        t = idloc, reci, idloc2, reci2
+        self.cur.execute(s, t)
         row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
+        if row:
             self.idhom = row[0]
             return True
 
 
     def get_homologa_idlocreci_origen(self, idloc, reci):
+        ''' Existe origen '''
+
+        susp_supr = " (4, 5, 82, 83) "
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona, NombreRecinto," + \
-            " Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud, doc_idA, doc_idAF" + \
+            " Direccion, NroCircun, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud, doc_idA, doc_idAF" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
-            " where idEstado in (4, 5, 82, 83) and IdLocReci = %d and Reci = %d"
-        lista = idloc, reci    
-        self.cur.execute(s, lista)
+            " where idEstado in " + susp_supr + " and IdLocReci = %d and Reci = %d"
+        t = idloc, reci
+        self.cur.execute(s, t)
         row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
+        if  row:
             self.dep = row[0]
             self.prov = row[1]
             self.sec = row[2]
@@ -134,7 +133,7 @@ class Homologa:
             self.nomzona = row[12]
             self.recinto = row[13]
             self.direccion = row[14]
-            self.circun = row[15]
+            self.circun = row[15] #NroCircun
             self.idtipocircun = row[16]
             self.tipocircun = row[17]
             self.idtiporecinto = row[18]
@@ -143,21 +142,20 @@ class Homologa:
             self.longitud = row[21]
             self.doc = row[22]
             self.doc1 = row[23]
-            return True
 
 
     def get_homologa_idlocreci_destino(self, idloc2, reci2):
+        ''' Existe destino '''
         # destino - excepto suspendidos y suprimidos
+
         s = "Select Dep, Prov, Sec, IdLoc, Dist, Zona, Reci, NomDep, NomProv, NombreMunicipio, AsientoElectoral, NomDist, NomZona, NombreRecinto," + \
-            " Direccion, CircunDist, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud" + \
+            " Direccion, NroCircun, TipoLocLoc, TipoCircunscripcion, idTipoRecinto, TipoRecinto, latitud, longitud" + \
             " from [bdge].[dbo].[GeoRecintos_Hom_all]" + \
             " where idEstado in (1, 2, 3, 6, 79, 80, 81, 84) and IdLocReci = %d and Reci = %d"
-        lista = idloc2, reci2    
-        self.cur.execute(s, lista)
+        t = idloc2, reci2
+        self.cur.execute(s, t)
         row = self.cur.fetchone()
-        if  row == None:
-            return False
-        else:
+        if  row:
             self.dep2 = row[0]
             self.prov2 = row[1]
             self.sec2 = row[2]
@@ -171,7 +169,7 @@ class Homologa:
             self.asiento2 = row[10]
             self.nomdist2 = row[11]
             self.nomzona2 = row[12]
-            self.recinto2 = row[13]
+            self.recinto2 = row[13] #NroCircun
             self.direccion2 = row[14]
             self.circun2 = row[15]
             self.idtipocircun2 = row[16]
@@ -180,21 +178,10 @@ class Homologa:
             self.tiporecinto2 = row[19]
             self.latitud2 = row[20]
             self.longitud2 = row[21]
-            return True
 
 
-    def add_homologa(self, dep, prov, sec, idloc, dist, zona, reci, departamento, provincia, municipio, \
-                     asiento, nomdist, nomzona, recinto, direccion, circun, idtipocircun, tipocircun, \
-                     idtiporecinto, tiporecinto, latitud, longitud, doc, doc1, dep2, prov2, sec2, \
-                     idloc2, dist2, zona2, reci2, departamento2, provincia2, municipio2, asiento2, nomdist2, \
-                     nomzona2, recinto2, direccion2, circun2, idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, \
-                     latitud2, longitud2, f_ingreso, f_actual, usr):
-        new_homologa = dep, prov, sec, idloc, dist, zona, reci, departamento, provincia, municipio, \
-            asiento, nomdist, nomzona, recinto, direccion, circun, idtipocircun, tipocircun, \
-            idtiporecinto, tiporecinto, latitud, longitud, doc, doc1, dep2, prov2, sec2, idloc2, dist2, \
-            zona2, reci2, departamento2, provincia2, municipio2, asiento2, nomdist2, nomzona2, recinto2, \
-            direccion2, circun2, idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, latitud2, \
-            longitud2, 0, f_ingreso, f_actual, usr
+    def add_homologa(self, *hom):
+        new_hom = hom[0]
         s = "insert into bdge.dbo.hom (dep, prov, sec, idloc, dist, zona, reci, nomDep, nomProv, nomSec, nomLoc," + \
             " nomDist, nomZona, nomReci, direccion, circun, idTipoCircun, tipoCircun, idTipoRecinto, tipoRecinto," + \
             " latitud, longitud, doc, doc1, dep2, prov2, sec2, idloc2, dist2, zona2, reci2, nomDep2, nomProv2," + \
@@ -203,18 +190,15 @@ class Homologa:
             " (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," + \
             " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
-            self.cur.execute(s, new_homologa)
+            self.cur.execute(s, new_hom)
             self.cx.commit()
-            print("homologa adicionado...")
+            print("Homologación adicionada...")
         except:
-            print("Error - actualización de homologa...")
+            print("Error - Adición de homologación...")
 
 
-    def upd_homologa(self, dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, provincia2, municipio2, asiento2, nomdist2, \
-                     nomzona2, recinto2, direccion2, circun2, idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, latitud2, longitud2, \
-                     f_actual, usr, idhom):
-        upd_homologa = dep2, prov2, sec2, idloc2, dist2, zona2, reci2, departamento2, provincia2, municipio2, asiento2, nomdist2, nomzona2, \
-            recinto2, direccion2, circun2, idtipocircun2, tipocircun2, idtiporecinto2, tiporecinto2, latitud2, longitud2, f_actual, usr, idhom
+    def upd_homologa(self, *hom):
+        upd_hom = hom
         s = "update bdge.dbo.hom" + \
             " set dep2 = %s, prov2 = %s, sec2 = %s, idLoc2 = %s, dist2 = %s, zona2 = %s, reci2 = %s, nomDep2 = %s," + \
             " nomProv2 = %s, nomSec2 = %s, nomLoc2 = %s, nomDist2 = %s, nomZona2 = %s, nomReci2 = %s, direccion2 = %s," + \
@@ -222,11 +206,11 @@ class Homologa:
             " fechaAct = %s, usuario = %s" + \
             " where id = %d"
         try:
-            self.cur.execute(s, upd_homologa)
+            self.cur.execute(s, upd_hom)
             self.cx.commit()
-            print('Homologa actualizado')
+            print('Homologación actualizada')
         except Exception as e:
-            print("Error - actualización de Homologa...")
+            print("Error - Actualización de Homologación...")
 
 
     def get_recintos_idloc_cir(self, idlocreci, circun):

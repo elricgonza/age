@@ -2691,7 +2691,7 @@ def homologa_list():
 def homologa_list_excep():
     ''' Lista recintos susp/supr para ASIGNACION de homologación Casos Excepcionales 
     -sólo difiere en hom_excep = True 
-    -homologa_list.html (título)  
+    -homologa_list.html (título)
     -func. a_homologa (get all reci of dep) 
     '''
 
@@ -2709,14 +2709,17 @@ def homologa_list_excep():
     rows = ahom.get_homologa_all(usrdep, inicio, final)  # ret recintos susp/supr en rango de fechas
     if rows:
         if 'Homologa - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('homologa_list_excep.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
-                                    puede_editar='Homologa - Edición' in permisos_usr
+            return render_template('homologa_list_excep.html', homologas=rows, load=True, \
+                                   ban=True, inicio=inicio, final=final, \
+                                   puede_adicionar='Homologa - Adición' in permisos_usr, \
+                                   puede_editar='Homologa - Edición' in permisos_usr
                                   )  # render a template
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos para Homologación...')
-        return render_template('homologa_list_excep.html', puede_adicionar='Homologa - Adición' in permisos_usr, \
+        return render_template('homologa_list_excep.html', \
+                                puede_adicionar='Homologa - Adición' in permisos_usr, \
                                 puede_editar='Homologa - Edición' in permisos_usr
                               )  # render a template)
 
@@ -2772,7 +2775,7 @@ def a_homologa_m():
         reci21 = request.form['idlocreci21']
         inicio = request.form['inicio']
         final = request.form['final']
-        if ahom.verificar_homologa_idlocreci(idloc, reci, idloc21, reci21): #verifica si ya existe una asignacion previa
+        if ahom.existe_homologacion(idloc, reci, idloc21, reci21): #verifica si ya existe una asignacion previa
             f_actual = str(datetime.datetime.now())[:-7]
             ahom.get_homologa_idlocreci_destino(idloc2, reci2)
             ahom.upd_homologa(ahom.dep2, ahom.prov2, ahom.sec2, ahom.idloc2, ahom.dist2, ahom.zona2, ahom.reci2, ahom.departamento2, ahom.provincia2, \
@@ -2783,12 +2786,13 @@ def a_homologa_m():
             f_actual = str(datetime.datetime.now())[:-7]
             ahom.get_homologa_idlocreci_origen(idloc, reci)
             ahom.get_homologa_idlocreci_destino(idloc2, reci2)
-            ahom.add_homologa(ahom.dep, ahom.prov, ahom.sec, ahom.idloc, ahom.dist, ahom.zona, ahom.reci, ahom.departamento, ahom.provincia, ahom.municipio, \
-                              ahom.asiento, ahom.nomdist, ahom.nomzona, ahom.recinto, ahom.direccion, ahom.circun, ahom.idtipocircun, ahom.tipocircun, \
-                              ahom.idtiporecinto, ahom.tiporecinto, ahom.latitud, ahom.longitud, ahom.doc, ahom.doc1, ahom.dep2, ahom.prov2, ahom.sec2, \
-                              ahom.idloc2, ahom.dist2, ahom.zona2, ahom.reci2, ahom.departamento2, ahom.provincia2, ahom.municipio2, ahom.asiento2, ahom.nomdist2, \
-                              ahom.nomzona2, ahom.recinto2, ahom.direccion2, ahom.circun2, ahom.idtipocircun2, ahom.tipocircun2, ahom.idtiporecinto2, ahom.tiporecinto2, \
-                              ahom.latitud2, ahom.longitud2, f_ingreso, f_actual, usr)
+            new_hom = ahom.dep, ahom.prov, ahom.sec, ahom.idloc, ahom.dist, ahom.zona, ahom.reci, ahom.departamento, ahom.provincia, ahom.municipio, \
+                      ahom.asiento, ahom.nomdist, ahom.nomzona, ahom.recinto, ahom.direccion, ahom.circun, ahom.idtipocircun, ahom.tipocircun, \
+                      ahom.idtiporecinto, ahom.tiporecinto, ahom.latitud, ahom.longitud, ahom.doc, ahom.doc1, ahom.dep2, ahom.prov2, ahom.sec2, \
+                      ahom.idloc2, ahom.dist2, ahom.zona2, ahom.reci2, ahom.departamento2, ahom.provincia2, ahom.municipio2, ahom.asiento2, ahom.nomdist2, \
+                      ahom.nomzona2, ahom.recinto2, ahom.direccion2, ahom.circun2, ahom.idtipocircun2, ahom.tipocircun2, ahom.idtiporecinto2, ahom.tiporecinto2, \
+                      ahom.latitud2, ahom.longitud2, 0, f_ingreso, f_actual, usr
+            ahom.add_homologa(new_hom)
 
         rows = ahom.get_homologa_all(usrdep, inicio, final)
         return render_template('homologa_list.html', homologas=rows, load=True, ban=True, inicio=inicio, final=final, puede_adicionar='Homologa - Adición' in permisos_usr, \
