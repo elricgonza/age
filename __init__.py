@@ -2898,8 +2898,6 @@ def homologacion_pdf():
     else:
         return ('PDF No Generado')
 
-""" Final de Listar Homologaciones """
-""" Inicio de Actualizacion de Jurisdiccion """
 
 @app.route('/jurisdiccion_list', methods=['GET', 'POST'])
 @login_required
@@ -2924,7 +2922,7 @@ def jurisdiccion(reci, idloc):
     rces = recies.Reciespeciales(cxms)
     d = docu.Documentos(cxms)
     error = None
-    
+
     if request.method == 'POST':
         f_ingreso = str(datetime.datetime.now())[:-7]
         f_actual = str(datetime.datetime.now())[:-7]
@@ -2981,7 +2979,7 @@ def jurisdiccion_m():
     ju = jur.Jurisdiccion(cxms)
     rces = recies.Reciespeciales(cxms)
     error = None
-    
+
     if request.method == 'POST':
         f_actual = str(datetime.datetime.now())[:-7]
         idloc = request.form['idloc']
@@ -3041,7 +3039,6 @@ def get_zondist_all():
         return jsonify(0)
 
 
-""" Inicio de Actualizacion de Jurisd_asi """
 @app.route('/jurisd_asi_list', methods=['GET', 'POST'])
 @login_required
 def jurisd_asi_list():
@@ -3070,7 +3067,7 @@ def jurisd_asi(idloc):
     rces = recies.Reciespeciales(cxms)
     d = docu.Documentos(cxms)
     error = None
-    
+
     if request.method == 'POST':
         f_ingreso = str(datetime.datetime.now())[:-7]
         f_actual = str(datetime.datetime.now())[:-7]
@@ -3196,11 +3193,7 @@ def get_zonas_dps():
     else:
         return jsonify(0)
 
-""" Final de Actualizacion de Jurisd_asi """
-""" Final de Actualizacion de Jurisdiccion """
 
-
-""" Inicio Sincronizacion """
 @app.route('/sincro_asi_list', methods=['GET', 'POST'])
 @login_required
 def sincro_asi_list():
@@ -3221,7 +3214,7 @@ def sincro_asi_list():
                latitud = asie[15]
                longitud = asie[16]
 
-           situacion = 'Antiguo'       
+           situacion = 'Antiguo'
            s.get_geos(latitud, longitud)
            if rowas_n != False:
                for rowa_n in rowas_n:
@@ -3236,7 +3229,7 @@ def sincro_asi_list():
            if rowas_s != False:
                for rowa_s in rowas_s:
                     if rowa_s[17] == asie[6]:
-                        situacion = 'Suprimido' 
+                        situacion = 'Suprimido'
 
            s.add_geo_asiento(asie[0], asie[1], asie[2], asie[3], asie[4], asie[5], asie[6], asie[7], asie[8], asie[9], asie[10], asie[11], asie[12], \
                              asie[13], asie[14], latitud, longitud, asie[17], s.geom, asie[18], asie[19], asie[20], situacion)
@@ -3272,7 +3265,7 @@ def sincro_reci_list():
             s.get_geos(latitud, longitud)
             if rowas_n != False:
                 for rowa_n in rowas_n:
-                    if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]: 
+                    if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]:
                         situacion = 'Nuevo'
 
             if rowas_m != False:
@@ -3623,7 +3616,6 @@ def get_provs_all():
 @login_required
 def bitacora_list():
     """ Modulo log de Transacciones """
-
     if 'Historial' not in permisos_usr:    # No tiene pemisos asignados
         return render_template('msg.html', l1='Sin permisos asignados !!')
     else:

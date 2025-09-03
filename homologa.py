@@ -230,9 +230,9 @@ class Homologa:
         ''' Recintos destino para asignar homolog. '''
         # hab/rehab TED TSE - (1,2,79,80)
 
-        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
+        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, NroCircun, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
-            " where Dep = %d and Prov = %d and Sec = %d and CircunDist = %d and estado in (1, 2, 79, 80)"
+            " where Dep = %d and Prov = %d and Sec = %d and NroCircun = %d and estado in (1, 2, 79, 80)"
         t = dep, prov, sec, circun
         self.cur.execute(s, t)
         rows = self.cur.fetchall()
@@ -243,7 +243,7 @@ class Homologa:
         ''' Obtiene recintos destino para casos excepcionales (cualquier recinto del dep) '''
 
         # hab/rehab TED TSE - (1,2,79,80)
-        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, CircunDist, Direccion" + \
+        s = "select IdLoc, Reci, NomReci, NomZona, NomDist, NroCircun, Direccion" + \
             " from [bdge].[dbo].[v_reci_nal_all]" + \
             " where Dep = %d  and estado in (1, 2, 79, 80)"
         self.cur.execute(s, dep)

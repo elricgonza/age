@@ -159,7 +159,9 @@
             </div>
             <div class="col-md-2">
                 <label for="poblacionloc">Población Localidad:</label>
-                <input type="text" class="form-control" id="ipoblacionloc" title="" placeholder="Introduzca población en localidad" name="poblacionloc"  pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 1000000)"
+                <input type="text" class="form-control" id="ipoblacionloc" title="" 
+                        placeholder="Introduzca población en localidad" name="poblacionloc"  
+                        pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 1000000)"
                         {% if load %}
                             value="{{ ax.poblacionloc }}"
                         {% endif %}
@@ -168,7 +170,9 @@
             </div>
             <div class="col-md-2">
                 <label for="poblacionelecloc">Población electoral:</label>
-                <input type="text" class="form-control" id="ipoblacionelecloc" title="" placeholder="Introduzca población electoral en localidad" name="poblacionelecloc"  pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 700000)"
+                <input type="text" class="form-control" id="ipoblacionelecloc" title="" 
+                        placeholder="Introduzca población electoral en localidad" name="poblacionelecloc"  
+                        pattern="^ *\d[\d ]*$"  oninput="valida_n_rango(event, this, 10, 700000)"
                         {% if load %}
                             value="{{ ax.poblacionelecloc }}"
                         {% endif %}
@@ -177,11 +181,13 @@
             </div>
             <div class="col-md-2">
                 <label for="fechacensoloc">Fecha Censo:</label>
-                <input type="date" class="form-control" id="ifechacensoloc" title="" placeholder="Introduzca fecha del Censo" name="fechacensoloc" min="2012-01-01" max="2025-01-01"
+                <input type="date" class="form-control" id="ifechacensoloc" title="" 
+                        placeholder="Introduzca fecha del Censo" name="fechacensoloc" 
+                        min="2012-01-01" max="2035-01-01"
                         {% if load %}
                             value="{{ ax.fechacensoloc }}"
                         {% else %}
-                            value="2012-01-01"
+                            value="2023-03-23"
                         {% endif %}
                     >
                 <div class="invalid-feedback" id="v_fechacensoloc">Debe introducir una fecha válida.</div>

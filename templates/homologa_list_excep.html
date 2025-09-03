@@ -20,7 +20,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-8">
-                        <label class="float-left" for="fechadoc">Periodo de Búsqueda.:</label>
+                        <label class="float-left" for="fechadoc">Periodo de Búsqueda:</label>
                     </div>
                 </div>
                 <div class="row">
@@ -42,8 +42,8 @@
                         <label class="float-right" for="fechadoc">Hasta.:</label>
                     </div>
                     <div class="col-md-3 float-left">
-                        <input type="date" class="form-control" id="ifinal" name="final" 
-                                placeholder="Introduzca fecha de Búsqueda" name="final" min="2012-01-01" max="2035-01-01"
+                        <input type="date" class="form-control" id="ifinal" name="final"
+                               placeholder="Introduzca fecha de Búsqueda" name="final" min="2012-01-01" max="2035-01-01"
                                 {% if load %}
                                     value="{{ final }}"  
                                 {% endif %}
@@ -95,16 +95,16 @@
                                 <td style="text-align: center; font-size: 15px;">
                                     {% if homologa[6] == None %}
                                         {% if puede_adicionar %}
-                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, 
-                                                final=final, ur=homologa[9], idlocdes=0) }} 
+                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], 
+                                                inicio=inicio, final=final, ur=homologa[9], idlocdes=0) }} 
                                                 style="color: #FF0000;"><i class="fas fa-file-signature"></i><br>Asignar</a>
                                         {% else %}
                                             <i class="fas fa-file-signature" style="color: grey"></i><br>Asignar
                                         {% endif %}
                                     {% else %}
                                         {% if puede_editar %}
-                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], inicio=inicio, 
-                                                final=final, ur=homologa[9], idlocdes=homologa[6]) }}>
+                                            <a href={{ url_for( 'a_homologa', idreci=homologa[1], idlocreci=homologa[0], 
+                                                inicio=inicio, final=final, ur=homologa[9], idlocdes=homologa[6]) }}>
                                                 <i class="fas fa-file-signature"></i><br>Modificar</a>
                                         {% else %}
                                             <i class="fas fa-file-signature" style="color: grey"></i><br>Modificar
