@@ -1,37 +1,6 @@
 # Operaciones asientos
 
 class Asientos:
-    idloc = 0
-    deploc = 0
-    provloc = 0
-    secloc = 0
-    nomloc = ""
-    poblacionloc = 0
-    poblacionelecloc = 0
-    fechacensoloc = ''
-    tipolocloc = ''
-    fechabaselegloc = ''
-    marcaloc = ''
-    latitud = 0
-    longitud = 0
-    estado = 0
-    circunconsulado = ''
-
-    etapa = 0
-    obsUbicacion = ''
-    obs = ''
-    doc_idA = 0
-    docRspNal = 0
-    fechaIngreso = ''
-    fechaAct = ''
-    usuario = ''
-
-    _departamento = ''
-    _provincia = ''
-    _municipio = ''
-    _tipo_circun = ''
-
-
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()

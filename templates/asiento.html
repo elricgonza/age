@@ -4,6 +4,7 @@
 
 {% include "geo_libs.html" %}
 {% block js_css %}
+    <script src="{{ url_for('static', filename='js/uts/var_global.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/viewmap.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uts/buildmap.js') }}"></script>
 {% endblock %}
@@ -127,8 +128,9 @@
             </div>
             <div class="col-md-3">
                 <label for="nomloc">Asiento ELectoral:</label>
+                <!--onkeypress="return char_aceptados.includes(event.charCode)"-->
                 <input type="text" class="form-control" id="inomloc" title="" placeholder="Introduzca nombre de Asiento" name="nomloc"  required 
-                        onkeypress="return char_aceptados.includes(event.charCode)"
+                        onkeypress="return ACEPTADOS.includes(event.charCode)"
                         {% if load %}
                             value="{{ a.nomloc }}"
                         {% endif %}
@@ -517,10 +519,7 @@
 </div> <!--main-->
 
 <script>
-    const a = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]; // a-z
-    const b = [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90]; //  A-Z
-    const c = [48,49,50,51,52,53,54,55,56,57,  40,41, 193,201,205,211,218,209,  225,233,237,243,250,241, 46,32];  // 0-9 ()ÁÉÍÓÚÑáéíóúñ.ESPACIO 
-    const char_aceptados = [...a, ...b, ...c];
+    ACEPTADOS = CARACTERES_ACEPTADOS; // global
 
     var input = document.getElementById('idocActF');
 
@@ -656,4 +655,3 @@ function getGeoLoc(event) {
 </script>
 
 {% endblock %}
-
