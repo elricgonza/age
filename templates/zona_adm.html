@@ -3,6 +3,7 @@
 {% block content %}
 
 {% block js_css %}
+    <script src="{{ url_for('static', filename='js/uts/var_global.js') }}"></script>
     <link href="{{ url_for('static', filename='css/leaflet1.5.1/leaflet.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/leaflet1.5.1/leaflet.js') }}"></script>
 {% endblock %}
@@ -66,7 +67,7 @@
                         <div class="col-md-6">
                             <label for="nomzon">Nombre de la Zona:</label>
                             <input type="text" class="form-control" id="nomzona" placeholder="Introduzca el Nombre de la Zona" name="nomzona" required
-                                onkeypress="return !char_restringidos.includes(event.charCode)"
+                                onkeypress="return ACEPTADOS.includes(event.charCode)"
                                 {% if load %}
                                     value="{{ za.nomzona }}"        
                                 {% endif %}
@@ -147,7 +148,7 @@
 </div>
 
 <script>
-    char_restringidos = [34,44,61,43,136,124,42,59,58,94,95,172,36,37,96,64, 191,63,161,33,123,125,92,47,60,62 ];  // ",=+~|*;:^_¬$%`@  ¿?¡!{}\/<>
+    ACEPTADOS = CARACTERES_ACEPTADOS; // global
 
     function getNomloc() {
         $.getJSON('/get_nomloc', {
