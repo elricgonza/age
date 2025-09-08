@@ -417,6 +417,3 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
             layer.setStyle(highlightCir);  //highlights selected.
         }); 
     }
-
-
-
