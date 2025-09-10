@@ -839,8 +839,10 @@ def asiento(idloc):
                            tcircuns=a.get_tipocircun(), tpdfsA=d.get_tipo_documentos_pdfA(usrdep), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep))
 
 
-@app.route('/get_mapas_all', methods=['GET', 'POST'])
-def get_mapas_all():
+@app.route('/get_data_visor', methods=['GET', 'POST'])
+def get_data_visor():
+    ''' data por dep para visor: viewMap '''
+
     j = get_json.GetJson(cxpg)
     ideploc = request.values.get('ideploc', type=int)
     gj_mun = j.get_mun(ideploc)
@@ -903,15 +905,15 @@ def recinto_vs(idloc, reci):
     r.get_recinto_key(idloc, reci)    # siempre debiera existir
 
     j = get_json.GetJson(cxpg)
-    return render_template('coord_vs.html', 
-                            gj_reci=j.get_reci(r.deploc), 
-                            gj_asi=j.get_asi(r.deploc), 
-                            gj_cir=j.get_cir(r.deploc),
-                            gj_mun=j.get_mun(r.deploc),
-                            gj_prov=j.get_prov(r.deploc),
-                            latitud=r.latitud, 
-                            longitud=r.longitud,
-                            nombre=r.nomreci
+    return render_template('coord_vs.html',
+                            gj_reci = j.get_reci(r.deploc),
+                            gj_asi = j.get_asi(r.deploc),
+                            gj_cir = j.get_cir(r.deploc),
+                            gj_mun = j.get_mun(r.deploc),
+                            gj_prov = j.get_prov(r.deploc),
+                            latitud = r.latitud,
+                            longitud = r.longitud,
+                            nombre = r.nomreci
                           )
 
 
@@ -3239,20 +3241,20 @@ def sincro_asi_list():
         return render_template('sincro_asi.html', titulo = 'Sincronizar Asientos', puede_consultar='Sincronizado - Consulta' in permisos_usr)
 
 
-@app.route('/sincro_reci_list', methods=['GET', 'POST'])
+@app.route('/sincro_reci', methods=['GET', 'POST'])
 @login_required
-def sincro_reci_list():
-    s = sin.LatLong(cxpg)
+def sincro_reci():
+    s = sin.LatLong(cxpg) #sincro
     rc = recintos.Recintos(cxms)
     g = ger.Gerencial(cxms)
     cont = 0
     if request.method == 'POST':
         s.del_geo_recinto()
-        rows = rc.get_recintos_sincro(0)
-        rowas_n = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '1')
-        rowas_m = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '2')
-        rowas_s = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '3')
-        for reci in rows:
+        recis_sincro = rc.get_recintos_sincro(0) # = count(*) reci 
+        rowas_n = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '1') # nuevos
+        rowas_m = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '2') # modificados
+        rowas_s = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '3') # suprimidos
+        for reci in recis_sincro:
             if reci[22] is None or reci[23] is None:
                 latitud = -20.118403
                 longitud = -67.540008
@@ -3262,7 +3264,7 @@ def sincro_reci_list():
 
             situacion = 'Antiguo'
             cont = cont + 1
-            s.get_geos(latitud, longitud)
+            s.get_geos(latitud, longitud) # get s.geom
             if rowas_n != False:
                 for rowa_n in rowas_n:
                     if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]:
@@ -3282,9 +3284,11 @@ def sincro_reci_list():
                              reci[13], reci[14], reci[15], reci[16], reci[17], reci[18], reci[19], reci[20], reci[21], latitud, longitud, s.geom, reci[24], \
                              reci[25], reci[26], situacion)
 
-        return render_template('sincro_reci.html', titulo = 'Recintos Sincronizado', puede_consultar='Sincronizado - Consulta' in permisos_usr)# render a template
+        return render_template('sincro_reci.html', titulo = 'Recintos Sincronizado', \
+                               puede_consultar='Sincronizado - Consulta' in permisos_usr)
     else:
-        return render_template('sincro_reci.html', titulo = 'Sincronizar Recintos', puede_consultar='Sincronizado - Consulta' in permisos_usr)
+        return render_template('sincro_reci.html', titulo = 'Sincronizar Recintos', \
+                               puede_consultar='Sincronizado - Consulta' in permisos_usr)
 
 
 @app.route('/paises_list', methods=['GET', 'POST'])

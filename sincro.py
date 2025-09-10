@@ -1,4 +1,4 @@
-# Operaciones asientos
+# Operaciones sincro-nización
 
 class LatLong:
 
@@ -6,7 +6,9 @@ class LatLong:
         self.cx = cx
         self.cur = cx.cursor()
 
+
     def get_geos(self, lat, long):
+        ''' Crea objeto geométrico '''
         s = "select f_crea_geom(%s, %s) as geom"
         coord = long, lat
         try: 

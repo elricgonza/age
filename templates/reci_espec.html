@@ -646,12 +646,13 @@
 
     function mostrarMapa(){
         var ideploc = document.getElementById('ideploc').value;
+        // get pg json: mun, prov, cir
         $.ajax({
             data:{
                 ideploc : ideploc
             },
             type: 'POST',
-            url: '/get_mapas_all',
+            url: '/get_data_visor',
         })
         .done(function(data) {
             if (data.error){

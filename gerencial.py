@@ -854,6 +854,8 @@ class Gerencial:
 
 
     def get_gerencial_reci(self, inicio, final, dpto, usuario, accion):
+        ''' Actualizado (factorizado) '''
+
         v_fecha = True if (inicio != "00-00-0000" and final != "00-00-0000")  else False
         v_dpto = True if dpto != 0 else False
         v_usuario = True if usuario != 0 else False
