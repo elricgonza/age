@@ -3196,114 +3196,55 @@ def get_zonas_dps():
         return jsonify(0)
 
 
-@app.route('/sincro_asi_list', methods=['GET', 'POST'])
+@app.route('/sincro_asi', methods=['GET', 'POST'])
 @login_required
-def sincro_asi_list():
+def sincro_asi():
     s = sin.LatLong(cxpg)
     a = asi.Asientos(cxms)
     g = ger.Gerencial(cxms)
+
     if request.method == 'POST':
         s.del_geo_asiento()
-        rows = a.get_loc_nal_dep(0) #  0 nal
+        asientos = a.get_loc_nal_dep(0) #  0 nal
         rowas_n = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '1')
         rowas_m = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '2')
         rowas_s = g.get_gerencial_asi("00-00-0000", "00-00-0000", 0, 0, '3')
-        for asie in rows:
-           if asie[15] is None or asie[16] is None:
+        for a in asientos:
+           if a[15] is None or a[16] is None:
                latitud = -20.118403
                longitud = -67.540008
            else:
-               latitud = asie[15]
-               longitud = asie[16]
+               latitud = a[15]
+               longitud = a[16]
 
            situacion = 'Antiguo'
            s.get_geos(latitud, longitud)
            if rowas_n != False:
                for rowa_n in rowas_n:
-                    if rowa_n[19] == asie[6]:
+                    if rowa_n[19] == a[6]:
                         situacion = 'Nuevo'
 
            if rowas_m != False:
                for rowa_m in rowas_m:
-                    if rowa_m[34] == asie[6]:
+                    if rowa_m[34] == a[6]:
                         situacion = 'Modificado'
 
            if rowas_s != False:
                for rowa_s in rowas_s:
-                    if rowa_s[17] == asie[6]:
+                    if rowa_s[17] == a[6]:
                         situacion = 'Suprimido'
 
-           s.add_geo_asiento(asie[0], asie[1], asie[2], asie[3], asie[4], asie[5], asie[6], asie[7], asie[8], asie[9], asie[10], asie[11], asie[12], \
-                             asie[13], asie[14], latitud, longitud, asie[17], s.geom, asie[18], asie[19], asie[20], situacion)
+           # estructura bdgeo.asientos
+           s.add_geo_asiento(a[0], a[1], a[2], a[3], a[4], a[5], a[6], \
+                          a[7], a[8], a[9], a[10], a[11], a[12], a[13], \
+                          a[14], latitud, longitud, a[17], s.geom, a[18], a[19], \
+                          a[20], '', situacion)
 
-        return render_template('sincro_asi.html', titulo = 'Asientos Sincronizado', puede_consultar='Sincronizado - Consulta' in permisos_usr)# render a template
-    else:
-        return render_template('sincro_asi.html', titulo = 'Sincronizar Asientos', puede_consultar='Sincronizado - Consulta' in permisos_usr)
-
-
-@app.route('/sincro_reciK', methods=['GET', 'POST'])
-@login_required
-def sincro_reciK():
-    s = sin.LatLong(cxpg) #sincro
-    rc = recintos.Recintos(cxms)
-    g = ger.Gerencial(cxms)
-    cont = 0
-    if request.method == 'POST':
-        s.del_geo_recinto()
-        recis_sincro = rc.get_recintos_sincro(0) # = count(*) reci 
-        rowas_n = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '1') # nuevos
-        rowas_m = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '2') # modificados
-        rowas_s = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '3') # suprimidos
-        for reci in recis_sincro:
-            if reci[22] is None or reci[23] is None:
-                latitud = -20.118403
-                longitud = -67.540008
-            else:
-                latitud = reci[22]
-                longitud = reci[23]
-
-            situacion = 'Antiguo'
-            cont = cont + 1
-            s.get_geos(latitud, longitud) # get s.geom
-            if rowas_n != False:
-                for rowa_n in rowas_n:
-                    if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]:
-                        situacion = 'Nuevo'
-
-            if rowas_m != False:
-                for rowa_m in rowas_m:
-                    if rowa_m[7] == reci[6] and rowa_m[9] == reci[8]:
-                        situacion = 'Modificado'
-
-            if rowas_s != False:
-                for rowa_s in rowas_s:
-                    if rowa_s[7] == reci[6] and rowa_s[9] == reci[8]:
-                        situacion = 'Suprimido'
-
-            # repositorio rg
-            '''
-            rg = sin.RecintoGeo(
-                id=cont, cod_dep=reci[0], cod_prov=reci[1], cod_mun=reci[2], departamento=reci[3],
-                provincia=reci[4], municipio=reci[5], idloc=reci[6], asiento=reci[7], reci=reci[8],
-                recinto=reci[9], doc_act=reci[10], fecha_doc_act=reci[11], cod_dist=reci[12], distrito=reci[13],
-                cod_zona=reci[14], zona=reci[15], direccion=reci[16], circun=reci[17], tipo_circun=reci[18],
-                tipo_recinto=reci[19], etapa=reci[20], estado=reci[21], latitud=latitud, longitud=longitud,
-                obs='', geom=s.geom, fecha_ingreso=reci[24], fecha_act=reci[25], usuario=reci[26],
-                gdb_geomattr_data=0, situacion=situacion
-            )
-            '''
-            s.add_geo_recinto(cont, reci[0], reci[1], reci[2], reci[3], reci[4], reci[5], reci[6], reci[7], reci[8], reci[9], reci[10], reci[11], reci[12], \
-                             reci[13], reci[14], reci[15], reci[16], reci[17], reci[18], reci[19], reci[20], reci[21], latitud, longitud, s.geom, reci[24], \
-                             reci[25], reci[26], situacion)
-            #sin.add_geo_recinto(rg) #
-
-
-        return render_template('sincro_reci.html', titulo = 'Recintos Sincronizado', \
+        return render_template('sincro_asi.html', titulo = 'Asientos Sincronizado', \
                                puede_consultar='Sincronizado - Consulta' in permisos_usr)
     else:
-        return render_template('sincro_reci.html', titulo = 'Sincronizar Recintos', \
+        return render_template('sincro_asi.html', titulo = 'Sincronizar Asientos', \
                                puede_consultar='Sincronizado - Consulta' in permisos_usr)
-
 
 
 @app.route('/sincro_reci', methods=['GET', 'POST'])
@@ -3319,49 +3260,44 @@ def sincro_reci():
         rowas_n = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '1') # nuevos
         rowas_m = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '2') # modificados
         rowas_s = g.get_gerencial_reci("00-00-0000", "00-00-0000", 0, 0, '3') # suprimidos
-        for reci in recis_sincro:
-            if reci[22] is None or reci[23] is None:
+
+        for r in recis_sincro:
+            # nrocircun tipocircun
+            nrocircun = 0 if r[17] is None else r[17]
+            tipocircun = '' if r[18] is None else r[18]
+
+            # coord
+            if r[22] is None or r[23] is None:
                 latitud = -20.118403
                 longitud = -67.540008
             else:
-                latitud = reci[22]
-                longitud = reci[23]
+                latitud = r[22]
+                longitud = r[23]
 
             situacion = 'Antiguo'
             cont = cont + 1
             s.get_geos(latitud, longitud) # get s.geom
             if rowas_n != False:
                 for rowa_n in rowas_n:
-                    if rowa_n[7] == reci[6] and rowa_n[9] == reci[8]:
+                    if rowa_n[7] == r[6] and rowa_n[9] == r[8]:
                         situacion = 'Nuevo'
 
             if rowas_m != False:
                 for rowa_m in rowas_m:
-                    if rowa_m[7] == reci[6] and rowa_m[9] == reci[8]:
+                    if rowa_m[7] == r[6] and rowa_m[9] == r[8]:
                         situacion = 'Modificado'
 
             if rowas_s != False:
                 for rowa_s in rowas_s:
-                    if rowa_s[7] == reci[6] and rowa_s[9] == reci[8]:
+                    if rowa_s[7] == r[6] and rowa_s[9] == r[8]:
                         situacion = 'Suprimido'
 
-            # repositorio rg
-            rg = sin.RecintoGeo(
-                id=cont, cod_dep=reci[0], cod_prov=reci[1], cod_mun=reci[2], departamento=reci[3],
-                provincia=reci[4], municipio=reci[5], idloc=reci[6], asiento=reci[7], reci=reci[8],
-                recinto=reci[9], doc_act=reci[10], fecha_doc_act=reci[11], cod_dist=reci[12], distrito=reci[13],
-                cod_zona=reci[14], zona=reci[15], direccion=reci[16], circun=reci[17], tipo_circun=reci[18],
-                tipo_recinto=reci[19], etapa=reci[20], estado=reci[21], latitud=latitud, longitud=longitud,
-                obs='', geom=s.geom, fecha_ingreso=reci[24], fecha_act=reci[25], usuario=reci[26],
-                gdb_geomattr_data=0, situacion=situacion
-            )
-            '''
-            s.add_geo_recinto(cont, reci[0], reci[1], reci[2], reci[3], reci[4], reci[5], reci[6], reci[7], reci[8], reci[9], reci[10], reci[11], reci[12], \
-                             reci[13], reci[14], reci[15], reci[16], reci[17], reci[18], reci[19], reci[20], reci[21], latitud, longitud, s.geom, reci[24], \
-                             reci[25], reci[26], situacion)
-            '''
-            s.add_geo_recinto(rg)
-
+            # param = estructura bdgeo.dbo.recintos
+            s.add_geo_recinto(cont, r[0], r[1], r[2], r[3], r[4], r[5], r[6],  \
+                             r[7], r[8], r[9], r[10], r[11], r[12], r[13], \
+                             r[14], r[15], r[16], nrocircun, tipocircun, r[19], r[20], \
+                             r[21], latitud, longitud, '', s.geom, r[24], \
+                             r[25], r[26], '', situacion)
 
         return render_template('sincro_reci.html', titulo = 'Recintos Sincronizado', \
                                puede_consultar='Sincronizado - Consulta' in permisos_usr)

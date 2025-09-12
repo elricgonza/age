@@ -343,10 +343,14 @@ class Recintos:
 
     def get_recintos_sincro(self, usrdep):
         '''Used en opc sincroniza'''
-        s = "Select Dep, Prov, Sec, NomDep, NomProv, NombreMunicipio, IdLoc, AsientoElectoral, Reci, NombreRecinto, doc_act, fecha_doc_act, " + \
-            "cod_dist, NomDist, cod_zona, NomZona, Direccion, CircunDist, tipoCircunscripcion, tipoRecinto, etapa, estado, latitud, longitud, fechaIngreso, " + \
-            "fechaAct, usuario " + \
-            "from [bdge].[dbo].[Geo_Recintos_all]"
+
+        s = '''
+            select dep, prov, sec, NomDep, NomProv, NomMun, IdLoc,
+            NomLoc, Reci, NomReci, rspted_cite, rspted_fecha, dist, NomDist,
+            Zona, NomZona, Direccion, NroCircun, TipoCircun, desTipoRecinto, desEtapa,
+            desEstado, latitud, longitud, fechaIngreso, fechaAct, usuario
+            from [bdge].[dbo].[v_reci_nal_all]
+        '''
         if usrdep != 0 :
             s = s + " where Dep = %d order by Prov, Sec"
             self.cur.execute(s, usrdep)
