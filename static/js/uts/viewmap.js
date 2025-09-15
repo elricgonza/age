@@ -58,6 +58,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     var source = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", options);
     var ueLayer = source.getLayer('uniedu');
     var locLayer = source.getLayer('loc2012');
+    var locLayer24 = source.getLayer('loc2024');
     var asiLayer = source.getLayer('asientos');
     var reciLayer = source.getLayer('recintos');
 
@@ -71,7 +72,8 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       "Municipios":munLayer,
       "Provincias":provLayer,
       "Unidades Educativas":ueLayer,
-      "Centros Poblados INE-2012":locLayer,
+      "Censo INE-2012":locLayer,
+      "Censo INE-2024":locLayer24,
       "Asientos Electorales":asiLayer,
       "Recintos Electorales":reciLayer
     };	
