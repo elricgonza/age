@@ -61,6 +61,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     var locLayer24 = source.getLayer('loc2024');
     var asiLayer = source.getLayer('asientos');
     var reciLayer = source.getLayer('recintos');
+    var distLayer = source.getLayer('distritos');
 
     /*
       "Recintos Electorales":reciLayer,
@@ -76,6 +77,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       "Censo INE-2024":locLayer24,
       "Asientos Electorales":asiLayer,
       "Recintos Electorales":reciLayer
+      "Distritos":distLayer
     };	
       
 
