@@ -62,6 +62,7 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
     var asiLayer = source.getLayer('asientos');
     var reciLayer = source.getLayer('recintos');
     var distLayer = source.getLayer('distritos');
+    var zonaLayer = source.getLayer('zonas');
 
     /*
       "Recintos Electorales":reciLayer,
@@ -76,8 +77,9 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       "Censo INE-2012":locLayer,
       "Censo INE-2024":locLayer24,
       "Asientos Electorales":asiLayer,
-      "Recintos Electorales":reciLayer
-      "Distritos":distLayer
+      "Recintos Electorales":reciLayer,
+      "Distritos":distLayer,
+      "Zonas":zonaLayer
     };	
       
 
