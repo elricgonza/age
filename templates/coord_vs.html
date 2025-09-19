@@ -338,6 +338,8 @@
       zoomOffset: -1
     });
 
+
+    // key y/o js - desactualizado   "Bing Satellite": bingSat,
     var baseLayers = {
       "Open Street Map": osmMap,
       "Google Satellite": googleSat,
@@ -346,7 +348,6 @@
       "MapBox Streets": mapboxStreets,
       "Esri Streets": esriStreets,
       "Esri Imagery": esriImagery,
-      "Bing Satellite": bingSat,
       "Landscape": landMap,
       "Open TopoMap": topoMap
     };
@@ -358,6 +359,9 @@
     var source = L.WMS.source("http://10.100.15.54:8080/geoserver/ows?", options);
     var ueLayer = source.getLayer('uniedu');
     var locLayer = source.getLayer('loc2012');
+    var locLayer24 = source.getLayer('loc2024');
+    var distLayer = source.getLayer('distritos');
+    var zonaLayer = source.getLayer('zonas');
 
     var overlayMaps = {
       "Recintos Electorales":reciLayer,
@@ -367,7 +371,10 @@
       "Municipios":munLayer,
       "Provincias":provLayer,
       "Unidades Educativas":ueLayer,
-      "Centros Poblados INE-2012":locLayer
+      "Censo INE-2012":locLayer,
+      "Censo INE-2024":locLayer24,
+      "Distritos":distLayer,
+      "Zonas":zonaLayer
     };	
       
     // Set up map

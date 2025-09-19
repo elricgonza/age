@@ -288,7 +288,7 @@
             </div>
             <div class="col-md-2">
                 <label for="ruereci">Cod. RUE:</label>
-                <input type="text" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci"  pattern="^ *\d[\d ]*$"
+                <input type="number" class="form-control" id="iruereci" title="" placeholder="Introduzca codigo RUE." name="ruereci" 
                         {% if load and rc.codrue != '0' and rc.tiporecinto == 7 %}
                             enabled value="{{ rc.codrue }}"
                          {% else %}
@@ -299,7 +299,7 @@
             </div>
             <div class="col-md-2">
                 <label for="edireci">Cod. Edificio:</label>
-                <input type="text" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"  pattern="^ *\d[\d ]*$"
+                <input type="number" class="form-control" id="iedireci" title="" placeholder="Introduzca codigo del Edificio" name="edireci"
                         {% if load and rc.codrueedif != '0' and rc.tiporecinto == 7 %}
                             enabled value="{{ rc.codrueedif }}"
                          {% else %}

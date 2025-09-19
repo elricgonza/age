@@ -39,6 +39,8 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       zoomOffset: -1
     });
 
+
+    //desactualizado  "Bing Satellite": bingSat,
     var baseLayers = {
       "Open Street Map": osmMap,
       "Google Satellite": googleSat,
@@ -47,7 +49,6 @@ function viewMap(gj_mun, gj_prov, gj_cir) {
       "MapBox Streets": mapboxStreets,
       "Esri Streets": esriStreets,
       "Esri Imagery": esriImagery,
-      "Bing Satellite": bingSat,
       "Landscape": landMap,
       "Open TopoMap": topoMap
     };
