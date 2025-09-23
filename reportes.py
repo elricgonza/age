@@ -318,7 +318,7 @@ class Reportes:
         s = "select Dep, NomDep, Prov, NomProv, Sec, NomMun, " + \
             " IdLoc, NomLoc, Reci, NomReci, Dist, " + \
             " NomDist, Zona, NomZona, Direccion, MaxMesasReci, " + \
-            " CircunDist, NombreTipoLocLoc, latitud, longitud, desTipoRecinto, " + \
+            " NroCircun, TipoCircun, latitud, longitud, desTipoRecinto, " + \
             " desUrbanoRural, desEstado, usuario, desEtapa, fechaIngreso, " + \
             " fechaAct " + \
             " from bdge.dbo.v_reci_nal_all "
@@ -331,4 +331,3 @@ class Reportes:
 
         rows = self.cur.fetchall()
         return rows
-
