@@ -421,15 +421,21 @@ def asiento_img(idloc, nomloc):
 
                 if li.exist_img(idloc, img_ids[n]):   # si upd img
                     file_to_del = li.get_name_file_img(idloc, img_ids[n]) # referencia en bd 
-                    os.remove(file_to_del[1:]) # borra arch. de HD
+                    try:
+                        os.remove(file_to_del[1:]) # borra arch. de HD
+                    except Exception as e:
+                        print('error -remove file loc- ', e)
                     li.upd_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr) # upd de bd
                 else: # new
                     li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
 
                 f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
-                resize_save_file(fpath, name_to_save, (1024, 768))
+                resize_save_file(app.config['IMG_ASIENTOS'], fpath, name_to_save, (1024, 768))
 
-                os.remove(fpath[1:])   # arch. fuente 
+                try:
+                    os.remove(fpath[1:])   # arch. fuente
+                except Exception as e:
+                    print('Error --remove file--', e)
 
         return redirect(url_for('asientos_list'))
     else:
@@ -471,15 +477,21 @@ def asi_excep_img(idloc, nomloc):
 
                 if li.exist_img(idloc, img_ids[n]):   # si upd img
                     file_to_del = li.get_name_file_img(idloc, img_ids[n]) # referencia en bd 
-                    os.remove(file_to_del[1:]) # borra arch. de HD
+                    try:
+                        os.remove(file_to_del[1:]) # borra arch. de HD
+                    except Exception as e:
+                        print('error -remove file- ', e)
                     li.upd_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr) # upd de bd
                 else: # new
                     li.add_loc_img(idloc, img_ids[n], fpath_destino, datetime.datetime.now(), usr)
 
                 f.save(os.path.join('.' + app.config['IMG_ASIENTOS'], securef))
-                resize_save_file(fpath, name_to_save, (1024, 768))
+                resize_save_file(app.config['IMG_ASIENTOS'], fpath, name_to_save, (1024, 768))
 
-                os.remove(fpath[1:])   # arch. fuente 
+                try:
+                    os.remove(fpath[1:])   # arch. fuente
+                except Exception as e:
+                    print('Error --remove file--', e)
 
         return redirect(url_for('asi_excep_list'))
     else:
@@ -3846,15 +3858,21 @@ def recinto_img(idloc, reci, nomreci):
 
                 if li.exist_img_reci(idloc, reci, img_ids[n]):   # si upd img
                     file_to_del = li.get_name_file_img_reci(idloc, reci, img_ids[n]) # referencia en bd 
-                    os.remove(file_to_del[1:]) # borra arch. de HD
+                    try:
+                        os.remove(file_to_del[1:]) # borra arch. de HD
+                    except Exception as e:
+                        print('error -remove file- ', e)
                     li.upd_reci_img(idloc, img_ids[n], reci, fpath_destino, datetime.datetime.now(), usr) # upd de bd
                 else: # new
                     li.add_reci_img(idloc, img_ids[n], reci, fpath_destino, datetime.datetime.now(), usr)
 
                 f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
-                resize_save_file1(fpath, name_to_save, (1024, 768))
+                resize_save_file(app.config['IMG_RECINTOS'], fpath, name_to_save, (1024, 768))
 
-                os.remove(fpath[1:])   # arch. fuente 
+                try:
+                    os.remove(fpath[1:])   # arch. fuente 
+                except Exception as e:
+                    print('Error --remove file--', e)
 
         return redirect(url_for('recintos_list'))
 
@@ -3881,7 +3899,7 @@ def reci_espec_img(idloc, reci, nomreci):
     error = None
 
     if request.method == 'POST':
-        img_ids_ = request.form.getlist('imgsa[]')  # options img for Asiento
+        img_ids_ = request.form.getlist('imgsa[]')  # options img for Recinto
         img_ids = list(img_ids_[0].split(","))      # list ok
 
         uploaded_files = request.files.getlist("filelist")
@@ -3896,16 +3914,22 @@ def reci_espec_img(idloc, reci, nomreci):
                 fpath_destino = os.path.join(app.config['IMG_RECINTOS'], name_to_save)   # loc_img.ruta
 
                 if li.exist_img_reci(idloc, reci, img_ids[n]):   # si upd img
-                    file_to_del = li.get_name_file_img_reci(idloc, reci, img_ids[n]) # referencia en bd 
-                    os.remove(file_to_del[1:]) # borra arch. de HD
+                    file_to_del = li.get_name_file_img_reci(idloc, reci, img_ids[n]) # referencia en bd
+                    try:
+                        os.remove(file_to_del[1:]) # borra arch. de HD
+                    except Exception as e:
+                        print('error -remove file- ', e)
                     li.upd_reci_img(idloc, img_ids[n], reci, fpath_destino, datetime.datetime.now(), usr) # upd de bd
                 else: # new
                     li.add_reci_img(idloc, img_ids[n], reci, fpath_destino, datetime.datetime.now(), usr)
 
                 f.save(os.path.join('.' + app.config['IMG_RECINTOS'], securef))
-                resize_save_file1(fpath, name_to_save, (1024, 768))
+                resize_save_file(app.config['IMG_RECINTOS'], fpath, name_to_save, (1024, 768))
 
-                os.remove(fpath[1:])   # arch. fuente 
+                try:
+                    os.remove(fpath[1:])   # arch. fuente
+                except Exception as e:
+                    print('Error --remove file-- ', e)
 
         return redirect(url_for('reci_espec_list'))
     else:
@@ -3918,27 +3942,16 @@ def reci_espec_img(idloc, reci, nomreci):
                                 puede_editar='Especiales - Edición' in permisos_usr)
 
 
-#def resize_save_file(in_file, out_file, size, ruta_img):
-def resize_save_file(in_file, out_file, size):
-    with open('.' + in_file, 'rb') as fd:
-        image = resizeimage.resize_thumbnail(Image.open(fd), size)
+def resize_save_file(ruta, in_file, out_file, size):
+    try:
+        with open('.' + in_file, 'rb') as fd:
+            image = resizeimage.resize_thumbnail(Image.open(fd), size)
 
-    #image.save('.' + ruta_img, out_file)
-    #image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
-    image.save('.' + os.path.join(app.config['IMG_ASIENTOS'], out_file))
-    image.close()
-    #return(out_file)
-
-
-def resize_save_file1(in_file, out_file, size):
-    with open('.' + in_file, 'rb') as fd:
-        image = resizeimage.resize_thumbnail(Image.open(fd), size)
-
-    #image.save('.' + ruta_img, out_file)
-    #image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
-    image.save('.' + os.path.join(app.config['IMG_RECINTOS'], out_file))
-    image.close()
-    #return(out_file)
+        image.save('.' + os.path.join(ruta, out_file))
+        image.close()
+    except Exception as e:
+        print('Error en -resizeimg-')
+        print(e)
 
 
 @app.route('/reportes', methods=['GET', 'POST'])
