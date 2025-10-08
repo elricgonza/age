@@ -390,8 +390,6 @@ class RecintosExcep(Recintos):
 
     def __init__(self, cx):
         super().__init__(cx)
-        #self.cx = cx
-        #self.cur = cx.cursor()
 
 
     def get_reci_excep(self, usrdep):
