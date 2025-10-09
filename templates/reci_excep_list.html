@@ -15,12 +15,12 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-8">
-                    <h5>Recintos Electorales - Uninominales</h5>
+                    <h5>Recintos Electorales (Excepcional)</h5>
                 </div>
                 {% if puede_adicionar %}
                 <div class="col-xs-6 col-md-4">
                     <button type="button" class="btn btn-light btn-block"><span class="fas fa-university"></span> 
-                        <a href= {{ url_for('recinto', idlocreci=0, reci=0) }} >Adicionar Recinto Electoral UNINOMINAL</a></button>
+                        <a href= {{ url_for('reci_excep', idlocreci=0, reci=0) }} >Adicionar Recinto (Caso Excepcional)</a></button>
                 </div>
                 {% endif %}
             </div>
@@ -59,7 +59,7 @@
                             <td>{{ recinto[11] }}</td>
                             <td>
                                 {% if puede_editar or puede_consultar %}
-                                    <a href={{ url_for( 'recinto', idlocreci=recinto[0], reci=recinto[1] ) }}><span class="fas fa-edit"></span></a>
+                                    <a href={{ url_for( 'reci_excep', idlocreci=recinto[0], reci=recinto[1] ) }}><span class="fas fa-edit"></span></a>
                                 {% else %}
                                     <span class="fas fa-edit" style="color: grey"></span>
                                 {% endif%}

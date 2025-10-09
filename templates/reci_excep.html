@@ -18,9 +18,9 @@
 {% endif %}
 
 <div class="container">
-    <h2 class="text-center text-blue pt-5" >Recinto Electoral - Uninominal</h2>
+    <h2 class="text-center text-blue pt-5" >Recinto Electoral - Excepcional</h2>
     <br>
-    <form class="needs-validation" action="{{ url_for('recinto', idlocreci = rc.idlocreci, reci = rc.reci) }}" 
+    <form class="needs-validation" action="{{ url_for('reci_excep', idlocreci = rc.idlocreci, reci = rc.reci) }}" 
             novalidate method='POST' onsubmit="return Validation(this)" name="form">
         <div class="form-row">
             <!--<div class="col-md-2">-->
@@ -513,7 +513,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <button type="button"  onclick="javascript: window.location.href = '/recintos_list';"  
+                <button type="button"  onclick="javascript: window.location.href = '/reci_excep_list';"  
                               class="btn btn-outline-danger btn-lg btn-block">Cancelar</button>
             </div>
             <div class="col-md-6">
