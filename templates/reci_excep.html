@@ -66,11 +66,22 @@
             </div>
             <div class="col-md-2">
                 <label for="departamento">1er. Nivel:</label>
-                <input type="text" class="form-control" id="idepartamento" title="" placeholder="1er. Nivel" name="departamento" disabled
+                <input type="hidden" id="idepto" name="depto">
+                <!--<input type="text" class="form-control" id="idepartamento" title="" placeholder="1er. Nivel" name="departamento" disabled
                         {% if load %}
                             value="{{ rc.nomdep }}"
                         {% endif %}
-                    >
+                        >-->
+                <select id="idepartamento" name="departamento" class="form-control" onchange="cargaresp(this.value, 0)" required>
+                    <option></option>
+                    {% for depto in deptos %}
+                        {% if load and rces.deploc == depto[0] %}
+                            <option value = "{{ depto[0] }}" selected>{{ depto[1] }}</option>
+                        {% else %}
+                            <option value = "{{ depto[0] }}">{{ depto[1] }}</option>
+                        {% endif %}                               
+                    {% endfor %}
+                </select>
             </div>
 
             <!--<div class="col-md-1">-->

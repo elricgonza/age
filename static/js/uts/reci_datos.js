@@ -199,3 +199,18 @@ function asientosReci_ext(event) {
             });
     };
 }
+
+
+function fillProvincias() {
+    var dep = document.getElementById("ideploc").value;
+    $('#iprovincia').html('');
+    $('#imunicipio').html('');
+    $.getJSON("/get_provincias", {
+        dep: dep
+    }, function(datos){
+        $("#iprovincia").append('<option></option>');                
+        $.each(datos, function(index2, obj2){           
+            $("#iprovincia").append('<option value="' + obj2[0] + '">' + obj2[1] + '</option>');
+        });
+    });
+}

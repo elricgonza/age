@@ -2177,6 +2177,8 @@ def reci_excep(idlocreci, reci):
     loc = asi.Asientos(cxms)
     d = docu.Documentos(cxms)
     zo = zona.Zona(cxms)
+    dep = deptoss.Departamento(cxms)
+
 
     error = None
     p = ('Reciexcep - Edición' in permisos_usr)  # t/f
@@ -2254,7 +2256,10 @@ def reci_excep(idlocreci, reci):
                                        zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                        dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
-                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                       deptos= dep.get_deptos_nal()
+                                      )
+                                      # deptos= dep.get_deptos(usrdep)
             else:  # Edit/Save
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
@@ -2280,14 +2285,18 @@ def reci_excep(idlocreci, reci):
                                     zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
-                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                    deptos= dep.get_deptos_nal()
+                                    )
                 else:
                     return render_template('reci_excep.html', error=error, rc=rc, load=True, puede_editar=p,
                                     asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
                                     zonas = zo.get_zonas_idloc(idlocreci),
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
-                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                    deptos= dep.get_deptos_nal()
+                                    )
 
     # New from <reci_excep_list>
     rc.idlocreci, rc.reci = 0, 0  #para url recinto new
@@ -2295,7 +2304,9 @@ def reci_excep(idlocreci, reci):
                             estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                             dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                             tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                            titulo='*-*')
+                            titulo='*-*',
+                            deptos= dep.get_deptos_nal()
+                            )
 
 
 @app.route('/reciespeciales/<idreci>/<idlocreci>', methods=['GET', 'POST'])
@@ -2395,13 +2406,28 @@ def reciespeciales(idreci, idlocreci):
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
+                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep),
                                        municipios=rces.get_muniespeciales_all(usrdep))
 
     # New from <reciespeciales_list>
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
                             dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+
+
+@app.route('/get_provincias', methods=['GET', 'POST'])
+def get_provincias():
+    ''' Invocado x ajax - Obtiene:  DepProv, Prov, Nomprov (PROV) '''
+
+    cxms2 = dbcn.get_db_ms()
+    p = provs.Prov(cxms2)
+    rows = p.get_provincias(usrdep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
 
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
