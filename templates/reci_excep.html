@@ -71,8 +71,8 @@
                         {% if load %}
                             value="{{ rc.nomdep }}"
                         {% endif %}
-                        >-->
-                <select id="idepartamento" name="departamento" class="form-control" onchange="cargaresp(this.value, 0)" required>
+                <select id="idepartamento" name="departamento" class="form-control" onchange="cargaresp(this.value, 0)" required> >-->
+                <select id="idepartamento" name="departamento" class="form-control" onchange="fillCboProv()" required>
                     <option></option>
                     {% for depto in deptos %}
                         {% if load and rces.deploc == depto[0] %}
@@ -96,11 +96,25 @@
             </div>
             <div class="col-md-2">
                 <label for="provincia">2do. Nivel:</label>
-                <input type="text" class="form-control" id="iprovincia" title="" placeholder="2do. Nivel" name="provincia" disabled
+                <input type="hidden" id="iprovi" name="provi">
+                
+                <!-- <input type="text" class="form-control" id="iprovincia" title="" placeholder="2do. Nivel" name="provincia" 
                         {% if load %}
                             value="{{ rc.nomprov }}"
                         {% endif %}
-                    >
+                        >-->
+
+                <select id="iprovincia" name="provincia" class="form-control" onchange="fillCboMunic()" required>
+                    {% for provincia in provincias %}
+                        {% if rc.deploc == provincia[0] %}
+                            {% if load and rc.provloc == provincia[1]%}
+                                <option value = "{{ provincia[1] }}" selected>{{ provincia[2] }}</option>
+                            {% else %}
+                                <option value = "{{ provincia[1] }}">{{ provincia[2] }}</option>
+                            {% endif %}
+                        {% endif %}                               
+                    {% endfor %}      
+                </select>
             </div>
 
             <!--<div class="col-md-1">-->
@@ -862,6 +876,25 @@
             {% endif %}
             >-->
 </form>
+
+<script>
+    // fill cbo prov, munic
+    function fillCboProv() {
+        document.getElementById("ideploc").value=valor;
+        $('#iprovincia').html('');
+        $('#imunicipio').html('');
+        $.getJSON("/get_provincias", function(datos){
+            $("#iprovincia").append('<option></option>');
+            $.each(datos, function(index, obj){
+                if(valor==obj[0]){
+                    $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');    
+                }
+            });
+        });
+    }
+
+</script>
+
 
 {% endblock %}
 

@@ -2178,6 +2178,7 @@ def reci_excep(idlocreci, reci):
     d = docu.Documentos(cxms)
     zo = zona.Zona(cxms)
     dep = deptoss.Departamento(cxms)
+    prov = provs.Prov(cxms)
 
 
     error = None
@@ -2257,9 +2258,9 @@ def reci_excep(idlocreci, reci):
                                        estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                        dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                        tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                       deptos= dep.get_deptos_nal()
+                                       deptos= dep.get_deptos_nal(),
+                                       provincias= prov.get_provincias(usrdep)
                                       )
-                                      # deptos= dep.get_deptos(usrdep)
             else:  # Edit/Save
                 rc.upd_recinto(row_to_upd)
                 d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
@@ -2286,7 +2287,8 @@ def reci_excep(idlocreci, reci):
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                    deptos= dep.get_deptos_nal()
+                                    deptos= dep.get_deptos_nal(),
+                                    provincias= prov.get_provincias(usrdep)
                                     )
                 else:
                     return render_template('reci_excep.html', error=error, rc=rc, load=True, puede_editar=p,
@@ -2295,7 +2297,8 @@ def reci_excep(idlocreci, reci):
                                     estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
                                     dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                                     tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                    deptos= dep.get_deptos_nal()
+                                    deptos= dep.get_deptos_nal(),
+                                    provincias= prov.get_provincias(usrdep)
                                     )
 
     # New from <reci_excep_list>
@@ -2305,7 +2308,8 @@ def reci_excep(idlocreci, reci):
                             dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
                             tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
                             titulo='*-*',
-                            deptos= dep.get_deptos_nal()
+                            deptos= dep.get_deptos_nal(),
+                            provincias= prov.get_provincias(usrdep)
                             )
 
 
