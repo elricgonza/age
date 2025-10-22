@@ -2434,6 +2434,43 @@ def get_provincias():
     cxms2.close()
 
 
+@app.route('/get_provincias_dep', methods=['GET', 'POST'])
+def get_provincias_dep():
+    ''' Invocado x ajax - Obtiene:  DepProv, Prov, Nomprov (PROV) '''
+
+    cxms2 = dbcn.get_db_ms()
+    p = provs.Prov(cxms2)
+    dep = request.args.get('dep')   #param desde ajax
+    rows = p.get_provincias(dep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
+@app.route('/get_municipios_dep_prov', methods=['GET', 'POST'])
+def get_municipios_dep_prov():
+    ''' Invocado x ajax - Obtiene:  Sec, Nomsec (SEC) '''
+
+    cxms2 = dbcn.get_db_ms()
+    m = muns.Municipio(cxms2)
+    #dep = request.args.get('dep')   #param desde ajax
+    #prov = request.args.get('prov')   #param desde ajax
+    #rows = m.get_municipios_dep_prov(dep, prov)
+    rows = m.get_municipios_dep_prov(request.args.get('dep'),
+                                     request.args.get('prov'))
+    print('-----------------------------------------------------')
+    print(rows)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
 def get_provespeciales_all():
     cxms2 = dbcn.get_db_ms()

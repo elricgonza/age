@@ -1,18 +1,6 @@
-# Operaciones SECCIONES
+# Operaciones Municipios (SEC)
 
 class Municipio:
-    DepSec = 0
-    ProvSec = 0
-    Sec = 0
-    NumConceSec = 0
-    NomSec = ''
-    CircunSec = 0
-    CodProv = 0
-    CodSecc = 0
-    fechaIngreso = ''
-    fechaAct = ''
-    usuario = ''
-    DescNivelId = ''
 
     def __init__(self, cx):
         self.cx = cx
@@ -223,3 +211,18 @@ class Municipio:
             return False
         else:
             return rows
+
+
+    def get_municipios_dep_prov(self, dep, prov):
+        ''' get municipios de un departamento y provincia '''
+
+        #s = "SELECT Sec, NomSec FROM [GeografiaElectoral_app].[dbo].[SEC] where DepSec = %d order by NomSec"      
+        s = '''
+            SELECT Sec, NomSec
+            FROM [GeografiaElectoral_app].[dbo].[SEC]
+            WHERE DepSec = %d AND ProvSec = %d
+            ORDER BY NomSec
+        '''
+        self.cur.execute(s, dep, prov)
+        rows = self.cur.fetchall()
+        return rows

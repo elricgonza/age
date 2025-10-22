@@ -131,11 +131,22 @@
             <div class="col" style="flex: 0 0 27%; max-width: 50%;">
                 <label for="municipio">3er. Nivel:</label>
                 <input type="hidden" name="muni" id="imuni" value="{{ rc.nomsec }}">
-                <input type="text" class="form-control" id="imunicipio" title="" placeholder="3er. Nivel" name="municipio" disabled
+                <!--<input type="text" class="form-control" id="imunicipio" title="" placeholder="3er. Nivel" name="municipio" disabled
                         {% if load %}
                             value="{{ rc.nomsec }}"
                         {% endif %}
-                    >
+                        >-->
+                <select id="imunicipio" name="municipio" class="form-control" required>
+                    {% for municipio in municipios %}
+                        {% if rc.deploc == municipio[0] and rc.provloc == municipio[1] %}
+                            {% if load and rc.secloc == municipio[2]%}
+                                <option value = "{{ municipio[2] }}" selected>{{ municipio[3] }}</option>
+                            {% else %}
+                                <option value = "{{ municipio[2] }}">{{ municipio[3] }}</option>
+                            {% endif %}
+                        {% endif %}                               
+                    {% endfor %}
+                </select>
             </div>
         </div> <!--row-->
 
@@ -878,21 +889,40 @@
 </form>
 
 <script>
-    // fill cbo prov, munic
+    // fill cbo prov
     function fillCboProv() {
-        document.getElementById("ideploc").value=valor;
+        const selectDep = document.getElementById('idepartamento');
+        document.getElementById('ideploc').value = selectDep.value;  // upd cod
+        //const texto = selectDep.options[selectDep.selectedIndex].text;
+
         $('#iprovincia').html('');
         $('#imunicipio').html('');
-        $.getJSON("/get_provincias", function(datos){
+        $.getJSON("/get_provincias_dep", {
+            dep: selectDep.value
+        }, function(datos){
             $("#iprovincia").append('<option></option>');
             $.each(datos, function(index, obj){
-                if(valor==obj[0]){
-                    $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');    
-                }
+                  $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');    
             });
         });
     }
 
+    // fill cbo munic
+    function fillCboMunic() {
+        const selectProv = document.getElementById('iprovincia');
+        document.getElementById('iprovloc').value = selectProv.value;  // upd cod
+
+        $('#imunicipio').html('');
+        $.getJSON("/get_municipios_dep_prov", {
+            dep: document.getElementById('ideploc').value,
+            prov: selectProv.value
+        }, function(datos){
+            $("#imunicipio").append('<option></option>');
+            $.each(datos, function(index, obj){
+                  $("#imunicipio").append('<option value="' + obj[0] + '">' + obj[1] + '</option>');    
+            });
+        });
+    }
 </script>
 
 
