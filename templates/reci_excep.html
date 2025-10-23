@@ -57,7 +57,8 @@
             <!--<div class="col-md-1">-->
             <div class="col" style="flex: 0 0 5%; max-width: 12.5%;">
                 <label for="dep">COD:</label>
-                <input type="text" class="form-control" id="ideploc" title="" placeholder="DEP" name="deploc"  readonly required pattern="[0-9]{1}"
+                <input type="text" class="form-control" id="ideploc" title="" placeholder="DEP" name="deploc" 
+                        readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ rc.deploc }}"
                         {% endif %}
@@ -67,11 +68,6 @@
             <div class="col-md-2">
                 <label for="departamento">1er. Nivel:</label>
                 <input type="hidden" id="idepto" name="depto">
-                <!--<input type="text" class="form-control" id="idepartamento" title="" placeholder="1er. Nivel" name="departamento" disabled
-                        {% if load %}
-                            value="{{ rc.nomdep }}"
-                        {% endif %}
-                <select id="idepartamento" name="departamento" class="form-control" onchange="cargaresp(this.value, 0)" required> >-->
                 <select id="idepartamento" name="departamento" class="form-control" onchange="fillCboProv()" required>
                     <option></option>
                     {% for depto in deptos %}
@@ -87,7 +83,8 @@
             <!--<div class="col-md-1">-->
             <div class="col" style="flex: 0 0 6%; max-width: 12.5%;">
                 <label for="prov">COD:</label>
-                <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  readonly required pattern="[0-9]{1}"
+                <input type="text" class="form-control" id="iprovloc" title="" placeholder="PROV" name="provloc"  
+                        readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ rc.provloc }}"
                         {% endif %}
@@ -98,12 +95,6 @@
                 <label for="provincia">2do. Nivel:</label>
                 <input type="hidden" id="iprovi" name="provi">
                 
-                <!-- <input type="text" class="form-control" id="iprovincia" title="" placeholder="2do. Nivel" name="provincia" 
-                        {% if load %}
-                            value="{{ rc.nomprov }}"
-                        {% endif %}
-                        >-->
-
                 <select id="iprovincia" name="provincia" class="form-control" onchange="fillCboMunic()" required>
                     {% for provincia in provincias %}
                         {% if rc.deploc == provincia[0] %}
@@ -120,7 +111,8 @@
             <!--<div class="col-md-1">-->
             <div class="col" style="flex: 0 0 6%; max-width: 12.5%;">
                 <label for="sec">COD:</label>
-                <input type="text" class="form-control" id="isecloc" title="" placeholder="SEC" name="secloc"  readonly required pattern="[0-9]{1}"
+                <input type="text" class="form-control" id="isecloc" title="" placeholder="SEC" name="secloc"  
+                        readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ rc.secloc }}"
                         {% endif %}
@@ -131,12 +123,7 @@
             <div class="col" style="flex: 0 0 27%; max-width: 50%;">
                 <label for="municipio">3er. Nivel:</label>
                 <input type="hidden" name="muni" id="imuni" value="{{ rc.nomsec }}">
-                <!--<input type="text" class="form-control" id="imunicipio" title="" placeholder="3er. Nivel" name="municipio" disabled
-                        {% if load %}
-                            value="{{ rc.nomsec }}"
-                        {% endif %}
-                        >-->
-                <select id="imunicipio" name="municipio" class="form-control" required>
+                <select id="imunicipio" name="municipio" class="form-control" onchange="updCodMunic()" required>
                     {% for municipio in municipios %}
                         {% if rc.deploc == municipio[0] and rc.provloc == municipio[1] %}
                             {% if load and rc.secloc == municipio[2]%}
@@ -907,6 +894,11 @@
         });
     }
 
+    function fillCboCir() {
+        const selectCir = document.getElementById('icircunscripcion');
+        document.getElementById('idcirloc').value = selectCir.value;  // upd cod
+    }
+
     // fill cbo munic
     function fillCboMunic() {
         const selectProv = document.getElementById('iprovincia');
@@ -922,6 +914,12 @@
                   $("#imunicipio").append('<option value="' + obj[0] + '">' + obj[1] + '</option>');    
             });
         });
+    }
+
+    // upd cod munic
+    function updCodMunic() {
+        const selectMunic = document.getElementById('imunicipio');
+        document.getElementById('isecloc').value = selectMunic.value;  // upd cod
     }
 </script>
 

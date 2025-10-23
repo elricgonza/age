@@ -2456,13 +2456,8 @@ def get_municipios_dep_prov():
 
     cxms2 = dbcn.get_db_ms()
     m = muns.Municipio(cxms2)
-    #dep = request.args.get('dep')   #param desde ajax
-    #prov = request.args.get('prov')   #param desde ajax
-    #rows = m.get_municipios_dep_prov(dep, prov)
     rows = m.get_municipios_dep_prov(request.args.get('dep'),
                                      request.args.get('prov'))
-    print('-----------------------------------------------------')
-    print(rows)
     if rows:
         return jsonify(rows)
     else:
