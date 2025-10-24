@@ -41,6 +41,7 @@ import jurisdiccion as jur
 import jurisd_asi as jua
 import tipodocs as tdoc
 import zona
+import circun
 
 import paises
 import deptos as deptoss
@@ -1558,6 +1559,22 @@ def get_dists_idloc():
     cxms2.close()
 
 
+@app.route('/get_circun', methods=['GET', 'POST'])
+def get_circun():
+    ''' (ajax) invocado por reci_excep.html - x dep ó nal - idCircun, nomCircun '''
+
+    cxms = dbcn.get_db_ms()
+    cir = circun.Circun(cxms)
+    dep = request.args.get('dep')
+    rows = cir.get_circun(dep) # idCircun, nomCircun
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms.close()
+
+
 @app.route('/get_distritos_all2', methods=['GET', 'POST'])
 def get_distritos_all2():
     idlocreci = request.args.get('idlocreci')
@@ -2172,6 +2189,7 @@ def reci_excep_list():
 @login_required
 def reci_excep(idlocreci, reci):
     ''' Casos excepcionales '''
+
     rc = recintos.RecintosExcep(cxms)
     rca = recia.Reciasiento(cxms)
     loc = asi.Asientos(cxms)

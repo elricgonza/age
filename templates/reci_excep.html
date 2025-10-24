@@ -142,7 +142,7 @@
         </div> <!--row-->
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="hidden" name="cod_dist" id="icod_dist" value>
                 <label for="distrito">Distrito:</label>
                 <input type="text" class="form-control" id="idistrito" title="" placeholder="Distrito" name="distrito"  readonly required "
@@ -151,7 +151,7 @@
                         {% endif %}
                     >
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="hidden" name="cod_zona" id="icod_zona" value>
                 <label for="zona">Zona:</label>
                 <input type="text" class="form-control" id="izona" title="" placeholder="Zona" name="zona"  readonly required "
@@ -161,14 +161,23 @@
                     >
             </div>
 
-            <div class="col-md-1">
+            <div class="col-md-3">
                 <label for="circun">CIRCUN:</label>
                 <input type="hidden" name="tipoCir" id="itipoCir" value="uninominal/mixto">
-                <input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
+                <!--<input type="text" class="form-control" id="icircun" title="" placeholder="Circun." name="circun"  readonly required pattern="[0-9]{1}"
                         {% if load %}
                             value="{{ rc.idcircun }}"
                         {% endif %}
-                    >
+                        >-->
+                <select id="icircun"  name="circun" class="form-control" required>
+                    {% for circun in circuns %}
+                        {% if load and rc.idcircun == circun[0] %}
+                                <option value = "{{ circun[0] }}" selected>{{ circun[1] }}</option>
+                        {% else %}
+                                <option value = "{{ circun[0] }}">{{ circun[1] }}</option>
+                        {% endif %}                                                                
+                    {% endfor %}
+                </select>
                 <div class="invalid-feedback">Debe introducir CIRCUN.</div>
             </div>
             <div class="col-md-3">
@@ -892,12 +901,19 @@
                   $("#iprovincia").append('<option value="' + obj[1] + '">' + obj[2] + '</option>');    
             });
         });
+
+        // fill Circun
+        $('#icircun').html('');
+        $.getJSON("/get_circun", {
+            dep: selectDep.value
+        }, function(datos){
+            $("#icircun").append('<option></option>');
+            $.each(datos, function(index, obj){
+                  $("#icircun").append('<option value="' + obj[0] + '">' + obj[1] + '</option>');    
+            });
+        });
     }
 
-    function fillCboCir() {
-        const selectCir = document.getElementById('icircunscripcion');
-        document.getElementById('idcirloc').value = selectCir.value;  // upd cod
-    }
 
     // fill cbo munic
     function fillCboMunic() {
@@ -921,6 +937,7 @@
         const selectMunic = document.getElementById('imunicipio');
         document.getElementById('isecloc').value = selectMunic.value;  // upd cod
     }
+
 </script>
 
 
