@@ -862,43 +862,8 @@ class Gerencial:
 
         # nuevos - accion = 1
         s = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
-            "a.Reci, a.NomReci, di.CircunDist, " + \
-            "CASE " + \
-            "WHEN d.dep = 1 THEN 67 " + \
-            "WHEN d.dep = 2 AND di.CircunDist = 1 THEN 68 " + \
-            "WHEN d.dep = 2 AND l.tipolocloc in (67,69) AND (di.CircunDist between 6 and 19) THEN 67 " + \
-            "WHEN d.dep = 3 AND di.CircunDist = 2 THEN 68 " + \
-            "WHEN d.dep = 3 AND l.tipolocloc in (67,69) AND (di.CircunDist between 20 and 28) THEN 67 " + \
-            "WHEN d.dep = 4 AND di.CircunDist = 3 THEN 68 " + \
-            "WHEN d.dep = 4 AND l.tipolocloc in (67,69) AND (di.CircunDist between 29 and 32) THEN 67 " + \
-            "WHEN d.dep = 5 THEN 67 " + \
-            "WHEN d.dep = 6 AND di.CircunDist = 4 THEN 68 " + \
-            "WHEN d.dep = 6 AND l.tipolocloc in (67,69) AND (di.CircunDist between 40 and 43) THEN 67 " + \
-            "WHEN d.dep = 7 AND di.CircunDist = 5 THEN 68 " + \
-            "WHEN d.dep = 7 AND l.tipolocloc in (67,69) AND (di.CircunDist between 44 and 57) THEN 67 " + \
-            "WHEN d.dep = 8 AND di.CircunDist = 6 THEN 68 " + \
-            "WHEN d.dep = 8 AND l.tipolocloc in (67,69) AND (di.CircunDist between 58 and 61) THEN 67 " + \
-            "WHEN d.dep = 9 AND di.CircunDist = 7 THEN 68 " + \
-            "WHEN d.dep = 9 AND l.tipolocloc in (67,69) AND (di.CircunDist between 62 and 63) THEN 67 " + \
-            "ELSE l.tipolocloc END AS TipoLocLoc, " + \
-            "CASE " + \
-            "WHEN d.dep = 1 THEN 'Uninominal' " + \
-            "WHEN d.dep = 2 AND di.CircunDist = 1 THEN 'Especial' " + \
-            "WHEN d.dep = 2 AND l.tipolocloc in (67,69) AND (di.CircunDist between 6 and 19) THEN 'Uninominal' " + \
-            "WHEN d.dep = 3 AND di.CircunDist = 2 THEN 'Especial' " + \
-            "WHEN d.dep = 3 AND l.tipolocloc in (67,69) AND (di.CircunDist between 20 and 28) THEN 'Uninominal' " + \
-            "WHEN d.dep = 4 AND di.CircunDist = 3 THEN 'Especial' " + \
-            "WHEN d.dep = 4 AND l.tipolocloc in (67,69) AND (di.CircunDist between 29 and 32) THEN 'Uninominal' " + \
-            "WHEN d.dep = 5 THEN 'Uninominal' " + \
-            "WHEN d.dep = 6 AND di.CircunDist = 4 THEN 'Especial' " + \
-            "WHEN d.dep = 6 AND l.tipolocloc in (67,69) AND (di.CircunDist between 40 and 43) THEN 'Uninominal' " + \
-            "WHEN d.dep = 7 AND di.CircunDist = 5 THEN 'Especial' " + \
-            "WHEN d.dep = 7 AND l.tipolocloc in (67,69) AND (di.CircunDist between 44 and 57) THEN 'Uninominal' " + \
-            "WHEN d.dep = 8 AND di.CircunDist = 6 THEN 'Especial' " + \
-            "WHEN d.dep = 8 AND l.tipolocloc in (67,69) AND (di.CircunDist between 58 and 61) THEN 'Uninominal' " + \
-            "WHEN d.dep = 9 AND di.CircunDist = 7 THEN 'Especial' " + \
-            "WHEN d.dep = 9 AND l.tipolocloc in (67,69) AND (di.CircunDist between 62 and 63) THEN 'Uninominal' " + \
-            "END AS TipoCircunscripcion, " + \
+            "a.Reci, a.NomReci, " + \
+            "ci.Circun, ci.tipoCircun as idTipoCircun, tc.descripcion as TipoCircun, " + \
             "di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
             "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
             "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, et.descripcion as Etapa " + \
@@ -914,90 +879,22 @@ class Gerencial:
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tr ON a.tipoRecinto = tr.idClasif " + \
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.circun AS ci ON a.idCircun = ci.idCircun " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON a.idCircun = ci.idCircun AND ci.TipoCircun = tc.idClasif " + \
             "WHERE b.IdLocReci is NULL"
 
 
         # modificados - accion = 2
         s2 = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
-            "a.Reci, a.NomReci, di.CircunDist, " + \
-            "CASE " + \
-            "WHEN d.dep = 1 THEN 67 " + \
-            "WHEN d.dep = 2 AND di.CircunDist = 1 THEN 68 " + \
-            "WHEN d.dep = 2 AND l.tipolocloc in (67,69) AND (di.CircunDist between 6 and 19) THEN 67 " + \
-            "WHEN d.dep = 3 AND di.CircunDist = 2 THEN 68 " + \
-            "WHEN d.dep = 3 AND l.tipolocloc in (67,69) AND (di.CircunDist between 20 and 28) THEN 67 " + \
-            "WHEN d.dep = 4 AND di.CircunDist = 3 THEN 68 " + \
-            "WHEN d.dep = 4 AND l.tipolocloc in (67,69) AND (di.CircunDist between 29 and 32) THEN 67 " + \
-            "WHEN d.dep = 5 THEN 67 " + \
-            "WHEN d.dep = 6 AND di.CircunDist = 4 THEN 68 " + \
-            "WHEN d.dep = 6 AND l.tipolocloc in (67,69) AND (di.CircunDist between 40 and 43) THEN 67 " + \
-            "WHEN d.dep = 7 AND di.CircunDist = 5 THEN 68 " + \
-            "WHEN d.dep = 7 AND l.tipolocloc in (67,69) AND (di.CircunDist between 44 and 57) THEN 67 " + \
-            "WHEN d.dep = 8 AND di.CircunDist = 6 THEN 68 " + \
-            "WHEN d.dep = 8 AND l.tipolocloc in (67,69) AND (di.CircunDist between 58 and 61) THEN 67 " + \
-            "WHEN d.dep = 9 AND di.CircunDist = 7 THEN 68 " + \
-            "WHEN d.dep = 9 AND l.tipolocloc in (67,69) AND (di.CircunDist between 62 and 63) THEN 67 " + \
-            "ELSE l.tipolocloc END AS TipoLocLoc, " + \
-            "CASE " + \
-            "WHEN d.dep = 1 THEN 'Uninominal' " + \
-            "WHEN d.dep = 2 AND di.CircunDist = 1 THEN 'Especial' " + \
-            "WHEN d.dep = 2 AND l.tipolocloc in (67,69) AND (di.CircunDist between 6 and 19) THEN 'Uninominal' " + \
-            "WHEN d.dep = 3 AND di.CircunDist = 2 THEN 'Especial' " + \
-            "WHEN d.dep = 3 AND l.tipolocloc in (67,69) AND (di.CircunDist between 20 and 28) THEN 'Uninominal' " + \
-            "WHEN d.dep = 4 AND di.CircunDist = 3 THEN 'Especial' " + \
-            "WHEN d.dep = 4 AND l.tipolocloc in (67,69) AND (di.CircunDist between 29 and 32) THEN 'Uninominal' " + \
-            "WHEN d.dep = 5 THEN 'Uninominal' " + \
-            "WHEN d.dep = 6 AND di.CircunDist = 4 THEN 'Especial' " + \
-            "WHEN d.dep = 6 AND l.tipolocloc in (67,69) AND (di.CircunDist between 40 and 43) THEN 'Uninominal' " + \
-            "WHEN d.dep = 7 AND di.CircunDist = 5 THEN 'Especial' " + \
-            "WHEN d.dep = 7 AND l.tipolocloc in (67,69) AND (di.CircunDist between 44 and 57) THEN 'Uninominal' " + \
-            "WHEN d.dep = 8 AND di.CircunDist = 6 THEN 'Especial' " + \
-            "WHEN d.dep = 8 AND l.tipolocloc in (67,69) AND (di.CircunDist between 58 and 61) THEN 'Uninominal' " + \
-            "WHEN d.dep = 9 AND di.CircunDist = 7 THEN 'Especial' " + \
-            "WHEN d.dep = 9 AND l.tipolocloc in (67,69) AND (di.CircunDist between 62 and 63) THEN 'Uninominal' " + \
-            "END AS TipoCircunscripcion, " + \
+            "a.Reci, a.NomReci, ci.Circun, " + \
+            "ci.TipoCircun as IdTipoCircun, tco.descripcion as TipoCircun, " + \
             "di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
             "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
             "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, et.descripcion AS Etapa, " + \
             "dd.Dep as DepN, pp.Prov as ProvN, ss.Sec as SecN, dd.NomDep as NomdepN, pp.NomProv as NomProvN, " + \
             "ss.NomSec as NombreMunicipioN, b.ambientesDisp as ambientesDispN, ll.IdLoc as IdLocN, " + \
-            "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, dii.CircunDist as CircunDistN, "+ \
-            "CASE " + \
-            "WHEN dd.dep = 1 THEN 67 " + \
-            "WHEN dd.dep = 2 AND dii.CircunDist = 1 THEN 68 " + \
-            "WHEN dd.dep = 2 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 6 and 19) THEN 67 " + \
-            "WHEN dd.dep = 3 AND dii.CircunDist = 2 THEN 68 " + \
-            "WHEN dd.dep = 3 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 20 and 28) THEN 67 " + \
-            "WHEN dd.dep = 4 AND dii.CircunDist = 3 THEN 68 " + \
-            "WHEN dd.dep = 4 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 29 and 32) THEN 67 " + \
-            "WHEN dd.dep = 5 THEN 67 " + \
-            "WHEN dd.dep = 6 AND dii.CircunDist = 4 THEN 68 " + \
-            "WHEN dd.dep = 6 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 40 and 43) THEN 67 " + \
-            "WHEN dd.dep = 7 AND dii.CircunDist = 5 THEN 68 " + \
-            "WHEN dd.dep = 7 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 44 and 57) THEN 67 " + \
-            "WHEN dd.dep = 8 AND dii.CircunDist = 6 THEN 68 " + \
-            "WHEN dd.dep = 8 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 58 and 61) THEN 67 " + \
-            "WHEN dd.dep = 9 AND dii.CircunDist = 7 THEN 68 " + \
-            "WHEN dd.dep = 9 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 62 and 63) THEN 67 " + \
-            "ELSE ll.tipolocloc END AS TipoLocLocN, " + \
-            "CASE " + \
-            "WHEN dd.dep = 1 THEN 'Uninominal' " + \
-            "WHEN dd.dep = 2 AND dii.CircunDist = 1 THEN 'Especial' " + \
-            "WHEN dd.dep = 2 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 6 and 19) THEN 'Uninominal' " + \
-            "WHEN dd.dep = 3 AND dii.CircunDist = 2 THEN 'Especial' " + \
-            "WHEN dd.dep = 3 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 20 and 28) THEN 'Uninominal' " + \
-            "WHEN dd.dep = 4 AND dii.CircunDist = 3 THEN 'Especial' " + \
-            "WHEN dd.dep = 4 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 29 and 32) THEN 'Uninominal' " + \
-            "WHEN dd.dep = 5 THEN 'Uninominal' " + \
-            "WHEN dd.dep = 6 AND dii.CircunDist = 4 THEN 'Especial' " + \
-            "WHEN dd.dep = 6 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 40 and 43) THEN 'Uninominal' " + \
-            "WHEN dd.dep = 7 AND dii.CircunDist = 5 THEN 'Especial' " + \
-            "WHEN dd.dep = 7 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 44 and 57) THEN 'Uninominal' " + \
-            "WHEN dd.dep = 8 AND dii.CircunDist = 6 THEN 'Especial' " + \
-            "WHEN dd.dep = 8 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 58 and 61) THEN 'Uninominal' " + \
-            "WHEN dd.dep = 9 AND dii.CircunDist = 7 THEN 'Especial' " + \
-            "WHEN dd.dep = 9 AND ll.tipolocloc in (67,69) AND (dii.CircunDist between 62 and 63) THEN 'Uninominal' " + \
-            "END AS TipoCircunscripcionN, " + \
+            "ll.NomLoc as AsientoElectoralN, b.Reci as ReciN, b.NomReci as NomReciN, cin.Circun as CircunN, "+ \
+            "cin.TipoCircun as idTipoCircunN, tcn.descripcion as TipoCircunN, " + \
             "dii.Dist as DistN, dii.NomDist as NomDistN, zz.Zona as ZonaN, zz.NomZona as NomZonaN, b.MaxMesasReci as MaxMesasReciN, " + \
             "b.Direccion as DireccionN, b.latitud as latitudN, b.longitud as longitudN, ess.idClasif as idEstadoN, ess.descripcion as estadoN, " + \
             "trr.idClasif as idTipoRecintoN, trr.descripcion as TipoRecintoN, urr.idClasif as idUrbanoRuralN, urr.descripcion as descUrbanoRuralN, ett.descripcion AS EtapaN " + \
@@ -1025,11 +922,16 @@ class Gerencial:
             "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS urr ON ll.urbanoRural = urr.idClasif " + \
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
             "INNER JOIN GeografiaElectoral_appA.dbo.clasif AS ett ON b.etapa = ett.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.circun AS ci ON a.idCircun = ci.idCircun " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tco ON a.idCircun = ci.idCircun AND ci.TipoCircun = tco.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.circun AS cin ON b.idCircun = cin.idCircun " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tcn ON b.idCircun = cin.idCircun AND cin.TipoCircun = tcn.idClasif " + \
             "WHERE (a.NomReci <> b.NomReci or a.estado <> b.estado or a.tipoRecinto <> b.tipoRecinto or a.depend <> b.depend or " + \
             "a.etapa <> b.etapa or a.latitud <> b.latitud or a.longitud <> b.longitud or a.Direccion <> b.Direccion " + \
             "or a.ZonaReci <> b.ZonaReci or a.codRue <> b.codRue or a.codRueEdif <> b.codRueEdif or a.cantPisos <> b.cantPisos " + \
             "or a.fechaAct <> b.fechaAct or a.usuario <> b.usuario or a.doc_idA <> b.doc_idA or a.doc_idAF <> b.doc_idAF " + \
-            "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci) "
+            "or a.nacionId <> b.nacionId or a.ambientesDisp <> b.ambientesDisp or a.doc_idT <> b.doc_idT or a.MaxMesasReci <> b.MaxMesasReci "  + \
+            "or a.idCircun <> b.idCircun) "
 
 
         # suprimidos - accion = 3
