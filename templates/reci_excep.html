@@ -71,7 +71,7 @@
                 <select id="idepartamento" name="departamento" class="form-control" onchange="fillCboProv()" required>
                     <option></option>
                     {% for depto in deptos %}
-                        {% if load and rces.deploc == depto[0] %}
+                        {% if load and rc.deploc == depto[0] %}
                             <option value = "{{ depto[0] }}" selected>{{ depto[1] }}</option>
                         {% else %}
                             <option value = "{{ depto[0] }}">{{ depto[1] }}</option>
