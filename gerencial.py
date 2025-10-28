@@ -990,6 +990,28 @@ class Gerencial:
             "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
             "WHERE (a.estado <> b.estado and a.estado in(4, 5, 82, 83))"
 
+        s3 = "select d.Dep, p.Prov, s.Sec, d.NomDep, p.NomProv, s.NomSec as NombreMunicipio, a.ambientesDisp, l.IdLoc, l.NomLoc as AsientoElectoral, " + \
+            "a.Reci, a.NomReci, " + \
+            "ci.Circun, ci.tipoCircun as idTipoCircun, tc.descripcion as TipoCircun, " + \
+            "di.Dist, di.NomDist, z.Zona, z.NomZona, " + \
+            "a.MaxMesasReci, a.Direccion, a.latitud, a.longitud, es.idClasif as idEstado, es.descripcion as estado, tr.idClasif as idTipoRecinto, " + \
+            "tr.descripcion as TipoRecinto, ur.idClasif as idUrbanoRural, ur.descripcion as descUrbanoRural, et.descripcion AS Etapa " + \
+            "from GeografiaElectoral_app.dbo.RECI a " + \
+            "INNER JOIN GeografiaElectoral_appA.dbo.RECI b ON a.IdLocReci = b.IdLocReci and a.Reci = b.Reci " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.LOC l ON a.IdLocReci = l.IdLoc " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DEP d ON l.DepLoc = d.Dep " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.PROV p ON l.ProvLoc = p.Prov AND d.Dep = p.DepProv " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.SEC s ON l.SecLoc = s.Sec AND d.Dep = s.DepSec AND p.Prov = s.ProvSec " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.ZONA z ON a.IdLocReci = z.IdLocZona and z.Zona = a.ZonaReci " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.DIST di ON z.IdLocZona = di.IdLocDist and z.DistZona = di.Dist " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS es ON a.estado = es.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tr ON a.tipoRecinto = tr.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS ur ON l.urbanoRural = ur.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS et ON a.etapa = et.idClasif " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.circun AS ci ON a.idCircun = ci.idCircun " + \
+            "INNER JOIN GeografiaElectoral_app.dbo.clasif AS tc ON a.idCircun = ci.idCircun AND ci.TipoCircun = tc.idClasif " + \
+            "WHERE (a.estado <> b.estado and a.estado in(4, 5, 82, 83))"
+
         ''' posibles opciones seleccionadas - total 8
             NO considera la variable -accion- que debe estar seleccionada para cualquier consulta
             0 0 0

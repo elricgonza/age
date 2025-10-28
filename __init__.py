@@ -4102,7 +4102,7 @@ def gerencial_reci():
         return render_template('gerencial_reci.html', puede_consultar='Gerencial - Consulta' in permisos_usr)
     else:
         if request.method == 'POST':
-            if request.form['accion'] == '0':    
+            if request.form['accion'] == '0':
                 #return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(), load=False, puede_consultar='Gerencial - Consulta' in permisos_usr)
                 return render_template('gerencial_reci.html', dptos=g.get_deptos_all(), usuarios=g.get_usuarios(),
                                        load=False, puede_consultar='Gerencial - Consulta' in permisos_usr,
@@ -4131,7 +4131,7 @@ def gerencial_reci():
                 if request.form['dep'] != '0':
                     depto = usrdep
                 else:
-                    if request.form['depto'] == 'Seleccionar':    
+                    if request.form['depto'] == 'Seleccionar':
                         depto = 0
                     else:
                         depto = request.form['depto']
@@ -4139,7 +4139,7 @@ def gerencial_reci():
                 if request.form['usua'] != '0':
                     usuario = current_user.usuario
                 else:
-                    if request.form['usuario'] == 'Seleccionar':    
+                    if request.form['usuario'] == 'Seleccionar':
                         usuario = 0
                     else:
                         user = request.form['usuario']
