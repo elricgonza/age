@@ -2266,7 +2266,14 @@ def reci_excep(idlocreci, reci):
                 request.form['pisosreci'], fa, usr, \
                 request.form['etapa'], request.form['docAct'], docActF, \
                 request.form['ambientes'], request.form['docTec'], request.form['obs'].strip(), \
-                0, idlocreci, reci
+                0, request.form['circun'], idlocreci, reci
+
+            print('---------------------datos circun')
+            print(request.form['circun'])
+            print('---------------------datos circun>')
+
+            print('-----------------row_to_upd:', row_to_upd)
+
 
             if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
                 error = 'Intenta actualizar datos NO autorizados.'
