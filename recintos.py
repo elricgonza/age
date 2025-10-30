@@ -404,21 +404,21 @@ class RecintosExcep(Recintos):
             self.cur.execute(s, usrdep)
         else:
             s = s + " order by Dep, Prov, Sec"
-            self.cur.execute(s, usrdep)
+            print('****************************')
+            print(s)
+            self.cur.execute(s)
         rows = self.cur.fetchall()
         return rows
 
 
-    def upd_recinto(self, recinto):
-        '''Complementa con dato de circunscripción'''
+    def upd_recinto_excep(self, recinto):
+        '''Complementa con dato de circunscripción (idCircun)
+            omite nacionId en actualización 
+            hummm no neces si se habilita edit sólo en modulo uninominales
+        '''
 
-        print('-------------------------------------------------------------')
-        print('Recinto a actualizar (excep): ', recinto)
-        print('-------------------------------------------------------------')
+        super().get_recinto_key(recinto[22], recinto[23])  #22 -> idlocreci, #23 -> reci
 
-        self.get_recinto_key_excep(recinto[21], recinto[22])  #21 -> idlocreci, #22 -> reci
-
-        #if self.diff_old_new_reci(recinto):
         if super().diff_old_new_reci(recinto):
             s = "update GeografiaElectoral_app.dbo.RECI" + \
                 " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
@@ -434,68 +434,4 @@ class RecintosExcep(Recintos):
             except Exception as e:
                 print(e)
                 print("Error - actualización de Recinto Excepcional..")
-
-
-    def get_recinto_key_excep(self, idlocreci, reci):
-        s = "select a.IdLocReci, a.Reci, a.idCircun, b.DepLoc, c.NomDep, b.ProvLoc, " + \
-            "d.NomProv, b.SecLoc, e.NomSec, a.NomReci, a.ZonaReci, a.MaxMesasReci, " + \
-            "a.Direccion, a.latitud, a.longitud, a.estado, a.tipoRecinto, " + \
-            "a.codRue, a.codRueEdif, a.depend, a.cantPisos, a.fechaIngreso, a.fechaAct, a.usuario, " + \
-            "a.etapa, a.doc_idA, a.doc_idAF, h.ruta as rutaA, i.ruta as rutaAF, b.NomLoc, a.ambientesDisp, " + \
-            "a.doc_idT, j.ruta as rutaT, a.obs, f.zonaGeo, g.distGeo, a.nacionId " + \
-            "from [GeografiaElectoral_app].[dbo].[RECI] a " + \
-            "inner join [GeografiaElectoral_app].[dbo].[LOC] b on a.IdLocReci=b.IdLoc " + \
-            "inner join [GeografiaElectoral_app].[dbo].[DEP] c on b.DepLoc=c.Dep " + \
-            "inner join [GeografiaElectoral_app].[dbo].[PROV] d on b.ProvLoc=d.Prov and b.DepLoc=d.DepProv " + \
-            "inner join [GeografiaElectoral_app].[dbo].[SEC] e on b.SecLoc=e.Sec and b.DepLoc=e.DepSec and b.ProvLoc=e.ProvSec " + \
-            "inner join [GeografiaElectoral_app].[dbo].[ZONA] f on a.IdLocReci=f.IdLocZona and a.ZonaReci=f.Zona " + \
-            "inner join [GeografiaElectoral_app].[dbo].[DIST] g on f.IdLocZona=g.IdLocDist and f.DistZona=g.Dist " + \
-            "left join [bdge].[dbo].[doc] h on a.doc_idA=h.id " + \
-            "left join [bdge].[dbo].[doc] i on a.doc_idAF=i.id " + \
-            "left join [bdge].[dbo].[doc] j on a.doc_idT=j.id " + \
-            "where a.IdLocReci = %d and a.Reci = %d"
-        key = idlocreci, reci
-        self.cur.execute(s, key)
-        row = self.cur.fetchone()
-        print('**************')
-        print(row[9])
-        if  row:
-            self.idlocreci = row[0]
-            self.reci = row[1]
-            self.idcircun = row[2]
-            self.deploc = row[3]
-            self.nomdep = row[4]
-            self.provloc = row[5]
-            self.nomprov = row[6]
-            self.secloc = row[7]
-            self.nomsec = row[8]
-            self.nomreci = row[9]
-            self.zonareci = row[10]
-            self.maxmesasreci = row[11]
-            self.direccion = row[12]
-            self.latitud = row[13]
-            self.longitud = row[14]
-            self.estado = row[15]
-            self.tiporecinto = row[16]
-            self.codrue = row[17]
-            self.codrueedif = row[18]
-            self.depend = row[19]
-            self.cantpisos = row[20]
-            self.fechaIngreso = row[21]
-            self.fechaAct = row[22]
-            self.usuario = row[23]
-            self.etapa = row[24]
-            self.doc_idA = row[25]
-            self.doc_idAF = row[26]
-            self.rutaA = row[27]
-            self.rutaAF = row[28]
-            self.nomloc = row[29]
-            self.ambientes = row[30]
-            self.doc_idT = row[31]
-            self.rutaT = row[32]
-            self.obs = row[33]
-            self.zonaGeo = row[34]
-            self.distGeo = row[35]
-            self.nacionId = row[36]
-        return row
 
