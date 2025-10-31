@@ -404,8 +404,6 @@ class RecintosExcep(Recintos):
             self.cur.execute(s, usrdep)
         else:
             s = s + " order by Dep, Prov, Sec"
-            print('****************************')
-            print(s)
             self.cur.execute(s)
         rows = self.cur.fetchall()
         return rows
@@ -415,6 +413,14 @@ class RecintosExcep(Recintos):
         '''Complementa con dato de circunscripción (idCircun)
             omite nacionId en actualización 
             hummm no neces si se habilita edit sólo en modulo uninominales
+
+            -pendiente correcciones - justificaría sólo upd de coordenadas
+            -upd de munic, prov, dep  -> cambio de jurisdicción
+            -upd de circun debiera estar asociada a validación de departamento
+            -si se habilita edición en grabar omitir:
+                    -ZonaReci, nacionId, idCircun
+                    -visualizar datos solo readonly para dep, prov, sec, circun, asiento, zona
+                    -al introducir coordenadas NO actualizar dep, prov, sec dist zona
         '''
 
         super().get_recinto_key(recinto[22], recinto[23])  #22 -> idlocreci, #23 -> reci

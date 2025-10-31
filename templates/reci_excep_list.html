@@ -40,8 +40,8 @@
                             <th>Tipo Circun.</th>
                             <th>Estado</th>
                             <th>Etapa</th>
-                            <th>Editar</th>
-                            <th>Imágen</th>
+                            <!--<th>Editar</th>-->
+                            <!--<th>Imágen</th>-->
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +57,7 @@
                             <td>{{ recinto[6] }}</td>
                             <td>{{ recinto[10] }}</td>
                             <td>{{ recinto[11] }}</td>
+                            <!--
                             <td>
                                 {% if puede_editar or puede_consultar %}
                                     <a href={{ url_for( 'reci_excep', idlocreci=recinto[0], reci=recinto[1] ) }}><span class="fas fa-edit"></span></a>
@@ -71,6 +72,7 @@
                                     <span class="fas fa-camera" style="color: grey"></span>
                                 {% endif%}
                             </td>
+                            -->
                         </tr>
                         {% endfor %}
                     </tbody>
