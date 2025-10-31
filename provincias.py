@@ -1,19 +1,27 @@
 # Operaciones provincias
 
 class Prov:
-    DepProv = 0
-    Prov = 0
-    NomProv = ''
-    codprov = 0
-    fechaIngreso = ''
-    fechaAct = ''
-    usuario = ''
-    DescNivelId = ''
 
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
-    
+
+
+    def get_provincias(self, usrdep):
+        ''' Devuelve todas las provincias o las de un departamento '''
+
+        s = "select DepProv, Prov, NomProv from [GeografiaElectoral_app].[dbo].[PROV]"
+        if usrdep != 0 :
+            s = s + " where DepProv = %d order by DepProv"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by DepProv"
+            self.cur.execute(s)
+
+        rows = self.cur.fetchall()
+        return rows
+
+
     def get_provs_all(self, usrdep):
             s = "select pa.NomPais, d.NomDep, p.DepProv, p.Prov, p.NomProv from [GeografiaElectoral_app].[dbo].[PROV] p" + \
                 " inner join [GeografiaElectoral_app].[dbo].[DEP] d on p.DepProv=d.Dep" + \

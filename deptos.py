@@ -1,21 +1,25 @@
-# Operaciones usuarios
+# Operaciones Departamentos
 
 class Departamento:
-    Dep = 0
-    NomDep = ''
-    Diputados = 0
-    DiputadosUninominales = 0
-    IdPais = 0
-    fechaIngreso = ''
-    fechaAct = ''
-    usuario = '' 
-    DescNivelId = ''
-
 
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
-    
+
+
+    def get_deptos(self, usrdep):
+            s = "select Dep, NomDep from [GeografiaElectoral_app].[dbo].[DEP]"
+            if usrdep != 0 :
+                s = s + " where Dep = %d "
+                self.cur.execute(s, usrdep)
+            else:
+                s = s + " order by Dep"
+                self.cur.execute(s)
+
+            rows = self.cur.fetchall()
+            return rows
+
+
     def get_deptos_all(self, usrdep):
             s = "SELECT DEP.Dep, PAIS.IdPais, PAIS.NomPais, DEP.NomDep " + \
                 "FROM  [GeografiaElectoral_app].[dbo].[DEP] INNER JOIN [GeografiaElectoral_app].[dbo].[PAIS] ON  " + \
@@ -99,6 +103,7 @@ class Departamento:
             return False
         else:
             return rows 
+
 
     def get_deptos_nal(self):
         ''' Retorna cod y nombre de deptos nacional '''

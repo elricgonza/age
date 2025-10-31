@@ -1,30 +1,18 @@
-# Operaciones SECCIONES
+# Operaciones Municipios (SEC)
 
 class Municipio:
-    DepSec = 0
-    ProvSec = 0
-    Sec = 0
-    NumConceSec = 0
-    NomSec = ''
-    CircunSec = 0
-    CodProv = 0
-    CodSecc = 0
-    fechaIngreso = ''
-    fechaAct = ''
-    usuario = ''
-    DescNivelId = ''
 
     def __init__(self, cx):
         self.cx = cx
         self.cur = cx.cursor()
-    
+
     def get_mun_all(self, usrdep):
         s = "SELECT pa.IdPais, d.Dep, p.prov, s.Sec, pa.NomPais, d.NomDep, p.NomProv, s.NomSec " + \
             "from [GeografiaElectoral_app].[dbo].[SEC] s " + \
             "inner join [GeografiaElectoral_app].[dbo].[PROV] p on s.ProvSec=p.Prov " + \
             "inner join [GeografiaElectoral_app].[dbo].[DEP] d on d.Dep=p.DepProv and d.Dep=s.DepSec " + \
             "inner join [GeografiaElectoral_app].[dbo].[PAIS] pa on pa.IdPais=d.IdPais"
-            
+
         self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
@@ -38,7 +26,7 @@ class Municipio:
             "FROM [GeografiaElectoral_app].[dbo].[SEC] AS s INNER JOIN [GeografiaElectoral_app].[dbo].[DEP] AS d " + \
             "ON s.DepSec = d.Dep INNER JOIN [GeografiaElectoral_app].[dbo].[PAIS] AS pa ON d.IdPais = pa.IdPais " + \
             "WHERE(s.DepSec = %d) AND (s.ProvSec = %d) AND (s.Sec = %d)"
-        
+
         self.cur.execute(s, varAux)
         row = self.cur.fetchone()
         if  row == None:
@@ -48,7 +36,7 @@ class Municipio:
             self.DepSec = row[1]
             self.ProvSec = row[2]
             self.Sec = row[3]
-            self.NumConceSec = row[4]            
+            self.NumConceSec = row[4]
             self.NomSec = row[5]
             self.CircunSec = row[6]
             self.CodProv = row[7]
@@ -99,7 +87,7 @@ class Municipio:
         except Exception as e:
             print("Error - actualización de municipio")
             print(e)
-    
+
     def upd_mun_2(self, DepSec1, DepSec, ProvSec, Sec, NumConceSec, NomSec, descNivelId, fechaAct, usuario):
         new_mun = DepSec1, NumConceSec, NomSec, descNivelId, fechaAct, usuario, DepSec, ProvSec, Sec
         s = "update [GeografiaElectoral_app].[dbo].[SEC]" + \
@@ -147,19 +135,19 @@ class Municipio:
         self.cur.execute(s, new_mun)
         row = self.cur.fetchone()
         return row[0]
-    
+
     def get_combo_paises(self, usrdep):
-        s = "select IdPais, NomPais from GeografiaElectoral_app.dbo.PAIS where Estado = 1 order by NomPais;"             
-        self.cur.execute(s) 
+        s = "select IdPais, NomPais from GeografiaElectoral_app.dbo.PAIS where Estado = 1 order by NomPais;"
+        self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False
         else:
-            return rows    
+            return rows
 
     def get_combo_deptos(self, usrdep):
-        s = "SELECT Dep, NomDep, IdPais FROM [GeografiaElectoral_app].[dbo].[DEP] order by IdPais;"             
-        self.cur.execute(s) 
+        s = "SELECT Dep, NomDep, IdPais FROM [GeografiaElectoral_app].[dbo].[DEP] order by IdPais;"
+        self.cur.execute(s)
         rows = self.cur.fetchall()
         if self.cur.rowcount == 0:
             return False
@@ -223,3 +211,18 @@ class Municipio:
             return False
         else:
             return rows
+
+
+    def get_municipios_dep_prov(self, dep, prov):
+        ''' get municipios de un departamento y provincia '''
+
+        s = '''
+            SELECT Sec, NomSec
+            FROM [GeografiaElectoral_app].[dbo].[SEC]
+            WHERE DepSec = %d AND ProvSec = %d
+            ORDER BY Sec
+        '''
+        p = dep, prov
+        self.cur.execute(s, p)
+        rows = self.cur.fetchall()
+        return rows

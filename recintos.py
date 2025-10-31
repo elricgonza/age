@@ -14,7 +14,7 @@ class Recintos:
             " NomReci as NombreRecinto, TipoCircun as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
             " from [bdge].[dbo].[v_reci_nal_all]"
         if usrdep != 0:
-            s = s + " where (TipoCircun = 'Uninominal' or isnull(TipoCircun,'')='')  and DEP = %d order by prov, sec"  
+            s = s + " where (TipoCircun = 'Uninominal' or isnull(TipoCircun,'')='')  and DEP = %d order by prov, sec"
             self.cur.execute(s, usrdep)
         else:
             s = s + " where (TipoCircun = 'Uninominal' or isnull(TipoCircun,'')='')  order by Dep, Prov, Sec"
@@ -385,5 +385,59 @@ class Recintos:
         return rows
 
 
-    #def __str__(self):
-    #    return str(self.idloc) + ' - ' + str(self.reci) +  ' -- ' + self.nomloc
+class RecintosExcep(Recintos):
+    ''' Clase para recintos excepcionales - hereda de recintos '''
+
+    def __init__(self, cx):
+        super().__init__(cx)
+
+
+    def get_reci_excep(self, usrdep):
+        '''Obtiene para actualización como recintos excepcionales'''
+
+        s = "Select IdLoc as IdLocReci, Reci, NomDep as Departamento, NomProv as Provincia, NomMun as Municipio," + \
+            " NomReci as NombreRecinto, TipoCircun as TipoCircunscripcion, DEP, PROV, SEC, desEstado as Estado, desEtapa, usuario " + \
+            " from [bdge].[dbo].[v_reci_nal_all]"
+
+        if usrdep != 0:
+            s = s + " where Dep = %d order by prov, sec"
+            self.cur.execute(s, usrdep)
+        else:
+            s = s + " order by Dep, Prov, Sec"
+            self.cur.execute(s)
+        rows = self.cur.fetchall()
+        return rows
+
+
+    def upd_recinto_excep(self, recinto):
+        '''Complementa con dato de circunscripción (idCircun)
+            omite nacionId en actualización 
+            hummm no neces si se habilita edit sólo en modulo uninominales
+
+            -pendiente correcciones - justificaría sólo upd de coordenadas
+            -upd de munic, prov, dep  -> cambio de jurisdicción
+            -upd de circun debiera estar asociada a validación de departamento
+            -si se habilita edición en grabar omitir:
+                    -ZonaReci, nacionId, idCircun
+                    -visualizar datos solo readonly para dep, prov, sec, circun, asiento, zona
+                    -al introducir coordenadas NO actualizar dep, prov, sec dist zona
+        '''
+
+        super().get_recinto_key(recinto[22], recinto[23])  #22 -> idlocreci, #23 -> reci
+
+        if super().diff_old_new_reci(recinto):
+            s = "update GeografiaElectoral_app.dbo.RECI" + \
+                " set NomReci= %s, ZonaReci= %s, MaxMesasReci= %s, Direccion= %s, latitud= %s, " + \
+                " longitud= %s, estado= %s, tipoRecinto= %s, codRue= %s, codRueEdif= %s, " + \
+                " depend= %d, cantPisos= %s, fechaAct= %s, usuario= %s, " + \
+                " etapa= %s, doc_idA= %s, doc_idAF= %s, ambientesDisp= %s, doc_idT= %s, " + \
+                " obs= %s, nacionId= %s, idCircun= %s " + \
+                " where IdLocReci = %s and Reci = %s"
+            try:
+                self.cur.execute(s, recinto)
+                self.cx.commit()
+                print('Recinto Excepcional actualizado')
+            except Exception as e:
+                print(e)
+                print("Error - actualización de Recinto Excepcional..")
+

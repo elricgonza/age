@@ -41,6 +41,7 @@ import jurisdiccion as jur
 import jurisd_asi as jua
 import tipodocs as tdoc
 import zona
+import circun
 
 import paises
 import deptos as deptoss
@@ -1558,6 +1559,22 @@ def get_dists_idloc():
     cxms2.close()
 
 
+@app.route('/get_circun', methods=['GET', 'POST'])
+def get_circun():
+    ''' (ajax) invocado por reci_excep.html - x dep ó nal - idCircun, nomCircun '''
+
+    cxms = dbcn.get_db_ms()
+    cir = circun.Circun(cxms)
+    dep = request.args.get('dep')
+    rows = cir.get_circun(dep) # idCircun, nomCircun
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms.close()
+
+
 @app.route('/get_distritos_all2', methods=['GET', 'POST'])
 def get_distritos_all2():
     idlocreci = request.args.get('idlocreci')
@@ -2148,30 +2165,176 @@ def get_circundist():
     cxms2.close()
 
 
-@app.route('/reciespeciales_list', methods=['GET', 'POST'])
+@app.route('/reci_excep_list', methods=['GET', 'POST'])
 @login_required
-def reciespeciales_list():
-    '''Casos excepcionales - coordenadas/circun que no corresponden espacialmente (en opc/mod equiv Especiales)'''
+def reci_excep_list():
+    '''Casos excepcionales - coordenadas/circun que no corresponden espacialmente (en opc/mod equiv Excepcionales)'''
 
-    rces = recies.Reciespeciales(cxms)
-    rows = rces.get_reciespeciales_all(usrdep)
+    r = recintos.RecintosExcep(cxms)
+    rows = r.get_reci_excep(usrdep)
     if rows:
-        if 'Especiales - Consulta' in permisos_usr:    # tiene pemisos asignados
-            return render_template('reciespeciales_list.html', reciespeciales=rows, puede_adicionar='Especiales - Adición' in permisos_usr, \
-                                    puede_editar='Especiales - Edición' in permisos_usr
-                                  )  # render a template
+        if 'Reciexcep - Consulta' in permisos_usr:    # tiene pemisos asignados
+            return render_template('reci_excep_list.html', recintos=rows, \
+                                   puede_adicionar='Reciexcep - Adición' in permisos_usr, \
+                                   puede_editar='Reciexcep - Edición' in permisos_usr)
         else:
             return render_template('msg.html', l1='Sin permisos asignados !!')
     else:
         print ('Sin recintos...')
-        return render_template('reciespeciales_list.html', puede_adicionar='Especiales - Adición' in permisos_usr, \
-                                puede_editar='Especiales - Edición' in permisos_usr
-                              )
+        return render_template('reci_excep_list.html', \
+                               puede_adicionar='Reciexcep - Adición' in permisos_usr)
+
+
+@app.route('/reci_excep/<idlocreci>/<reci>', methods=['GET', 'POST'])
+@login_required
+def reci_excep(idlocreci, reci):
+    ''' Casos excepcionales '''
+
+    rc = recintos.RecintosExcep(cxms)
+    rca = recia.Reciasiento(cxms)
+    loc = asi.Asientos(cxms)
+    d = docu.Documentos(cxms)
+    zo = zona.Zona(cxms)
+    dep = deptoss.Departamento(cxms)
+    prov = provs.Prov(cxms)
+
+
+    error = None
+    p = ('Reciexcep - Edición' in permisos_usr)  # t/f
+    if request.method == 'POST':
+        fa = request.form['fechaAct'][:-7]
+        # Valida si el campo docActF esta desactivado
+        if request.form.get('docActF') == None:
+            docActF = 0
+        else:
+            docActF = request.form['docActF']
+
+        if request.form.get('docTec') == None:
+            if request.form.get('doc_idTec') != None:
+                docTec = request.form['doc_idTec']
+            else:
+                docTec = 0
+        else:
+            docTec = request.form['docTec']
+
+        # Valida si el campo ruereci esta desactivado
+        if request.form.get('ruereci') == None:
+            ruereci = 0
+        else:
+            ruereci = request.form['ruereci']
+        # Valida si el campo edireci esta desactivado
+        if request.form.get('edireci') == None:
+            edireci = 0
+        else:
+            edireci = request.form['edireci']
+        # Valida si el campo depenreci esta desactivado
+        if request.form.get('depenreci') == None:
+            depenreci = 0
+        else:
+            depenreci = request.form['depenreci']
+
+
+        if reci == '0':  # es NEW
+            if False:   # valida si neces POST
+                #error = "El usuario: " + request.form['uname']  + " ya existe...!"
+                print('msg-err')
+            else:
+                nextid = rc.get_next_reci()
+                datos = request.form['asiento'], nextid, request.form['nomreci'].strip(), request.form['zonareci'], request.form['mesasreci'], \
+                    request.form['dirreci'].strip(), request.form['latitud'], request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                    ruereci, edireci, depenreci, request.form['pisosreci'], request.form['fechaIngreso'][:-7], \
+                    fa, request.form['usuario'], request.form['etapa'], request.form['docAct'], docActF, \
+                    request.form['ambientes'], request.form['docTec'], request.form['circun'], request.form['obs'].strip(), 0
+
+                if rc.add_recinto(datos):
+                    d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
+
+                rows = rc.get_reci_excep(usrdep)
+                return render_template('reci_excep_list.html', recintos=rows,
+                                       puede_adicionar='Reciexcep - Adición' in permisos_usr,
+                                       puede_editar='Reciexcep - Edición' in permisos_usr
+                                      )# render a template
+        else: # Es POST / Edit
+            fa = str(datetime.datetime.now())[:-7]
+            idlocreci = request.form['asiento'].split(':')
+
+            row_to_upd = \
+                request.form['nomreci'], request.form['zonareci'], \
+                request.form['mesasreci'], request.form['dirreci'], request.form['latitud'], \
+                request.form['longitud'], request.form['estado'], request.form['tiporeci'], \
+                ruereci, edireci, depenreci, \
+                request.form['pisosreci'], fa, usr, \
+                request.form['etapa'], request.form['docAct'], docActF, \
+                request.form['ambientes'], request.form['docTec'], request.form['obs'].strip(), \
+                0, request.form['circun'], idlocreci, reci
+
+            if usrauth == 3 and rc.upd_reci_noauth(row_to_upd):   #tmpauth3 valida act datos no auth
+                error = 'Intenta actualizar datos NO autorizados.'
+                return render_template('reci_excep.html', error=error, rc=rc, load=True, puede_editar=p,
+                                       asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                       zonasRecis=rca.get_zonas_all(usrdep),
+                                       estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
+                                       dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
+                                       tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                       deptos= dep.get_deptos_nal(),
+                                       provincias= prov.get_provincias(usrdep)
+                                      )
+            else:  # Edit/Save
+                rc.upd_recinto(row_to_upd)
+                d.upd_doc_r(request.form['docAct'], request.form['doc_idAct'], docActF, docTec)
+
+                rows = rc.get_reci_uninom(usrdep)
+                return render_template('reci_excep_list.html', recintos=rows, \
+                                       puede_adicionar='Reciexcep - Adición' in permisos_usr, \
+                                       puede_editar='Reciexcep - Edición' in permisos_usr
+                                      )# render a template
+    else: # Viene de <reci_excep_list>
+        if reci != '0':  # EDIT
+            if rc.get_recinto_key(idlocreci, reci):
+                if rc.fechaIngreso == None:
+                    rc.fechaIngreso = str(datetime.datetime.now())[:-7]
+                if rc.fechaAct == None:
+                    rc.fechaAct = str(datetime.datetime.now())[:-7]
+                if rc.usuario == None:
+                    rc.usuario = usr
+
+                if usrauth == 3:    #tmpauth3 - get_etapas_auth
+                    return render_template('reci_excep.html', error=error, rc=rc, load=True, puede_editar=p,
+                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    zonas = zo.get_zonas_idloc(idlocreci),
+                                    estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas_auth(usrdep, usrtipo),
+                                    dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
+                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                    deptos= dep.get_deptos_nal(),
+                                    provincias= prov.get_provincias(usrdep)
+                                    )
+                else:
+                    return render_template('reci_excep.html', error=error, rc=rc, load=True, puede_editar=p,
+                                    asientos=loc.get_loc_municipio(rc.deploc, rc.provloc, rc.secloc, 'uninominal/mixto'),
+                                    zonas = zo.get_zonas_idloc(idlocreci),
+                                    estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
+                                    dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
+                                    tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                                    deptos= dep.get_deptos_nal(),
+                                    provincias= prov.get_provincias(usrdep)
+                                    )
+
+    # New from <reci_excep_list>
+    rc.idlocreci, rc.reci = 0, 0  #para url recinto new
+    return render_template('reci_excep.html', error=error, rc=rc, load=False, puede_editar=p,
+                            estados=rc.get_estados_reci(usrtipo), etapas=rc.get_etapas(usrtipo),
+                            dependencias=rc.get_dependencias(), trecintos=rc.get_tiporecintos(),
+                            tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
+                            titulo='*-*',
+                            deptos= dep.get_deptos_nal(),
+                            provincias= prov.get_provincias(usrdep)
+                            )
 
 
 @app.route('/reciespeciales/<idreci>/<idlocreci>', methods=['GET', 'POST'])
 @login_required
 def reciespeciales(idreci, idlocreci):
+    # para borrar ppp def
     '''Casos Excepcionales  - (opc Especiales en tabla modulo y archs '''
 
     rces = recies.Reciespeciales(cxms)
@@ -2192,7 +2355,7 @@ def reciespeciales(idreci, idlocreci):
 
         if request.form.get('docTec') == None:
             if request.form.get('doc_idTec') != None:
-                docTec = request.form['doc_idTec']    
+                docTec = request.form['doc_idTec']
             else:
                 docTec = 0
         else:
@@ -2217,7 +2380,6 @@ def reciespeciales(idreci, idlocreci):
         if idreci == '0':  # es NEW
             if False:   # valida si neces POST
                 #error = "El usuario: " + request.form['uname']  + " ya existe...!"
-                #return render_template('asiento.html', error=error, u=u, load_u=True)
                 print('msg-err')
             else:
                 nextid = rces.get_next_reciespecial()
@@ -2266,13 +2428,60 @@ def reciespeciales(idreci, idlocreci):
 
                 return render_template('reciespeciales.html', error=error, rces=rces, load=True, puede_editar=p, asientoRecis=rca.get_loc_all(usrdep), zonasRecis=rca.get_zonas_all(usrdep),
                                        estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(), tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), tpdfsA=d.get_tipo_documentos_pdfA(usrdep),
-                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep), 
+                                       dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), dptos=rces.get_depaespeciales_all(usrdep), provincias=rces.get_provespeciales_all(usrdep),
                                        municipios=rces.get_muniespeciales_all(usrdep))
 
     # New from <reciespeciales_list>
     return render_template('reciespeciales.html', error=error, rces=rces, load=False, puede_editar=p, tpdfsRN=d.get_tipo_documentos_pdfRN(usrdep), dptos=rces.get_depaespeciales_all(usrdep),
                             provincias=rces.get_provespeciales_all(usrdep), municipios=rces.get_muniespeciales_all(usrdep), estados=rces.get_estados(usrdep), trecintos=rces.get_tiporecintos(),
                             dependencias=rces.get_dependencias(), etapas=rces.get_etapas(usrtipo), tpdfsA=d.get_tipo_documentos_pdfA(usrdep))
+
+
+@app.route('/get_provincias', methods=['GET', 'POST'])
+def get_provincias():
+    ''' Invocado x ajax - Obtiene:  DepProv, Prov, Nomprov (PROV) '''
+
+    cxms2 = dbcn.get_db_ms()
+    p = provs.Prov(cxms2)
+    rows = p.get_provincias(usrdep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
+@app.route('/get_provincias_dep', methods=['GET', 'POST'])
+def get_provincias_dep():
+    ''' Invocado x ajax - Obtiene:  DepProv, Prov, Nomprov (PROV) '''
+
+    cxms2 = dbcn.get_db_ms()
+    p = provs.Prov(cxms2)
+    dep = request.args.get('dep')   #param desde ajax
+    rows = p.get_provincias(dep)
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
+
+
+@app.route('/get_municipios_dep_prov', methods=['GET', 'POST'])
+def get_municipios_dep_prov():
+    ''' Invocado x ajax - Obtiene:  Sec, Nomsec (SEC) '''
+
+    cxms2 = dbcn.get_db_ms()
+    m = muns.Municipio(cxms2)
+    rows = m.get_municipios_dep_prov(request.args.get('dep'),
+                                     request.args.get('prov'))
+    if rows:
+        return jsonify(rows)
+    else:
+        return jsonify(0)
+
+    cxms2.close()
 
 
 @app.route('/get_provespeciales_all', methods=['GET', 'POST'])
@@ -2331,9 +2540,7 @@ def get_muniespeciales_all1():
                        provincia='INCORRECTA !!!',
                        municipio='INTENTE NUEVAMENTE....')
 
-#========== Final Modulo Recintos Casos Especiales ============#
-
-#========== Inicio Modulo Recintos Exterior ============#
+#========== End excep ============#
 
 @app.route('/exterior_reci_list', methods=['GET', 'POST'])
 @login_required
